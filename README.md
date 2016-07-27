@@ -11,9 +11,9 @@ It makes use of Web Audio API to play various flamenco rhythms and features a vi
 
 ```bash
 # Clone the git repository in the current folder
-git clone https://github.com/ElJere/aCompas.git
+git clone http://gitlab.acompas.audio/oricordeau/acompas.git
 # Go inside the folder created by the previous command
-cd aCompas
+cd acompas
 # Install dependencies using bower
 bower install
 # Synchronize assets to the web/ and crosswalk/ folders
@@ -28,13 +28,13 @@ Then, open your favorite web browser and go to [http://localhost:8000](http://lo
 
 Get the latest version of vagrant at `https://www.vagrantup.com/downloads.html`
 
-Then in the project folder 
+Then in the project folder
 
-```bash 
+```bash
 # Clone the git repository in the current folder
-git clone https://github.com/ElJere/aCompas.git
+git clone http://gitlab.acompas.audio/oricordeau/acompas.git
 # Go inside the folder created by the previous command
-cd aCompas
+cd acompas
 # Create and provision the vm
 vagrant up --provision
 # ssh into the vm
@@ -55,9 +55,9 @@ Then, in the host operating system (not inside the virtual machine), open your f
 
 ```bash
 # Clone the git repository in the current folder
-git clone https://github.com/ElJere/aCompas.git
+git clone http://gitlab.acompas.audio/oricordeau/acompas.git
 # Go inside the folder created by the previous command
-cd aCompas
+cd acompas
 # Install dependencies using bower
 bower install
 # Synchronize assets to the web/ and crosswalk/ folders
@@ -69,4 +69,3 @@ python /path/to/crosswalk/make_apk.py --package=audio.acompas.app --manifest=cro
 ## Credits
 
 * The metronome's audio core is inspired by the following [code from Chris Wilson](https://github.com/cwilso/metronome).
-* The palmas sordas and jaleo sounds are recordings of Aziz Andry.
