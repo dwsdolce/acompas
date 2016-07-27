@@ -9,7 +9,7 @@ It makes use of Web Audio API to play various flamenco rhythms and features a vi
 
 ## Version 2.0 development
 
-The [online version](http://acompas.audio) is the version 1 A Compás.
+The [online version](http://acompas.audio) is the version 1 of A Compás.
 A new version is being developed since August 2015, a complete rewrite based on the [Meteor framework](https://www.meteor.com).
 
 [Browse the "meteor" branch](http://gitlab.acompas.audio/oricordeau/acompas/tree/meteor) on gitlab.acompas.audio
