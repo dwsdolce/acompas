@@ -1,0 +1,12 @@
+stages:
+  - build
+#  - staging
+#  - production
+
+# Jobs
+
+build_job:
+  script:
+    - bower install
+    - ./sync_assets.sh
+  stage: build
