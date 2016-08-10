@@ -79,7 +79,7 @@ bower install
 python /path/to/crosswalk/make_apk.py --package=audio.acompas.app --manifest=crosswalk/manifest.json --enable-remote-debugging --compressor=js --compressor=css
 ```
 
-## Credits
+## Thanks
 
 * The metronome's audio core is inspired by the following [code from Chris Wilson](https://github.com/cwilso/metronome).
 * The palmas sordas and jaleo sounds are recordings of Aziz Andry.
