@@ -34,3 +34,6 @@ rsync -av ./bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.
 # jquery-mousewheel
 mkdir -p ./crosswalk/bower_components/jquery-mousewheel
 rsync -av ./bower_components/jquery-mousewheel/jquery.mousewheel.min.js ./crosswalk/bower_components/jquery-mousewheel
+# startaudiocontext
+mkdir -p ./crosswalk/bower_components/startaudiocontext
+rsync -av ./bower_components/startaudiocontext/StartAudioContext.js ./crosswalk/bower_components/startaudiocontext

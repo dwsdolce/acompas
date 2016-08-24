@@ -1273,7 +1273,7 @@ function scheduleNote(beatNumber, time) {
     }
     // If option "times only" selected, don't play counter times
     if ( (window.aCompas.noteResolution === 1) && (beatNumber % 2 === 1) ) {
-        return; 
+        return;
     }
     var paloData = null;
     $.each(window.aCompas.palos, function(paloIndex, paloData2) {
@@ -1499,10 +1499,10 @@ function setPalo(paloSlug) {
 function adaptToFooterHeight() {
     var footer = $("footer");
     if (footer.length > 0) {
-        var mainPaddingBottom = footer.height() 
+        var mainPaddingBottom = footer.height()
             + parseInt(footer.css("margin-top").replace("px", ""))
             + parseInt(footer.css("padding-top").replace("px", ""))
-            + parseInt(footer.css("padding-bottom").replace("px", "")) 
+            + parseInt(footer.css("padding-bottom").replace("px", ""))
             + parseInt($(".slider-handle").css("height").replace("px", "")) / 2;
         $("#main").css("padding-bottom", mainPaddingBottom);
     }
@@ -1652,6 +1652,11 @@ function buildUi() {
     html += "</div>"; // End #controls-container
 
     $("#main").html(html);
+
+    // Trick for getting audio working in iOS
+    // Tell StartAudioContext to start AudioContext when the play button is touched
+    // https://github.com/tambien/StartAudioContext
+    StartAudioContext.on(".play");
 
     // On palo change
     $("#palo").change(function(e) {
@@ -1932,6 +1937,10 @@ function initAudio() {
                 }
             };
             window.aCompas.timerWorker.postMessage({"interval":window.aCompas.lookahead});
+            // Trick for getting audio working on iOS
+            // Tell StartAudioContext which AudioContext instance we are using
+            // https://github.com/tambien/StartAudioContext
+            StartAudioContext.setContext(window.aCompas.audioContext);
         } else {
             $("#will-not-work-modal").modal("show");
         }
@@ -1948,9 +1957,5 @@ function initAudio() {
 
 function initMetronome() {
     buildUi();
-    // Apple iOS detection (See http://stackoverflow.com/questions/9038625/detect-if-device-is-ios)
-    if ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ) {
-        $("#ios-modal").modal("show");
-    }
     initAudio();
 }
