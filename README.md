@@ -18,6 +18,8 @@ A new version is being developed since August 2015, a complete rewrite based on 
 
 `master` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/master)
 
+`production` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/production)
+
 `meteor` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/meteor/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/meteor)
 
 ## Installing the web application (the simple way)
