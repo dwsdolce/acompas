@@ -10,7 +10,9 @@ cordova/www/common
 cordova/platforms/android/assets/www
 cordova/platforms/android/release-signing.properties
 crosswalk/common
+crosswalk/images
 crosswalk/bower_components
 *.apk
 .project
 nbproject
+crosswalk-*.zip

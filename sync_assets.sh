@@ -52,3 +52,6 @@ rsync -av ./bower_components/jquery-mousewheel/jquery.mousewheel.min.js ./crossw
 # startaudiocontext
 mkdir -p ./crosswalk/bower_components/startaudiocontext
 rsync -av ./bower_components/startaudiocontext/StartAudioContext.js ./crosswalk/bower_components/startaudiocontext
+# Icons
+mkdir -p ./crosswalk/images
+rsync -av ./images/icon_*.png ./crosswalk/images

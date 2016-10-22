@@ -1670,11 +1670,6 @@ function buildUi() {
 
     $("#main").html(html);
 
-    // Trick for getting audio working in iOS
-    // Tell StartAudioContext to start AudioContext when the play button is touched
-    // https://github.com/tambien/StartAudioContext
-    StartAudioContext.on(".play");
-
     // On palo change
     $("#palo").change(function(e) {
         // Set rhythm style
@@ -1927,6 +1922,10 @@ function initAudio() {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         if (window.AudioContext != undefined) {
             window.aCompas.audioContext = new AudioContext();
+            // Trick for getting audio working in iOS
+            // Tell StartAudioContext to start AudioContext when the play button is touched
+            // https://github.com/tambien/StartAudioContext
+            StartAudioContext(window.aCompas.audioContext, ".play");
             // Detect the audio format to use for playing
             if (new Audio().canPlayType("audio/flac")) {
                 window.aCompas.audioFormat = "flac";
@@ -1954,10 +1953,6 @@ function initAudio() {
                 }
             };
             window.aCompas.timerWorker.postMessage({"interval":window.aCompas.lookahead});
-            // Trick for getting audio working on iOS
-            // Tell StartAudioContext which AudioContext instance we are using
-            // https://github.com/tambien/StartAudioContext
-            StartAudioContext.setContext(window.aCompas.audioContext);
         } else {
             $("#will-not-work-modal").modal("show");
         }
