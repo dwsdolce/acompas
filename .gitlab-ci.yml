@@ -28,5 +28,6 @@ build_job:
   script:
     - bower install
     - ./sync_assets.sh
+    - PATH=$PATH:$ANDROID_HOME/tools
     - crosswalk-pkg --targets="arm x86 arm_64 x86_64" -c stable ./crosswalk/
   stage: build
