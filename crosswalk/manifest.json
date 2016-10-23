@@ -1,6 +1,6 @@
 {
   "name": "A Compás",
-  "xwalk_app_version": "1.0.29",
+  "xwalk_app_version": "1.0.31",
   "xwalk_package_id": "audio.acompas.app",
   "start_url": "index.html",
   "icons": [
