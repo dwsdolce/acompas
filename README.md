@@ -5,22 +5,20 @@ A flamenco metronome available in two versions :
 * Web application (available at [http://acompas.audio](http://acompas.audio)).
 * Mobile application using [Crosswalk](https://crosswalk-project.org/), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app).
 
-It makes use of Web Audio API to play various flamenco rhythms and features a visual animation.
+It uses the Web Audio API to play various flamenco rhythms and features a visual animation.
 
-## Version 2.0 development
+## Branches
 
 The [online version](http://acompas.audio) is the version 1 of A Compás.
-A new version is being developed since August 2015, a complete rewrite based on the [Meteor framework](https://www.meteor.com).
-
-[Browse the "meteor" branch](http://gitlab.acompas.audio/oricordeau/acompas/tree/meteor) on gitlab.acompas.audio
+A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/oricordeau/acompas/tree/vue).
 
 ## Automated builds status
 
-`master` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/master)
+`master` branch (v1) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/master)
 
-`production` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/production)
+`production` branch (v1) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/production)
 
-`meteor` branch - [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/meteor/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/meteor)
+`vue` branch (v2) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/vue/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/vue)
 
 ## Installing the web application (the simple way)
 
