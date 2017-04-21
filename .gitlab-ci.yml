@@ -19,7 +19,7 @@ stages:
 #  - production
 
 variables:
-  ANDROID_HOME: "/www/android/android-sdk-linux"
+  ANDROID_HOME: "/www/android"
   JAVA_HOME: "/usr/lib/jvm/java-8-oracle"
 
 # Jobs

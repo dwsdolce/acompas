@@ -76,7 +76,7 @@ bower install
 # Synchronize assets to the web/ and crosswalk/ folders
 ./sync_assets.sh
 # Build the app
-crosswalk-pkg -c stable ./crosswalk/
+crosswalk-pkg --targets="arm x86 arm_64 x86_64" -c stable ./crosswalk/
 ```
 
 ## Thanks
