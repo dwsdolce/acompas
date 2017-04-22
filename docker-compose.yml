@@ -18,5 +18,5 @@ services:
 #      - .:/opt/app
 #      - /opt/app/node_modules
     ports:
-      - 8080:8080
+      - 8082:8080
     restart: always
