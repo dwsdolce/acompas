@@ -10,21 +10,21 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 ## Branches
 
 The [online version](http://acompas.audio) is the version 1 of A Compás.
-A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/oricordeau/acompas/tree/vue).
+A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/acompas/acompas/tree/vue).
 
 ## Automated builds status
 
-`master` branch (v1) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/master)
+`master` branch (v1) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/master)
 
-`production` branch (v1) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/production)
+`production` branch (v1) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/production)
 
-`vue` branch (v2) [![build status](http://gitlab.acompas.audio/oricordeau/acompas/badges/vue/build.svg)](http://gitlab.acompas.audio/oricordeau/acompas/commits/vue)
+`vue` branch (v2) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/vue/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/vue)
 
 ## Installing the web application (the simple way)
 
 ```bash
 # Clone the git repository in the current folder
-git clone http://gitlab.acompas.audio/oricordeau/acompas.git
+git clone http://gitlab.acompas.audio/acompas/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
 # Install dependencies using bower
@@ -45,7 +45,7 @@ Then in the project folder
 
 ```bash
 # Clone the git repository in the current folder
-git clone http://gitlab.acompas.audio/oricordeau/acompas.git
+git clone http://gitlab.acompas.audio/acompas/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
 # Create and provision the vm
@@ -68,7 +68,7 @@ Then, in the host operating system (not inside the virtual machine), open your f
 
 ```bash
 # Clone the git repository in the current folder
-git clone http://gitlab.acompas.audio/oricordeau/acompas.git
+git clone http://gitlab.acompas.audio/acompas/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
 # Install dependencies using bower

@@ -24,4 +24,4 @@ if [ ! -d "common" ]; then
     exit 1
 fi
 
-( cd web && python3 -m http.server 8000 --bind 192.168.0.11 )
+( cd web && python3 -m http.server 8000 --bind 127.0.0.1 )

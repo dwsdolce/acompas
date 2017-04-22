@@ -15,8 +15,7 @@
 
 stages:
   - build
-#  - staging
-#  - production
+  - deploy
 
 variables:
   ANDROID_HOME: "/www/android"
@@ -24,10 +23,42 @@ variables:
 
 # Jobs
 
-build_job:
+build_web_job:
+  script:
+    - bower install
+    - ./sync_assets.sh
+  stage: build
+  tags:
+    - development
+
+build_android_job:
   script:
     - bower install
     - ./sync_assets.sh
     - PATH=$PATH:$ANDROID_HOME/tools
     - crosswalk-pkg --targets="arm x86 arm_64 x86_64" -c stable ./crosswalk/
   stage: build
+  tags:
+    - development
+
+build_docker_job:
+  script:
+    - docker-compose build app_dev
+  stage: build
+  tags:
+    - development
+
+deploy_production_job:
+  when: manual
+  script:
+    - docker-compose up -d app_production
+  stage: deploy
+  environment:
+    name: production
+    url: http://acompas.audio
+  # Only run this job for this/those branch(es)
+  only:
+    - master
+  # Run this job on production runner
+  tags:
+    - production
