@@ -16,8 +16,8 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 
 ### Dead Branches
 
- * `meteor` and `meteor-react-graphql` are dead.
- * `production` is not since April 2017. Production deployments are now made from Gitlab using the `master` branch.
+ * `meteor` and `meteor-react-graphql` branches are dead.
+ * `production` is not maintained since April 2017. Production deployments are now made from Gitlab using the `master` branch.
 
 ## Automated builds status
 
