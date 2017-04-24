@@ -23,8 +23,6 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 
 `master` branch (v1) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/master/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/master)
 
-`production` branch (v1) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/production/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/production)
-
 `vue` branch (v2) [![build status](http://gitlab.acompas.audio/acompas/acompas/badges/vue/build.svg)](http://gitlab.acompas.audio/acompas/acompas/commits/vue)
 
 ## Installing the web application (the simple way)
