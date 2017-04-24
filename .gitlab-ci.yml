@@ -43,7 +43,8 @@ build_android_job:
 
 build_docker_job:
   script:
-    - docker-compose build app_dev
+    - ./docker-clean.sh
+    - docker-compose build --force-recreate --build app_dev
   stage: build
   tags:
     - development
@@ -51,7 +52,8 @@ build_docker_job:
 deploy_production_job:
   when: manual
   script:
-    - docker-compose up -d app_production
+    - ./docker-clean.sh
+    - docker-compose up --force-recreate --build -d app_production
   stage: deploy
   environment:
     name: production
