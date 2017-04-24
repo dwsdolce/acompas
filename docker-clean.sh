@@ -29,5 +29,5 @@ IMAGES=$(docker images | grep '^<none>' | awk '{print $3}')
 if [ "$IMAGES" == "" ]; then
   echo "No docker untagged image(s) to remove"
 else
-  docker rmi $IMAGES
+  docker rmi --force $IMAGES
 fi
