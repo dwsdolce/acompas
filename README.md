@@ -9,8 +9,15 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 
 ## Branches
 
-The [online version](http://acompas.audio) is the version 1 of A Compás.
-A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/acompas/acompas/tree/vue).
+### Active branches
+
+ * The [online version](http://acompas.audio) is the version 1 of A Compás, aka the ["master" branch](http://gitlab.acompas.audio/acompas/acompas).
+ * A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/acompas/acompas/tree/vue).
+
+### Dead Branches
+
+ * `meteor` and `meteor-react-graphql` are dead.
+ * `production` is not since April 2017. Production deployments are now made from Gitlab using the `master` branch.
 
 ## Automated builds status
 
