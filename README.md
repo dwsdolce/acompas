@@ -9,8 +9,8 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 
 ## Branches
 
- * The [online version](http://acompas.audio) is the version 1 of A Compás, aka the ["master" branch](http://gitlab.acompas.audio/acompas/acompas).
- * A new version (v2) is being developed in the ["vue" branch](http://gitlab.acompas.audio/acompas/acompas/tree/vue).
+ * The [online version](http://acompas.audio) is the version 1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
+ * A new version (v2) is being developed in the ["vue" branch](https://gitlab.com/oricordeau/acompas/tree/vue).
 
 ## Automated builds status
 
@@ -20,7 +20,7 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 
 ```bash
 # Clone the git repository in the current folder
-git clone http://gitlab.acompas.audio/acompas/acompas.git
+git clone https://gitlab.com/oricordeau/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
 # Install dependencies using bower
@@ -37,7 +37,7 @@ Then, open your favorite web browser and go to [http://localhost:8000](http://lo
 
 ```bash
 # Clone the git repository in the current folder
-git clone http://gitlab.acompas.audio/acompas/acompas.git
+git clone https://gitlab.com/oricordeau/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
 # Install dependencies using bower
