@@ -25,6 +25,10 @@ stages:
 
 build_web_job:
   script:
+    - apt-get -y update
+    - apt-get -y dist-upgrade
+    - curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    - apt-get install -y nodejs git rsync
     - npm install
     - ./sync_assets.sh
   stage: build
