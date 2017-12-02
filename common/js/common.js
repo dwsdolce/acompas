@@ -58,31 +58,31 @@ window.aCompas = {
         },
         clara_3: {
             src: 'clara/clara_3',
-            volume : 0.5
+            volume : 0.8
         },
         sorda_1: {
             src: 'sorda/sorda_1',
-            volume : 0.3
+            volume : 0.8
         },
         sorda_2: {
             src: 'sorda/sorda_2',
-            volume : 0.3
+            volume : 0.8
         },
         sorda_3: {
             src: "sorda/sorda_3",
-            volume: 0.3
+            volume: 0.8
         },
         cajon_1: {
             src: 'cajon/cajon_1',
-            volume: 0.6
+            volume: 0.8
         },
         cajon_2: {
             src: 'cajon/cajon_2',
-            volume: 0.6
+            volume: 0.8
         },
         cajon_3: {
             src: 'cajon/cajon_3',
-            volume: 0.6
+            volume: 0.8
         },
         udu_1: {
             src: 'udu/udu_1',
@@ -90,83 +90,83 @@ window.aCompas = {
         },
         udu_2: {
             src: 'udu/udu_2',
-            volume : 0.5
+            volume : 0.8
         },
         jaleo_1: {
             src: "jaleo/jaleo_1",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_2: {
             src: "jaleo/jaleo_2",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_3: {
             src: "jaleo/jaleo_3",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_4: {
             src: "jaleo/jaleo_4",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_5: {
             src: "jaleo/jaleo_5",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_6: {
             src: "jaleo/jaleo_6",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_7: {
             src: "jaleo/jaleo_7",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_8: {
             src: "jaleo/jaleo_8",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_9: {
             src: "jaleo/jaleo_9",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_10: {
             src: "jaleo/jaleo_10",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_11: {
             src: "jaleo/jaleo_11",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_12: {
             src: "jaleo/jaleo_12",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_13: {
             src: "jaleo/jaleo_13",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_14: {
             src: "jaleo/jaleo_14",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_15: {
             src: "jaleo/jaleo_15",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_16: {
             src: "jaleo/jaleo_16",
-            volume: 0.5
+            volume: 0.8
         },
         jaleo_17: {
             src: "jaleo/jaleo_17",
-            volume: 0.5
+            volume: 0.8
         },
         click_1: {
             src: 'click/click_1',
-            volume: 0.1
+            volume: 0.2
         },
         click_2: {
             src: 'click/click_2',
-            volume: 0.1
+            volume: 0.2
         }
     },
     soundCounts: {
