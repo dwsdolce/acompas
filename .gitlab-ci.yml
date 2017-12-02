@@ -28,7 +28,7 @@ build_web_job:
     - apt-get -y update
     - apt-get -y dist-upgrade
     - apt-get -y install curl
-    - curl -sL https://deb.nodesource.com/setup_9.x | -E bash -
+    - curl -sL https://deb.nodesource.com/setup_9.x | bash -
     - apt-get install -y nodejs git rsync
     - npm install
     - ./sync_assets.sh
