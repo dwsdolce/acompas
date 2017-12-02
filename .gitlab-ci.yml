@@ -27,6 +27,7 @@ build_web_job:
   script:
     - apt-get -y update
     - apt-get -y dist-upgrade
+    - sudo apt-get install curl
     - curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
     - apt-get install -y nodejs git rsync
     - npm install
