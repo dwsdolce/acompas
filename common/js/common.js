@@ -1881,7 +1881,7 @@ function buildUi() {
     html += "    </div>"
     html += "    <div class=\"mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--2-col-phone\">";
     html += "       <input id=\"tempo-slider\" class=\"mdl-slider mdl-js-slider\" type=\"range\" "
-        + "min=\"0\" max=\"100\" value=\"0\" tabindex=\"0\">";
+        + "min=\"0\" max=\"400\" value=\"0\" tabindex=\"0\">";
     html += "   </div>";
     html += "    <div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone\">";
     html += "        <button id=\"tempo-increase-button\" class=\"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
