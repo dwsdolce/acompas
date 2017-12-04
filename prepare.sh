@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with A Compás. If not, see <http://www.gnu.org/licenses/>.
 
-# This script copies the assets to both version of the app (web and crosswalk)
+# This script copies the assets to both version of the app (web and mobile)
 
 
 # Check that this script is called from the right place, i.e. the project's root
@@ -24,34 +24,34 @@ if [ ! -d "common" ]; then
     exit 1
 fi
 
+mkdir -p ./build/css
+sass ./common/sass/common.scss ./build/common.css
+
 # Web version
 
+rsync -av --delete ./node_modules ./web
 rsync -av --delete ./common ./web
-rsync -av --delete ./bower_components ./web
 rsync -av ./images/icon_512x512.png ./web/images
+rsync -av ./images/icon_96x96.png ./web/images
+rsync -av ./build/common.css ./web
 
 # Cordova version
 
+rsync -av ./build/common.css ./cordova/www
 # Fonts
 rsync -av --delete --delete-excluded --exclude="common/fonts/Playball/OFL.txt" --exclude="common/audio/README" ./common ./cordova/www
-# Bootstrap
-mkdir -p ./cordova/www/bower_components/bootstrap/dist/{css,fonts,js}
-rsync -av ./bower_components/bootstrap/dist/css/bootstrap.min.css ./cordova/www/bower_components/bootstrap/dist/css
-rsync -av --delete ./bower_components/bootstrap/dist/fonts ./cordova/www/bower_components/bootstrap/dist
-rsync -av ./bower_components/bootstrap/dist/js/bootstrap.min.js ./cordova/www/bower_components/bootstrap/dist/js
+# material-design-lite
+mkdir -p ./cordova/www/node_modules/material-design-lite
+rsync -av node_modules/material-design-lite/material.min.js ./cordova/www/node_modules/material-design-lite
 # jQuery
-mkdir -p ./cordova/www/bower_components/jquery/dist
-rsync -av ./bower_components/jquery/dist/jquery.min.js ./cordova/www/bower_components/jquery/dist
-# seiyria-bootstrap-slider
-mkdir -p ./cordova/www/bower_components/seiyria-bootstrap-slider/dist/css
-rsync -av ./bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js ./cordova/www/bower_components/seiyria-bootstrap-slider/dist
-rsync -av ./bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css ./cordova/www/bower_components/seiyria-bootstrap-slider/dist/css
+mkdir -p ./cordova/www/node_modules/jquery/dist
+rsync -av ./node_modules/jquery/dist/jquery.min.js ./cordova/www/node_modules/jquery/dist
 # jquery-mousewheel
-mkdir -p ./cordova/www/bower_components/jquery-mousewheel
-rsync -av ./bower_components/jquery-mousewheel/jquery.mousewheel.min.js ./cordova/www/bower_components/jquery-mousewheel
+mkdir -p ./cordova/www/node_modules/jquery-mousewheel
+rsync -av ./node_modules/jquery-mousewheel/jquery.mousewheel.js ./cordova/www/node_modules/jquery-mousewheel
 # startaudiocontext
-mkdir -p ./cordova/www/bower_components/startaudiocontext
-rsync -av ./bower_components/startaudiocontext/StartAudioContext.js ./cordova/www/bower_components/startaudiocontext
+mkdir -p ./cordova/www/node_modules/startaudiocontext
+rsync -av ./node_modules/startaudiocontext/StartAudioContext.js ./cordova/www/node_modules/startaudiocontext
 # Icons
 mkdir -p ./cordova/www/images
 rsync -av ./images/icon_*.png ./cordova/www/images

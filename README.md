@@ -23,10 +23,10 @@ It uses the Web Audio API to play various flamenco rhythms and features a visual
 git clone https://gitlab.com/oricordeau/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
-# Install dependencies using bower
-bower install
-# Synchronize assets to the web/ and crosswalk/ folders
-./sync_assets.sh
+# Install dependencies
+npm install
+# Synchronize assets to the web/ and cordova/ folders
+./prepare.sh
 # Run a basic web server on port 8000
 ./server.sh
 ```
@@ -40,12 +40,16 @@ Then, open your favorite web browser and go to [http://localhost:8000](http://lo
 git clone https://gitlab.com/oricordeau/acompas.git
 # Go inside the folder created by the previous command
 cd acompas
-# Install dependencies using bower
-bower install
-# Synchronize assets to the web/ and crosswalk/ folders
-./sync_assets.sh
+# Install dependencies
+npm install
+# Synchronize assets to the web/ and cordova/ folders
+./prepare.sh
+# Go to the cordova folder
+cd cordova
 # Build the app
 cordova build android --debug
+# You can also run the app by doing
+cordova run android --debug
 ```
 
 ## Thanks

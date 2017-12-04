@@ -31,7 +31,7 @@ build_web_job:
     - curl -sL https://deb.nodesource.com/setup_9.x | bash -
     - apt-get install -y nodejs git rsync
     - npm install
-    - ./sync_assets.sh
+    - ./prepare.sh
   stage: build
   tags:
     - development

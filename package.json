@@ -1,0 +1,30 @@
+{
+  "name": "acompas",
+  "version": "1.0.0",
+  "description": "A flamenco metronome",
+  "main": "web/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/oricordeau/acompas.git"
+  },
+  "keywords": [
+    "flamenco",
+    "metronome",
+    "web"
+  ],
+  "author": "Olivier Ricordeau <olivier@ricordeau.org>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://gitlab.com/oricordeau/acompas/issues"
+  },
+  "homepage": "http://acompas.audio",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "jquery-mousewheel": "^3.1.13",
+    "material-design-lite": "^1.3.0",
+    "startaudiocontext": "^1.2.1"
+  }
+}

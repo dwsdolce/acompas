@@ -31,12 +31,7 @@ window.aCompas = {
     masterGainNode: null,           // GainNode used for the master volume
     nextNoteTime: 0.0,              // When the next note is due ?
     noteResolution: 0,              // 0 = times + counter times, 1 = times only
-    clara: true,                    // Is the palma clara track on ?
-    sorda: true,                    // Is the palma sorda track on ?
-    cajon: true,                    // Is the cajón track on ?
-    udu: true,                      // Is the udu track on ?
-    jaleo: false,                   // Is the jaleo track on ?
-    click: false,                   // Is the click track on ?
+    mixer: [],                      // Volume for each instrument
     improvise: true,                // Is improvisation mode on ?
     timerWorker: null,              // The Web Worker used to fire timer messages
     nbBeatsInPattern: null,         // Number of beats in the current pattern (counting eighth notes)
@@ -177,12 +172,36 @@ window.aCompas = {
         jaleo: 17
     },
     instruments: [
-        "clara",
-        "sorda",
-        "cajon",
-        "udu",
-        "jaleo",
-        "click"
+        {
+            slug: "clara",
+            label: "Palma clara",
+            defaultVolume: 100
+        },
+        {
+            slug: "sorda",
+            label: "Palma sorda",
+            defaultVolume: 100
+        },
+        {
+            slug: "cajon",
+            label: "Cajón",
+            defaultVolume: 80
+        },
+        {
+            slug: "udu",
+            label: "Udu",
+            defaultVolume: 80
+        },
+        {
+            slug: "jaleo",
+            label: "Jaleo",
+            defaultVolume: 8
+        },
+        {
+            slug: "click",
+            label: "Click",
+            defaultVolume: 0
+        }
     ]
 };
 
@@ -1420,10 +1439,10 @@ function localStorageGet(name) {
 }
 
 // Set functions
-function playSound(name, start, vol) {
-    // If vol is null, use the sound's default volume
-    if (vol === null) {
-        vol = window.aCompas.sounds[name].volume;
+function playSound(name, start, soundVol, instrumentSlug) {
+    // If soundVol is null, use the sound's default volume
+    if (soundVol === null) {
+        soundVol = window.aCompas.sounds[name].volume;
     }
     // Lazy-load the master gain node
     if (window.aCompas.masterGainNode === null) {
@@ -1431,22 +1450,32 @@ function playSound(name, start, vol) {
         window.aCompas.masterGainNode.connect( window.aCompas.audioContext.destination );
     }
     // Create a gainNode
-    var gainNode = window.aCompas.audioContext.createGain();
+    var soundGainNode = window.aCompas.audioContext.createGain();
     // Set gain values
     window.aCompas.masterGainNode.gain.value = window.aCompas.masterVolume / 100;
-    gainNode.gain.value = vol;
+    soundGainNode.gain.value = soundVol;
+    // Create a gainNode
+    var instrumentGainNode = window.aCompas.audioContext.createGain();
+    let instrumentVol = null;
+    $.each(window.aCompas.mixer, function(index, item) {
+        if (instrumentSlug === item.instrumentSlug) {
+            instrumentVol = item.volume / 100;
+        }
+    });
+    instrumentGainNode.gain.value = instrumentVol;
     // Create bufferSource
     var bufferSource = window.aCompas.audioContext.createBufferSource();
     bufferSource.buffer = window.aCompas.sounds[name].buffer;
     // Connect everything
-    bufferSource.connect(gainNode);
-    gainNode.connect(window.aCompas.masterGainNode);
+    bufferSource.connect(soundGainNode);
+    soundGainNode.connect(instrumentGainNode);
+    instrumentGainNode.connect(window.aCompas.masterGainNode);
     // Play
     bufferSource.start(start);
 }
 
 function getTempo() {
-    return $("#tempo").data("slider").getValue();
+    return parseInt($("#tempo-slider").val());
 }
 
 function nextNote() {
@@ -1488,7 +1517,7 @@ function scheduleInstrumentWithoutImprovisation(instrument, beatNumber, time, pa
         } else {
             nb = paloData[instrument][beatNumber];
         }
-        playSound(instrument + "_" + nb, time, volume);
+        playSound(instrument + "_" + nb, time, volume, instrument);
     }
 }
 
@@ -1497,27 +1526,25 @@ function scheduleInstrumentWithImprovisation(instrument, time) {
     var nb = Math.round(Math.random() * (window.aCompas.soundCounts[instrument] - 1)) + 1;
     // Pick a random volume, using the sound's default volume as a maximum value
     var volume = Math.random() * window.aCompas.sounds[instrument + "_" + nb].volume;
-    playSound(instrument + "_" + nb, time, volume);
+    playSound(instrument + "_" + nb, time, volume, instrument);
 }
 
 function scheduleInstrument(instrument, beatNumber, time, paloData) {
-    if (window.aCompas[instrument]) {
-        if (window.aCompas.improvise) {
-            var improvisationProbability = 20; // Percentage of chances that the pattern is not followed
-            var willStickToPattern = (Math.random() > improvisationProbability / 100);
-            if (willStickToPattern) {
-                scheduleInstrumentWithoutImprovisation(instrument, beatNumber, time, paloData);
-            } else {
-                scheduleInstrumentWithImprovisation(instrument, time);
-            }
-        } else {
+    if (window.aCompas.improvise) {
+        var improvisationProbability = 20; // Percentage of chances that the pattern is not followed
+        var willStickToPattern = (Math.random() > improvisationProbability / 100);
+        if (willStickToPattern) {
             scheduleInstrumentWithoutImprovisation(instrument, beatNumber, time, paloData);
+        } else {
+            scheduleInstrumentWithImprovisation(instrument, time);
         }
+    } else {
+        scheduleInstrumentWithoutImprovisation(instrument, beatNumber, time, paloData);
     }
 }
 
 function scheduleJaleo(beatNumber, time, paloData) {
-    if (window.aCompas.jaleo && paloData.beats[beatNumber] === "strong") {
+    if (paloData.beats[beatNumber] === "strong") {
         var willPlay = null;
         if (beatNumber === 0) {
             willPlay = true;
@@ -1537,18 +1564,18 @@ function scheduleJaleo(beatNumber, time, paloData) {
             for (var i = 0; i < nbVoices; i++) {
                 // Pick a random jaleo sound
                 var nb = Math.round(Math.random() * (window.aCompas.soundCounts.jaleo - 1)) + 1;
-                playSound("jaleo_" + nb, time, null);
+                playSound("jaleo_" + nb, time, null, "jaleo");
             }
         }
     }
 }
 
 function scheduleClick(beatNumber, time, paloData) {
-    if (window.aCompas.click && beatNumber % 2 === 0) {
+    if (beatNumber % 2 === 0) {
         if (paloData.beats[beatNumber] === "strong") {
-            playSound("click_1", time, null);
+            playSound("click_1", time, null, "click");
         } else {
-            playSound("click_2", time, null);
+            playSound("click_2", time, null, "click");
         }
     }
 }
@@ -1590,7 +1617,7 @@ function scheduler() {
 }
 
 function play() {
-    var playButton = $('.play > .glyphicon');
+    var playButton = $('.play > .material-icons');
     var paloData = null;
     $.each(window.aCompas.palos, function(paloIndex, paloData2) {
         if (window.aCompas.palo === paloData2.slug) {
@@ -1602,7 +1629,7 @@ function play() {
         window.aCompas.nextNoteTime = window.aCompas.audioContext.currentTime;
         window.aCompas.playStartTime = window.aCompas.audioContext.currentTime;
         // change play button
-        playButton.removeClass('glyphicon-play').addClass('glyphicon-stop');
+        playButton.html("stop");
         $('.play').css("border-color", "firebrick").addClass('active');
         // Send message to worker
         window.aCompas.timerWorker.postMessage("start");
@@ -1611,7 +1638,7 @@ function play() {
         _paq.push(['trackEvent', 'Playing', 'Play', paloData.label]);
     } else {
         // change play button
-        playButton.removeClass('glyphicon-stop').addClass('glyphicon-play');
+        playButton.html("play_arrow");
         $('.play').css("border-color", "tomato").removeClass('active');
         // Send message to worker
         window.aCompas.timerWorker.postMessage("stop");
@@ -1694,7 +1721,7 @@ function draw() {
     $("#visualizer").html(html);
 
     // Set height for #visualizer
-    var ratio = 0.17; // height / width ratio
+    var ratio = 0.13; // height / width ratio
     var visualizerHeight = ratio * $("#visualizer").width();
     $("#visualizer").css("height", visualizerHeight);
     // Set CSS for each bar
@@ -1744,200 +1771,154 @@ function setPalo(paloSlug) {
     });
     // Update window.aCompas.nbBeatsInPattern
     window.aCompas.nbBeatsInPattern = paloData.nbBeatsInPattern;
-    // Destroy the tempo slider if needed
-    if ($("#tempo").data("slider")) {
-        $("#tempo").data("slider").destroy();
-    }
     var tempoValue = paloData.defaultTempo;
     if (localStorageGet("tempo-" + window.aCompas.palo)) {
         tempoValue = parseInt(localStorageGet("tempo-" + window.aCompas.palo));
     }
-    // Build tempo slider
-    $("#tempo").slider({
-        orientation: "vertical",
-        min: paloData.minTempo,
-        max: paloData.maxTempo,
-        tooltip: "hide",
-        value: tempoValue,
-        reversed: true
-    }).on("slide", function(e) {
-        $("#tempo-label").html("<i class=\"glyphicon glyphicon-time\"></i> " + getTempo() + " bpm");
-        paloData.setTempoInfo();
-        localStorageSet("tempo-" + window.aCompas.palo, getTempo());
-    }).on("slideStop", function(e) {
-        $("#tempo-label").html("<i class=\"glyphicon glyphicon-time\"></i> " + getTempo() + " bpm");
-        paloData.setTempoInfo();
-        localStorageSet("tempo-" + window.aCompas.palo, getTempo());
-    });
-    // Mouse wheel behavior
-    $("#tempo").parent().off("mousewheel").on("mousewheel", function(e) {
-        e.preventDefault();
-        if (e.deltaY > 0) {
-            $("#tempo").data("slider").setValue($("#tempo").data("slider").getValue() + 1, true, false);
-        } else {
-            $("#tempo").data("slider").setValue($("#tempo").data("slider").getValue() - 1, true, false);
-        }
-    });
-    // Force rendering of the slider's label
-    $("#tempo").trigger("slideStop");
+    if (document.getElementById("tempo-slider").MaterialSlider) {
+        document.getElementById("tempo-slider").MaterialSlider.change(tempoValue);
+    } else {
+        $("#tempo-slider").val(tempoValue);
+    }
+    $("#tempo-slider").attr("min", paloData.minTempo);
+    $("#tempo-slider").attr("max", paloData.maxTempo);
+    // This will update tempo label
+    $("#tempo-slider").trigger("change");
     // Draw visualization
     draw();
 }
 
-function adaptToFooterHeight() {
-    var footer = $("footer");
-    if (footer.length > 0) {
-        var mainPaddingBottom = footer.height()
-            + parseInt(footer.css("margin-top").replace("px", ""))
-            + parseInt(footer.css("padding-top").replace("px", ""))
-            + parseInt(footer.css("padding-bottom").replace("px", ""))
-            + parseInt($(".slider-handle").css("height").replace("px", "")) / 2;
-        $("#main").css("padding-bottom", mainPaddingBottom);
-    }
-}
-
 function setVolumeLabel() {
-    $("#volume-label").html("<i class=\"glyphicon glyphicon-volume-up\"></i> " + window.aCompas.masterVolume + " %");
+    $("#volume-label").html(window.aCompas.masterVolume + " %");
 }
 
 function buildUi() {
     var html = "";
 
     // Visualization
-    html += "<div id=\"visualizer-container\" class=\"container\">";
-    html += "    <div class=\"row\">";
-    html += "        <div id=\"visualizer\" class=\"col-xs-12\">";
-    html += "        </div>";
+    html += "<div id=\"visualizer\">";
+    html += "</div>";
+
+    html += "<div class=\"mdl-grid\">";
+    html += "    <div class=\"mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone\">";
+
+    html += "<div class=\"mdl-grid\">";
+
+    // Palo switcher
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+    html += "    <div class=\"label-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <b>Rhythm</b>";
+    html += "    </div>";
+    html += "    <div class=\"action-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <select id=\"palo\" class=\"form-control\">";
+    $.each(window.aCompas.palos, function(paloIndex, paloData) {
+        html += "<option value=\"" + paloData.slug + "\">";
+        html += paloData.label;
+        html += "</option>";
+    });
+    html += "        </select>";
+    html += "    </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+
+    // Improvise
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+    html += "    <div class=\"label-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <b>Improvise</b>";
+    html += "    </div>";
+    html += "    <div class=\"action-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <label class=\"mdl-switch mdl-js-switch mdl-js-ripple-effect\" for=\"improvise-switch\">";
+    html += "            <input type=\"checkbox\" id=\"improvise-switch\" class=\"mdl-switch__input\" checked>";
+    html += "            <span class=\"mdl-switch__label\"></span>";
+    html += "        </label>";
+    html += "    </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+
+    // Resolution
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+    html += "    <div class=\"label-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <b>Eighth-note</b>"
+    html += "    </div>";
+    html += "    <div class=\"action-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <label class=\"mdl-switch mdl-js-switch mdl-js-ripple-effect\" for=\"resolution-switch\">";
+    html += "            <input type=\"checkbox\" id=\"resolution-switch\" class=\"mdl-switch__input\" checked>";
+    html += "            <span class=\"mdl-switch__label\"></span>";
+    html += "        </label>";
+    html += "    </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+
+    // Mixer
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+    html += "    <div class=\"label-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <b>Instruments</b>";
+    html += "    </div>";
+    html += "    <div class=\"action-cell mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <button class=\"mixer-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
+    html += "            Mixer";
+    html += "        </button>";
+    html += "    </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--3-col mdl-cell--hide-tablet mdl-cell--hide-phone\">";
+    html += "    </div>";
+
+    html += "</div>"; // ! .mdl-grid
+
+    html += "    </div>"; // ! .mdl-cell
+    html += "    <div class=\"mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone\">";
+
+    // Tempo
+    html += "<span><b>Tempo :</b> <span id=\"tempo-label\"></span></span>";
+    html += "<div id=\"tempo-grid\" class=\"mdl-grid\">";
+    html += "    <div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone\">";
+    html += "        <button id=\"tempo-decrease-button\" class=\"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
+    html += "            -";
+    html += "        </button>";
+    html += "    </div>"
+    html += "    <div class=\"mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--2-col-phone\">";
+    html += "       <input id=\"tempo-slider\" class=\"mdl-slider mdl-js-slider\" type=\"range\" "
+        + "min=\"0\" max=\"100\" value=\"0\" tabindex=\"0\">";
+    html += "   </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone\">";
+    html += "        <button id=\"tempo-increase-button\" class=\"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
+    html += "            +";
+    html += "        </button>";
     html += "    </div>";
     html += "</div>";
 
-    html += "<div id=\"controls-container\" class=\"container\">";
-    html += "    <div class=\"row\">";
-
-    // Palo switcher + options (resolution and palmas) + play button
-    html += "        <div id=\"left-col\" class=\"col-xs-6 col-sm-6 col-md-4 col-lg-4\">";
-
-    // Palo switcher + options
-    html += "            <div id=\"palo-and-options\">";
-
-    // Palo switcher
-    html += "                <select id=\"palo\" class=\"form-control\">";
-    $.each(window.aCompas.palos, function(paloIndex, paloData) {
-        html += "                <option value=\"" + paloData.slug + "\">";
-        html +=                      paloData.label;
-        html += "                </option>";
-    });
-    html += "                </select>";
-
-    // Options
-
-    // Resolution
-    html += "                <div>";
-    html += "                    <div class=\"btn-group btn-group-justified\" role=\"group\">";
-    html += "                        <div class=\"btn-group\" role=\"group\">";
-    html += "                            <button class=\"resolution resolution-0 btn btn-default btn-sm active\" title=\"Up beats and down beats\" data-resolution=\"0\">";
-    html += "                                <img src=\"common/images/croche.svg\" class=\"btn-icon\" />";
-    html += "                            </button>";
-    html += "                        </div>";
-    html += "                        <div class=\"btn-group\" role=\"group\">";
-    html += "                            <button class=\"resolution resolution-1 btn btn-default btn-sm\" title=\"Up beats only\" data-resolution=\"1\">";
-    html += "                                <img src=\"common/images/noire.svg\" class=\"btn-icon\" />";
-    html += "                            </button>";
-    html += "                        </div>";
-    html += "                    </div>";
-    html += "                </div>";
-
-    // Instruments
-    html += "                <div>";
-    html += "                    <button id=\"toggle-instruments\" class=\"btn btn-default btn-lg btn-block\" title=\"Toggle instruments\">";
-    html += "                        <i class=\"glyphicon glyphicon-th-list\"></i> Instruments";
-    html += "                    </button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle active\" data-instrument=\"clara\" title=\"Palma clara\"><img src=\"common/images/clara.svg\" class=\"btn-instrument\" /></button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle active\" data-instrument=\"sorda\" title=\"Palma sorda\"><img src=\"common/images/sorda.svg\" class=\"btn-instrument\" /></button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle active\" data-instrument=\"cajon\" title=\"Cajón\"><img src=\"common/images/cajon.svg\" class=\"btn-instrument\" /></button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle active\" data-instrument=\"udu\" title=\"Udu\"><img src=\"common/images/udu.svg\" class=\"btn-instrument\" /></button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle\" data-instrument=\"click\" title=\"Click\"><img src=\"common/images/click.svg\" class=\"btn-instrument\" /></button>";
-    html += "                    <button class=\"toggle-instrument btn btn-default btn-lg btn-circle\" data-instrument=\"jaleo\" title=\"Jaleo\"><img src=\"common/images/jaleo.svg\" class=\"btn-instrument\" /></button>";
-    html += "                </div>";
-
-    // Improvise
-    html += "                <div>";
-    html += "                    <button id=\"improvise\" class=\"btn btn-default btn-lg btn-block active\" title=\"Add some randomness to the rhythmic pattern\">";
-    html += "                        <i class=\"glyphicon glyphicon-random\"></i> Improvise";
-    html += "                    </button>";
-    html += "                </div>";
+    // Volume
+    html += "<span><b>Volume :</b> <span id=\"volume-label\"></span></span>";
+    html += "<div id=\"volume-grid\" class=\"mdl-grid\">";
+    html += "    <div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone\">";
+    html += "        <button id=\"volume-decrease-button\" class=\"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
+    html += "            -";
+    html += "        </button>";
+    html += "    </div>"
+    html += "    <div class=\"mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--2-col-phone\">";
+    html += "        <input id=\"volume-slider\" class=\"mdl-slider mdl-js-slider\" type=\"range\" "
+        + "min=\"0\" max=\"100\" value=\"0\" tabindex=\"0\">";
+    html += "   </div>";
+    html += "    <div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone\">";
+    html += "        <button id=\"volume-increase-button\" class=\"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent\">";
+    html += "            +";
+    html += "        </button>";
+    html += "    </div>";
+    html += "</div>";
 
     // Info area
-    html += "                <p id=\"info\" class=\"text-danger text-center\"></p>";
+    html += "<div id=\"info\"></div>";
 
-    html += "            </div>"; // End #palo-and-options
-    html += "        </div>"; // End Palo switcher + options (resolution and palmas)
-
-    // Sliders (tempo and volume)
-    html += "        <div id=\"right-col\" class=\"col-xs-6 col-sm-6 col-md-4 col-md-push-4 col-lg-4 col-lg-push-4 text-center\">";
-    html += "            <div class=\"row\">";
-
-    // Tempo
-    html += "                <div id=\"tempo-slider-container\" class=\"col-xs-6\">";
-    html += "                    <div class=\"row\">";
-    html += "                        <div id=\"tempo-label\" class=\"col-xs-12\"><i class=\"glyphicon glyphicon-time\"></i> </div>";
-    html += "                    </div>";
-    html += "                    <div class=\"row\">";
-    html += "                        <div class=\"slider-container col-xs-6\">";
-    html += "                            <div id=\"tempo\">";
-    html += "                            </div>";
-    html += "                        </div>";
-    html += "                        <div class=\"col-xs-6 buttons\">";
-    html += "                             <div>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"tempo\" data-sign=\"plus\" data-offset=\"5\"><span class=\"glyphicon glyphicon-plus\"></span>5</button>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"tempo\" data-sign=\"plus\" data-offset=\"1\"><span class=\"glyphicon glyphicon-plus\"></span>1</button>";
-    html += "                             </div>";
-    html += "                             <div class=\"bottom\">";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"tempo\" data-sign=\"minus\" data-offset=\"1\"><span class=\"glyphicon glyphicon-minus\"></span>1</button>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"tempo\" data-sign=\"minus\" data-offset=\"5\"><span class=\"glyphicon glyphicon-minus\"></span>5</button>";
-    html += "                            </div>";
-    html += "                        </div>";
-    html += "                    </div>";
-    html += "                </div>";
-
-    // Volume
-    html += "                <div id=\"volume-slider-container\" class=\"col-xs-6\">";
-    html += "                    <div class=\"row\">";
-    html += "                        <div id=\"volume-label\" class=\"col-xs-12\"><i class=\"glyphicon glyphicon-volume-up\"></i> " + window.aCompas.masterVolume + " %</div>";
-    html += "                    </div>";
-    html += "                    <div class=\"row\">";
-    html += "                        <div class=\"slider-container col-xs-6\">";
-    html += "                            <div id=\"volume\">";
-    html += "                            </div>";
-    html += "                        </div>";
-    html += "                        <div class=\"col-xs-6 buttons\">";
-    html += "                            <div>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"volume\" data-sign=\"plus\" data-offset=\"5\"><span class=\"glyphicon glyphicon-plus\"></span>5</button>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"volume\" data-sign=\"plus\" data-offset=\"1\"><span class=\"glyphicon glyphicon-plus\"></span>1</button>";
-    html += "                            </div>";
-    html += "                            <div class=\"bottom\">";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"volume\" data-sign=\"minus\" data-offset=\"1\"><span class=\"glyphicon glyphicon-minus\"></span>1</button>";
-    html += "                                <button class=\"btn bth-default btn-lg\" data-target=\"volume\" data-sign=\"minus\" data-offset=\"5\"><span class=\"glyphicon glyphicon-minus\"></span>5</button>";
-    html += "                            </div>";
-    html += "                        </div>";
-    html += "                    </div>";
-    html += "                </div>";
-
-    html += "            </div>";
-    html += "        </div>"; // End #right-col
-
-    // Play button + info zone
-    html += "        <div id=\"play-container\" class=\"col-xs-12 col-sm-12 col-md-4 col-md-pull-4 col-lg-4 col-lg-pull-4 text-center\">";
+    html += "    </div>"; // ! .mdl-cell
+    html += "</div>"; // ! .mdl-grid
 
     // Play button
-    html += "            <button class=\"play\">";
-    html += "                <span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>";
-    html += "            </button>";
-
-    html += "        </div>"; // End #play-container
-
-    html += "    </div>"; // End .row
-    html += "</div>"; // End #controls-container
+    html += "<button class=\"play\">";
+    html += "    <i class=\"material-icons\">play_arrow</i>";
+    html += "</button>";
 
     $("#main").html(html);
 
@@ -1957,42 +1938,62 @@ function buildUi() {
         _paq.push(['trackEvent', 'PaloSwitch', 'Set', paloData.label]);
     });
 
-    // Volume slider
-    $("#volume").slider({
-        orientation: "vertical",
-        min: 0,
-        max: 100,
-        tooltip: "hide",
-        value: window.aCompas.masterVolume,
-        reversed: true,
-    }).on("slide", function(e) {
-        window.aCompas.masterVolume = e.value;
-        setVolumeLabel();
-        localStorageSet("volume", window.aCompas.masterVolume);
-    }).on("slideStop", function(e) {
-        window.aCompas.masterVolume = e.value;
-        setVolumeLabel();
-        localStorageSet("volume", window.aCompas.masterVolume);
-    });
+    // Tempo controls
 
-    $("#volume").parent().on("mousewheel", function(e) {
-        e.preventDefault();
+    $("#tempo-slider").change(function() {
+        $("#tempo-label").html(getTempo() + " bpm");
+        var paloData = null;
+        $.each(window.aCompas.palos, function(paloIndex, paloData2) {
+            if (window.aCompas.palo === paloData2.slug) {
+                paloData = paloData2;
+            }
+        });
+        paloData.setTempoInfo();
+        localStorageSet("tempo-" + window.aCompas.palo, getTempo());
+    });
+    // Mouse wheel behavior
+    $("#tempo-slider").off("mousewheel").on("mousewheel", function(e) {
         if (e.deltaY > 0) {
-            $("#volume").data("slider").setValue($("#volume").data("slider").getValue() + 1, true, false);
+            document.getElementById("tempo-slider").MaterialSlider.change(parseInt($("#tempo-slider").val()) + 1);
         } else {
-            $("#volume").data("slider").setValue($("#volume").data("slider").getValue() - 1, true, false);
+            document.getElementById("tempo-slider").MaterialSlider.change(parseInt($("#tempo-slider").val()) - 1);
         }
+        $("#tempo-slider").trigger("change");
+    });
+    $("#tempo-decrease-button").click(function(e) {
+        document.getElementById("tempo-slider").MaterialSlider.change(parseInt($("#tempo-slider").val()) - 1);
+        $("#tempo-slider").trigger("change");
+    });
+    $("#tempo-increase-button").click(function(e) {
+        document.getElementById("tempo-slider").MaterialSlider.change(parseInt($("#tempo-slider").val()) + 1);
+        $("#tempo-slider").trigger("change");
     });
 
-    // Buttons which are connected to the sliders (tempo and volume)
-    $("#right-col .buttons button").click(function (e) {
-        e.preventDefault();
-        var target = $(this).data("target");
-        var number = parseInt($(this).data("offset"));
-        var sign = ($(this).data("sign") === "plus") ? 1 : -1;
-        var offset = (sign >= 0) ? number : -number;
-        $("#" + target).data("slider")
-            .setValue($("#" + target).data("slider").getValue() + offset, true, false);
+
+    // Volume controls
+
+    $("#volume-slider").change(function() {
+        var volume = parseInt($(this).val());
+        window.aCompas.masterVolume = volume;
+        setVolumeLabel();
+        localStorageSet("volume", window.aCompas.masterVolume);
+    });
+    // Mouse wheel behavior
+    $("#volume-slider").off("mousewheel").on("mousewheel", function(e) {
+        if (e.deltaY > 0) {
+            document.getElementById("volume-slider").MaterialSlider.change(parseInt($("#volume-slider").val()) + 1);
+        } else {
+            document.getElementById("volume-slider").MaterialSlider.change(parseInt($("#volume-slider").val()) - 1);
+        }
+        $("#volume-slider").trigger("change");
+    });
+    $("#volume-decrease-button").click(function(e) {
+        document.getElementById("volume-slider").MaterialSlider.change(parseInt($("#volume-slider").val()) - 1);
+        $("#volume-slider").trigger("change");
+    });
+    $("#volume-increase-button").click(function(e) {
+        document.getElementById("volume-slider").MaterialSlider.change(parseInt($("#volume-slider").val()) + 1);
+        $("#volume-slider").trigger("change");
     });
 
     // Play button
@@ -2001,68 +2002,26 @@ function buildUi() {
     });
 
     // Resolution
-    $(".resolution").on("click", function(e) {
-        window.aCompas.noteResolution = $(this).hasClass("resolution-0") ? 0 : 1;
+    $("#resolution-switch").on("click", function(e) {
+        window.aCompas.noteResolution = $(this).parent().hasClass("is-checked") ? 1 : 0;
         localStorageSet("resolution", window.aCompas.noteResolution);
         var label = null;
         if (window.aCompas.noteResolution === 0) {
-            $(".resolution-0").addClass("active");
-            $(".resolution-1").removeClass("active");
             label = "Contratiempo";
         } else {
-            $(".resolution-1").addClass("active");
-            $(".resolution-0").removeClass("active");
             label = "Tiempo";
         }
         // Track event in Piwik
         _paq.push(['trackEvent', 'Options', 'Resolution', label]);
     });
 
-    // Instruments menu
-    $("#toggle-instruments").on("click", function() {
-        var $this = $(this);
-        if ($this.hasClass("open")) {
-            $this.removeClass("active");
-            $(".toggle-instrument").fadeOut(function() {
-                $this.removeClass("open");
-            });
-        }
-        else {
-            $this.addClass("active");
-            $(".toggle-instrument").fadeIn(function() {
-                $this.addClass("open");
-            });
-        }
-    });
-
-    // Instrument On/Off buttons
-    $(".toggle-instrument").on("click", function(e) {
-        e.preventDefault();
-        var instrument = $(this).data("instrument");
-        var label = null;
-        if ($(this).hasClass("active")) {
-            window.aCompas[instrument] = false;
-            $(this).removeClass("active");
-            label = "Off";
-        } else {
-            window.aCompas[instrument] = true;
-            $(this).addClass("active");
-            label = "On";
-        }
-        localStorageSet("instrument-" + instrument, window.aCompas[instrument]);
-        _paq.push(['trackEvent', 'Instrument', instrument.charAt(0).toUpperCase() + instrument.slice(1), label]);
-    });
-
     // Improvisation
-    $("#improvise").on("click", function(e) {
-        e.preventDefault();
+    $("#improvise-switch").on("click", function(e) {
         var label = null;
-        if ($(this).hasClass("active")) {
-            $(this).removeClass("active");
+        if ($(this).parent().hasClass("is-checked")) {
             window.aCompas.improvise = false;
             label = "Off";
         } else {
-            $(this).addClass("active");
             window.aCompas.improvise = true;
             label = "On";
         }
@@ -2083,19 +2042,77 @@ function buildUi() {
         }
     });
 
+    var html = "";
+    html += "<h4 class=\"mdl-dialog__title\">Mixer</h4>";
+    html += "<div class=\"mdl-dialog__content\">";
+    $.each(window.aCompas.instruments, function(index, instrument) {
+        html += "<div>";
+        html += "    <b><img src=\"common/images/" + instrument.slug
+            + ".svg\" class=\"instrument-icon\"/>" + instrument.label + "</b>";
+        html += "    <input id=\"instrument-slider-" + instrument.slug
+            + "\" class=\"instrument-slider mdl-slider mdl-js-slider\" "
+            + "data-instrument=\"" + instrument.slug + "\" type=\"range\" "
+            + "min=\"0\" max=\"100\" value=\"0\" tabindex=\"0\">";
+        html += "</div>";
+    });
+    html += "</div>";
+    html += "<div class=\"mdl-dialog__actions\">";
+    html += "    <button type=\"button\" class=\"mdl-button mdl-js-button "
+        + "mdl-button--raised mdl-js-ripple-effect mdl-button--accent close\">Ok</button>";
+    html += "</div>";
+
+    $("#mixer-dialog").html(html);
+
+    initMixer();
+
+    $(".mixer-button").click(function(e) {
+        e.preventDefault();
+        $("#mixer-dialog").show();
+    });
+
+    $("#mixer-dialog .close").click(function(e) {
+        e.preventDefault();
+        $("#mixer-dialog").fadeOut();
+    });
+
+    $("#will-not-work-dialog .close").click(function(e) {
+        e.preventDefault();
+        $("#will-not-work-dialog").fadeOut();
+    });
+
+    // Mouse wheel behavior
+    $.each(window.aCompas.instruments, function(index, instrument) {
+        var selector = "instrument-slider-" + instrument.slug;
+        $("#" + selector).off("mousewheel").on("mousewheel", function(e) {
+            if (e.deltaY > 0) {
+                document.getElementById(selector).MaterialSlider.change(parseInt($("#" + selector).val()) + 1);
+            } else {
+                document.getElementById(selector).MaterialSlider.change(parseInt($("#" + selector).val()) - 1);
+            }
+        });
+    });
+
+    // Instruments sliders
+    $("#mixer-dialog .instrument-slider").change(function() {
+        let instrumentSlug = $(this).data("instrument");
+        let value = parseInt($(this).val());
+        $.each(window.aCompas.mixer, function(index, item) {
+            if (item.instrumentSlug === instrumentSlug) {
+                window.aCompas.mixer[index].volume = value;
+            }
+        });
+        localStorageSet("instrument-" + instrumentSlug, value);
+    });
+
     // On window resize and/or orientation change
     $(window).on("resize", function(e) {
         draw();
-        adaptToFooterHeight();
-        adaptInstrumentsMenu();
         // Track event in Piwik
         trackDeviceOrientation();
     });
 
     // Initialization
     restoreValuesFromLocalStorage();
-    adaptToFooterHeight();
-    adaptInstrumentsMenu();
     trackDeviceOrientation();
 }
 
@@ -2106,46 +2123,47 @@ function restoreValuesFromLocalStorage() {
     $("#palo").val(paloSlug);
     // Resolution
     if (localStorageGet("resolution") !== null && parseInt(localStorageGet("resolution")) !== window.aCompas.noteResolution) {
-        $(".resolution[data-resolution=" + parseInt(localStorageGet("resolution")) + "]").click();
+        $("#resolution-switch").click();
     }
     // Instruments
-    $.each(window.aCompas.instruments, function(index, instrumentSlug) {
-        if (localStorageGet("instrument-" + instrumentSlug) !== null && JSON.parse(localStorageGet("instrument-" + instrumentSlug)) !== window.aCompas[instrumentSlug]) {
-            $(".toggle-instrument[data-instrument=" + instrumentSlug + "]").click();
+    $.each(window.aCompas.instruments, function(index, instrument) {
+        var readValue = localStorageGet("instrument-" + instrument.slug);
+        if (readValue !== null && JSON.parse(readValue) !== null) {
+            let volume = readValue;
+            // Remark : old version of the code used to set "true" or "false"
+            // (strings, not booleans). The next if (...) is here for backward
+            // compatibility
+            if (readValue === "true") {
+                volume = 100;
+            } else {
+                // Same thing here : this is for backward compatibility
+                if (readValue === "false") {
+                    volume = 0;
+                } else { // General case
+                    volume = parseInt(readValue)
+                }
+            }
+            $.each(window.aCompas.mixer, function(index, item) {
+                if (item.instrumentSlug === instrument.slug) {
+                    window.aCompas.mixer[index].volume = volume;
+                }
+            });
+            $("#mixer-dialog .instrument-slider[data-instrument="
+                + instrument.slug + "]").val(volume);
         }
     });
     // Improvise
     if (localStorageGet("improvise") !== null && JSON.parse(localStorageGet("improvise")) !== window.aCompas.improvise) {
-        $("#improvise").click();
+        $("#improvise-switch").click();
     }
     // Volume
     if (localStorageGet("volume") !== null && parseInt(localStorageGet("volume")) !== window.aCompas.masterVolume) {
         var volume = parseInt(localStorageGet("volume"));
         window.aCompas.masterVolume = volume;
-        $("#volume").data("slider").setValue(volume);
-        setVolumeLabel();
     }
-}
+    $("#volume-slider").val(window.aCompas.masterVolume);
+    setVolumeLabel();
 
-function adaptInstrumentsMenu() {
-    // Display instruments buttons
-    var radius = 55;
-    var fields = $('.toggle-instrument');
-    var instruButton = $('#toggle-instruments');
-    var centerX = instruButton.position().left + $("#palo-and-options").width() / 2;
-    var centerY = instruButton.offset().top - $("#palo-and-options").offset().top;
-    var angle = - Math.PI / 2,
-        step = (2 * Math.PI) / fields.length;
-
-    fields.each(function() {
-        var x = centerX + radius * Math.cos(angle) - $(this).width() / 2 - parseFloat($(this).css("padding-left").replace("px", ""));
-        var y = centerY + radius * Math.sin(angle);
-        $(this).css({
-            left: x + 'px',
-            top: y + 'px'
-        });
-        angle += step;
-    });
 }
 
 function trackDeviceOrientation() {
@@ -2159,6 +2177,17 @@ function trackDeviceOrientation() {
         window.aCompas.deviceOrientation = label;
         _paq.push(['trackEvent', 'Device', 'Orientation', window.aCompas.deviceOrientation]);
     }
+}
+
+function initMixer() {
+    $.each(window.aCompas.instruments, function(index, instrument) {
+        window.aCompas.mixer.push({
+            instrumentSlug: instrument.slug,
+            volume: instrument.defaultVolume
+        });
+        $("#mixer-dialog .instrument-slider[data-instrument="
+            + instrument.slug + "]").val(instrument.defaultVolume);
+    });
 }
 
 function loadSoundObj(obj, callback) {
@@ -2225,10 +2254,10 @@ function initAudio() {
             };
             window.aCompas.timerWorker.postMessage({"interval":window.aCompas.lookahead});
         } else {
-            $("#will-not-work-modal").modal("show");
+            $("#will-not-work-dialog").show();
         }
     } catch (e) {
-        $("#will-not-work-modal").modal("show");
+        $("#will-not-work-dialog").show();
     }
 }
 

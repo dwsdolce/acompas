@@ -1,0 +1,310 @@
+/*
+    This file is part of A Compás.
+
+    A Compás is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    A Compás is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with A Compás. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+@font-face {
+    font-family: 'Playball';
+    src: url('../fonts/Playball/Playball-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body {
+    font-size: 11px;
+}
+
+.mdl-dialog {
+    top: 60px;
+    z-index: 1;
+    padding: 2px;
+    .mdl-dialog__title {
+        color: tomato;
+        font-size: 1.5rem;
+        margin-left: 8px;
+    }
+    .mdl-dialog__title,
+    .mdl-dialog__content {
+        padding: 0px;
+    }
+}
+
+.mdl-button--accent {
+    background-color: tomato !important;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.mdl-cell {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+a {
+    color: tomato;
+    text-decoration: none;
+}
+
+a:hover {
+    color: firebrick;
+    text-decoration: none;
+}
+
+.mdl-layout__content {
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mdl-layout__header {
+    background-color: tomato;
+    .mdl-layout__header-row {
+        padding: 0px 10px;
+        #app-logo {
+            width: 54px;
+        }
+        #app-title-container {
+            display: inline-block;
+            vertical-align: middle;
+            #app-title,
+            #app-subtitle {
+                display: block;
+            }
+            #app-title {
+                font-family: 'Playball';
+                font-weight: bold;
+                font-size: 22px;
+            }
+            #app-subtitle {
+                margin-top: 2px;
+                font-size: 11px;
+            }
+        }
+    }
+}
+
+#main {
+    text-align: center;
+}
+
+#main .mdl-grid {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    .mdl-cell {
+        .mdl-grid {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    }
+}
+
+// Tablet
+@media (max-width: 839px) and (min-width: 480px) and (orientation: portrait) {
+    html,
+    body {
+        font-size: 14px;
+    }
+    .mdl-dialog {
+        top: 80px;
+    }
+    #main .mdl-grid {
+        margin-top:32px;
+        margin-bottom: 32px;
+        .label-cell,
+        .action-cell {
+            margin-top: 6px !important;
+            margin-bottom: 6px !important;
+        }
+    }
+    .play {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    #mixer-dialog {
+        .mdl-slider__container {
+            height: 16px !important;
+        }
+    }
+}
+// Desktop
+@media (min-width: 840px) {
+    html,
+    body {
+        font-size: 14px;
+    }
+    .mdl-dialog {
+        top: 80px;
+    }
+    #main .mdl-grid {
+        margin-top:32px;
+        margin-bottom: 32px;
+        .label-cell,
+        .action-cell {
+            margin-top: 6px !important;
+            margin-bottom: 6px !important;
+        }
+    }
+    .play {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    #mixer-dialog {
+        .mdl-slider__container {
+            height: 16px !important;
+        }
+    }
+}
+
+#visualizer .bar,
+#visualizer .beat-label {
+    display: inline-block;
+}
+
+#visualizer .row-1 {
+    position: relative;
+}
+
+#visualizer .bar {
+    position: absolute;
+    bottom: 0px;
+}
+
+#visualizer .bar-strong {
+    background-color: firebrick;
+}
+
+#visualizer .bar-up,
+#visualizer .bar-down {
+    background-color: tomato;
+}
+
+#visualizer .row-2,
+#visualizer .beat-label {
+    height: 10px;
+}
+
+#visualizer .beat-label {
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 5px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.beat-label.beat-label-strong {
+    color: black;
+}
+
+.beat-label.beat-label-up,
+.beat-label.beat-label-down {
+    color: lightgray;
+}
+
+.mdl-switch[for=improvise-switch],
+.mdl-switch[for=resolution-switch] {
+    width: 40px;
+    margin-left: 10px;
+}
+
+.label-cell {
+    text-align: left;
+}
+
+#tempo-grid,
+#volume-grid {
+    .mdl-slider__container {
+        margin-top: 8px;
+    }
+}
+
+#tempo-decrease-button,
+#tempo-increase-button,
+#volume-decrease-button,
+#volume-increase-button {
+    min-width: 4px;
+}
+
+#info {
+    height: 16px;
+    color: firebrick;
+}
+
+.play {
+    -webkit-transition: all 1s ease 0s;
+    -moz-transition: all 1s ease 0s;
+    -o-transition: all 1s ease 0s;
+    transition: all 1s ease 0s;
+    background: #ffffff;
+    border: 5px solid tomato;
+    border-radius: 50%;
+    color: #777;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    .material-icons {
+        font-size: 20px;
+    }
+}
+
+.play:hover {
+    border-color: firebrick;
+}
+
+.play.active {
+    border-color: tomato;
+}
+
+.play.active:hover {
+    border-color: firebrick;
+}
+
+.mdl-mini-footer {
+    padding: 0px;
+    min-height: 42px;
+    #footer-google-play-img {
+        width: 110px;
+    }
+    .mdl-mini-footer__left-section {
+        .footer-link {
+            line-height: 42px;
+        }
+    }
+    .mdl-mini-footer__right-section {
+        padding: 6px 6px 12px 6px;
+        .share-img {
+            width: 30px;
+            height: 30px;
+        }
+    }
+}
+
+#mixer-dialog {
+    .instrument-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+    .mdl-slider__container {
+        height: 8px;
+    }
+}

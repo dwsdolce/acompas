@@ -1,8 +1,12 @@
-bower_components
-.vagrant
+node_modules/
+build/
 web/common
-web/bower_components
+web/common.css
+web/fonts/
 web/images/icon_512x512.png
+web/images/icon_96x96.png
+web/node_modules/
+cordova/www/common.css
 cordova/platforms/android/.gradle
 cordova/platforms/android/CordovaLib/build
 cordova/platforms/android/res/xml/config.xml
@@ -11,5 +15,6 @@ cordova/platforms/android/assets/www
 cordova/platforms/android/release-signing.properties
 cordova/www/common
 cordova/www/images
-cordova/www/bower_components
 *.apk
+.DS_Store
+.sass-cache/

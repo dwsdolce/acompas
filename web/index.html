@@ -26,9 +26,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="A Compás is a web-based flamenco metronome, also available as an Android application. It will let you play various flamenco rhythms and change the tempo." />
 
-        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
-        <link rel="stylesheet" href="common/css/common.css" />
+        <link rel="stylesheet" href="common/css/material.min.css">
+        <link rel="stylesheet" href="common/css/MaterialIcons.css">
+        <link rel="stylesheet" href="common.css" />
         <link rel="shortcut icon" href="favicon.ico"/>
         <meta property="og:title" content="A Compás - Flamenco metronome" />
         <meta property="og:description" content="A Compás is a web-based flamenco metronome, also available as an Android application. It will let you play various flamenco rhythms and change the tempo." />
@@ -40,104 +40,108 @@
 
     <body>
 
-        <div id="wrapper">
-            <header>
-                <div class="container custom-row text-center">
-                    <h1 id="title">A Compás</h1>
-                    <h2 id="baseline"><small>A&nbsp;flamenco&nbsp;metronome&nbsp;for&nbsp;the&nbsp;Web</small></h2>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">
+                        <img id="app-logo" src="images/icon_96x96.png" alt="" />
+                        <div id="app-title-container">
+                            <span id="app-title">
+                                A Compás
+                            </span>
+                            <span id="app-subtitle">
+                                A flamenco metronome for the web
+                            </span>
+                        </div>
+                    </span>
                 </div>
             </header>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <div id="main">
+                    </div>
+                </div>
+            </main>
 
-            <section id="main">
-            </section>
-
-            <footer>
-                <div class="container text-center">
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <p>
-                                This application is also available on tablets and smartphones running Android
-                            </p>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <a href="https://play.google.com/store/apps/details?id=audio.acompas.app"
-                                title="Get A Compás for Android" target="_blank">
-                                <img src="images/en_app_rgb_wo_45.png" alt="Android app on Google Play" />
+            <footer class="mdl-mini-footer">
+                <div class="mdl-mini-footer__left-section">
+                    <ul class="mdl-mini-footer__link-list">
+                        <li>
+                            <a target="_blank"
+                                href="https://play.google.com/store/apps/details?id=audio.acompas.app"
+                                title="Get A Compás for Android">
+                                <img id="footer-google-play-img" src="images/en_badge_web_generic.png" alt="Get it on Google Play" />
                             </a>
-                        </div>
-                    </div>
-                    <div class="social-sharers col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <div>
-                            <p>
-                                Share this page :
-                            </p>
-                        </div>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u=http://acompas.audio"
-                           target="_blank">
-                            <img src="/images/3D-Icons/facebook.png"
-                                alt="Share this page on Facebook"
-                                class="img-responsive" />
-                        </a>
-                        <a href="https://twitter.com/share?url=http://acompas.audio"
-                           target="_blank">
-                           <img src="/images/3D-Icons/Twitter-2.png"
-                                alt="Share this page on Twitter"
-                                class="img-responsive" />
-                        </a>
-                        <a href="https://plus.google.com/share?url=http://acompas.audio"
-                           target="_blank">
-                           <img src="/images/3D-Icons/Google+.png"
-                                alt="Share this page on Google+"
-                                class="img-responsive" />
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <p>
-                            Find this application's source code on <a href="http://gitlab.com/oricordeau/acompas" target="_blank">Gitlab</a>
-                        </p>
-<!--
-                        <p>
-                            Found a bug or want to request for a new feature ?
-                            <br />
-                            <a href="http://gitlab.acompas.audio/acompas/acompas/issues" target="_blank">Let us know !</a>
-                        </p>
--->
-                    </div>
+                        </li>
+                        <li>
+                            <a target="_blank" class="footer-link"
+                                href="https://gitlab.com/oricordeau/acompas">
+                                Source code
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" class="footer-link"
+                                href="https://gitlab.com/oricordeau/acompas/issues">
+                                Issues
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mdl-mini-footer__right-section">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://acompas.audio"
+                       target="_blank">
+                        <img src="/images/3D-Icons/facebook.png"
+                            alt="Share this page on Facebook"
+                            class="share-img" />
+                    </a>
+                    <a href="https://twitter.com/share?url=http://acompas.audio"
+                       target="_blank">
+                       <img src="/images/3D-Icons/Twitter-2.png"
+                            alt="Share this page on Twitter"
+                            class="share-img" />
+                    </a>
+                    <a href="https://plus.google.com/share?url=http://acompas.audio"
+                       target="_blank">
+                       <img src="/images/3D-Icons/Google+.png"
+                            alt="Share this page on Google+"
+                            class="share-img" />
+                    </a>
                 </div>
             </footer>
+
         </div>
 
-        <!-- Modal which is shown if user's browser can't run the application -->
-        <div id="will-not-work-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="will-not-work-modal-label" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="will-not-work-modal-label">Unsupported browser</h4>
-                    </div>
-                    <div class="modal-body">
-                        The web browser you are currently using does not meet the minimal
-                        requirements needed to use this website.
-                        <br /><br />
-                        Please use (for example) a recent version of
-                        <a href="http://www.google.com/chrome">Google Chrome</a>
-                        or <a href="http://getfirefox.com">Mozilla Firefox</a>.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-                    </div>
-                </div>
+        <!-- Dialog which contains the instruments mixer -->
+        <dialog id="mixer-dialog" class="mdl-dialog">
+        </dialog>
+
+        <!-- Dialog which is shown if user's browser can't run the application -->
+        <dialog id="will-not-work-dialog" class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Requirements issue</h4>
+            <div class="mdl-dialog__content">
+                <p>
+                    The web browser you are currently using does not meet the minimal
+                    requirements needed to use this website.
+                </p>
+                <p>
+                    Please use (for example) a recent version of
+                    <a href="http://www.google.com/chrome">Google Chrome</a>
+                    or <a href="http://getfirefox.com">Mozilla Firefox</a>.
+                </p>
             </div>
-        </div>
+            <div class="mdl-dialog__actions">
+                <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close">
+                    Ok
+                </button>
+            </div>
+        </dialog>
 
-        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript" src="bower_components/jquery-mousewheel/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-        <script type="text/javascript" src="bower_components/startaudiocontext/StartAudioContext.js"></script>
+        <script type="text/javascript" src="node_modules/material-design-lite/material.min.js"></script>
+        <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+        <script type="text/javascript" src="node_modules/startaudiocontext/StartAudioContext.js"></script>
         <script type="text/javascript" src="common/js/common.js"></script>
         <script type="text/javascript">
 
@@ -150,32 +154,32 @@
         <!-- Piwik -->
         <script type="text/javascript">
             var _paq = _paq || [];
-                _paq.push(['setCustomVariable', 1, "AppVersion", "Website", "visit"]);
-                _paq.push(['trackPageView']);
-                _paq.push(['enableLinkTracking']);
-                (function() {
-                    var u="//piwik.acompas.audio/";
-                    _paq.push(['setTrackerUrl', u+'piwik.php']);
-                    _paq.push(['setSiteId', 1]);
-                    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-                })();
-           </script>
-           <noscript><p><img src="//piwik.acompas.audio/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
-           <!-- End Piwik Code -->
-           <script type="application/ld+json">
-                {
-                  "@context": "http://schema.org/",
-                  "@type": "WebApplication",
-                  "name": "A Compás",
-                  "browserRequirements": "Requires both HTML5 and Web Audio API support",
-                  "applicationCategory": "Music",
-                  "operatingSystem": "Any",
-                  "url": "http://acompas.audio",
-                  "image": "http://acompas.audio/images/icon_512x512.png",
-                  "description": "A Compás is a web-based flamenco metronome, also available as an Android application. It will let you play various flamenco rhythms and change the tempo, and features a graphical visualization and some options."
-                }
-            </script>
+            _paq.push(['setCustomVariable', 1, "AppVersion", "Website", "visit"]);
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                var u="//piwik.acompas.audio/";
+                _paq.push(['setTrackerUrl', u+'piwik.php']);
+                _paq.push(['setSiteId', 1]);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+            })();
+       </script>
+       <noscript><p><img src="//piwik.acompas.audio/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+       <!-- End Piwik Code -->
+       <script type="application/ld+json">
+            {
+              "@context": "http://schema.org/",
+              "@type": "WebApplication",
+              "name": "A Compás",
+              "browserRequirements": "Requires both HTML5 and Web Audio API support",
+              "applicationCategory": "Music",
+              "operatingSystem": "Any",
+              "url": "http://acompas.audio",
+              "image": "http://acompas.audio/images/icon_512x512.png",
+              "description": "A Compás is a web-based flamenco metronome, also available as an Android application. It will let you play various flamenco rhythms and change the tempo, and features a graphical visualization and some options."
+            }
+        </script>
 
 	</body>
 </html>
