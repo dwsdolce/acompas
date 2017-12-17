@@ -2,14 +2,14 @@
 
 A flamenco metronome available in two versions :
 
-* Web application (available at [http://acompas.audio](http://acompas.audio)).
+* Web application (available at [http://acompas.org](http://acompas.org)).
 * Mobile application using [Apache Cordova](http://cordova.apache.org/), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app).
 
 It uses the Web Audio API to play various flamenco rhythms and features a visual animation.
 
 ## Branches
 
- * The [online version](http://acompas.audio) is the version 1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
+ * The [online version](http://acompas.org) is the version 1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
  * A new version (v2) is being developed in the ["vue" branch](https://gitlab.com/oricordeau/acompas/tree/vue).
 
 ## Automated builds status

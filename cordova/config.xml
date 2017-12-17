@@ -4,7 +4,7 @@
     <description>
         A flamenco metronome.
     </description>
-    <author email="olivier@ricordeau.org" href="http://acompas.audio">
+    <author email="olivier@ricordeau.org" href="http://acompas.org">
         Olivier Ricordeau
     </author>
     <content src="index.html" />
