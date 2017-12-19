@@ -1922,6 +1922,10 @@ function buildUi() {
 
     $("#main").html(html);
 
+    // Trigger MDL components processing
+    // See https://stackoverflow.com/a/42370691
+    componentHandler.upgradeAllRegistered();
+
     // On palo change
     $("#palo").change(function(e) {
         // Set rhythm style
@@ -2123,7 +2127,14 @@ function restoreValuesFromLocalStorage() {
     $("#palo").val(paloSlug);
     // Resolution
     if (localStorageGet("resolution") !== null && parseInt(localStorageGet("resolution")) !== window.aCompas.noteResolution) {
-        $("#resolution-switch").click();
+      var resolutionActive = parseInt(localStorageGet("resolution"));
+      if (resolutionActive === 0) {
+        window.aCompas.noteResolution = 0;
+        $("#resolution-switch").parent()[0].MaterialSwitch.on();
+      } else {
+        window.aCompas.noteResolution = 1;
+        $("#resolution-switch").parent()[0].MaterialSwitch.off();
+      }
     }
     // Instruments
     $.each(window.aCompas.instruments, function(index, instrument) {
@@ -2153,8 +2164,15 @@ function restoreValuesFromLocalStorage() {
         }
     });
     // Improvise
-    if (localStorageGet("improvise") !== null && JSON.parse(localStorageGet("improvise")) !== window.aCompas.improvise) {
-        $("#improvise-switch").click();
+    if (localStorageGet("improvise") !== null&& JSON.parse(localStorageGet("improvise")) !== window.aCompas.improvise) {
+        var improviseActive = JSON.parse(localStorageGet("improvise"));
+        if (improviseActive) {
+          window.aCompas.improvise = true;
+          $("#improvise-switch").parent()[0].MaterialSwitch.on();
+        } else {
+          window.aCompas.improvise = false;
+          $("#improvise-switch").parent()[0].MaterialSwitch.off();
+        }
     }
     // Volume
     if (localStorageGet("volume") !== null && parseInt(localStorageGet("volume")) !== window.aCompas.masterVolume) {
