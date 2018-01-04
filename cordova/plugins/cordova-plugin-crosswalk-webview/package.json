@@ -22,7 +22,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-crosswalk-webview/-/cordova-plugin-crosswalk-webview-2.3.0.tgz",
   "_shasum": "e2ee34ecfdaddd84bda84e72663539e40c99d324",
   "_spec": "cordova-plugin-crosswalk-webview@2.3.0",
-  "_where": "/Volumes/Data/code/acompas/acompas-master/cordova",
+  "_where": "/mnt/data/code/acompas/acompas-vue/cordova",
   "author": "",
   "bugs": {
     "url": "https://crosswalk-project.org/jira"

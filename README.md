@@ -5,54 +5,84 @@ A flamenco metronome available in two versions :
 * Web application (available at [http://acompas.org](http://acompas.org)).
 * Mobile application using [Apache Cordova](http://cordova.apache.org/), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app).
 
-It uses the Web Audio API to play various flamenco rhythms and features a visual animation.
+It can play various flamenco rhythms (palos), and features a visual animation
+and many options.
 
-## Branches
-
- * The [online version](http://acompas.org) is the version 1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
- * A new version (v2) is being developed in the ["vue" branch](https://gitlab.com/oricordeau/acompas/tree/vue).
+It is based on the following technologies :
+ - [Quasar framework](http://quasar-framework.org)
+ - [vue.js](https://vuejs.org)
+ - [Vuex](https://vuex.vuejs.org)
+ - [Tonejs](https://tonejs.github.io)
+ - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 ## Automated builds status
 
-[![pipeline status](https://gitlab.com/oricordeau/acompas/badges/master/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/master)
+[![pipeline status](https://gitlab.com/oricordeau/acompas/badges/vue/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/vue)
 
-## Installing the web application
+## Cloning and building the source code
 
-```bash
-# Clone the git repository in the current folder
-git clone https://gitlab.com/oricordeau/acompas.git
-# Go inside the folder created by the previous command
-cd acompas
-# Install dependencies
-npm install
-# Synchronize assets to the web/ and cordova/ folders
-./prepare.sh
-# Run a basic web server on port 8000
-./server.sh
+``` bash
+# install dependencies
+$ npm install
+
+# serve with hot reload at localhost:8080
+$ npx quasar dev
+
+# build for production with minification
+$ npx quasar build
+
+# lint code
+$ npx quasar lint
 ```
 
-Then, open your favorite web browser and go to [http://localhost:8000](http://localhost:8000)
+## Android app build
 
-## Building the mobile app for Android
+``` bash
+# Build app
+npx quasar build
 
-```bash
-# Clone the git repository in the current folder
-git clone https://gitlab.com/oricordeau/acompas.git
-# Go inside the folder created by the previous command
-cd acompas
 # Install dependencies
+cd ./cordova
 npm install
-# Synchronize assets to the web/ and cordova/ folders
+
+# Check cordova requirements (run this in the cordova/ folder)
+npx cordova requirements
+
+# Copy files to the cordova/platforms/android/app/src/main/assets/www subfolder (run this in the cordova/ folder)
+# No idea why using a script for this is required
 ./prepare.sh
-# Go to the cordova folder
-cd cordova
-# Build the app
-cordova build android --debug
-# You can also run the app by doing
-cordova run android --debug
+
+# Run android apk (run this in the cordova/ folder)
+npx cordova run android --debug
 ```
 
-## Thanks
+## iOS app build
 
-* The metronome's audio core is inspired by the following [code from Chris Wilson](https://github.com/cwilso/metronome).
-* The palmas sordas and jaleo sounds are recordings of Aziz Andry.
+``` bash
+# Build app
+npx quasar build
+
+# Install dependencies
+cd ./cordova
+npm install
+
+npx cordova platform add ios
+
+# Check cordova requirements (run this in the cordova/ folder)
+npx cordova requirements
+
+# Fullfill the requirements
+npm install -g ios-deploy
+# Install ruby with either:
+# $ sudo apt-get install ruby-full
+# $ sudo yum install ruby
+# $ sudo emerge dev-lang/ruby
+# $ sudo pacman -S ruby
+# $ brew install ruby
+# $ pkg install runtime/ruby-18
+# $ ./configure $ make $ sudo make install
+# Then (use sudo if encounter permission issues):
+gem update --system
+gem install cocoapods
+pod setup
+```
