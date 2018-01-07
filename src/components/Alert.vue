@@ -12,10 +12,6 @@
                 enter="fadeIn",
                 leave="fadeOut"
             ) {{ slowMessage }}
-        q-transition(
-            enter="fadeIn",
-            leave="fadeOut"
-        )
             q-alert(
                 v-if="isTooFast",
                 color="negative",
