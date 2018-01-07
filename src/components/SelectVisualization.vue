@@ -1,6 +1,6 @@
 <template lang="pug">
     div
-        p.caption.auto.gt-md View mode
+        p.caption.auto(v-if="visualizationSize.width > breakpoint.sm") View mode
         q-btn(
             round,
             outline,
@@ -31,7 +31,9 @@
         computed: {
             ...mapState({
                 visualizationModes: state => state.visualizationModes,
-                selectedVisualizationMode: state => state.selectedVisualizationMode
+                selectedVisualizationMode: state => state.selectedVisualizationMode,
+                visualizationSize: state => state.visualizationSize,
+                breakpoint: state => state.breakpoint
             })
         },
         methods: {

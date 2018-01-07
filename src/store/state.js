@@ -9,6 +9,7 @@ const state = {
     ],
     visualizationSize: {},
     canvasElement: null,
+    breakpoint: { xs: 575, sm: 767, md: 991, lg: 1199 },
     selectedVisualizationMode: 'dots',
     palos: palosDefaultSettings,
     selectedPalo: palosDefaultSettings[2],

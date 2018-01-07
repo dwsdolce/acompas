@@ -1,7 +1,7 @@
 <template lang="pug">
     .layout-padding.horizontal.text-grey-1.full-height
-        q-window-resize-observable(@resize="onResize")
         .row.no-wrap.justify-center(:style="parentRect")
+            q-resize-observable(@resize="onResize")
             draw-bars(v-if="visualizationMode === 'dots'")
             draw-counter(v-if="visualizationMode === 'counter'")
         .row.justify-between.content-center.text-center.no-wrap
@@ -13,7 +13,7 @@
                     .col-xs-12
                         toggle-improvise
                         toggle-humanize
-            .col.p.gt-md(v-if="windowSize.width > 991")
+            .col.p(v-if="visualizationSize.width > breakpoint.sm")
                 .column.content-center.text-center.full-height.justify-end
                     .item-center
                         play
@@ -22,13 +22,13 @@
                     select-tempo
                     .row.content-center.text-center
                         select-visualization.col.mr
-                        .lt-lg(v-if="windowSize.width <= 991").col
+                        .col(v-if="visualizationSize.width <= breakpoint.sm")
                             play
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import { QWindowResizeObservable } from 'quasar'
+    import { mapState, mapMutations } from 'vuex'
+    import { QResizeObservable } from 'quasar'
     import Play from '@components/Play'
     import SelectTempo from '@components/SelectTempo'
     import SelectPalo from '@components/SelectPalo'
@@ -41,7 +41,7 @@
 
     export default {
         components: {
-            QWindowResizeObservable,
+            QResizeObservable,
             Play,
             SelectTempo,
             SelectPalo,
@@ -54,7 +54,6 @@
         },
         data () {
             return {
-                windowSize: {},
                 parentRect: {
                     width: '100%'
                 }
@@ -62,12 +61,17 @@
         },
         computed: {
             ...mapState({
-                visualizationMode: state => state.selectedVisualizationMode
+                visualizationMode: state => state.selectedVisualizationMode,
+                visualizationSize: state => state.visualizationSize,
+                breakpoint: state => state.breakpoint
             })
         },
         methods: {
+            ...mapMutations({
+                getVisualizationSize: 'GET_VISUALIZATION_SIZE'
+            }),
             onResize (size) {
-                this.windowSize = size
+                this.getVisualizationSize(size)
             }
         }
     }
