@@ -62,17 +62,13 @@
     </p>
 </noscript>
 
-<style>
-    #logo {
-        height: 40px;
-    }
-    p.caption {
-        margin: 0 0 .1rem;
-    }
-    p.caption:not(:first-child) {
-        margin-top: 1rem;
-    }
-    .no-style.auto.q-input-field {
-        color: white;
-    }
+<style lang="stylus">
+    #logo
+        height 40px
+    p.caption
+        margin 0 0 .1rem
+    p.caption:not(:first-child)
+        margin-top 1rem
+    .no-style.auto.q-input-field
+        color white
 </style>

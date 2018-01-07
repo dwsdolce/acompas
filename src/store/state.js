@@ -7,6 +7,8 @@ const state = {
         { label: 'Dots', value: 'dots' },
         { label: 'Counter', value: 'counter' }
     ],
+    visualizationSize: {},
+    canvasElement: null,
     selectedVisualizationMode: 'dots',
     palos: palosDefaultSettings,
     selectedPalo: palosDefaultSettings[2],
@@ -15,7 +17,6 @@ const state = {
         { label: 'Sordas', value: 'sorda', eighthNotes: false, volume: 0 },
         { label: 'Cajon', value: 'cajon', eighthNotes: false, volume: 0 },
         { label: 'Udu', value: 'udu', eighthNotes: false, volume: 0 },
-        { label: 'Jaleo', value: 'jaleo', eighthNotes: false, volume: 0 },
         { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }
     ],
     selectedInstruments: [ 'clara', 'sorda' ],
@@ -25,8 +26,7 @@ const state = {
     isPlaying: false,
     metronomeEvent: null,
     isTooSlow: false,
-    isTooFast: false,
-    canvasElement: null
+    isTooFast: false
 }
 
 export default state

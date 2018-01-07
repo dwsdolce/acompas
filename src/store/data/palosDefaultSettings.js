@@ -1,7 +1,6 @@
 export default [
     {
         id: 1,
-        slug: 'alegria',
         label: 'Alegría',
         value: 'alegria',
         minTempo: 40,
@@ -164,7 +163,6 @@ export default [
     },
     {
         id: 2,
-        slug: 'buleria-6',
         label: 'Bulería (6)',
         value: 'buleria-6',
         minTempo: 60,
@@ -259,7 +257,6 @@ export default [
     },
     {
         id: 3,
-        slug: 'buleria-12',
         label: 'Bulería (12)',
         value: 'buleria-12',
         minTempo: 60,
@@ -414,11 +411,10 @@ export default [
     },
     {
         id: 4,
-        slug: 'buleria-12-variation',
         label: 'Bulería (12) variation',
         value: 'buleria-12-variation',
         minTempo: 120,
-        maxTempo: 250,
+        maxTempo: 300,
         defaultTempo: 190,
         slowTempo: 135,
         fastTempo: 230,
@@ -569,7 +565,6 @@ export default [
     },
     {
         id: 5,
-        slug: 'fandangos',
         label: 'Fandangos',
         value: 'fandangos',
         minTempo: 80,
@@ -719,7 +714,6 @@ export default [
     },
     {
         id: 6,
-        slug: 'rumba',
         label: 'Rumba',
         value: 'rumba',
         minTempo: 120,
@@ -832,13 +826,12 @@ export default [
     },
     {
         id: 7,
-        slug: 'siguiriya',
         label: 'Siguiriya',
         value: 'siguiriya',
-        minTempo: 60,
-        maxTempo: 200,
+        minTempo: 30,
+        maxTempo: 300,
         defaultTempo: 130,
-        slowTempo: 100,
+        slowTempo: 70,
         fastTempo: 170,
         nbBeatsInPattern: 24,
         accents: [ 0, 2, 4, 7, 10 ],
@@ -984,7 +977,6 @@ export default [
     },
     {
         id: 8,
-        slug: 'solea',
         label: 'Soleá',
         value: 'solea',
         minTempo: 50,
@@ -1135,7 +1127,6 @@ export default [
     },
     {
         id: 9,
-        slug: 'tangos',
         label: 'Tangos',
         value: 'tangos',
         minTempo: 40,
@@ -1248,7 +1239,6 @@ export default [
     },
     {
         id: 10,
-        slug: 'sevillana',
         label: 'Sevillanas',
         value: 'sevillana',
         minTempo: 80,

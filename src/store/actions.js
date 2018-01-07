@@ -1,4 +1,5 @@
 import * as types from '@store/mutation-types'
+import { forEachValue } from '../assets/utils'
 
 export const startAudioContext = ({ commit }) => {
     commit(types.START_AUDIO_CONTEXT)
@@ -10,27 +11,33 @@ export const toggleSideMenu = ({ commit }) => {
 
 export const playStop = ({ commit }) => {
     commit(types.PLAY_STOP)
+    commit(types.TRIGGER_EVENT, null)
 }
 
-export const selectVisualizationMode = ({ commit }, payload) => {
+export const selectVisualizationMode = ({ commit, state }, payload) => {
     commit(types.SELECT_VISUALIZATION_MODE, payload)
+    if (state.isPlaying) commit(types.PLAY_STOP)
 }
 
-export const selectPalo = ({ commit, state }, payload) => { // payload is a palo slug
+export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload is a palo slug
     if (state.isPlaying) commit(types.PLAY_STOP)
-    commit(types.SELECT_PALO, payload)
+    forEachValue(state.palos, palo => {
+        if (palo.value === payload) {
+            commit(types.SELECT_PALO, palo)
+        }
+    })
 }
 
 export const selectTempo = ({ commit, state }, payload) => {
     commit(types.SELECT_TEMPO, payload)
     if (payload > state.selectedPalo.fastTempo && !state.isTooFast) {
         commit(types.SHOW_FAST_MESSAGE)
-    } else {
+    } else if (payload < state.selectedPalo.fastTempo && state.isTooFast) {
         commit(types.HIDE_FAST_MESSAGE)
     }
     if (payload < state.selectedPalo.slowTempo && !state.isTooSlow) {
         commit(types.SHOW_SLOW_MESSAGE)
-    } else {
+    } else if (payload > state.selectedPalo.slowTempo && state.isTooSlow) {
         commit(types.HIDE_SLOW_MESSAGE)
     }
 }

@@ -1,7 +1,7 @@
 <template lang="pug">
     .layout-padding.horizontal.text-grey-1.full-height
         q-window-resize-observable(@resize="onResize")
-        .row.no-wrap.justify-center
+        .row.no-wrap.justify-center(:style="parentRect")
             draw-bars(v-if="visualizationMode === 'dots'")
             draw-counter(v-if="visualizationMode === 'counter'")
         .row.justify-between.content-center.text-center.no-wrap
@@ -54,7 +54,10 @@
         },
         data () {
             return {
-                windowSize: {}
+                windowSize: {},
+                parentRect: {
+                    width: '100%'
+                }
             }
         },
         computed: {

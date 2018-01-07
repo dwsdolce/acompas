@@ -3,6 +3,7 @@ import { Loading } from 'quasar'
 import { deepCopy, forEachValue } from '../assets/utils'
 import * as types from '@store/mutation-types'
 import audioSettings from '@store/data/audioDefaultSettings'
+import { restoreLocalStorage } from '@plugins/localStorage'
 
 const aCompas = {
     audioFormat: null,
@@ -70,25 +71,6 @@ const improviseSequence = (sound, time, value) => {
     }
 }
 
-const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
-    if (!eighthNotes && (events % 2 !== 0)) {
-        return
-    }
-    let playThreshold = 0.95
-    // Check if time is a strong beat
-    if (palo.accents.includes(events)) {
-        // if the event is a strong beat, sound occurence will be more probable
-        playThreshold = 0.8
-    }
-    const playProbability = Math.random()
-    if (playProbability > playThreshold) {
-        // Pick a random index in the available jaleo sounds
-        const jaleoSoundsCount = Object.keys(aCompas.sounds['jaleo']).length
-        let randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
-        aCompas.sounds['jaleo'][randomIndex].start(time)
-    }
-}
-
 /**
      * Builds a compas sequence from a palo, an "is eighthNote ?" boolean and a sound
      * @param {Object} store The Vuex store
@@ -101,7 +83,6 @@ const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
 const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
     // 'events' is an occurence of an element inside the sequence variable (integer)
     let seq = new Tone.Sequence((time, events) => {
-        events = parseInt(events)
         // Call canvas animation on event time.
         if (sound === store.state.selectedInstruments[0] && events % 2 === 0) {
             Tone.Draw.schedule(() => {
@@ -110,13 +91,9 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
             }, time) // Use AudioContext time of the event
         }
 
-        if (sound === 'jaleo') {
-            improviseJaleoSequence(seq, events, time, palo, eighthNotes)
-            return
-        }
-
         // key is a pulsation number, value is the number of clara sound
         forEachValue(palo[sound], (value, key) => {
+            events = parseInt(events)
             key = parseInt(key)
             if (eighthNotes) {
                 if (events === key && key % 2 !== 0) {
@@ -146,13 +123,12 @@ const initPalos = store => {
         for (let i = 0; i < palo.nbBeatsInPattern; i++) {
             sequence.push(i)
         }
-        aCompas.sequences[palo.slug] = {
+        aCompas.sequences[palo.value] = {
             quarterNotes: {
                 clara: buildSequence(store, palo, false, 'clara', sequence),
                 sorda: buildSequence(store, palo, false, 'sorda', sequence),
                 cajon: buildSequence(store, palo, false, 'cajon', sequence),
                 udu: buildSequence(store, palo, false, 'udu', sequence),
-                jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
                 click: buildSequence(store, palo, false, 'click', sequence)
             },
             eighthNotes: {
@@ -160,7 +136,6 @@ const initPalos = store => {
                 sorda: buildSequence(store, palo, true, 'sorda', sequence),
                 cajon: buildSequence(store, palo, true, 'cajon', sequence),
                 udu: buildSequence(store, palo, true, 'udu', sequence),
-                jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
                 click: buildSequence(store, palo, true, 'click', sequence)
             }
         }
@@ -239,99 +214,6 @@ const changeVolume = (prevState, nextState) => {
             })
         }
     })
-}
-
-// ==========================
-// Restore from local storage
-// ==========================
-
-const restoreVisualization = store => {
-    if (window.localStorage.getItem('visualization-mode') !== null) {
-        store.dispatch('selectVisualizationMode', window.localStorage.getItem('visualization-mode'))
-    }
-}
-
-const restoreSelectedPalo = store => {
-    if (window.localStorage.getItem('palo') !== null) {
-        store.dispatch('selectPalo', window.localStorage.getItem('palo'))
-    }
-}
-
-const restoreTempo = store => {
-    let selectedPaloSlug = store.state.selectedPalo.slug
-    if (window.localStorage.getItem('tempo-' + selectedPaloSlug) !== null) {
-        if (parseInt(window.localStorage.getItem('tempo-' + selectedPaloSlug))) {
-            store.dispatch('selectTempo', parseInt(window.localStorage.getItem('tempo-' + selectedPaloSlug)))
-        }
-    }
-}
-
-const restoreSelectedInstruments = store => {
-    if (window.localStorage.getItem('selected-instruments') !== null) {
-        let selectedInstrumentsParsed = JSON.parse(window.localStorage.getItem('selected-instruments'))
-        if (selectedInstrumentsParsed) {
-            store.dispatch('selectInstruments', selectedInstrumentsParsed)
-        }
-    }
-}
-
-const restoreEighthNotes = store => {
-    forEachValue(store.state.instruments, (v, k) => {
-        if (window.localStorage.getItem(v.value + '-eighthNotes') !== null) {
-            if (window.localStorage.getItem(v.value + '-eighthNotes') === 'true') {
-                store.dispatch('enableEighthNotes', v)
-            }
-            if (window.localStorage.getItem(v.value + '-eighthNotes') === 'false') {
-                store.dispatch('disableEighthNotes', v)
-            }
-        }
-    })
-}
-
-const restoreInstrumentsVolumes = store => {
-    forEachValue(store.state.instruments, (v, k) => {
-        if (window.localStorage.getItem(v.value + '-volume') !== null) {
-            if (parseInt(window.localStorage.getItem(v.value + '-volume'))) {
-                let payload = {}
-                payload.instrument = v
-                payload.volume = parseInt(window.localStorage.getItem(v.value + '-volume'))
-                store.dispatch('changeVolume', payload)
-            }
-        }
-    })
-}
-
-const restoreHumanize = store => {
-    if (window.localStorage.getItem('humanize') !== null) {
-        if (window.localStorage.getItem('humanize') === 'true') {
-            store.dispatch('enableHumanize')
-        }
-        if (window.localStorage.getItem('humanize') === 'false') {
-            store.dispatch('disableHumanize')
-        }
-    }
-}
-
-const restoreImprovise = store => {
-    if (window.localStorage.getItem('improvise') !== null) {
-        if (window.localStorage.getItem('improvise') === 'true') {
-            store.dispatch('enableImprovise')
-        }
-        if (window.localStorage.getItem('improvise') === 'false') {
-            store.dispatch('disableImprovise')
-        }
-    }
-}
-
-const restoreLocalStorage = async store => {
-    await restoreVisualization(store)
-    await restoreSelectedPalo(store)
-    await restoreTempo(store)
-    await restoreSelectedInstruments(store)
-    await restoreEighthNotes(store)
-    await restoreInstrumentsVolumes(store)
-    await restoreHumanize(store)
-    await restoreImprovise(store)
 }
 
 // ==========================

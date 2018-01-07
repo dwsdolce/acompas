@@ -1,16 +1,17 @@
 <template lang="pug">
     div
+        p.caption.auto.gt-md View mode
         q-btn(
             round,
             outline,
             icon="remove_red_eye",
             @click="$refs.visualizationModal.open()"
-        )
+        ).mt
         q-modal(
             ref="visualizationModal",
             :content-css="{padding: '2rem'}"
         )
-            h5.m-none.mb Select Visualization mode
+            h5.m-none.mb Select view mode
             q-option-group(
                 type="radio",
                 color="primary",
