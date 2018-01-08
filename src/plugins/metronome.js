@@ -159,17 +159,17 @@ const initSequences = prevState => {
     })
 }
 
-const selectPalo = (prevPalo, nextPalo) => {
-    forEachValue(aCompas.sequences[prevPalo].quarterNotes, (seq, key) => {
+const selectPalo = (prevState, nextState) => {
+    forEachValue(aCompas.sequences[prevState.selectedPalo.value].quarterNotes, (seq, key) => {
         if (seq.state === 'started') seq.stop()
     })
-    forEachValue(aCompas.sequences[prevPalo].eighthNotes, (seq, key) => {
+    forEachValue(aCompas.sequences[prevState.selectedPalo.value].eighthNotes, (seq, key) => {
         if (seq.state === 'started') seq.stop()
     })
-    forEachValue(aCompas.sequences[nextPalo].quarterNotes, (seq, key) => {
+    forEachValue(aCompas.sequences[nextState.selectedPalo.value].quarterNotes, (seq, key) => {
         if (seq.state === 'stopped') seq.start(0)
     })
-    forEachValue(aCompas.sequences[nextPalo].eighthNotes, (seq, key) => {
+    forEachValue(aCompas.sequences[nextState.selectedPalo.value].eighthNotes, (seq, key) => {
         if (seq.state === 'stopped') seq.start(0)
     })
 }
@@ -244,14 +244,18 @@ export const initMetronome = async (store, callback) => {
 // Metronome listen store
 // ==========================
 
+const stopAll = () => {
+    forEachValue(aCompas.sequences, notes => {
+        forEachValue(notes, instruments => {
+            forEachValue(instruments, seq => {
+                if (seq.state === 'started') seq.stop()
+            })
+        })
+    })
+}
+
 const selectSequences = async (prevState, nextState) => {
-    let prevPalo = prevState.selectedPalo.value
-    let nextPalo = nextState.selectedPalo.value
-
-    if (prevPalo !== nextPalo) {
-        await selectPalo(prevPalo, nextPalo)
-    }
-
+    await selectPalo(prevState, nextState)
     await toggleEighthNotes(nextState)
     await toggleImprovise(nextState)
     await toggleHumanize(nextState)
@@ -265,6 +269,7 @@ const playStop = state => {
             state.playStartTime = Tone.context.currentTime
         } else {
             Tone.Transport.stop()
+            stopAll()
             window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
                 Math.round(Tone.context.currentTime - state.playStartTime)])
         }
@@ -278,6 +283,7 @@ const metronome = store => {
 
         switch (mutation.type) {
             case types.PLAY_STOP:
+                selectSequences(prevState, nextState)
                 playStop(nextState)
                 break
 
