@@ -43,7 +43,7 @@ class BeatDot {
         this.color = palo.accents.includes(beatNb) ? '178, 34, 34' : '255, 99, 71'
         this.textColor = '255, 255, 255, '
         this.alpha = 0.5
-        this.speed = 0.2
+        this.speed = 2.5
         this.triggered = false
         this.done = true
     }
@@ -55,8 +55,6 @@ class BeatDot {
             this.alpha = 1
         }
 
-        if (this.alpha <= 0.5) this.alpha = 0.5
-
         if (this.triggered && this.radius <= coord.baseRadius) {
             this.triggered = false
             this.radius = coord.baseRadius
@@ -65,9 +63,12 @@ class BeatDot {
         }
 
         if (this.triggered && !this.done) {
-            this.alpha -= this.speed / 10
+            this.alpha -= this.speed / 30
             this.radius -= this.speed
         }
+
+        if (this.alpha <= 0.5) this.alpha = 0.5
+
         ctx.beginPath()
         ctx.fillStyle = 'rgb(' + this.color + ')'
         ctx.arc(this.x, this.y, this.radius, 0, PI2)
@@ -83,12 +84,25 @@ class BeatDot {
     }
 }
 
+// See http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/
+// for some info about fps and requestAnimationFrame
+// Note : higher fps must be tested on a mobile device !
+const maxFps = 10
+const interval = 1000 / maxFps
+let then = Date.now()
 const animateCanvas = () => {
-    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
-    forEachValue(beatDots, (beatDot, beatNb) => {
-        beatDot.draw(beatNb)
-    })
+    const now = Date.now()
+    const delta = now - then
+
     requestAnimationFrame(animateCanvas)
+    if (delta > interval) {
+        then = now - (delta % interval)
+        // Draw dots
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        forEachValue(beatDots, (beatDot, beatNb) => {
+            beatDot.draw(beatNb)
+        })
+    }
 }
 
 export const initCanvas = state => {

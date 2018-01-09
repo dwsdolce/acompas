@@ -71,6 +71,25 @@ const improviseSequence = (sound, time, value) => {
     }
 }
 
+const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
+    if (!eighthNotes && (events % 2 !== 0)) {
+        return
+    }
+    let playThreshold = 0.95
+    // Check if time is a strong beat
+    if (palo.accents.includes(events)) {
+        // if the event is a strong beat, sound occurence will be more probable
+        playThreshold = 0.8
+    }
+    const playProbability = Math.random()
+    if (playProbability > playThreshold) {
+        // Pick a random index in the available jaleo sounds
+        const jaleoSoundsCount = Object.keys(aCompas.sounds['jaleo']).length
+        let randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
+        aCompas.sounds['jaleo'][randomIndex].start(time)
+    }
+}
+
 /**
      * Builds a compas sequence from a palo, an "is eighthNote ?" boolean and a sound
      * @param {Object} store The Vuex store
@@ -83,6 +102,7 @@ const improviseSequence = (sound, time, value) => {
 const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
     // 'events' is an occurence of an element inside the sequence variable (integer)
     let seq = new Tone.Sequence((time, events) => {
+        events = parseInt(events)
         // Call canvas animation on event time.
         if (sound === store.state.selectedInstruments[0] && events % 2 === 0) {
             Tone.Draw.schedule(() => {
@@ -91,9 +111,13 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
             }, time) // Use AudioContext time of the event
         }
 
+        if (sound === 'jaleo') {
+            improviseJaleoSequence(seq, events, time, palo, eighthNotes)
+            return
+        }
+
         // key is a pulsation number, value is the number of clara sound
         forEachValue(palo[sound], (value, key) => {
-            events = parseInt(events)
             key = parseInt(key)
             if (eighthNotes) {
                 if (events === key && key % 2 !== 0) {
@@ -129,6 +153,7 @@ const initPalos = store => {
                 sorda: buildSequence(store, palo, false, 'sorda', sequence),
                 cajon: buildSequence(store, palo, false, 'cajon', sequence),
                 udu: buildSequence(store, palo, false, 'udu', sequence),
+                jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
                 click: buildSequence(store, palo, false, 'click', sequence)
             },
             eighthNotes: {
@@ -136,6 +161,7 @@ const initPalos = store => {
                 sorda: buildSequence(store, palo, true, 'sorda', sequence),
                 cajon: buildSequence(store, palo, true, 'cajon', sequence),
                 udu: buildSequence(store, palo, true, 'udu', sequence),
+                jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
                 click: buildSequence(store, palo, true, 'click', sequence)
             }
         }
