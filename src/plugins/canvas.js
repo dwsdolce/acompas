@@ -90,15 +90,17 @@ class BeatDot {
 const maxFps = 10
 const interval = 1000 / maxFps
 let then = Date.now()
+
 const animateCanvas = () => {
     const now = Date.now()
     const delta = now - then
 
     requestAnimationFrame(animateCanvas)
+
     if (delta > interval) {
         then = now - (delta % interval)
         // Draw dots
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
         forEachValue(beatDots, (beatDot, beatNb) => {
             beatDot.draw(beatNb)
         })
