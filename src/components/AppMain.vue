@@ -28,7 +28,8 @@
 
 <script>
     import { mapState, mapMutations } from 'vuex'
-    import { QResizeObservable } from 'quasar'
+    import { QResizeObservable, Dialog } from 'quasar'
+    import { isSupported } from '@plugins/metronome'
     import Play from '@components/Play'
     import SelectTempo from '@components/SelectTempo'
     import SelectPalo from '@components/SelectPalo'
@@ -66,12 +67,30 @@
                 breakpoint: state => state.breakpoint
             })
         },
+        mounted () {
+            if (!isSupported) this.showDialog()
+        },
         methods: {
             ...mapMutations({
                 getVisualizationSize: 'GET_VISUALIZATION_SIZE'
             }),
             onResize (size) {
                 this.getVisualizationSize(size)
+            },
+            showDialog () {
+                Dialog.create({
+                    title: 'Update your browser!',
+                    message: 'Your browser doesn\'t support one or more technologies used by this app. Please come back with another one or another version of this one.',
+                    buttons: [
+                        {
+                            label: 'Unable to close',
+                            preventClose: true,
+                            handler () {}
+                        }
+                    ],
+                    noBackdropDismiss: true,
+                    noEscDismiss: true
+                })
             }
         }
     }

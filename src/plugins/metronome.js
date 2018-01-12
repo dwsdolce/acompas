@@ -241,8 +241,6 @@ const changeVolume = (prevState, nextState) => {
 // Metronome init functions
 // ==========================
 
-export const getContext = Tone.context
-
 const startSequences = state => {
     return new Promise(resolve => {
         forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
@@ -275,6 +273,10 @@ const activateSequences = state => {
         ]).then(() => resolve())
     })
 }
+
+export const getContext = Tone.context
+
+export const isSupported = Tone.supported
 
 export const initMetronome = async (store, callback) => {
     Loading.show({ delay: 300 })
