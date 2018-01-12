@@ -8,7 +8,8 @@ import { restoreLocalStorage } from '@plugins/localStorage'
 const aCompas = {
     audioFormat: null,
     sounds: {},
-    sequences: {}
+    sequences: {},
+    cursor: {}
 }
 
 // ==========================
@@ -20,29 +21,32 @@ const aCompas = {
      * load sounds by creating the Tone players
  */
 const initSounds = () => {
-    if (new Audio().canPlayType('audio/flac')) {
-        aCompas.audioFormat = 'flac'
-    } else if (new Audio().canPlayType('audio/ogg')) {
-        aCompas.audioFormat = 'ogg'
-    } else if (new Audio().canPlayType('audio/mpeg')) {
-        aCompas.audioFormat = 'mp3'
-    } else if (new Audio().canPlayType('audio/mp4')) {
-        aCompas.audioFormat = 'mp4'
-    } else if (new Audio().canPlayType('audio/wav')) {
-        aCompas.audioFormat = 'wav'
-    } else {
-        throw new Error('None of the available audio formats can be played')
-    }
+    return new Promise(resolve => {
+        if (new Audio().canPlayType('audio/flac')) {
+            aCompas.audioFormat = 'flac'
+        } else if (new Audio().canPlayType('audio/ogg')) {
+            aCompas.audioFormat = 'ogg'
+        } else if (new Audio().canPlayType('audio/mpeg')) {
+            aCompas.audioFormat = 'mp3'
+        } else if (new Audio().canPlayType('audio/mp4')) {
+            aCompas.audioFormat = 'mp4'
+        } else if (new Audio().canPlayType('audio/wav')) {
+            aCompas.audioFormat = 'wav'
+        } else {
+            throw new Error('None of the available audio formats can be played')
+        }
 
-    let path = 'statics/audio/'
+        let path = 'statics/audio/'
 
-    forEachValue(audioSettings, (value, key) => {
-        aCompas.sounds[key] = {}
-        forEachValue(value, (v, k) => {
-            let url = path + v.src + '.' + aCompas.audioFormat
-            aCompas.sounds[key][k] = new Tone.Player(url).toMaster()
-            aCompas.sounds[key][k].volume.value = 0
+        forEachValue(audioSettings, (value, key) => {
+            aCompas.sounds[key] = {}
+            forEachValue(value, (v, k) => {
+                let url = path + v.src + '.' + aCompas.audioFormat
+                aCompas.sounds[key][k] = new Tone.Player(url).toMaster()
+                aCompas.sounds[key][k].volume.value = 0
+            })
         })
+        return resolve()
     })
 }
 
@@ -142,29 +146,32 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
 }
 
 const initPalos = store => {
-    forEachValue(store.state.palos, palo => {
-        let sequence = []
-        for (let i = 0; i < palo.nbBeatsInPattern; i++) {
-            sequence.push(i)
-        }
-        aCompas.sequences[palo.value] = {
-            quarterNotes: {
-                clara: buildSequence(store, palo, false, 'clara', sequence),
-                sorda: buildSequence(store, palo, false, 'sorda', sequence),
-                cajon: buildSequence(store, palo, false, 'cajon', sequence),
-                udu: buildSequence(store, palo, false, 'udu', sequence),
-                jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
-                click: buildSequence(store, palo, false, 'click', sequence)
-            },
-            eighthNotes: {
-                clara: buildSequence(store, palo, true, 'clara', sequence),
-                sorda: buildSequence(store, palo, true, 'sorda', sequence),
-                cajon: buildSequence(store, palo, true, 'cajon', sequence),
-                udu: buildSequence(store, palo, true, 'udu', sequence),
-                jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
-                click: buildSequence(store, palo, true, 'click', sequence)
+    return new Promise(resolve => {
+        forEachValue(store.state.palos, palo => {
+            let sequence = []
+            for (let i = 0; i < palo.nbBeatsInPattern; i++) {
+                sequence.push(i)
             }
-        }
+            aCompas.sequences[palo.value] = {
+                quarterNotes: {
+                    clara: buildSequence(store, palo, false, 'clara', sequence),
+                    sorda: buildSequence(store, palo, false, 'sorda', sequence),
+                    cajon: buildSequence(store, palo, false, 'cajon', sequence),
+                    udu: buildSequence(store, palo, false, 'udu', sequence),
+                    jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
+                    click: buildSequence(store, palo, false, 'click', sequence)
+                },
+                eighthNotes: {
+                    clara: buildSequence(store, palo, true, 'clara', sequence),
+                    sorda: buildSequence(store, palo, true, 'sorda', sequence),
+                    cajon: buildSequence(store, palo, true, 'cajon', sequence),
+                    udu: buildSequence(store, palo, true, 'udu', sequence),
+                    jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
+                    click: buildSequence(store, palo, true, 'click', sequence)
+                }
+            }
+        })
+        return resolve()
     })
 }
 
@@ -176,69 +183,57 @@ const selectTempo = tempo => {
     Tone.Transport.bpm.value = tempo
 }
 
-const initSequences = prevState => {
-    forEachValue(aCompas.sequences[prevState.selectedPalo.value].quarterNotes, (seq, key) => {
-        if (seq.state === 'stopped') seq.start(0)
-    })
-    forEachValue(aCompas.sequences[prevState.selectedPalo.value].eighthNotes, (seq, key) => {
-        if (seq.state === 'stopped') seq.start(0)
-    })
-}
-
-const selectPalo = (prevState, nextState) => {
-    forEachValue(aCompas.sequences[prevState.selectedPalo.value].quarterNotes, (seq, key) => {
-        if (seq.state === 'started') seq.stop()
-    })
-    forEachValue(aCompas.sequences[prevState.selectedPalo.value].eighthNotes, (seq, key) => {
-        if (seq.state === 'started') seq.stop()
-    })
-    forEachValue(aCompas.sequences[nextState.selectedPalo.value].quarterNotes, (seq, key) => {
-        if (seq.state === 'stopped') seq.start(0)
-    })
-    forEachValue(aCompas.sequences[nextState.selectedPalo.value].eighthNotes, (seq, key) => {
-        if (seq.state === 'stopped') seq.start(0)
-    })
-}
-
 const toggleEighthNotes = state => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, (seq, key) => {
-        seq.mute = !state.selectedInstruments.includes(key)
-    })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, (seq, key) => {
-        let instrument = state.instruments.find(o => o.value === key)
-        if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
-            seq.mute = false
-        } else {
-            seq.mute = true
-        }
+    return new Promise(resolve => {
+        forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, (seq, key) => {
+            seq.mute = !state.selectedInstruments.includes(key)
+        })
+        forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, (seq, key) => {
+            let instrument = state.instruments.find(o => o.value === key)
+            if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
+                seq.mute = false
+            } else {
+                seq.mute = true
+            }
+        })
+        return resolve()
     })
 }
 
 const toggleImprovise = state => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, (seq, key) => {
-        seq.improvise = state.improvise
-    })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, (seq, key) => {
-        seq.improvise = state.improvise
+    return new Promise(resolve => {
+        forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+            seq.improvise = state.improvise
+        })
+        forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+            seq.improvise = state.improvise
+        })
+        return resolve()
     })
 }
 
 const toggleHumanize = state => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, (seq, key) => {
-        seq.humanize = state.humanize
-    })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, (seq, key) => {
-        seq.humanize = state.humanize
+    return new Promise(resolve => {
+        forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+            seq.humanize = state.humanize
+        })
+        forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+            seq.humanize = state.humanize
+        })
+        return resolve()
     })
 }
 
 const changeVolume = (prevState, nextState) => {
-    forEachValue(nextState.instruments, (instrument, key) => {
-        if (instrument.volume !== prevState.instruments[key].volume) {
-            forEachValue(aCompas.sounds[instrument.value], sound => {
-                sound.volume.value = instrument.volume
-            })
-        }
+    return new Promise(resolve => {
+        forEachValue(nextState.instruments, (instrument, key) => {
+            if (instrument.volume !== prevState.instruments[key].volume) {
+                forEachValue(aCompas.sounds[instrument.value], sound => {
+                    sound.volume.value = instrument.volume
+                })
+            }
+        })
+        return resolve()
     })
 }
 
@@ -246,31 +241,21 @@ const changeVolume = (prevState, nextState) => {
 // Metronome init functions
 // ==========================
 
-const initInputs = async store => {
-    await initSequences(store.state)
-    await toggleEighthNotes(store.state)
-    await toggleImprovise(store.state)
-    await toggleHumanize(store.state)
-    await selectTempo(store.state.tempo)
-    await restoreLocalStorage(store)
-}
-
 export const getContext = Tone.context
 
-export const initMetronome = async (store, callback) => {
-    Loading.show()
-    await initSounds()
-    await initPalos(store)
-    await initInputs(store)
-    if (Loading.isActive()) Loading.hide()
-    callback(getContext.state)
+const startSequences = state => {
+    return new Promise(resolve => {
+        forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+            seq.start()
+        })
+        forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+            seq.start()
+        })
+        return resolve()
+    })
 }
 
-// ==========================
-// Metronome listen store
-// ==========================
-
-const stopAll = () => {
+const stopAllSequences = () => {
     forEachValue(aCompas.sequences, notes => {
         forEachValue(notes, instruments => {
             forEachValue(instruments, seq => {
@@ -280,37 +265,58 @@ const stopAll = () => {
     })
 }
 
-const selectSequences = async (prevState, nextState) => {
-    await selectPalo(prevState, nextState)
-    await toggleEighthNotes(nextState)
-    await toggleImprovise(nextState)
-    await toggleHumanize(nextState)
+const activateSequences = state => {
+    return new Promise(resolve => {
+        return Promise.all([
+            toggleEighthNotes(state),
+            toggleImprovise(state),
+            toggleHumanize(state),
+            selectTempo(state.tempo)
+        ]).then(() => resolve())
+    })
 }
 
-const playStop = state => {
-    if (state.isUnlocked) {
-        if (state.isPlaying) {
-            Tone.Transport.start('+0.1')
-            window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
-            state.playStartTime = Tone.context.currentTime
-        } else {
-            Tone.Transport.stop()
-            stopAll()
-            window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
-                Math.round(Tone.context.currentTime - state.playStartTime)])
-        }
-    }
+export const initMetronome = async (store, callback) => {
+    Loading.show({ delay: 300 })
+    await initSounds()
+    await initPalos(store)
+    await restoreLocalStorage(store)
+    await activateSequences(store.state).then(() => {
+        Tone.Transport.start('+0.1')
+        if (Loading.isActive()) Loading.hide()
+        callback(getContext.state)
+    })
 }
+
+const play = async state => {
+    await startSequences(state)
+    window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
+    state.playStartTime = Tone.context.currentTime
+}
+
+const stop = state => {
+    stopAllSequences()
+    window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
+        Math.round(Tone.context.currentTime - state.playStartTime)])
+}
+
+// ==========================
+// Metronome listen store
+// ==========================
 
 const metronome = store => {
     let prevState = deepCopy(store.state)
+
     store.subscribe((mutation, state) => {
         let nextState = deepCopy(state)
 
         switch (mutation.type) {
-            case types.PLAY_STOP:
-                selectSequences(prevState, nextState)
-                playStop(nextState)
+            case types.PLAY:
+                play(nextState)
+                break
+
+            case types.STOP:
+                stop(nextState)
                 break
 
             case types.SELECT_TEMPO:
@@ -318,9 +324,8 @@ const metronome = store => {
                 break
 
             case types.SELECT_PALO:
-                if (!nextState.isPlaying) Tone.Transport.stop()
-                selectSequences(prevState, nextState)
-                selectTempo(nextState.selectedPalo.defaultTempo)
+                if (!nextState.isPlaying) stop(nextState)
+                toggleEighthNotes(nextState)
                 window._paq.push(['trackEvent', 'PaloSwitch', 'Set', nextState.selectedPalo.label])
                 break
 
@@ -332,13 +337,19 @@ const metronome = store => {
             case types.TOGGLE_EIGHTHNOTES:
             case types.ENABLE_EIGHTHNOTES:
             case types.DISABLE_EIGHTHNOTES:
+                toggleEighthNotes(nextState)
+                break
+
             case types.TOGGLE_IMPROVISE:
             case types.ENABLE_IMPROVISE:
             case types.DISABLE_IMPROVISE:
+                toggleImprovise(nextState)
+                break
+
             case types.TOGGLE_HUMANIZE:
             case types.ENABLE_HUMANIZE:
             case types.DISABLE_HUMANIZE:
-                selectSequences(prevState, nextState)
+                toggleHumanize(nextState)
                 break
 
             default:

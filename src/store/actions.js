@@ -9,18 +9,22 @@ export const toggleSideMenu = ({ commit }) => {
     commit(types.TOGGLE_SIDE_MENU)
 }
 
-export const playStop = ({ commit }) => {
-    commit(types.PLAY_STOP)
-    commit(types.TRIGGER_EVENT, null)
+export const playStop = ({ commit, state }) => {
+    if (state.isPlaying) {
+        commit(types.STOP)
+        commit(types.TRIGGER_EVENT, null)
+    } else {
+        commit(types.PLAY)
+    }
 }
 
 export const selectVisualizationMode = ({ commit, state }, payload) => {
     commit(types.SELECT_VISUALIZATION_MODE, payload)
-    if (state.isPlaying) commit(types.PLAY_STOP)
+    if (state.isPlaying) commit(types.STOP)
 }
 
 export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload is a palo slug
-    if (state.isPlaying) commit(types.PLAY_STOP)
+    if (state.isPlaying) commit(types.STOP)
     forEachValue(state.palos, palo => {
         if (palo.value === payload) {
             commit(types.SELECT_PALO, palo)

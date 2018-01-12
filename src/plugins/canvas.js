@@ -135,8 +135,8 @@ const canvas = store => {
             case types.SELECT_PALO:
                 initCanvas(nextState)
                 break
-            case types.PLAY_STOP:
-                if (!nextState.isPlaying) metronomeEvent = null
+            case types.STOP:
+                metronomeEvent = null
                 break
             case types.TRIGGER_EVENT:
                 metronomeEvent = nextState.metronomeEvent

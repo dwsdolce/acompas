@@ -4,92 +4,121 @@ import { forEachValue, deepCopy } from '../assets/utils'
 const storage = window.localStorage
 
 const restoreVisualization = store => {
-    if (storage.getItem('visualization-mode') !== null) {
-        store.dispatch('selectVisualizationMode', storage.getItem('visualization-mode'))
-    }
+    return new Promise(resolve => {
+        if (storage.getItem('visualization-mode') !== null) {
+            store.dispatch('selectVisualizationMode', storage.getItem('visualization-mode'))
+        }
+        return resolve()
+    })
 }
 
 const restoreSelectedPalo = store => {
-    if (storage.getItem('palo') !== null) {
-        store.dispatch('selectPalo', storage.getItem('palo'))
-    }
+    return new Promise(resolve => {
+        if (storage.getItem('palo') !== null) {
+            store.dispatch('selectPalo', storage.getItem('palo'))
+        }
+        return resolve()
+    })
 }
 
 const restoreTempo = store => {
-    let selectedPaloSlug = store.state.selectedPalo.value
-    if (storage.getItem('tempo-' + selectedPaloSlug) !== null) {
-        if (parseInt(storage.getItem('tempo-' + selectedPaloSlug))) {
-            store.dispatch('selectTempo', parseInt(storage.getItem('tempo-' + selectedPaloSlug)))
+    return new Promise(resolve => {
+        let selectedPaloSlug = store.state.selectedPalo.value
+        if (storage.getItem('tempo-' + selectedPaloSlug) !== null) {
+            if (parseInt(storage.getItem('tempo-' + selectedPaloSlug))) {
+                store.dispatch('selectTempo', parseInt(storage.getItem('tempo-' + selectedPaloSlug)))
+            }
         }
-    }
+        return resolve()
+    })
 }
 
 const restoreSelectedInstruments = store => {
-    if (storage.getItem('selected-instruments') !== null) {
-        let selectedInstrumentsParsed = JSON.parse(storage.getItem('selected-instruments'))
-        if (selectedInstrumentsParsed) {
-            store.dispatch('selectInstruments', selectedInstrumentsParsed)
+    return new Promise(resolve => {
+        if (storage.getItem('selected-instruments') !== null) {
+            let selectedInstrumentsParsed = JSON.parse(storage.getItem('selected-instruments'))
+            if (selectedInstrumentsParsed) {
+                store.dispatch('selectInstruments', selectedInstrumentsParsed)
+            }
         }
-    }
+        return resolve()
+    })
 }
 
 const restoreEighthNotes = store => {
-    forEachValue(store.state.instruments, (v, k) => {
-        if (storage.getItem(v.value + '-eighthNotes') !== null) {
-            if (storage.getItem(v.value + '-eighthNotes') === 'true') {
-                store.dispatch('enableEighthNotes', v)
+    return new Promise(resolve => {
+        forEachValue(store.state.instruments, (v, k) => {
+            if (storage.getItem(v.value + '-eighthNotes') !== null) {
+                if (storage.getItem(v.value + '-eighthNotes') === 'true') {
+                    store.dispatch('enableEighthNotes', v)
+                }
+                if (storage.getItem(v.value + '-eighthNotes') === 'false') {
+                    store.dispatch('disableEighthNotes', v)
+                }
             }
-            if (storage.getItem(v.value + '-eighthNotes') === 'false') {
-                store.dispatch('disableEighthNotes', v)
-            }
-        }
+        })
+        return resolve()
     })
 }
 
 const restoreInstrumentsVolumes = store => {
-    forEachValue(store.state.instruments, (v, k) => {
-        if (storage.getItem(v.value + '-volume') !== null) {
-            if (parseInt(storage.getItem(v.value + '-volume'))) {
-                let payload = {}
-                payload.instrument = v
-                payload.volume = parseInt(storage.getItem(v.value + '-volume'))
-                store.dispatch('changeVolume', payload)
+    return new Promise(resolve => {
+        forEachValue(store.state.instruments, (v, k) => {
+            if (storage.getItem(v.value + '-volume') !== null) {
+                if (parseInt(storage.getItem(v.value + '-volume'))) {
+                    let payload = {}
+                    payload.instrument = v
+                    payload.volume = parseInt(storage.getItem(v.value + '-volume'))
+                    store.dispatch('changeVolume', payload)
+                }
             }
-        }
+        })
+        return resolve()
     })
 }
 
 const restoreHumanize = store => {
-    if (storage.getItem('humanize') !== null) {
-        if (storage.getItem('humanize') === 'true') {
-            store.dispatch('enableHumanize')
+    return new Promise(resolve => {
+        if (storage.getItem('humanize') !== null) {
+            if (storage.getItem('humanize') === 'true') {
+                store.dispatch('enableHumanize')
+            }
+            if (storage.getItem('humanize') === 'false') {
+                store.dispatch('disableHumanize')
+            }
         }
-        if (storage.getItem('humanize') === 'false') {
-            store.dispatch('disableHumanize')
-        }
-    }
+        return resolve()
+    })
 }
 
 const restoreImprovise = store => {
-    if (storage.getItem('improvise') !== null) {
-        if (storage.getItem('improvise') === 'true') {
-            store.dispatch('enableImprovise')
+    return new Promise(resolve => {
+        if (storage.getItem('improvise') !== null) {
+            if (storage.getItem('improvise') === 'true') {
+                store.dispatch('enableImprovise')
+            }
+            if (storage.getItem('improvise') === 'false') {
+                store.dispatch('disableImprovise')
+            }
         }
-        if (storage.getItem('improvise') === 'false') {
-            store.dispatch('disableImprovise')
-        }
-    }
+        return resolve()
+    })
 }
 
-export const restoreLocalStorage = async store => {
-    await restoreVisualization(store)
-    await restoreSelectedPalo(store)
-    await restoreTempo(store)
-    await restoreSelectedInstruments(store)
-    await restoreEighthNotes(store)
-    await restoreInstrumentsVolumes(store)
-    await restoreHumanize(store)
-    await restoreImprovise(store)
+export const restoreLocalStorage = store => {
+    return new Promise(resolve => {
+        if (!storage.length) return resolve()
+        return Promise.all([
+            restoreVisualization(store),
+            restoreSelectedPalo(store),
+            restoreTempo(store),
+            restoreSelectedInstruments(store),
+            restoreEighthNotes(store),
+            restoreInstrumentsVolumes(store),
+            restoreHumanize(store),
+            restoreImprovise(store)
+        ]).then(() => resolve())
+    })
 }
 
 const localStorage = store => {

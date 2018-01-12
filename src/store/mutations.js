@@ -24,8 +24,12 @@ const mutations = {
         state.visualizationSize = payload
     },
 
-    [types.PLAY_STOP] (state) {
-        state.isPlaying = !state.isPlaying
+    [types.PLAY] (state) {
+        state.isPlaying = true
+    },
+
+    [types.STOP] (state) {
+        state.isPlaying = false
     },
 
     // payload = palo object
