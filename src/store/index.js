@@ -10,6 +10,7 @@ import createLogger from '@plugins/logger'
 import metronome from '@plugins/metronome'
 import canvas from '@plugins/canvas'
 import localStorage from '@plugins/localStorage'
+import piwik from '@plugins/piwik'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,7 @@ const store = new Vuex.Store({
     getters,
     actions,
     mutations,
-    plugins: [ createLogger(), metronome, canvas, localStorage ]
+    plugins: [ createLogger(), metronome, canvas, localStorage, piwik ]
 })
 
 export default store

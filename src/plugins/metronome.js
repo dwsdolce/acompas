@@ -292,14 +292,10 @@ export const initMetronome = async (store, callback) => {
 
 const play = async state => {
     await startSequences(state)
-    window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
-    state.playStartTime = Tone.context.currentTime
 }
 
 const stop = state => {
     stopAllSequences()
-    window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
-        Math.round(Tone.context.currentTime - state.playStartTime)])
 }
 
 // ==========================
@@ -328,7 +324,6 @@ const metronome = store => {
             case types.SELECT_PALO:
                 if (!nextState.isPlaying) stop(nextState)
                 toggleEighthNotes(nextState)
-                window._paq.push(['trackEvent', 'PaloSwitch', 'Set', nextState.selectedPalo.label])
                 break
 
             case types.CHANGE_VOLUME:
