@@ -49,8 +49,7 @@ npm install
 npx cordova requirements
 
 # Copy files to the cordova/platforms/android/app/src/main/assets/www subfolder (run this in the cordova/ folder)
-# No idea why using a script for this is required
-./prepare.sh
+npx cordova prepare android
 
 # Run android apk (run this in the cordova/ folder)
 npx cordova run android --debug
