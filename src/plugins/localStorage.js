@@ -128,6 +128,7 @@ const localStorage = store => {
             case types.SELECT_VISUALIZATION_MODE:
                 storage.setItem('visualization-mode', mutation.payload)
                 break
+
             case types.SELECT_PALO:
                 storage.setItem('palo', mutation.payload.value)
                 if (window.localStorage.getItem('tempo-' + mutation.payload.value) !== null) {
@@ -140,39 +141,51 @@ const localStorage = store => {
                     store.dispatch('selectTempo', mutation.payload.defaultTempo)
                 }
                 break
+
             case types.SELECT_TEMPO:
                 storage.setItem('tempo-' + nextState.selectedPalo.value, mutation.payload)
                 break
+
             case types.SELECT_INSTRUMENTS:
                 storage.setItem('selected-instruments', JSON.stringify(nextState.selectedInstruments))
                 break
+
             case types.CHANGE_VOLUME:
                 storage.setItem(mutation.payload.instrument.value + '-volume', mutation.payload.volume)
                 break
+
             case types.TOGGLE_EIGHTHNOTES:
                 storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
                 break
+
             case types.ENABLE_EIGHTHNOTES:
                 storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
                 break
+
             case types.DISABLE_EIGHTHNOTES:
                 storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
                 break
+
             case types.TOGGLE_IMPROVISE:
                 storage.setItem('improvise', nextState.improvise)
                 break
+
             case types.ENABLE_IMPROVISE:
                 storage.setItem('improvise', nextState.improvise)
                 break
+
             case types.DISABLE_IMPROVISE:
                 storage.setItem('improvise', nextState.improvise)
                 break
+
             case types.TOGGLE_HUMANIZE:
                 storage.setItem('humanize', nextState.humanize)
                 break
+
             case types.ENABLE_HUMANIZE:
                 storage.setItem('humanize', nextState.humanize)
                 break
+
             case types.DISABLE_HUMANIZE:
                 storage.setItem('humanize', nextState.humanize)
                 break

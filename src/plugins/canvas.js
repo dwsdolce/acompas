@@ -87,7 +87,7 @@ class BeatDot {
 // See http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/
 // for some info about fps and requestAnimationFrame
 // Note : higher fps must be tested on a mobile device !
-const maxFps = 10
+const maxFps = 20
 const interval = 1000 / maxFps
 let then = Date.now()
 
@@ -130,14 +130,17 @@ const canvas = store => {
                 canvasEl = mutation.payload || 300
                 initCanvas(nextState)
                 break
+
             case types.GET_VISUALIZATION_SIZE:
             case types.SELECT_VISUALIZATION_MODE:
             case types.SELECT_PALO:
                 initCanvas(nextState)
                 break
+
             case types.STOP:
                 metronomeEvent = null
                 break
+
             case types.TRIGGER_EVENT:
                 metronomeEvent = nextState.metronomeEvent
                 break

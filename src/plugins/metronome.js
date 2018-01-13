@@ -8,8 +8,7 @@ import { restoreLocalStorage } from '@plugins/localStorage'
 const aCompas = {
     audioFormat: null,
     sounds: {},
-    sequences: {},
-    cursor: {}
+    sequences: {}
 }
 
 // ==========================
@@ -290,14 +289,6 @@ export const initMetronome = async (store, callback) => {
     })
 }
 
-const play = async state => {
-    await startSequences(state)
-}
-
-const stop = state => {
-    stopAllSequences()
-}
-
 // ==========================
 // Metronome listen store
 // ==========================
@@ -310,11 +301,11 @@ const metronome = store => {
 
         switch (mutation.type) {
             case types.PLAY:
-                play(nextState)
+                startSequences(nextState)
                 break
 
             case types.STOP:
-                stop(nextState)
+                stopAllSequences()
                 break
 
             case types.SELECT_TEMPO:
@@ -322,7 +313,7 @@ const metronome = store => {
                 break
 
             case types.SELECT_PALO:
-                if (!nextState.isPlaying) stop(nextState)
+                if (!nextState.isPlaying) stopAllSequences()
                 toggleEighthNotes(nextState)
                 break
 
