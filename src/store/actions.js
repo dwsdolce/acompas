@@ -20,7 +20,6 @@ export const playStop = ({ commit, state }) => {
 
 export const selectVisualizationMode = ({ commit, state }, payload) => {
     commit(types.SELECT_VISUALIZATION_MODE, payload)
-    if (state.isPlaying) commit(types.STOP)
 }
 
 export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload is a palo slug
