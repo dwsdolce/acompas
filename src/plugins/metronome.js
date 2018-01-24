@@ -11,6 +11,12 @@ const aCompas = {
     sequences: {}
 }
 
+const synth = new Tone.Synth().toMaster()
+
+export const playSynth = note => {
+    synth.triggerAttackRelease(note, 4)
+}
+
 // ==========================
 // Metronome initial settings
 // ==========================

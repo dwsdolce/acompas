@@ -24,7 +24,10 @@
                     q-item(@click="launch('https://plus.google.com/share?url=http://acompas.org')")
                         q-item-side(icon="ion-social-googleplus")
                         q-item-main(label="Share on Google +")
-        q-modal(ref="helpModal", :content-css="{padding: '2rem'}")
+            q-item(@click="$refs.tuningModal.open()")
+                q-item-side(icon="ion-wrench")
+                q-item-main(label="Tuning fork")
+        q-modal(ref="helpModal", :content-css="{ padding: '2rem' }")
             h5.m-none.mb Help
             div
                 p: b Palo
@@ -42,15 +45,23 @@
                 color="primary",
                 @click="$refs.helpModal.close()"
             ).float-right Close
+        q-modal(ref="tuningModal", :content-css="{ padding: '2rem' }")
+            h5.m-none.mb Tuning fork
+            tuning-fork
+            q-btn(
+                color="primary",
+                @click="$refs.tuningModal.close()"
+            ).float-right Close
 </template>
 
 <script>
     import {
         QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn, openURL
     } from 'quasar'
+    import TuningFork from '@components/TuningFork'
 
     export default {
-        components: { QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn },
+        components: { QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn, TuningFork },
         methods: {
             launch (url) {
                 openURL(url)
