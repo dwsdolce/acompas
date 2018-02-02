@@ -16,7 +16,7 @@
     "es6-promise": "^4.2.2",
     "moment": "^2.20.1",
     "pug": "^2.0.0-rc.4",
-    "quasar-cli": "^0.6.4",
+    "quasar-cli": "^0.6.5",
     "quasar-extras": "0.x",
     "quasar-framework": "^0.14.7",
     "startaudiocontext": "^1.2.1",

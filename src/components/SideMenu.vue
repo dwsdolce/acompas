@@ -56,7 +56,7 @@
 
 <script>
     import {
-        QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn, openURL
+        QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn, openURL, Platform
     } from 'quasar'
     import TuningFork from '@components/TuningFork'
 
@@ -64,6 +64,9 @@
         components: { QList, QCollapsible, QItem, QItemSide, QItemMain, QModal, QBtn, TuningFork },
         methods: {
             launch (url) {
+                if (Platform.is.cordova) {
+                    cordova.InAppBrowser.open(url, '_system')
+                }
                 openURL(url)
             }
         }
