@@ -1,7 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="701000409" id="audio.acompas.app" version="2.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="701000429" id="audio.acompas.app" version="2.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
     </feature>
     <name>A Compás</name>
     <description>
@@ -12,8 +16,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" launch-external="yes" />
-    <allow-intent href="https://*/*" launch-external="yes" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
@@ -25,6 +29,9 @@
     <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
     <icon density="xxhdpi" src="res/icon/android/icon-144-xxhdpi.png" />
     <icon density="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
+    <config-file parent="/*" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.INTERNET" />
+    </config-file>
     <preference name="loglevel" value="DEBUG" />
     <preference name="android-minSdkVersion" value="24" />
 </widget>
