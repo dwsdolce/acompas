@@ -10,7 +10,7 @@ build_web_job:
   script:
     - apt-get -y update
     - apt-get -y dist-upgrade
-    - apt-get -y install curl
+    - apt-get -y install curl gnupg
     - curl -sL https://deb.nodesource.com/setup_9.x | bash -
     - apt-get install -y nodejs git rsync
     - $NPM install
