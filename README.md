@@ -17,7 +17,7 @@ It is based on the following technologies :
 
 ## Automated builds status
 
-[![pipeline status](https://gitlab.com/oricordeau/acompas/badges/vue/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/vue)
+[![pipeline status](https://gitlab.com/oricordeau/acompas/badges/master/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/master)
 
 ## Cloning and building the source code
 
