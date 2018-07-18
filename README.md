@@ -15,6 +15,11 @@ It is based on the following technologies :
  - [Tonejs](https://tonejs.github.io)
  - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
+## Branches
+
+ * The [online version](http://acompas.org) is the version 2 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
+ * The [1.1 branch](https://gitlab.com/oricordeau/acompas/tree/1.1) is still maintained in order to provide the Android application for users with Android >= 4.1 to Android < 7.0.
+
 ## Automated builds status
 
 [![pipeline status](https://gitlab.com/oricordeau/acompas/badges/master/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/master)
