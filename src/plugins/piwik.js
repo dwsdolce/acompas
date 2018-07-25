@@ -6,7 +6,7 @@ window._paq = []
 
 let platformName = null
 if (Platform.is.cordova) platformName = 'Cordova'
-if (Platform.is.desktop) platformName = 'Website'
+else platformName = 'Website'
 
 let playStartTime = null
 

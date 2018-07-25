@@ -59,7 +59,7 @@ const initSounds = () => {
 // Metronome palos settings
 // ==========================
 
-const improviseSequence = (sound, time, value) => {
+const improviseSequence = (sound, time, value, events, key, eighthNotes) => {
     // For the "click" sounds, follow the sequence and never improvise
     if (sound === 'click') {
         aCompas.sounds[sound][value].start(time)
@@ -67,13 +67,18 @@ const improviseSequence = (sound, time, value) => {
     }
     // Pick a probability that the sound occurence is following the pattern
     const improvisationProbability = Math.random()
-    const improvisationThreshold = 0.4
+    const improvisationThreshold = 0.15 // 15% chances that we don't follow the pattern
     if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
-        aCompas.sounds[sound][value].start(time)
+        if (events === key && eighthNotes && key % 2 !== 0) {
+            aCompas.sounds[sound][value].start(time)
+        }
+        if (events === key && !eighthNotes && key % 2 === 0) {
+            aCompas.sounds[sound][value].start(time)
+        }
     } else {
         // Pick a probability that the sound is played
         const playProbability = Math.random()
-        const playThreshold = 0.5
+        const playThreshold = 0.10 // 10% chances that the sound is not played
         if (playProbability > playThreshold) {
             aCompas.sounds[sound][value].start(time)
         }
@@ -84,11 +89,11 @@ const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
     if (!eighthNotes && (events % 2 !== 0)) {
         return
     }
-    let playThreshold = 0.95
+    let playThreshold = 0.95 // 95% chances that the the sound is not played
     // Check if time is a strong beat
     if (palo.accents.includes(events)) {
         // if the event is a strong beat, sound occurence will be more probable
-        playThreshold = 0.8
+        playThreshold = 0.7 // 70% chances that the sound is not played
     }
     const playProbability = Math.random()
     if (playProbability > playThreshold) {
@@ -128,21 +133,20 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
         // key is a pulsation number, value is the number of clara sound
         forEachValue(palo[sound], (value, key) => {
             key = parseInt(key)
-            if (eighthNotes) {
-                if (events === key && key % 2 !== 0) {
-                    if (!store.state.improvise) {
-                        aCompas.sounds[sound][value].start(time)
-                    } else {
-                        improviseSequence(sound, time, value)
-                    }
+            if (eighthNotes && key % 2 !== 0) {
+                if (!store.state.improvise && events === key) {
+                    aCompas.sounds[sound][value].start(time)
                 }
-            } else {
-                if (events === key && key % 2 === 0) {
-                    if (!store.state.improvise) {
-                        aCompas.sounds[sound][value].start(time)
-                    } else {
-                        improviseSequence(sound, time, value)
-                    }
+                if (store.state.improvise && events === key) {
+                    improviseSequence(sound, time, value, events, key, eighthNotes)
+                }
+            }
+            if (!eighthNotes && key % 2 === 0) {
+                if (!store.state.improvise && events === key) {
+                    aCompas.sounds[sound][value].start(time)
+                }
+                if (store.state.improvise && events === key) {
+                    improviseSequence(sound, time, value, events, key, eighthNotes)
                 }
             }
         })
