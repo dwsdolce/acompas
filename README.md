@@ -28,7 +28,7 @@ It is based on the following technologies :
 
 ``` bash
 # install dependencies
-$ npm install
+$ yarn install
 
 # serve with hot reload at localhost:8080
 $ npx quasar dev
@@ -48,7 +48,7 @@ npx quasar build
 
 # Install dependencies
 cd ./cordova
-npm install
+yarn install
 
 # Check cordova requirements (run this in the cordova/ folder)
 npx cordova requirements
