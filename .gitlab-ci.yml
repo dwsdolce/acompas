@@ -15,7 +15,6 @@ build_web_job:
     - apt-get install -y nodejs git rsync
     - $NPM install
     - npx quasar build
-    - npx quasar lint
   stage: build
   tags:
     - development
