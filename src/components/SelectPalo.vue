@@ -6,7 +6,7 @@ div
     color="white",
     @click="palosDialog = true"
   ).mt.mb {{ selectedPaloLabel }}
-  q-dialog(v-model="palosDialog", :content-css="{padding: '2rem'}")
+  q-dialog(v-model="palosDialog")
     h5.m-none.mb Select palo
     q-option-group(
       type="radio",

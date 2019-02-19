@@ -5,7 +5,7 @@ div
     outline,
     @click="instrumentsDialog = true"
   ).mt.mb Mixer
-  q-dialog(v-model="instrumentsDialog", :content-css="{minWidth: '50vw', padding: '2rem'}")
+  q-dialog(v-model="instrumentsDialog")
     h5.m-none.mb Mix instruments
     //- q-alert(
     //-   v-if="!selectedInstruments.length",

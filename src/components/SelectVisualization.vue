@@ -7,10 +7,7 @@ div
     icon="remove_red_eye",
     @click="visualizationDialog = true"
   ).mt
-  q-dialog(
-    v-model="visualizationDialog",
-    :content-css="{padding: '2rem'}"
-  )
+  q-dialog(v-model="visualizationDialog")
     h5.m-none.mb Select view mode
     q-option-group(
       type="radio",
