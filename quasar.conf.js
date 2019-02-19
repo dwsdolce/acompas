@@ -38,7 +38,8 @@ module.exports = function (ctx) {
         'QItemSection',
         'QItemLabel',
         'QExpansionItem',
-        'QDialog'
+        'QDialog',
+        'QResizeObserver'
       ],
 
       directives: [
@@ -48,6 +49,7 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
+        'Loading',
         'Notify'
       ],
 

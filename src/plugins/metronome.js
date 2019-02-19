@@ -1,7 +1,7 @@
 import Tone from 'tone'
 import { Loading } from 'quasar'
 import { deepCopy, forEachValue } from '../assets/utils'
-import * as types from '../store/my-module/mutation-types'
+import * as types from '../store/mutation-types'
 import audioSettings from '../store/data/audioDefaultSettings'
 import { restoreLocalStorage } from './localStorage'
 
@@ -294,7 +294,7 @@ export const initMetronome = async (store, callback) => {
   await restoreLocalStorage(store)
   await activateSequences(store.state).then(() => {
     Tone.Transport.start('+0.1')
-    if (Loading.isActive()) Loading.hide()
+    Loading.hide()
     callback(getContext.state)
   })
 }

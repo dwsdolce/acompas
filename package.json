@@ -24,6 +24,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "startaudiocontext": "^1.2.1",
     "strip-ansi": "=3.0.1",
     "tone": "^13.4.9"
   },

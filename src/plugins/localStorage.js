@@ -1,4 +1,4 @@
-import * as types from '../store/my-module/mutation-types'
+import * as types from '../store/mutation-types'
 import { forEachValue, deepCopy } from '../assets/utils'
 
 const storage = window.localStorage

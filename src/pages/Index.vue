@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-full.svg">
+    <AppMain />
   </q-page>
 </template>
 
@@ -8,7 +8,12 @@
 </style>
 
 <script>
+import AppMain from '../components/AppMain'
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {
+    AppMain
+  }
 }
 </script>
