@@ -3,37 +3,37 @@ div
   q-list(no-border, link, separator)
     q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
       q-item-section(avatar)
-        q-icon(name="ion-android")
+        q-icon(name="android")
       q-item-section Get the Android app
     q-item(clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
-        q-icon(name="ion-information-circled")
+        q-icon(name="help")
       q-item-section Help
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/oricordeau/acompas')")
       q-item-section(avatar)
-        q-icon(name="ion-code")
+        q-icon(name="code")
       q-item-section Source code
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/oricordeau/acompas/issues')")
       q-item-section(avatar)
-        q-icon(name="ion-bug")
+        q-icon(name="bug_report")
       q-item-section Issues
-    q-expansion-item(icon="ion-share", label="Share")
+    q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=http://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="ion-social-facebook")
+            q-icon(name="ion-logo-facebook")
           q-item-section Share on Facebook
         q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=http://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="ion-social-twitter")
+            q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter
         q-item(clickable, v-ripple, @click="launch('https://plus.google.com/share?url=http://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="ion-social-googleplus")
+            q-icon(name="ion-logo-googleplus")
           q-item-section Share on Google +
     q-item(clickable, v-ripple, @click="tuningDialog = true")
       q-item-section(avatar)
-        q-icon(name="ion-wrench")
+        q-icon(name="hearing")
       q-item-section Tuning fork
   q-dialog(v-model="helpDialog")
     q-card
