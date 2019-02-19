@@ -36,19 +36,23 @@ module.exports = function (ctx) {
         'QList',
         'QItem',
         'QItemSection',
-        'QItemLabel'
+        'QItemLabel',
+        'QExpansionItem',
+        'QDialog'
       ],
 
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseDialog'
       ],
 
       // Quasar plugins
       plugins: [
         'Notify'
-      ]
+      ],
 
-      // iconSet: 'ionicons-v4'
+      //iconSet: 'ionicons-v4'
+      iconSet: 'material-icons'
       // lang: 'de' // Quasar language
     },
 
@@ -58,7 +62,7 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
-      // gzip: true,
+      gzip: true,
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
@@ -67,6 +71,10 @@ module.exports = function (ctx) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /node_modules/
+        })
+        cfg.module.rules.push({
+          test: /\.pug$/,
+          loader: 'pug-plain-loader'
         })
       }
     },
@@ -94,7 +102,7 @@ module.exports = function (ctx) {
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
-        theme_color: '#027be3',
+        theme_color: 'tomato',
         icons: [
           {
             'src': 'statics/icons/icon-128x128.png',

@@ -13,10 +13,9 @@
         </q-btn>
 
         <q-toolbar-title>
-          Quasar App
+          A Compás
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -25,6 +24,8 @@
       bordered
       content-class="bg-grey-2"
     >
+      <SideMenu />
+    <!--
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
         <q-item clickable tag="a" target="_blank" href="http://v1.quasar-framework.org">
@@ -73,6 +74,7 @@
           </q-item-section>
         </q-item>
       </q-list>
+    -->
     </q-drawer>
 
     <q-page-container>
@@ -83,6 +85,7 @@
 
 <script>
 import { openURL } from 'quasar'
+import SideMenu from 'components/SideMenu'
 
 export default {
   name: 'MyLayout',
@@ -93,6 +96,9 @@ export default {
   },
   methods: {
     openURL
+  },
+  components: {
+    SideMenu
   }
 }
 </script>

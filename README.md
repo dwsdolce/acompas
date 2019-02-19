@@ -35,9 +35,6 @@ $ npx quasar dev
 
 # build for production with minification
 $ npx quasar build
-
-# lint code
-$ npx quasar lint
 ```
 
 ## Android app build
