@@ -40,8 +40,8 @@ module.exports = function (ctx) {
         'QExpansionItem',
         'QDialog',
         'QCard',
-        'QcardSection',
-        'QCardActions'
+        'QCardSection',
+        'QCardActions',
         'QResizeObserver'
       ],
 
