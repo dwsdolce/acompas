@@ -39,6 +39,9 @@ module.exports = function (ctx) {
         'QItemLabel',
         'QExpansionItem',
         'QDialog',
+        'QCard',
+        'QcardSection',
+        'QCardActions'
         'QResizeObserver'
       ],
 

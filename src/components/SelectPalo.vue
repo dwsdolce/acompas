@@ -7,15 +7,18 @@ div
     @click="palosDialog = true"
   ).mt.mb {{ selectedPaloLabel }}
   q-dialog(v-model="palosDialog")
-    h5.m-none.mb Select palo
-    q-option-group(
-      type="radio",
-      color="primary",
-      :value="selectedPalo",
-      :options="palos",
-      @input="selectPalo",
-      @change="palosDialog = false"
-    ).mt
+    q-card
+      q-card-section
+        b Select palo
+      q-card-section
+        q-option-group(
+          type="radio",
+          color="primary",
+          :value="selectedPalo",
+          :options="palos",
+          @input="selectPalo",
+          @change="palosDialog = false"
+        ).mt
 </template>
 
 <script>
@@ -23,11 +26,13 @@ import { mapState, mapActions } from 'vuex'
 import {
   QBtn,
   QDialog,
+  QCard,
+  QCardSection,
   QOptionGroup
 } from 'quasar'
 
 export default {
-  components: { QBtn, QDialog, QOptionGroup },
+  components: { QBtn, QDialog, QOptionGroup, QCard, QCardSection },
   computed: {
     ...mapState({
       palos: state => state.palos,

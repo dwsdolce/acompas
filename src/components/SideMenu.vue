@@ -38,7 +38,8 @@ div
   q-dialog(v-model="helpDialog")
     q-card
       q-card-section
-        h5(class="text-h5") Help
+        b Help
+      q-card-section
         div
           p: b Palo
           p Use this button to select the flamenco rhythm that you want.
@@ -51,27 +52,32 @@ div
         div
           p: b Humanize
           p If it is on, then random time variations are applied to the sounds.
+      q-card-actions
         q-btn(
           color="primary",
           @click="helpDialog = false"
         ).float-right Close
   q-dialog(v-model="tuningDialog")
-    h5(class="text-h5") Tuning fork
-    tuning-fork
-    q-btn(
-      color="primary",
-      @click="tuningDialog = false"
-    ).float-right Close
+    q-card
+      q-card-section
+        b Tuning fork
+      q-card-section
+        tuning-fork
+      q-card-actions
+        q-btn(
+          color="primary",
+          @click="tuningDialog = false"
+        ).float-right Close
 </template>
 
 <script>
 import {
-  QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, openURL, Platform
+  QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, QCardActions, openURL, Platform
 } from 'quasar'
 import TuningFork from 'components/TuningFork'
 
 export default {
-  components: { QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, TuningFork },
+  components: { QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, QCardActions, TuningFork },
   methods: {
     launch (url) {
       if (Platform.is.cordova) {
