@@ -19,6 +19,11 @@ div
           @input="selectPalo",
           @change="palosDialog = false"
         ).mt
+      q-card-actions(align="right")
+        q-btn(
+          color="primary",
+          v-close-dialog
+        ) Close
 </template>
 
 <script>

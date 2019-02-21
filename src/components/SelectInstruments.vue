@@ -29,11 +29,11 @@ div
               :key="instrument.value",
               :slug="instrument.value"
             )
-      q-card-actions
+      q-card-actions(align="right")
         q-btn(
           color="primary",
-          @click="instrumentsDialog = false"
-        ).float-right Close
+          v-close-dialog
+        ) Close
 </template>
 
 <script>

@@ -13,7 +13,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          A Compás
+          <img :src="'statics/AClogo.png'" alt="A Compás" style="margin-top: 6px;">
         </q-toolbar-title>
 
       </q-toolbar>

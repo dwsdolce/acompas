@@ -55,19 +55,19 @@ div
       q-card-actions
         q-btn(
           color="primary",
-          @click="helpDialog = false"
-        ).float-right Close
+          v-close-dialog
+        ) Close
   q-dialog(v-model="tuningDialog")
     q-card
       q-card-section
         b Tuning fork
       q-card-section
         tuning-fork
-      q-card-actions
+      q-card-actions(align="right")
         q-btn(
           color="primary",
-          @click="tuningDialog = false"
-        ).float-right Close
+          v-close-dialog
+        ) Close
 </template>
 
 <script>
