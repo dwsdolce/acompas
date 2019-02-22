@@ -77,6 +77,7 @@ export default {
     onResize (size) {
       this.getVisualizationSize(size)
     },
+    // TODO Check if it works in 2.1
     showDialog () {
       Dialog.create({
         title: 'Update your browser!',

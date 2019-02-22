@@ -1,6 +1,6 @@
 <template lang="pug">
 .full-width
-  canvas#canvas(ref="canvas")
+  canvas#canvas
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
     })
   },
   mounted () {
-    this.getCanvasEl(this.$refs.canvas)
+    this.getCanvasEl(document.getElementById('canvas'))
   },
   methods: {
     ...mapMutations({

@@ -92,6 +92,9 @@ const interval = 1000 / maxFps
 let then = Date.now()
 
 const animateCanvas = () => {
+  if (!canvasEl) {
+    return
+  }
   const now = Date.now()
   const delta = now - then
 
@@ -108,7 +111,6 @@ const animateCanvas = () => {
 }
 
 export const initCanvas = state => {
-  canvasEl = document.getElementById('canvas')
   canvasEl.width = state.visualizationSize.width
   canvasEl.height = state.visualizationSize.width / 10 > 75 ? state.visualizationSize.width / 10 : 75
   coord.offsetX = canvasEl.width / (state.selectedPalo.nbBeatsInPattern / 2)
@@ -128,14 +130,19 @@ const canvas = store => {
     let nextState = deepCopy(state)
     switch (mutation.type) {
       case types.GET_CANVAS_EL:
-        canvasEl = mutation.payload || 300
-        initCanvas(nextState)
+        canvasEl = mutation.payload
+        if (canvasEl) {
+          initCanvas(nextState)
+        }
         break
 
       case types.GET_VISUALIZATION_SIZE:
       case types.SELECT_VISUALIZATION_MODE:
       case types.SELECT_PALO:
-        initCanvas(nextState)
+        canvasEl = document.getElementById('canvas')
+        if (canvasEl) {
+          initCanvas(nextState)
+        }
         break
 
       case types.STOP:
