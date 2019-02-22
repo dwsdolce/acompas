@@ -1,6 +1,6 @@
 <template lang="pug">
-  .layout-padding.horizontal.text-grey-1.full-height
-    .row.no-wrap.justify-center(:style="parentRect")
+  .layout-padding.horizontal.text-grey-1.full-height.full-width
+    .row.no-wrap.justify-center.full-width(:style="parentRect")
       q-resize-observer(@resize="onResize")
       draw-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")

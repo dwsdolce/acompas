@@ -52,7 +52,7 @@ div
         div
           p: b Humanize
           p If it is on, then random time variations are applied to the sounds.
-      q-card-actions
+      q-card-actions(align="right")
         q-btn(
           color="primary",
           v-close-dialog
