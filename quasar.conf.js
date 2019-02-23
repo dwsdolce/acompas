@@ -53,7 +53,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Loading',
-        'Notify'
+        'Notify',
+        'Dialog'
       ],
 
       //iconSet: 'ionicons-v4'
