@@ -4,9 +4,11 @@ div
     p.caption.auto.mb Tempo
     q-knob(
       color="primary",
+      track-color="grey-1",
       :value="tempo",
       :min="minTempo",
       :max="maxTempo",
+      show-value,
       :placeholder="tempo + 'bpm'",
       size="120px",
       lineWidth="6px",
