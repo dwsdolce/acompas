@@ -36,13 +36,21 @@ export const selectTempo = ({ commit, state }, payload) => {
   commit(types.SELECT_TEMPO, payload)
   if (payload > state.selectedPalo.fastTempo && !state.isTooFast) {
     commit(types.SHOW_FAST_MESSAGE)
-    Notify.create(state.selectedPalo.fastMessage)
+    Notify.create({
+      message: state.selectedPalo.fastMessage,
+      color: 'secondary',
+      icon: 'warning'
+    })
   } else if (payload < state.selectedPalo.fastTempo && state.isTooFast) {
     commit(types.HIDE_FAST_MESSAGE)
   }
   if (payload < state.selectedPalo.slowTempo && !state.isTooSlow) {
     commit(types.SHOW_SLOW_MESSAGE)
-    Notify.create(state.selectedPalo.slowMessage)
+    Notify.create({
+      message: state.selectedPalo.slowMessage,
+      color: 'secondary',
+      icon: 'warning'
+    })
   } else if (payload > state.selectedPalo.slowTempo && state.isTooSlow) {
     commit(types.HIDE_SLOW_MESSAGE)
   }
