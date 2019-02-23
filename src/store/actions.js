@@ -1,3 +1,4 @@
+import { Notify } from 'quasar'
 import * as types from './mutation-types'
 import { forEachValue } from '../assets/utils'
 
@@ -35,13 +36,13 @@ export const selectTempo = ({ commit, state }, payload) => {
   commit(types.SELECT_TEMPO, payload)
   if (payload > state.selectedPalo.fastTempo && !state.isTooFast) {
     commit(types.SHOW_FAST_MESSAGE)
-    setTimeout(() => { commit(types.HIDE_FAST_MESSAGE) }, 4000)
+    Notify.create(state.selectedPalo.fastMessage)
   } else if (payload < state.selectedPalo.fastTempo && state.isTooFast) {
     commit(types.HIDE_FAST_MESSAGE)
   }
   if (payload < state.selectedPalo.slowTempo && !state.isTooSlow) {
     commit(types.SHOW_SLOW_MESSAGE)
-    setTimeout(() => { commit(types.HIDE_SLOW_MESSAGE) }, 4000)
+    Notify.create(state.selectedPalo.slowMessage)
   } else if (payload > state.selectedPalo.slowTempo && state.isTooSlow) {
     commit(types.HIDE_SLOW_MESSAGE)
   }
