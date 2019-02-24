@@ -1,5 +1,5 @@
 <template lang="pug">
-h2(:class="className").m-none.mt
+h2(:class="className")
   q-icon(v-if="metronomeEvent === null", name="more_horiz")
   div(v-else) {{ counter }}
 </template>

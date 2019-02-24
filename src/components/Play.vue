@@ -5,7 +5,7 @@ q-btn#playBtn(
   color="primary",
   :icon="isPlaying ? 'stop' : 'play_arrow'",
   @click="playStop"
-).mt
+)
 </template>
 
 <script>

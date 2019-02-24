@@ -1,11 +1,11 @@
 <template lang="pug">
-    div
-        p.caption.auto Eighth-notes
-        q-toggle(
-            icon="audiotrack",
-            :value="eighthNotes",
-            @input="toggleEighthNotes"
-        ).primary.mt.mb
+  div
+    p.caption.auto Eighth-notes
+    q-toggle(
+      icon="audiotrack",
+      :value="eighthNotes",
+      @input="toggleEighthNotes"
+    ).primary
 </template>
 
 <script>

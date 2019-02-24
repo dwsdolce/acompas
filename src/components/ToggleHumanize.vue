@@ -5,7 +5,7 @@ div
   q-toggle(
     :value="humanize",
     @input="toggleHumanize"
-  ).primary.mt.mb
+  ).primary
 </template>
 
 <script>

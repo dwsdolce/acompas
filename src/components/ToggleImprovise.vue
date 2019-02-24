@@ -5,7 +5,7 @@ div
   q-toggle(
     :value="improvise",
     @input="toggleImprovise"
-  ).primary.mt.mb
+  ).primary
 </template>
 
 <script>

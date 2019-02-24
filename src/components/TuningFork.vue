@@ -6,7 +6,7 @@ div.mb
     outline,
     color="black",
     @click="playSynth(note)"
-  ).mr {{ note }}
+  ) {{ note }}
 </template>
 
 <script>

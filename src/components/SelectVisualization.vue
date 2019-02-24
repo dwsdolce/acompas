@@ -21,7 +21,7 @@ div
           :options="visualizationModes",
           @input="selectVisualizationMode",
           @change="visualizationDialog = false"
-        ).mt
+        )
       q-card-actions(align="right")
         q-btn(
           color="primary",
