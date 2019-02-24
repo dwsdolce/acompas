@@ -5,7 +5,8 @@ tr
       color="primary",
       :value="selectedInstruments",
       :val="instrument.value",
-      :label="instrument.label"
+      :label="instrument.label",
+      @input="selectInstruments"
     )
   td
     q-toggle(
@@ -13,7 +14,7 @@ tr
       :value="instrument.eighthNotes",
       :disable="!isChecked || isClick"
       @input="handleToggleEighthNotes($event)"
-    ).primary.ml.mr
+    ).primary
   td(style="width: 100%;")
     q-slider(
       :value="instrument.volume",
@@ -21,7 +22,6 @@ tr
       :max="30",
       :step="1",
       label,
-      :label-value="`${instrument.volume}db`",
       snap,
       :disable="!isChecked"
       @change="handleChangeVolume($event)"
@@ -49,10 +49,16 @@ export default {
       return this.instrument.value === 'click'
     }
   },
+  watch: {
+    selectedInstruments (value) {
+      this.selectInstruments(value)
+    }
+  },
   methods: {
     ...mapActions([
       'toggleEighthNotes',
-      'changeVolume'
+      'changeVolume',
+      'selectInstruments'
     ]),
     handleToggleEighthNotes (e) {
       this.toggleEighthNotes(this.instrument)

@@ -41,7 +41,7 @@ div
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { QIcon, QBtn, QDialog, QCard, QCardSection, QCardActions } from 'quasar'
 import InstrumentMixer from './InstrumentMixer'
 
@@ -49,19 +49,8 @@ export default {
   components: { QIcon, QBtn, QDialog, QCard, QCardSection, QCardActions, InstrumentMixer },
   computed: {
     ...mapState({
-      selectedInstruments: state => state.selectedInstruments,
       instruments: state => state.instruments
     })
-  },
-  watch: {
-    selectedInstruments (value) {
-      this.selectInstruments(value)
-    }
-  },
-  methods: {
-    ...mapActions([
-      'selectInstruments'
-    ])
   },
   data () {
     return {
