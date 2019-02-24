@@ -10,14 +10,6 @@ div
     q-card
       q-card-section
         b Instruments mixer
-        // TODO
-        //- q-alert(
-        //-   v-if="!selectedInstruments.length",
-        //-   color="negative",
-        //-   icon="warning",
-        //-   transition-show="jump-down",
-        //-   transition-hide="jump-up"
-        //- ) No instrument is selected. You will have no sound in the metronome...
       q-card-section
         table(style="width: 100%;").q-table
           thead
@@ -49,8 +41,20 @@ export default {
   components: { QIcon, QBtn, QDialog, QCard, QCardSection, QCardActions, InstrumentMixer },
   computed: {
     ...mapState({
-      instruments: state => state.instruments
+      instruments: state => state.instruments,
+      selectedInstruments: state => state.selectedInstruments
     })
+  },
+  watch: {
+    selectedInstruments (value) {
+      if (!value.length) {
+        this.$q.notify({
+          message: 'No instrument is selected. You will have no sound in the metronome ...',
+          color: 'secondary',
+          icon: 'warning'
+        })
+      }
+    }
   },
   data () {
     return {
