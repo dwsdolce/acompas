@@ -1,15 +1,16 @@
 <template lang="pug">
 div
-  p.caption.auto Palo
+  b Palo
+  br
   q-btn(
     outline,
     color="white",
     @click="palosDialog = true"
-  ).mt.mb {{ selectedPaloLabel }}
+  ) {{ selectedPaloLabel }}
   q-dialog(v-model="palosDialog")
     q-card
       q-card-section
-        b Select palo
+        b Please select a palo
       q-card-section
         q-option-group(
           type="radio",
@@ -18,12 +19,14 @@ div
           :options="palos",
           @input="selectPalo",
           @change="palosDialog = false"
-        ).mt
+        )
       q-card-actions(align="right")
         q-btn(
           color="primary",
           v-close-dialog
         ) Close
+  br
+  br
 </template>
 
 <script>

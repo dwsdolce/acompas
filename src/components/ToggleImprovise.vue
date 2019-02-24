@@ -1,6 +1,7 @@
 <template lang="pug">
 div
-  p.caption.auto.mb Improvise
+  b Improvise
+  br
   q-toggle(
     :value="improvise",
     @input="toggleImprovise"

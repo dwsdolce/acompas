@@ -1,14 +1,16 @@
 <template lang="pug">
 div
-  p.caption.auto Instruments
+  b Instruments
+  br
   q-btn(
     outline,
     @click="instrumentsDialog = true"
-  ).mt.mb Mixer
+  ) Mixer
   q-dialog(v-model="instrumentsDialog")
     q-card
       q-card-section
         b Instruments mixer
+        // TODO
         //- q-alert(
         //-   v-if="!selectedInstruments.length",
         //-   color="negative",
@@ -34,6 +36,8 @@ div
           color="primary",
           v-close-dialog
         ) Close
+  br
+  br
 </template>
 
 <script>

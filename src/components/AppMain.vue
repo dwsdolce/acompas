@@ -5,7 +5,7 @@
       draw-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
     .row.justify-between.content-center.text-center.no-wrap
-      .col-6.col-lg-4.p
+      .col-6.col-lg-4
         .row.content-stretch
           .col-xs-12
             select-palo
@@ -13,17 +13,19 @@
           .col-xs-12
             toggle-improvise
             toggle-humanize
-      .col.p(v-if="visualizationSize.width > breakpoint.sm")
-        .column.content-center.text-center.full-height.justify-end
-          .item-center
-            play
-      .col-6.col-lg-4.p
+      .col-6.col-lg-4
         .row.column.content-stretch
           select-tempo
-          .row.content-center.text-center
+          .row.content-center.text-center(style="margin-top: 12px")
             select-visualization.col.mr
             .col(v-if="visualizationSize.width <= breakpoint.sm")
               play
+    .row(v-if="visualizationSize.width > breakpoint.sm")
+      .col
+        .column.content-center.text-center.full-height.justify-end
+          .item-center
+            play
+
 </template>
 
 <script>

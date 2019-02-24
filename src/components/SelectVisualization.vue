@@ -1,12 +1,14 @@
 <template lang="pug">
 div
-  p.caption.auto(v-if="visualizationSize.width > breakpoint.sm") View mode
+  b(v-if="visualizationSize.width > breakpoint.sm")
+    span View mode
+    br
   q-btn(
     round,
     outline,
     icon="remove_red_eye",
     @click="visualizationDialog = true"
-  ).mt
+  )
   q-dialog(v-model="visualizationDialog")
     q-card
       q-card-section
