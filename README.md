@@ -40,21 +40,15 @@ $ npx quasar build
 ## Android app build
 
 ``` bash
-# Build app
-npx quasar build
-
-# Install dependencies
-cd ./cordova
-yarn install
-
 # Check cordova requirements (run this in the cordova/ folder)
+cd ./src-cordova
 npx cordova requirements
 
-# Copy files to the cordova/platforms/android/app/src/main/assets/www subfolder (run this in the cordova/ folder)
-npx cordova prepare android
+# Build and run android apk in debug mode
+npx quasar dev -m cordova -T android
 
-# Run android apk (run this in the cordova/ folder)
-npx cordova run android --debug
+# Build android apk in production mode
+npx quasar build -m cordova -T android
 ```
 
 ## iOS app build
