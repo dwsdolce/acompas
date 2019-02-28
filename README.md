@@ -40,7 +40,7 @@ $ npx quasar build
 ## Android app build
 
 ``` bash
-# Check cordova requirements (run this in the cordova/ folder)
+# Check cordova requirements (run this in the src-cordova/ folder)
 cd ./src-cordova
 npx cordova requirements
 
@@ -52,6 +52,8 @@ npx quasar build -m cordova -T android
 ```
 
 ## iOS app build
+
+This section needs an update
 
 ``` bash
 # Build app
