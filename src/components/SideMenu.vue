@@ -51,7 +51,7 @@ div
           p If it is on, then random improvised sound events will be added to the sound patterns.
         div
           p: b Humanize
-          p If it is on, then random time variations are applied to the sounds.
+          p If it is on, then random little time variations are applied to the sounds.
       q-card-actions(align="right")
         q-btn(
           color="primary",

@@ -13,10 +13,10 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.0",
-    "quasar": "^1.0.0-beta.13"
+    "quasar": "^1.0.0-beta.17"
   },
   "devDependencies": {
-    "@quasar/app": "^1.0.0-beta.13",
+    "@quasar/app": "^1.0.0-beta.17",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
