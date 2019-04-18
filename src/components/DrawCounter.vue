@@ -24,28 +24,7 @@ export default {
   },
   watch: {
     metronomeEvent (value) {
-      switch (this.selectedPalo.value) {
-        case 'buleria-12':
-        case 'buleria-12-variation':
-        case 'fandangos':
-        case 'alegria':
-        case 'siguiriya':
-          if (value === 0) {
-            this.counter = 12
-          } else {
-            this.counter = value
-          }
-          break
-        case 'buleria-6':
-          if (value === 0) {
-            this.counter = 6
-          } else {
-            this.counter = value
-          }
-          break
-        default:
-          this.counter = value + 1
-      }
+      this.counter = this.selectedPalo.beatLabels[value * 2]
       if (this.selectedPalo.accents.includes(value)) {
         this.className = 'accent'
       } else {

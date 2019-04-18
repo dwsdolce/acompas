@@ -245,12 +245,12 @@ export default [
       11: 'down'
     },
     beatLabels: {
-      0: 6,
-      2: 1,
-      4: 2,
-      6: 3,
-      8: 4,
-      10: 5
+      0: 1,
+      2: 2,
+      4: 3,
+      6: 4,
+      8: 5,
+      10: 6
     },
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
@@ -696,18 +696,18 @@ export default [
       23: 'down'
     },
     beatLabels: {
-      0: 1,
-      2: 2,
-      4: 3,
-      6: 4,
-      8: 5,
-      10: 6,
-      12: 7,
-      14: 8,
-      16: 9,
-      18: 10,
-      20: 11,
-      22: 12
+      0: 12,
+      2: 1,
+      4: 2,
+      6: 3,
+      8: 4,
+      10: 5,
+      12: 6,
+      14: 7,
+      16: 8,
+      18: 9,
+      20: 10,
+      22: 11
     },
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
@@ -816,10 +816,10 @@ export default [
       2: 2,
       4: 3,
       6: 4,
-      8: 5,
-      10: 6,
-      12: 7,
-      14: 8
+      8: 1,
+      10: 2,
+      12: 3,
+      14: 4
     },
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
@@ -966,11 +966,18 @@ export default [
       23: 'down'
     },
     beatLabels: {
-      0: 1,
+      0: 12,
+      2: 1,
       4: 2,
-      8: 3,
-      14: 4,
-      20: 5
+      6: 3,
+      8: 4,
+      10: 5,
+      12: 6,
+      14: 7,
+      16: 8,
+      18: 9,
+      20: 10,
+      22: 11
     },
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
@@ -1229,10 +1236,10 @@ export default [
       2: 2,
       4: 3,
       6: 4,
-      8: 5,
-      10: 6,
-      12: 7,
-      14: 8
+      8: 1,
+      10: 2,
+      12: 3,
+      14: 4
     },
     slowMessage: 'Your tempo is por tientos',
     fastMessage: 'Your tempo is por rumba'
@@ -1319,9 +1326,9 @@ export default [
       0: 1,
       2: 2,
       4: 3,
-      6: 4,
-      8: 5,
-      10: 6
+      6: 1,
+      8: 2,
+      10: 3
     },
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'

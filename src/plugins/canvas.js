@@ -19,24 +19,13 @@ const requestAnimationFrame = window.requestAnimationFrame ||
                               window.msRequestAnimationFrame ||
                               window.oRequestAnimationFrame
 
-const getBeatNb = (beatNb, palo) => {
-  switch (palo.value) {
-    case 'buleria-12':
-    case 'buleria-12-variation':
-    case 'fandangos':
-    case 'alegria':
-    case 'siguiriya':
-      return (beatNb === 0) ? 12 : beatNb
-    case 'buleria-6':
-      return beatNb === 0 ? 6 : beatNb
-    default:
-      return beatNb + 1
-  }
+const getBeatLabel = (beatNb, palo) => {
+  return palo.beatLabels[beatNb * 2]
 }
 
 class BeatDot {
   constructor (beatNb, palo) {
-    this.beatNb = getBeatNb(beatNb, palo)
+    this.beatLabel = getBeatLabel(beatNb, palo)
     this.x = coord.offsetX * beatNb + coord.initOffsetX
     this.y = coord.offsetY
     this.radius = coord.baseRadius
@@ -78,7 +67,7 @@ class BeatDot {
     ctx.beginPath()
     ctx.fillStyle = 'rgba(' + this.textColor + this.alpha + ')'
     ctx.font = (canvasEl.height / 5) + 'px Roboto'
-    ctx.fillText(this.beatNb, this.x, this.y * 2.25)
+    ctx.fillText(this.beatLabel, this.x, this.y * 2.25)
     ctx.textAlign = 'center'
     ctx.closePath()
   }
