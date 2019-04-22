@@ -83,3 +83,7 @@ gem update --system
 gem install cocoapods
 pod setup
 ```
+
+## Thanks
+
+ - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
