@@ -13,7 +13,7 @@ It is based on the following technologies :
  - [vue.js](https://vuejs.org)
  - [Vuex](https://vuex.vuejs.org)
  - [Tonejs](https://tonejs.github.io)
- - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+ - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
 ## Branches
 
@@ -27,31 +27,58 @@ It is based on the following technologies :
 ## Cloning and building the source code
 
 ``` bash
+# cloning the git repository
+git clone https://gitlab.com/oricordeau/acompas.git
+cd acompas
+
 # install dependencies
-$ yarn install
+yarn install
 
 # serve with hot reload at localhost:8080
-$ npx quasar dev
+npx quasar dev
 
 # build for production with minification
-$ npx quasar build
+npx quasar build
 ```
 
-## Android app build
+## Android app
+
+You must first install Oracle's Java JDK 8 and set the JAVA_HOME environment
+variable in your shell.
+
+Furthermore, you need to install Google's Android SDK (pick it from the "Command
+line tools only" section [here](https://developer.android.com/studio)). You
+must set the ANDROID_HOME and ANDROID_SDK_HOME environment variables in your shell.
+
+Here is an example ~/.bashrc configuration :
 
 ``` bash
+export ANDROID_HOME=/path/to/android
+export ANDROID_SDK_HOME=/home/olivier
+export JAVA_HOME=/path/to/jdk
+export PATH=$ANDROID_HOME/tools/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$JAVA_HOME/bin:$PATH
+```
+
+Here are the commands for building / running the Android app :
+
+``` bash
+# Global cordova install
+sudo npm i -g cordova
+
 # Check cordova requirements (run this in the src-cordova/ folder)
 cd ./src-cordova
 npx cordova requirements
 
 # Build and run android apk in debug mode
+cd /path/to/acompas
 npx quasar dev -m cordova -T android
 
 # Build android apk in production mode
+cd /path/to/acompas
 npx quasar build -m cordova -T android
 ```
 
-## iOS app build
+## iOS app
 
 This section needs an update
 
