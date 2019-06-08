@@ -25,7 +25,7 @@ div
       q-card-actions(align="right")
         q-btn(
           color="primary",
-          v-close-dialog
+          v-close-popup
         ) Close
 </template>
 
