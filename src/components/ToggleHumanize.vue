@@ -1,27 +1,28 @@
 <template lang="pug">
-    div
-        p.caption.auto.mb Humanize
-        q-toggle(
-            :value="humanize",
-            @input="toggleHumanize"
-        ).primary.mt.mb
+div
+  b Humanize
+  br
+  q-toggle(
+    :value="humanize",
+    @input="toggleHumanize"
+  ).primary
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
-    import { QToggle } from 'quasar'
+import { mapState, mapActions } from 'vuex'
+import { QToggle } from 'quasar'
 
-    export default {
-        components: { QToggle },
-        computed: {
-            ...mapState({
-                humanize: state => state.humanize
-            })
-        },
-        methods: {
-            ...mapActions([
-                'toggleHumanize'
-            ])
-        }
-    }
+export default {
+  components: { QToggle },
+  computed: {
+    ...mapState({
+      humanize: state => state.humanize
+    })
+  },
+  methods: {
+    ...mapActions([
+      'toggleHumanize'
+    ])
+  }
+}
 </script>

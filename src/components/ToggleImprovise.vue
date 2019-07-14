@@ -1,27 +1,28 @@
 <template lang="pug">
-    div
-        p.caption.auto.mb Improvise
-        q-toggle(
-            :value="improvise",
-            @input="toggleImprovise"
-        ).primary.mt.mb
+div
+  b Improvise
+  br
+  q-toggle(
+    :value="improvise",
+    @input="toggleImprovise"
+  ).primary
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
-    import { QToggle } from 'quasar'
+import { mapState, mapActions } from 'vuex'
+import { QToggle } from 'quasar'
 
-    export default {
-        components: { QToggle },
-        computed: {
-            ...mapState({
-                improvise: state => state.improvise
-            })
-        },
-        methods: {
-            ...mapActions([
-                'toggleImprovise'
-            ])
-        }
-    }
+export default {
+  components: { QToggle },
+  computed: {
+    ...mapState({
+      improvise: state => state.improvise
+    })
+  },
+  methods: {
+    ...mapActions([
+      'toggleImprovise'
+    ])
+  }
+}
 </script>
