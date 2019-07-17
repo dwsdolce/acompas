@@ -27,10 +27,6 @@ div
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter
-        q-item(clickable, v-ripple, @click="launch('https://plus.google.com/share?url=http://acompas.org')")
-          q-item-section(avatar)
-            q-icon(name="ion-logo-googleplus")
-          q-item-section Share on Google +
     q-item(clickable, v-ripple, @click="tuningDialog = true")
       q-item-section(avatar)
         q-icon(name="hearing")
