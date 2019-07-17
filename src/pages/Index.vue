@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center bg-grey-10 full-width">
+  <q-page class="flex bg-grey-10 full-width">
     <AppMain />
   </q-page>
 </template>

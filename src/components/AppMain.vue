@@ -1,30 +1,31 @@
 <template lang="pug">
-  .layout-padding.horizontal.text-grey-1.full-height.full-width
+  .text-grey-1.full-height.full-width
     .row.no-wrap.justify-center.full-width(:style="parentRect")
       q-resize-observer(@resize="onResize")
       draw-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
-    .row.justify-between.content-center.text-center.no-wrap
+    .row.justify-between.content-center.text-center.no-wrap.q-mb-sm
       .col-6.col-lg-4
-        .row.content-stretch
-          .col-xs-12
+        .column.content-stretch
             select-palo
             select-instruments
-          .col-xs-12
             toggle-improvise
             toggle-humanize
+      .col-lg-4(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
+        .item-center
+          play
       .col-6.col-lg-4
-        .row.column.content-stretch
+        .column.content-stretch
           select-tempo
           .row.content-center.text-center(style="margin-top: 12px")
             select-visualization.col.mr
             .col(v-if="visualizationSize.width <= breakpoint.sm")
               play
-    .row(v-if="visualizationSize.width > breakpoint.sm")
-      .col
-        .column.content-center.text-center.full-height.justify-end
-          .item-center
-            play
+    //- .row(v-if="visualizationSize.width > breakpoint.sm")
+    //-   .col
+    //-     .column.content-center.text-center.full-height.justify-end
+    //-       .item-center
+    //-         play
 
 </template>
 

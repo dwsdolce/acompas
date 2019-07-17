@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .column.items-center
-    b Tempo
+    p.caption.q-mb-sm Tempo
     q-knob(
       color="primary",
       track-color="grey-1",
@@ -9,38 +9,34 @@ div
       :min="minTempo",
       :max="maxTempo",
       show-value,
-      :placeholder="tempo + 'bpm'",
       size="120px",
-      lineWidth="6px",
+      :thickness="0.1",
       @input="selectTempo"
-    )
+    ).text-weight-light
     .row.full-width.items-center
-      .col-xs-4.decrement
+      .col-xs-3
         q-btn(
           outline,
           color="white",
           @click="decrement",
-          round,
-          style="float: right;"
+          round
         )
           q-icon(name="remove")
-      .col-xs-4
+      .col-xs-6
         q-input(
           dark,
           type="number",
           :value="tempo",
           :min="0",
           :max="300",
-          @input="selectTempo",
-          style="max-width: 44px; margin-left: auto; margin-right: auto;"
+          @input="selectTempo"
         )
-      .col-xs-4.increment
+      .col-xs-3
         q-btn(
           outline,
           color="white",
           @click="increment",
-          round,
-          style="float: left;"
+          round
         )
           q-icon(name="add")
   br

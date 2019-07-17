@@ -1,11 +1,10 @@
 <template lang="pug">
 div
-  b(v-if="visualizationSize.width > breakpoint.sm")
-    span View mode
-    br
+  p(v-if="visualizationSize.width > breakpoint.sm").caption.q-mb-sm View mode
   q-btn(
     round,
     outline,
+    size="18px",
     icon="remove_red_eye",
     @click="visualizationDialog = true"
   )

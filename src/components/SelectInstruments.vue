@@ -1,15 +1,14 @@
 <template lang="pug">
 div
-  b Instruments
-  br
+  p.caption.q-mb-sm Instruments
   q-btn(
     outline,
     @click="instrumentsDialog = true"
   ) Mixer
   q-dialog(v-model="instrumentsDialog")
-    q-card
+    q-card(style="width: 100%;")
       q-card-section
-        b Instruments mixer
+        .text-h6.text-center Instruments mixer
       q-card-section
         table(style="width: 100%;").q-table
           thead
@@ -23,7 +22,7 @@ div
               :key="instrument.value",
               :slug="instrument.value"
             )
-      q-card-actions(align="right")
+      q-card-actions(align="center")
         q-btn(
           color="primary",
           v-close-popup
