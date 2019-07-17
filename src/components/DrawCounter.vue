@@ -6,10 +6,8 @@ h2(:class="className")
 
 <script>
 import { mapState } from 'vuex'
-import { QIcon } from 'quasar'
 
 export default {
-  components: { QIcon },
   data () {
     return {
       counter: null,

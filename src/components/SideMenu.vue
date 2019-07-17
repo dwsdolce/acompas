@@ -32,34 +32,40 @@ div
         q-icon(name="hearing")
       q-item-section Tuning fork
   q-dialog(v-model="helpDialog")
-    q-card
+    q-card(style="width: 100%;")
       q-card-section
-        b Help
+        .text-h6.text-center Help
       q-card-section
         div
           p: b Palo
           p Use this button to select the flamenco rhythm that you want.
         div
-          p: b Eighth-notes
-          p If it is off, then only the up-beats are played. If it is on, then up and down beats are played.
+          p: b Instruments mixer
+          p Access the mixer. Select playing instruments, set its own relative volume, and weather playing eighth notes.
         div
           p: b Improvise
           p If it is on, then random improvised sound events will be added to the sound patterns.
         div
           p: b Humanize
           p If it is on, then random little time variations are applied to the sounds.
-      q-card-actions(align="right")
+        div
+          p: b Tempo
+          p Three ways to define tempo: the knob circle, input underneath for more precise setting, increment bpm with + and - buttons.
+        div
+          p: b View mode
+          p Choose between dots and counter visualisation.
+      q-card-section(align="center")
         q-btn(
           color="primary",
           v-close-popup
         ) Close
   q-dialog(v-model="tuningDialog")
-    q-card
+    q-card(style="width: 100%;")
       q-card-section
-        b Tuning fork
+        .text-h6.text-center Tuning fork
       q-card-section
         tuning-fork
-      q-card-actions(align="right")
+      q-card-section(align="center")
         q-btn(
           color="primary",
           v-close-popup
@@ -67,13 +73,11 @@ div
 </template>
 
 <script>
-import {
-  QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, QCardActions, openURL, Platform
-} from 'quasar'
+import { openURL, Platform } from 'quasar'
 import TuningFork from 'components/TuningFork'
 
 export default {
-  components: { QList, QItem, QItemSection, QExpansionItem, QDialog, QBtn, QCard, QCardSection, QCardActions, TuningFork },
+  components: { TuningFork },
   methods: {
     launch (url) {
       if (Platform.is.cordova) {

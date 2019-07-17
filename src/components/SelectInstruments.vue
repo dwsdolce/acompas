@@ -22,22 +22,19 @@ div
               :key="instrument.value",
               :slug="instrument.value"
             )
-      q-card-actions(align="center")
+      q-card-section(align="center")
         q-btn(
           color="primary",
           v-close-popup
         ) Close
-  br
-  br
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { QIcon, QBtn, QDialog, QCard, QCardSection, QCardActions } from 'quasar'
 import InstrumentMixer from './InstrumentMixer'
 
 export default {
-  components: { QIcon, QBtn, QDialog, QCard, QCardSection, QCardActions, InstrumentMixer },
+  components: { InstrumentMixer },
   computed: {
     ...mapState({
       instruments: state => state.instruments,

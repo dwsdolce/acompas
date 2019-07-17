@@ -11,12 +11,10 @@ q-btn#playBtn(
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { QBtn, QIcon } from 'quasar'
 import { getContext, initMetronome } from '../plugins/metronome'
 import StartAudioContext from 'startaudiocontext'
 
 export default {
-  components: { QBtn, QIcon },
   computed: {
     ...mapState({
       isPlaying: state => state.isPlaying

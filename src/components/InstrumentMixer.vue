@@ -30,10 +30,8 @@ tr
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { QItem, QToggle, QCheckbox, QSlider } from 'quasar'
 
 export default {
-  components: { QItem, QToggle, QCheckbox, QSlider },
   props: [ 'slug' ],
   computed: {
     ...mapState({

@@ -9,9 +9,9 @@ div
     @click="visualizationDialog = true"
   )
   q-dialog(v-model="visualizationDialog")
-    q-card
+    q-card(style="width: 100%;")
       q-card-section
-        b Select view mode
+        .text-h6.text-center Select view mode
       q-card-section
         q-option-group(
           type="radio",
@@ -21,7 +21,7 @@ div
           @input="selectVisualizationMode",
           @change="visualizationDialog = false"
         )
-      q-card-actions(align="right")
+      q-card-section(align="center")
         q-btn(
           color="primary",
           v-close-popup
@@ -30,10 +30,8 @@ div
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { QBtn, QDialog, QOptionGroup, QCard, QCardSection, QCardActions } from 'quasar'
 
 export default {
-  components: { QBtn, QDialog, QOptionGroup, QCard, QCardSection, QCardActions },
   computed: {
     ...mapState({
       visualizationModes: state => state.visualizationModes,

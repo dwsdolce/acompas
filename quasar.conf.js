@@ -42,7 +42,13 @@ module.exports = function (ctx) {
         'QCard',
         'QCardSection',
         'QCardActions',
-        'QResizeObserver'
+        'QResizeObserver',
+        'QOptionGroup',
+        'QToggle',
+        'QCheckbox',
+        'QSlider',
+        'QKnob',
+        'QInput'
       ],
 
       directives: [

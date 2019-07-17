@@ -12,7 +12,7 @@ div
       size="120px",
       :thickness="0.1",
       @input="selectTempo"
-    ).text-weight-light
+    ).text-weight-light.q-mb-md
     .row.full-width.items-center
       .col-xs-3
         q-btn(
@@ -39,15 +39,12 @@ div
           round
         )
           q-icon(name="add")
-  br
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { QKnob, QInput, QBtn, QIcon } from 'quasar'
 
 export default {
-  components: { QKnob, QInput, QBtn, QIcon },
   computed: {
     ...mapState({
       tempo: state => state.tempo,

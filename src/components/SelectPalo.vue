@@ -19,27 +19,17 @@ div
           @input="selectPalo",
           @change="palosDialog = false"
         )
-      q-card-actions(align="center")
+      q-card-section(align="center")
         q-btn(
           color="primary",
           v-close-popup
         ) Close
-  br
-  br
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import {
-  QBtn,
-  QDialog,
-  QCard,
-  QCardSection,
-  QOptionGroup
-} from 'quasar'
 
 export default {
-  components: { QBtn, QDialog, QOptionGroup, QCard, QCardSection },
   computed: {
     ...mapState({
       palos: state => state.palos,

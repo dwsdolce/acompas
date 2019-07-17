@@ -7,18 +7,18 @@
     .row.justify-between.content-center.text-center.no-wrap.q-mb-sm
       .col-6.col-lg-4
         .column.content-stretch
-            select-palo
-            select-instruments
-            toggle-improvise
+            select-palo.q-mb-md
+            select-instruments.q-mb-md
+            toggle-improvise.q-mb-md
             toggle-humanize
       .col-lg-4(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
         .item-center
           play
       .col-6.col-lg-4
         .column.content-stretch
-          select-tempo
-          .row.content-center.text-center(style="margin-top: 12px")
-            select-visualization.col.mr
+          select-tempo.q-mb-md
+          .row.content-center.text-center
+            select-visualization.col
             .col(v-if="visualizationSize.width <= breakpoint.sm")
               play
     //- .row(v-if="visualizationSize.width > breakpoint.sm")
@@ -31,7 +31,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { QResizeObserver, Dialog } from 'quasar'
+import { Dialog } from 'quasar'
 import { isSupported } from '../plugins/metronome'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
@@ -45,7 +45,6 @@ import SelectVisualization from './SelectVisualization'
 
 export default {
   components: {
-    QResizeObserver,
     Play,
     SelectTempo,
     SelectPalo,
