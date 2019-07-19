@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.2.0",
+    "animejs": "^3.0.1",
     "axios": "^0.18.0",
     "quasar": "^1.0.5"
   },
