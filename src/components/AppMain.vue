@@ -1,27 +1,28 @@
 <template lang="pug">
-  .text-grey-1.full-height.full-width
-    .row.no-wrap.justify-center.full-width(:style="parentRect")
+  .text-grey-1.full-width.q-pa-sm
+    div(:style="parentRect")
       q-resize-observer(@resize="onResize")
       //- draw-bars(v-if="visualizationMode === 'dots'")
       draw-new-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
-    .row.justify-between.content-center.text-center.no-wrap.q-mb-sm
-      .col-6.col-lg-4
-        .column.content-stretch
+    div
+      .row.text-center.no-wrap
+        .col-6.col-lg-4
+          .column
             select-palo.q-mb-md
             select-instruments.q-mb-md
             toggle-improvise.q-mb-md
             toggle-humanize
-      .col-lg-4(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
-        .item-center
-          play
-      .col-6.col-lg-4
-        .column.content-stretch
-          select-tempo.q-mb-md
-          .row.content-center.text-center
-            select-visualization.col
-            .col(v-if="visualizationSize.width <= breakpoint.sm")
-              play
+        .col-lg-4(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
+          .item-center
+            play
+        .col-6.col-lg-4
+          .column
+            select-tempo.q-mb-md
+            .row.text-center.q-mt-md
+              select-visualization.col
+              .col(v-if="visualizationSize.width <= breakpoint.sm")
+                play
 </template>
 
 <script>

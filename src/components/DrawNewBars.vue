@@ -1,5 +1,5 @@
 <template lang="pug">
-.full-width.row.inline.no-wrap.justify-around
+.full-width.row.inline.no-wrap.justify-around.q-mb-md
   q-resize-observer(@resize="onResize")
   .column(v-for="(n, i) in beatLabels")
     .dot(:style="getDotStyle(i)", :ref="`dot-${i}`").item-center.q-mb-md

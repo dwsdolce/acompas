@@ -17,9 +17,10 @@ div
       .col-xs-3
         q-btn(
           outline,
+          round,
           color="white",
-          @click="decrement",
-          round
+          :size="screen.lt.md ? 'sm' : 'md'",
+          @click="decrement"
         )
           q-icon(name="remove")
       .col-xs-6
@@ -34,15 +35,17 @@ div
       .col-xs-3
         q-btn(
           outline,
+          round,
           color="white",
-          @click="increment",
-          round
+          :size="screen.lt.md ? 'sm' : 'md'",
+          @click="increment"
         )
           q-icon(name="add")
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { Screen } from 'quasar'
 
 export default {
   computed: {
@@ -51,7 +54,8 @@ export default {
       palo: state => state.selectedPalo,
       maxTempo: state => state.selectedPalo.maxTempo,
       minTempo: state => state.selectedPalo.minTempo
-    })
+    }),
+    screen () { return Screen }
   },
   methods: {
     ...mapActions([
