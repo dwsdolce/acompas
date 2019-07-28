@@ -1,6 +1,6 @@
 <template lang="pug">
   .text-grey-1.full-width.q-pa-sm
-    div(:style="parentRect")
+    .full-width
       q-resize-observer(@resize="onResize")
       draw-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
-import { isSupported } from '../plugins/metronome'
+import StartAudioContext from 'startaudiocontext'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
 import SelectPalo from './SelectPalo'
@@ -37,6 +37,7 @@ import ToggleHumanize from './ToggleHumanize'
 import DrawBars from './DrawBars'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
+import { isSupported, getContext, initMetronome } from '../plugins/metronome'
 
 export default {
   components: {
@@ -52,22 +53,34 @@ export default {
   },
   data () {
     return {
-      parentRect: {
-        width: '100%'
-      }
+      audioContextState: null
     }
   },
   computed: {
     ...mapState({
+      isPlaying: state => state.isPlaying,
       visualizationMode: state => state.selectedVisualizationMode,
       visualizationSize: state => state.visualizationSize,
       breakpoint: state => state.breakpoint
     })
   },
+  async created () {
+    this.audioContext = await initMetronome(this.$store)
+  },
   mounted () {
     if (!isSupported) this.showDialog()
+    document.addEventListener('keypress', event => {
+      if (event.which === 32) {
+        this.playStop()
+      }
+    })
+    StartAudioContext(getContext, '#playBtn').then(async () => {
+      this.audioContextState = await initMetronome(this.$store)
+      if (this.audioContextState === 'running') this.startAudioContext()
+    })
   },
   methods: {
+    ...mapActions([ 'startAudioContext' ]),
     ...mapMutations({
       getVisualizationSize: 'GET_VISUALIZATION_SIZE'
     }),
