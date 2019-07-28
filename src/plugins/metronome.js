@@ -251,18 +251,17 @@ const changeVolume = (prevState, nextState) => {
 // ==========================
 
 const startSequences = state => {
-  return new Promise(resolve => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
-      seq.start()
-    })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
-      seq.start()
-    })
-    return resolve()
+  forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+    seq.start()
   })
+  forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+    seq.start()
+  })
+  Tone.Transport.start('+0.1')
 }
 
 const stopAllSequences = () => {
+  Tone.Transport.stop()
   forEachValue(aCompas.sequences, notes => {
     forEachValue(notes, instruments => {
       forEachValue(instruments, seq => {
@@ -283,6 +282,10 @@ const activateSequences = state => {
   })
 }
 
+// const startTransport = () => {
+//   Tone.Transport.start('+0.1')
+// }
+
 export const getContext = Tone.context
 
 export const isSupported = Tone.supported
@@ -293,7 +296,6 @@ export const initMetronome = async (store, callback) => {
   await initPalos(store)
   await restoreLocalStorage(store)
   await activateSequences(store.state).then(() => {
-    Tone.Transport.start('+0.1')
     Loading.hide()
     callback(getContext.state)
   })
