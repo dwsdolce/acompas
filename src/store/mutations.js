@@ -9,11 +9,6 @@ const mutations = {
     state.shownSideMenu = !state.shownSideMenu
   },
 
-  // payload = DOM element
-  [types.GET_CANVAS_EL] (state, payload) {
-    state.canvasElement = payload
-  },
-
   // payload is a slug value
   [types.SELECT_VISUALIZATION_MODE] (state, payload) {
     state.selectedVisualizationMode = payload

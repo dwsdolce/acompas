@@ -8,7 +8,6 @@ const state = {
     { label: 'Counter', value: 'counter' }
   ],
   visualizationSize: {},
-  canvasElement: null,
   breakpoint: { xs: 599, sm: 1023, md: 1439, lg: 1919 },
   selectedVisualizationMode: 'dots',
   palos: palosDefaultSettings,

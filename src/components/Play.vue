@@ -15,10 +15,18 @@ import { getContext, initMetronome } from '../plugins/metronome'
 import StartAudioContext from 'startaudiocontext'
 
 export default {
+  data () {
+    return {
+      audioContextState: null
+    }
+  },
   computed: {
     ...mapState({
       isPlaying: state => state.isPlaying
     })
+  },
+  async created () {
+    this.audioContext = await initMetronome(this.$store)
   },
   mounted () {
     document.addEventListener('keypress', event => {
@@ -26,10 +34,9 @@ export default {
         this.playStop()
       }
     })
-    StartAudioContext(getContext, '#playBtn').then(() => {
-      initMetronome(this.$store, (ctxState) => {
-        if (ctxState === 'running') this.startAudioContext()
-      })
+    StartAudioContext(getContext, '#playBtn').then(async () => {
+      this.audioContextState = await initMetronome(this.$store)
+      if (this.audioContextState === 'running') this.startAudioContext()
     })
   },
   methods: {

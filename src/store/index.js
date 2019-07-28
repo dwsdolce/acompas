@@ -8,7 +8,6 @@ import mutations from './mutations'
 
 import createLogger from '../plugins/logger'
 import metronome from '../plugins/metronome'
-import canvas from '../plugins/canvas'
 import localStorage from '../plugins/localStorage'
 import piwik from '../plugins/piwik'
 
@@ -25,7 +24,7 @@ export default function (/* { ssrContext } */) {
     getters,
     actions,
     mutations,
-    plugins: [ createLogger(), metronome, canvas, localStorage, piwik ]
+    plugins: [ createLogger(), metronome, localStorage, piwik ]
   })
 
   return Store

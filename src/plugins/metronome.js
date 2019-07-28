@@ -117,10 +117,10 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
-    // Call canvas animation on event time.
+    // Call animation on event time.
     if (sound === store.state.selectedInstruments[0] && note % 2 === 0) {
       Tone.Draw.schedule(() => {
-        // Callback invoked from a requestAnimationFrame, is invoked close to AudioContext time
+        // Animation triggered from store mutation, invoked close to AudioContext time
         store.commit(types.TRIGGER_EVENT, note / 2)
       }, time) // Use AudioContext time of the event
     }
@@ -295,10 +295,9 @@ export const initMetronome = async (store, callback) => {
   await initSounds()
   await initPalos(store)
   await restoreLocalStorage(store)
-  await activateSequences(store.state).then(() => {
-    Loading.hide()
-    callback(getContext.state)
-  })
+  await activateSequences(store.state)
+  Loading.hide()
+  return getContext.state
 }
 
 // ==========================

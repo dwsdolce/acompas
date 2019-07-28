@@ -2,8 +2,7 @@
   .text-grey-1.full-width.q-pa-sm
     div(:style="parentRect")
       q-resize-observer(@resize="onResize")
-      //- draw-bars(v-if="visualizationMode === 'dots'")
-      draw-new-bars(v-if="visualizationMode === 'dots'")
+      draw-bars(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
     div
       .row.text-center.no-wrap
@@ -36,7 +35,6 @@ import SelectInstruments from './SelectInstruments'
 import ToggleImprovise from './ToggleImprovise'
 import ToggleHumanize from './ToggleHumanize'
 import DrawBars from './DrawBars'
-import DrawNewBars from './DrawNewBars'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
 
@@ -49,7 +47,6 @@ export default {
     ToggleImprovise,
     ToggleHumanize,
     DrawBars,
-    DrawNewBars,
     DrawCounter,
     SelectVisualization
   },
