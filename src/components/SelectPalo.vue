@@ -16,8 +16,7 @@ div
           color="primary",
           :value="selectedPalo",
           :options="palos",
-          @input="selectPalo",
-          @change="palosDialog = false"
+          @input="onSelectedPalo"
         )
       q-card-section(align="center")
         q-btn(
@@ -30,6 +29,11 @@ div
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  data () {
+    return {
+      palosDialog: false
+    }
+  },
   computed: {
     ...mapState({
       palos: state => state.palos,
@@ -40,11 +44,10 @@ export default {
   methods: {
     ...mapActions([
       'selectPalo'
-    ])
-  },
-  data () {
-    return {
-      palosDialog: false
+    ]),
+    onSelectedPalo (v) {
+      this.selectPalo(v)
+      this.palosDialog = false
     }
   }
 }

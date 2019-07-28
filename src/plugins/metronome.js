@@ -292,7 +292,7 @@ export const getContext = Tone.context
 export const isSupported = Tone.supported
 
 export const initMetronome = async (store, callback) => {
-  Loading.show({ delay: 300 })
+  Loading.show({ delay: 100 })
   await initSounds()
   await initPalos(store)
   await restoreLocalStorage(store)
