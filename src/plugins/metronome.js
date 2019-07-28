@@ -67,7 +67,7 @@ const improviseSequence = (sound, time, value, events, key, eighthNotes) => {
   }
   // Pick a probability that the sound occurence is following the pattern
   const improvisationProbability = Math.random()
-  const improvisationThreshold = 0.15 // 15% chances that we don't follow the pattern
+  const improvisationThreshold = 0.30 // 15% chances that we don't follow the pattern
   if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
     if (events === key && eighthNotes && key % 2 !== 0) {
       aCompas.sounds[sound][value].start(time)
@@ -78,7 +78,7 @@ const improviseSequence = (sound, time, value, events, key, eighthNotes) => {
   } else {
     // Pick a probability that the sound is played
     const playProbability = Math.random()
-    const playThreshold = 0.10 // 10% chances that the sound is not played
+    const playThreshold = 0.50 // 10% chances that the sound is not played
     if (playProbability > playThreshold) {
       aCompas.sounds[sound][value].start(time)
     }
