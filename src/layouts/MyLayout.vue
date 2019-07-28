@@ -1,36 +1,28 @@
-<template>
-  <q-layout view="hHh Lpr lFf">
-    <q-header elevated> <!-- class="glossy" (seriously ?) -->
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
+<template lang="pug">
+  q-layout(view="hHh Lpr lFf")
+    q-header(elevated)
+      q-toolbar
+        q-btn(
+          flat,
+          dense,
+          round,
+          @click="leftDrawerOpen = !leftDrawerOpen",
           aria-label="Menu"
-        >
-          <q-icon name="menu" />
-        </q-btn>
+        )
+          q-icon(name="menu")
 
-        <q-toolbar-title>
-          <img :src="'statics/AClogo.png'" alt="A Compás" style="margin-top: 6px;">
-        </q-toolbar-title>
+        q-toolbar-title
+          img(:src="'statics/AClogo.png'" alt="A Compás" style="margin-top: 6px;")
 
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      bordered
+    q-drawer(
+      v-model="leftDrawerOpen",
+      bordered,
       content-class="bg-grey-2"
-    >
-      <SideMenu />
-    </q-drawer>
+    )
+      SideMenu
 
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+    q-page-container
+      router-view
 </template>
 
 <script>
