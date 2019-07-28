@@ -48,7 +48,8 @@ const initSounds = () => {
       forEachValue(value, (v, k) => {
         let url = path + v.src + '.' + aCompas.audioFormat
         aCompas.sounds[key][k] = new Tone.Player(url).toMaster()
-        aCompas.sounds[key][k].volume.value = 0
+        aCompas.sounds[key][k].volume.value = v.volume
+        aCompas.sounds[key][k].volume.default = v.volume
       })
     })
     return resolve()
@@ -238,7 +239,7 @@ const changeVolume = (prevState, nextState) => {
     forEachValue(nextState.instruments, (instrument, key) => {
       if (instrument.volume !== prevState.instruments[key].volume) {
         forEachValue(aCompas.sounds[instrument.value], sound => {
-          sound.volume.value = instrument.volume
+          sound.volume.value = instrument.volume + sound.volume.default
         })
       }
     })
