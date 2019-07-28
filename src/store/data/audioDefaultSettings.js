@@ -24,21 +24,21 @@ export default {
     },
     3: {
       src: 'sorda/sorda_3',
-      volume: 0.8
+      volume: 0.6
     }
   },
   cajon: {
     1: {
       src: 'cajon/cajon_1',
-      volume: 1
+      volume: 0.7
     },
     2: {
       src: 'cajon/cajon_2',
-      volume: 1
+      volume: 0.7
     },
     3: {
       src: 'cajon/cajon_3',
-      volume: 1
+      volume: 0.7
     }
   },
   udu: {
@@ -49,6 +49,10 @@ export default {
     2: {
       src: 'udu/udu_2',
       volume: 0.8
+    },
+    3: {
+      src: 'udu/udu_3',
+      volume: 1
     }
   },
   jaleo: {

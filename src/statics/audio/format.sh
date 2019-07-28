@@ -15,13 +15,12 @@ do
     filename=$(basename "$file")
     extension="${filename##*.}"
     filename="${filename%.*}"
-    if [[ ${extension} = *wav* ]]
-    then
+    if [[ ${extension} = *wav* ]]; then
         echo "Processing" ${filename}.wav
-        ffmpeg -i ${filename}.wav -strict -2 ${filename}.mp3
-        ffmpeg -i ${filename}.wav -strict -2 ${filename}.mp4
-        ffmpeg -i ${filename}.wav -strict -2 ${filename}.ogg
-        ffmpeg -i ${filename}.wav -strict -2 ${filename}.flac
+        ffmpeg -i $1/${filename}.wav -strict -2 $1/${filename}.mp3
+        ffmpeg -i $1/${filename}.wav -strict -2 $1/${filename}.mp4
+        ffmpeg -i $1/${filename}.wav -strict -2 $1/${filename}.ogg
+        ffmpeg -i $1/${filename}.wav -strict -2 $1/${filename}.flac
         echo "Done"
     fi
 done
