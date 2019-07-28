@@ -48,11 +48,11 @@ export default {
     },
     2: {
       src: 'udu/udu_2',
-      volume: 0.8
+      volume: 1
     },
     3: {
       src: 'udu/udu_3',
-      volume: 1
+      volume: 0.8
     }
   },
   jaleo: {
