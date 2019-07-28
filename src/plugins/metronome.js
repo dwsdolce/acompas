@@ -114,19 +114,19 @@ const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
  * @return {Object} Returns the Tone sequence object
  */
 const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
-  // 'events' is an occurence of an element inside the sequence variable (integer)
-  let seq = new Tone.Sequence((time, events) => {
-    events = parseInt(events)
+  // 'note' is an occurence of an element inside the sequence variable (integer)
+  let seq = new Tone.Sequence((time, note) => {
+    note = parseInt(note)
     // Call canvas animation on event time.
-    if (sound === store.state.selectedInstruments[0] && events % 2 === 0) {
+    if (sound === store.state.selectedInstruments[0] && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Callback invoked from a requestAnimationFrame, is invoked close to AudioContext time
-        store.commit(types.TRIGGER_EVENT, events / 2)
+        store.commit(types.TRIGGER_EVENT, note / 2)
       }, time) // Use AudioContext time of the event
     }
 
     if (sound === 'jaleo') {
-      improviseJaleoSequence(seq, events, time, palo, eighthNotes)
+      improviseJaleoSequence(seq, note, time, palo, eighthNotes)
       return
     }
 
@@ -134,19 +134,19 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
     forEachValue(palo[sound], (value, key) => {
       key = parseInt(key)
       if (eighthNotes && key % 2 !== 0) {
-        if (!store.state.improvise && events === key) {
+        if (!store.state.improvise && note === key) {
           aCompas.sounds[sound][value].start(time)
         }
-        if (store.state.improvise && events === key) {
-          improviseSequence(sound, time, value, events, key, eighthNotes)
+        if (store.state.improvise && note === key) {
+          improviseSequence(sound, time, value, note, key, eighthNotes)
         }
       }
       if (!eighthNotes && key % 2 === 0) {
-        if (!store.state.improvise && events === key) {
+        if (!store.state.improvise && note === key) {
           aCompas.sounds[sound][value].start(time)
         }
-        if (store.state.improvise && events === key) {
-          improviseSequence(sound, time, value, events, key, eighthNotes)
+        if (store.state.improvise && note === key) {
+          improviseSequence(sound, time, value, note, key, eighthNotes)
         }
       }
     })
