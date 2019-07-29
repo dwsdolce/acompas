@@ -17,3 +17,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.q-page
+  align-items: center
+</style>
