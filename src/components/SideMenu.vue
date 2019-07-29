@@ -41,7 +41,7 @@ div
           p Use this button to select the flamenco rhythm that you want.
         div
           p: b Instruments mixer
-          p Access the mixer. Select playing instruments, set its own relative volume, and weather playing eighth notes.
+          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing eighth notes.
         div
           p: b Improvise
           p If it is on, then random improvised sound events will be added to the sound patterns.
