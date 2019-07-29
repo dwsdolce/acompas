@@ -82,6 +82,7 @@ export default {
     launch (url) {
       if (Platform.is.cordova) {
         cordova.InAppBrowser.open(url, '_system')
+        return
       }
       openURL(url)
     }
