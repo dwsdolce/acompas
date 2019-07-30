@@ -19,11 +19,11 @@ div
       q-item-section Issues
     q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
-        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=http://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="ion-logo-facebook")
           q-item-section Share on Facebook
-        q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=http://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter

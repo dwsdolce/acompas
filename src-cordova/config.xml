@@ -2,7 +2,7 @@
 <widget android-versionCode="701000451" id="audio.acompas.app" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>A Compás</name>
     <description>A flamenco metronome</description>
-    <author email="olivier@ricordeau.org" href="http://acompas.org">
+    <author email="olivier@ricordeau.org" href="https://acompas.org">
         A Compás Team
     </author>
     <content src="index.html" />

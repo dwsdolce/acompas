@@ -13,7 +13,7 @@
     </feature>
     <name>A Compás</name>
     <description>A flamenco metronome</description>
-    <author email="olivier@ricordeau.org" href="http://acompas.org">
+    <author email="olivier@ricordeau.org" href="https://acompas.org">
         A Compás Team
     </author>
     <content src="index.html" />

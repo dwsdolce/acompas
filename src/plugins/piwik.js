@@ -11,7 +11,7 @@ else platformName = 'Website'
 let playStartTime = null
 
 const initPiwik = () => {
-  var u = 'http://piwik.acompas.org/'
+  var u = 'https://piwik.acompas.org/'
   window._paq.push(['setTrackerUrl', u + 'piwik.php'])
   window._paq.push(['setSiteId', 1])
   var d = document,
