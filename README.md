@@ -2,22 +2,25 @@
 
 A flamenco metronome available in two versions :
 
-* Web application (available at [http://acompas.org](http://acompas.org)).
+* Web application (available at [https://acompas.org](https://acompas.org)).
 * Mobile application using [Apache Cordova](http://cordova.apache.org/), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app).
 
 It can play various flamenco rhythms (palos), and features a visual animation
 and many options.
 
 It is based on the following technologies :
- - [Quasar framework](http://quasar-framework.org)
+ - [Quasar framework](https://quasar.dev)
  - [vue.js](https://vuejs.org)
  - [Vuex](https://vuex.vuejs.org)
  - [Tonejs](https://tonejs.github.io)
- - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+
+## Thanks
+
+ - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
 
 ## Branches
 
- * The [online version](http://acompas.org) is the version 2 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
+ * The [online version](https://acompas.org) is the version 2.1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
  * The [1.1 branch](https://gitlab.com/oricordeau/acompas/tree/1.1) is still maintained in order to provide the Android application for users with Android >= 4.1 to Android < 7.0.
 
 ## Automated builds status
@@ -110,7 +113,3 @@ gem update --system
 gem install cocoapods
 pod setup
 ```
-
-## Thanks
-
- - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
