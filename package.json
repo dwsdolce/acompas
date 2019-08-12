@@ -8,7 +8,9 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "test:e2e": "cypress open",
+    "test:e2e:CI": "cypress run"
   },
   "dependencies": {
     "@quasar/extras": "^1.2.0",
@@ -19,6 +21,8 @@
   "devDependencies": {
     "@quasar/app": "^1.0.4",
     "@quasar/quasar-app-extension-icon-genie": "^1.0.1",
+    "@quasar/quasar-app-extension-testing": "^1.0.0",
+    "@quasar/quasar-app-extension-testing-e2e-cypress": "^1.0.0-beta.10",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
