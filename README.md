@@ -18,11 +18,6 @@ It is based on the following technologies :
 
  - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
 
-## Branches
-
- * The [online version](https://acompas.org) is the version 2.1 of A Compás, aka the ["master" branch](https://gitlab.com/oricordeau/acompas).
- * The [1.1 branch](https://gitlab.com/oricordeau/acompas/tree/1.1) is still maintained in order to provide the Android application for users with Android >= 4.1 to Android < 7.0.
-
 ## Automated builds status
 
 [![pipeline status](https://gitlab.com/oricordeau/acompas/badges/master/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/master)
