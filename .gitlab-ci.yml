@@ -17,7 +17,6 @@ build_web_job:
     - apt-get update
     - apt-get install -y -qq nodejs git rsync yarn xvfb
     - $YARN install
-    - npx quasar build
     - npx quasar test --e2e cypress
   stage: build
   tags:
