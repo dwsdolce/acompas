@@ -1,6 +1,6 @@
 {
   "name": "acompas",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "A flamenco metronome",
   "productName": "A Compás",
   "cordovaId": "audio.acompas.app",
