@@ -1,12 +1,12 @@
 <template lang="pug">
 div
   p.caption.q-mb-sm Palo
-  q-btn(
+  q-btn#paloBtn(
     outline,
     color="white",
     @click="palosDialog = true"
   ) {{ selectedPaloLabel }}
-  q-dialog(v-model="palosDialog")
+  q-dialog#palosDialog(v-model="palosDialog")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Please select a palo

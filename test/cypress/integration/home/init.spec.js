@@ -1,13 +1,42 @@
 import * as ctx from  '../../../../quasar.conf.js'
 
-describe('Landing', () => {
+import palosDefaultSettings from '../../../../src/store/data/palosDefaultSettings'
+
+describe('Home page', () => {
   beforeEach(() => {
     cy.visit('/')
   })
-  it('should let you play with defaults settings', () => {
-    cy.title().should('include', 'A Compás')
-    cy.get('#playBtn').should('contain', 'play_arrow').click()
-    cy.get('#playBtn').should('contain', 'stop').click()
+  it('has proper page title', () => {
+    cy.title()
+      .should('include', 'A Compás')
+  })
+  it('can play using default settings', () => {
+    cy.get('#playBtn')
+      .should('contain', 'play_arrow')
+      .click()
+    cy.get('#playBtn')
+      .should('contain', 'stop')
+      .click()
+  })
+  it('can play each palo', () => {
+    palosDefaultSettings.forEach(function(palo) {
+      cy.get('#paloBtn')
+        .click()
+      cy.get('#palosDialog')
+        .should('contain', palo.label)
+      cy.get('#palosDialog .q-radio__label')
+        .each(($elt, index, $labels) => {
+          if ($elt.html() === palo.label) {
+            cy.wrap($elt).click()
+            cy.get('#playBtn')
+              .should('contain', 'play_arrow')
+              .click()
+            cy.get('#playBtn')
+              .should('contain', 'stop')
+              .click()
+          }
+        })
+    })
   })
 })
 
