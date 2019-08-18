@@ -5,7 +5,7 @@ div
       q-item-section(avatar)
         q-icon(name="android")
       q-item-section Get the Android app
-    q-item(clickable, v-ripple, @click="helpDialog = true")
+    q-item#helpQItem(clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
         q-icon(name="help")
       q-item-section Help
@@ -27,11 +27,11 @@ div
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter
-    q-item(clickable, v-ripple, @click="tuningDialog = true")
+    q-item#tuningForkQItem(clickable, v-ripple, @click="tuningDialog = true")
       q-item-section(avatar)
         q-icon(name="hearing")
       q-item-section Tuning fork
-  q-dialog(v-model="helpDialog")
+  q-dialog#helpDialog(v-model="helpDialog")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Help
@@ -55,11 +55,11 @@ div
           p: b View mode
           p Choose between dots and counter visualisation.
       q-card-section(align="center")
-        q-btn(
+        q-btn#closeHelpBtn(
           color="primary",
           v-close-popup
         ) Close
-  q-dialog(v-model="tuningDialog")
+  q-dialog#tuningDialog(v-model="tuningDialog")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Tuning fork

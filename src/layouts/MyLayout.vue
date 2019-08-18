@@ -2,7 +2,7 @@
   q-layout(view="hHh Lpr lFf")
     q-header(elevated)
       q-toolbar
-        q-btn(
+        q-btn#menuBtn(
           flat,
           dense,
           round,
@@ -19,7 +19,7 @@
       bordered,
       content-class="bg-grey-2"
     )
-      SideMenu
+      SideMenu#sideMenu
 
     q-page-container
       router-view

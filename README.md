@@ -39,6 +39,24 @@ npx quasar dev
 npx quasar build
 ```
 
+## Automated testing
+
+``` bash
+# run the test suite in headless mode
+npx quasar test --e2e cypress
+```
+It's also possible to serve the app and run Cypress with different
+commands. This is helpful while writing test scenarios.
+
+``` bash
+# first terminal :
+npx quasar dev
+# second terminal (run Cypress) :
+npx cypress run --config baseUrl=http://localhost:8080/
+# second terminal (open Cypress with hot reload) :
+npx cypress open --config baseUrl=http://localhost:8080/
+```
+
 ## Android app
 
 You must first install Oracle's Java JDK 8 and set the JAVA_HOME environment
