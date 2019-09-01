@@ -4,7 +4,12 @@ import palosDefaultSettings from '../../../../src/store/data/palosDefaultSetting
 
 describe('Home page', () => {
   beforeEach(() => {
+    window.localStorage.clear()
     cy.visit('/')
+    cy.get('#closePrivacyDialogBtn')
+      .click()
+    cy.get('#playBtn')
+      .should('contain', 'play_arrow')
   })
   it('has proper page title', () => {
     cy.title()
@@ -70,6 +75,17 @@ describe('Home page', () => {
         cy.wrap($elt)
           .click()
       })
+  })
+  it('can display the privacy popin', () => {
+    cy.get('#menuBtn')
+      .click()
+    cy.get('#sideMenu')
+      .should('be.visible')
+    cy.get('#privacyQItem')
+      .click()
+    cy.get('#privacyDialog')
+      .should('be.visible')
+      .should('contain', 'Privacy')
   })
 })
 

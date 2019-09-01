@@ -105,8 +105,40 @@ const restoreImprovise = store => {
   })
 }
 
+const restoreTrackVisits = store => {
+  return new Promise(resolve => {
+    if (storage.getItem('track_visits') !== null) {
+      if (storage.getItem('track_visits') === 'true') {
+        store.dispatch('initializeTracking')
+        store.dispatch('enableTrackVisits')
+      }
+      if (storage.getItem('track_visits') === 'false') {
+        store.dispatch('disableTrackVisits')
+      }
+    } else {
+      store.dispatch('disableTrackVisits')
+    }
+    return resolve()
+  })
+}
+
+const restoreTrackingChosen = store => {
+  return new Promise(resolve => {
+    if (storage.getItem('tracking_chosen') !== null) {
+      if (storage.getItem('tracking_chosen') === 'true') {
+        store.dispatch('enableTrackingChosen')
+      }
+    } else {
+      store.dispatch('openPrivacyDialog')
+    }
+    return resolve()
+  })
+}
+
 export const restoreLocalStorage = store => {
   return new Promise(resolve => {
+    restoreTrackingChosen(store)
+    restoreTrackVisits(store)
     if (!storage.length) return resolve()
     return Promise.all([
       restoreVisualization(store),
@@ -188,6 +220,22 @@ const localStorage = store => {
 
       case types.DISABLE_HUMANIZE:
         storage.setItem('humanize', nextState.humanize)
+        break
+
+      case types.TOGGLE_TRACKVISITS:
+        storage.setItem('track_visits', nextState.trackVisits)
+        break
+
+      case types.ENABLE_TRACKVISITS:
+        storage.setItem('track_visits', nextState.trackVisits)
+        break
+
+      case types.DISABLE_TRACKVISITS:
+        storage.setItem('track_visits', nextState.trackVisits)
+        break
+
+      case types.ENABLE_TRACKINGCHOSEN:
+        storage.setItem('tracking_chosen', nextState.trackingChosen)
         break
     }
   })

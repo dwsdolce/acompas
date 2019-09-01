@@ -33,7 +33,7 @@ export default {
   name: 'MyLayout',
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.screen.gt.lg
     }
   },
   methods: {

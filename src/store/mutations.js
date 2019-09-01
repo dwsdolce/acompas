@@ -99,6 +99,34 @@ const mutations = {
     state.isTooFast = false
   },
 
+  [types.TOGGLE_TRACKVISITS] (state) {
+    state.trackVisits = !state.trackVisits
+  },
+
+  [types.ENABLE_TRACKVISITS] (state) {
+    state.trackVisits = true
+  },
+
+  [types.DISABLE_TRACKVISITS] (state) {
+    state.trackVisits = false
+  },
+
+  [types.INITIALIZE_TRACKING] (state) {
+    state.trackingInitialized = true
+  },
+
+  [types.OPEN_PRIVACYDIALOG] (state) {
+    state.privacyDialogOpen = true
+  },
+
+  [types.CLOSE_PRIVACYDIALOG] (state) {
+    state.privacyDialogOpen = false
+  },
+
+  [types.ENABLE_TRACKINGCHOSEN] (state) {
+    state.trackingChosen = true
+  },
+
   // payload = Tonejs time event
   [types.TRIGGER_EVENT] (state, payload) {
     state.metronomeEvent = payload

@@ -27,7 +27,11 @@ const state = {
   isPlaying: false,
   metronomeEvent: null,
   isTooSlow: false,
-  isTooFast: false
+  isTooFast: false,
+  trackVisits: false,
+  trackingInitialized: false,
+  trackingChosen: false,
+  privacyDialogOpen: false
 }
 
 export default state

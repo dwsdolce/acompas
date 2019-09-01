@@ -11,6 +11,10 @@ else platformName = 'Website'
 let playStartTime = null
 
 const initPiwik = () => {
+  window._paq.push(['setCustomVariable', 1, 'AppVersion', platformName, 'visit'])
+  window._paq.push(['trackPageView'])
+  window._paq.push(['enableLinkTracking'])
+
   var u = 'https://piwik.acompas.org/'
   window._paq.push(['setTrackerUrl', u + 'piwik.php'])
   window._paq.push(['setSiteId', 1])
@@ -25,13 +29,16 @@ const initPiwik = () => {
 }
 
 const piwik = store => {
-  window._paq.push(['setCustomVariable', 1, 'AppVersion', platformName, 'visit'])
-  window._paq.push(['trackPageView'])
-  window._paq.push(['enableLinkTracking'])
-  initPiwik()
-
   store.subscribe((mutation, state) => {
+    // Do nothing if visits tracking is disabled
+    if (!state.trackVisits) {
+      return
+    }
     switch (mutation.type) {
+      case types.INITIALIZE_TRACKING:
+        initPiwik()
+        break
+
       case types.PLAY:
         window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
         playStartTime = getContext.currentTime

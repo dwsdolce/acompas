@@ -1,22 +1,22 @@
 <template lang="pug">
 div
   q-list(no-border, link, separator)
-    q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
-      q-item-section(avatar)
-        q-icon(name="android")
-      q-item-section Get the Android app
     q-item#helpQItem(clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
         q-icon(name="help")
       q-item-section Help
-    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/oricordeau/acompas')")
+    q-item#tuningForkQItem(clickable, v-ripple, @click="tuningDialog = true")
       q-item-section(avatar)
-        q-icon(name="code")
-      q-item-section Source code
-    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/oricordeau/acompas/issues')")
+        q-icon(name="hearing")
+      q-item-section Tuning fork
+    q-item#privacyQItem(clickable, v-ripple, @click="openPrivacyDialog()")
       q-item-section(avatar)
-        q-icon(name="bug_report")
-      q-item-section Issues
+        q-icon(name="person")
+      q-item-section Privacy
+    q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
+      q-item-section(avatar)
+        q-icon(name="android")
+      q-item-section Get the Android app
     q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
@@ -27,10 +27,14 @@ div
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter
-    q-item#tuningForkQItem(clickable, v-ripple, @click="tuningDialog = true")
+    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
       q-item-section(avatar)
-        q-icon(name="hearing")
-      q-item-section Tuning fork
+        q-icon(name="code")
+      q-item-section Source code
+    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
+      q-item-section(avatar)
+        q-icon(name="bug_report")
+      q-item-section Issues
   q-dialog#helpDialog(v-model="helpDialog")
     q-card(style="width: 100%;")
       q-card-section
@@ -59,6 +63,25 @@ div
           color="primary",
           v-close-popup
         ) Close
+  q-dialog#privacyDialog(v-model="privacyDialogOpen")
+    q-card(style="width: 100%;")
+      q-card-section
+        .text-h6.text-center Privacy
+      q-card-section
+        div
+          div
+            p.caption.q-mb-sm: b Allow this app to send us some usage data ?
+            q-toggle(
+              :value="trackVisits",
+              @input="toggleTrackVisits"
+              ).primary
+            p We collect that data to have an idea about how many users we have. We don't sell or give access to this data to anyone else. You can enable or disable this feature when you want to.
+      q-card-section(align="center")
+        q-btn#closePrivacyDialogBtn(
+          color="primary",
+          v-close-popup,
+          @click="enableTrackingChosen(); closePrivacyDialog()"
+        ) Close
   q-dialog#tuningDialog(v-model="tuningDialog")
     q-card(style="width: 100%;")
       q-card-section
@@ -74,6 +97,7 @@ div
 
 <script>
 import { openURL, Platform } from 'quasar'
+import { mapState, mapActions } from 'vuex'
 import TuningFork from 'components/TuningFork'
 
 export default {
@@ -85,7 +109,19 @@ export default {
         return
       }
       openURL(url)
-    }
+    },
+    ...mapActions([
+      'toggleTrackVisits',
+      'enableTrackingChosen',
+      'openPrivacyDialog',
+      'closePrivacyDialog'
+    ])
+  },
+  computed: {
+    ...mapState({
+      trackVisits: state => state.trackVisits,
+      privacyDialogOpen: state => state.privacyDialogOpen
+    })
   },
   data () {
     return {

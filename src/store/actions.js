@@ -104,3 +104,37 @@ export const enableHumanize = ({ commit }) => {
 export const disableHumanize = ({ commit }) => {
   commit(types.DISABLE_HUMANIZE)
 }
+
+export const toggleTrackVisits = ({ commit, state }) => {
+  commit(types.TOGGLE_TRACKVISITS)
+  if (!state.trackingInitialized && state.trackVisits) {
+    commit(types.INITIALIZE_TRACKING)
+  }
+}
+
+export const enableTrackVisits = ({ commit, state }) => {
+  commit(types.ENABLE_TRACKVISITS)
+  if (!state.trackingInitialized) {
+    commit(types.INITIALIZE_TRACKING)
+  }
+}
+
+export const disableTrackVisits = ({ commit }) => {
+  commit(types.DISABLE_TRACKVISITS)
+}
+
+export const initializeTracking = ({ commit }) => {
+  commit(types.INITIALIZE_TRACKING)
+}
+
+export const enableTrackingChosen = ({ commit }) => {
+  commit(types.ENABLE_TRACKINGCHOSEN)
+}
+
+export const openPrivacyDialog = ({ commit }) => {
+  commit(types.OPEN_PRIVACYDIALOG)
+}
+
+export const closePrivacyDialog = ({ commit }) => {
+  commit(types.CLOSE_PRIVACYDIALOG)
+}
