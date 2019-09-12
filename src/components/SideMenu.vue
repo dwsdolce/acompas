@@ -77,11 +77,17 @@ div
               ).primary
             p We collect that data to have an idea about how many users we have. We don't sell or give access to this data to anyone else. You can enable or disable this feature when you want to.
       q-card-section(align="center")
-        q-btn#closePrivacyDialogBtn(
-          color="primary",
-          v-close-popup,
-          @click="enableTrackingChosen(); closePrivacyDialog()"
-        ) Close
+        q-btn-group
+          q-btn#enableAndClosePrivacyDialogBtn(
+            color="primary",
+            v-close-popup,
+            @click="enableTrackVisits(); enableTrackingChosen(); closePrivacyDialog()"
+          ) Enable &amp; close
+          q-btn#closePrivacyDialogBtn(
+            color="secondary",
+            v-close-popup,
+            @click="enableTrackingChosen(); closePrivacyDialog()"
+          ) Close
   q-dialog#tuningDialog(v-model="tuningDialog")
     q-card(style="width: 100%;")
       q-card-section
@@ -112,6 +118,7 @@ export default {
     },
     ...mapActions([
       'toggleTrackVisits',
+      'enableTrackVisits',
       'enableTrackingChosen',
       'openPrivacyDialog',
       'closePrivacyDialog'
