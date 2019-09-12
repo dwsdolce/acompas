@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex bg-grey-10 full-width">
-    <AppMain />
+    <AppMain id="appMain" />
   </q-page>
 </template>
 

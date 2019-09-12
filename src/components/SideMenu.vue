@@ -71,7 +71,7 @@ div
         div
           div
             p.caption.q-mb-sm: b Allow this app to send us some usage data ?
-            q-toggle(
+            q-toggle#toggleTrackVisits(
               :value="trackVisits",
               @input="toggleTrackVisits"
               ).primary
@@ -95,7 +95,7 @@ div
       q-card-section
         tuning-fork
       q-card-section(align="center")
-        q-btn(
+        q-btn#closeTuningDialogBtn(
           color="primary",
           v-close-popup
         ) Close

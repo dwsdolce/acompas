@@ -19,7 +19,7 @@ div
           @input="onSelectedPalo"
         )
       q-card-section(align="center")
-        q-btn(
+        q-btn#closePalosDialogBtn(
           color="primary",
           v-close-popup
         ) Close

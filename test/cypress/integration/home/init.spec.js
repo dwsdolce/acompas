@@ -10,6 +10,8 @@ describe('Home page', () => {
       .click()
     cy.get('#playBtn')
       .should('contain', 'play_arrow')
+    cy.get('#appMain')
+      .should('be.visible')
   })
   it('has proper page title', () => {
     cy.title()
@@ -44,6 +46,14 @@ describe('Home page', () => {
           }
         })
     })
+    cy.get('#paloBtn')
+      .click()
+    cy.get('#palosDialog')
+      .should('be.visible')
+    cy.get('#closePalosDialogBtn')
+      .click()
+    cy.get('#appMain')
+      .should('be.visible')
   })
   it('can display the help popin', () => {
     cy.get('#menuBtn')
@@ -57,8 +67,8 @@ describe('Home page', () => {
       .should('contain', 'Help')
     cy.get('#closeHelpBtn')
       .click()
-    cy.get('#helpDialog')
-      .should('not.contain', 'Help')
+    cy.get('#appMain')
+      .should('be.visible')
   })
   it('can display the tuning fork', () => {
     cy.get('#menuBtn')
@@ -75,6 +85,10 @@ describe('Home page', () => {
         cy.wrap($elt)
           .click()
       })
+    cy.get('#closeTuningDialogBtn')
+      .click()
+    cy.get('#appMain')
+      .should('be.visible')
   })
   it('can display the privacy popin', () => {
     cy.get('#menuBtn')
@@ -86,28 +100,21 @@ describe('Home page', () => {
     cy.get('#privacyDialog')
       .should('be.visible')
       .should('contain', 'Privacy')
+    cy.get('#enableAndClosePrivacyDialogBtn')
+      .click()
+    cy.get('#appMain')
+      .should('be.visible')
+    cy.get('#sideMenu')
+      .should('be.visible')
+    cy.get('#privacyQItem')
+      .click()
+    cy.get('#privacyDialog')
+      .should('be.visible')
+    cy.get('#toggleTrackVisits')
+      .click()
+    cy.get('#closePrivacyDialogBtn')
+      .click()
+    cy.get('#appMain')
+      .should('be.visible')
   })
 })
-
-// describe('Home page tests', () => {
-//   beforeEach(() => {
-//     cy.visit('/');
-//   });
-//   it('has pretty background', () => {
-//     cy.get('.landing-wrapper')
-//       .should('have.css', 'background').and('match', /(".+(\/img\/background).+\.png)/);
-//   });
-//   it('has pretty logo', () => {
-//     cy.get('.landing-wrapper img')
-//       .should('have.class', 'logo-main')
-//       .and('have.attr', 'src')
-//       .and('match', /^(data:image\/svg\+xml).+/);
-//   });
-//   it('has very important information', () => {
-//     cy.get('.instruction-wrapper')
-//       .should('contain', 'SETUP INSTRUCTIONS')
-//       .and('contain', 'Configure Authentication')
-//       .and('contain', 'Database Configuration and CRUD operations')
-//       .and('contain', 'Continuous Integration & Continuous Deployment CI/CD');
-//   });
-// });

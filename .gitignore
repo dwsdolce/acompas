@@ -19,6 +19,9 @@ node_modules
 /src-cordova/res/screen/*
 /src-cordova/res/ios
 /src-cordova/platforms/android/app/src/main/res/drawable-*
+/src-cordova/platforms/android/CordovaLib/CordovaLib.iml
+/src-cordova/platforms/android/android.iml
+/src-cordova/platforms/android/app/app.iml
 /test/cypress/screenshots
 /test/cypress/videos
 npm-debug.log*
