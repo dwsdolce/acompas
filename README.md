@@ -20,13 +20,13 @@ It is based on the following technologies :
 
 ## Automated builds status
 
-[![pipeline status](https://gitlab.com/oricordeau/acompas/badges/master/pipeline.svg)](https://gitlab.com/oricordeau/acompas/commits/master)
+[![pipeline status](https://gitlab.com/acompas/acompas/badges/master/pipeline.svg)](https://gitlab.com/acompas/acompas/commits/master)
 
 ## Cloning and building the source code
 
 ``` bash
 # cloning the git repository
-git clone https://gitlab.com/oricordeau/acompas.git
+git clone https://gitlab.com/acompas/acompas.git
 cd acompas
 
 # install dependencies
