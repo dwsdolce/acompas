@@ -2,7 +2,7 @@
     "name": "audio.acompas.app",
     "displayName": "A Compás",
     "version": "2.1.4",
-    "description": "A sample Apache Cordova application that responds to the deviceready event.",
+    "description": "A flamenco metronome application.",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
