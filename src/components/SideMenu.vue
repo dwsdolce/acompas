@@ -45,16 +45,16 @@ div
           p Use this button to select the flamenco rhythm that you want.
         div
           p: b Instruments mixer
-          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing eighth notes.
+          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing quarter notes or eighth notes.
         div
           p: b Improvise
-          p If it is on, then random improvised sound events will be added to the sound patterns.
+          p If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
         div
           p: b Humanize
-          p If it is on, then random little time variations are applied to the sounds.
+          p If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
         div
           p: b Tempo
-          p Three ways to define tempo: the knob circle, input underneath for more precise setting, increment bpm with + and - buttons.
+          p There are 3 ways to define the tempo: the knob circle, the number input underneath for a more precise setting, and you can decrement/increment the bpm with the + and - buttons.
         div
           p: b View mode
           p Choose between dots and counter visualisation.
