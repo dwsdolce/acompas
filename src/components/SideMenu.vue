@@ -63,7 +63,7 @@ div
           color="primary",
           v-close-popup
         ) Close
-  q-dialog#privacyDialog(v-model="privacyDialogOpen")
+  q-dialog#privacyDialog(:value="privacyDialogOpen")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Privacy
