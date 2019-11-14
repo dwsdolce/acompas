@@ -11,6 +11,9 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
+    <feature name="Insomnia">
+        <param name="android-package" value="nl.xservices.plugins.Insomnia" />
+    </feature>
     <name>A Compás</name>
     <description>A flamenco metronome</description>
     <author email="olivier@ricordeau.org" href="https://acompas.org">

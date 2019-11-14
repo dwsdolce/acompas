@@ -89,5 +89,9 @@
     </platform>
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
+    <plugin name="cordova-plugin-insomnia" spec="https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git" />
+    <feature name="Insomnia">
+        <param name="android-package" value="nl.xservices.plugins.Insomnia" />
+    </feature>
     <engine name="android" spec="^8.0.0" />
 </widget>

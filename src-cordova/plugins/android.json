@@ -15,6 +15,9 @@
     },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "audio.acompas.app"
+    },
+    "cordova-plugin-insomnia": {
+      "PACKAGE_NAME": "audio.acompas.app"
     }
   },
   "dependent_plugins": {}
