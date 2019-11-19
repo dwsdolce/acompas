@@ -124,9 +124,9 @@ export default [
       9: 'down',
       10: 'up',
       11: 'down',
-      12: 'strong',
+      12: 'up',
       13: 'down',
-      14: 'up',
+      14: 'strong',
       15: 'down',
       16: 'strong',
       17: 'down',
@@ -151,6 +151,35 @@ export default [
       20: 10,
       22: 11
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '12 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' },
+      { value: 12, label: '6 (half a compás)' },
+      { value: 14, label: '7' },
+      { value: 16, label: '8' },
+      { value: 18, label: '9' },
+      { value: 20, label: '10' },
+      { value: 22, label: '11' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is por buleria'
   },
@@ -233,13 +262,30 @@ export default [
       11: 'down'
     },
     beatLabels: {
-      0: 6,
-      2: 1,
-      4: 2,
-      6: 3,
-      8: 4,
-      10: 5
+      0: 1,
+      2: 2,
+      4: 3,
+      6: 4,
+      8: 5,
+      10: 6
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3 (half a compás)' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 2, label: '2' },
+      { value: 4, label: '3' },
+      { value: 6, label: '4 (half a compás)' },
+      { value: 8, label: '5' },
+      { value: 10, label: '6' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -392,6 +438,35 @@ export default [
       20: 10,
       22: 11
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '12 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' },
+      { value: 12, label: '6 (half a compás)' },
+      { value: 14, label: '7' },
+      { value: 16, label: '8' },
+      { value: 18, label: '9' },
+      { value: 20, label: '10' },
+      { value: 22, label: '11' }
+    ],
     slowMessage: 'Your rhythm is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -545,6 +620,35 @@ export default [
       20: 10,
       22: 11
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '12 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' },
+      { value: 12, label: '6 (half a compás)' },
+      { value: 14, label: '7' },
+      { value: 16, label: '8' },
+      { value: 18, label: '9' },
+      { value: 20, label: '10' },
+      { value: 22, label: '11' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -699,6 +803,35 @@ export default [
       20: 10,
       22: 11
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '12 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' },
+      { value: 12, label: '6 (half a compás)' },
+      { value: 14, label: '7' },
+      { value: 16, label: '8' },
+      { value: 18, label: '9' },
+      { value: 20, label: '10' },
+      { value: 22, label: '11' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -804,6 +937,19 @@ export default [
       12: 3,
       14: 4
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2 (half a compás)' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 10, label: '2' },
+      { value: 12, label: '3 (half a compás)' },
+      { value: 14, label: '4' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -960,6 +1106,35 @@ export default [
       20: 10,
       22: 11
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '12 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' },
+      { value: 12, label: '6 (half a compás)' },
+      { value: 14, label: '7' },
+      { value: 16, label: '8' },
+      { value: 18, label: '9' },
+      { value: 20, label: '10' },
+      { value: 22, label: '11' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   },
@@ -1098,8 +1273,37 @@ export default [
       20: 11,
       22: 12
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (half a compás)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 2, label: '2' },
+      { value: 4, label: '3' },
+      { value: 6, label: '4' },
+      { value: 8, label: '5' },
+      { value: 10, label: '6' },
+      { value: 12, label: '7 (half a compás)' },
+      { value: 14, label: '8' },
+      { value: 16, label: '9' },
+      { value: 18, label: '10' },
+      { value: 20, label: '11' },
+      { value: 22, label: '12' }
+    ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is solea por buleria or alegria'
+    fastMessage: 'Your tempo is solea por bulería or alegría'
   },
   {
     id: 9,
@@ -1207,6 +1411,19 @@ export default [
       12: 3,
       14: 4
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2 (half a compás)' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 10, label: '2' },
+      { value: 12, label: '3 (half a compás)' },
+      { value: 14, label: '4' }
+    ],
     slowMessage: 'Your tempo is por tientos',
     fastMessage: 'Your tempo is por rumba'
   },
@@ -1284,7 +1501,7 @@ export default [
       5: 'down',
       6: 'strong',
       7: 'down',
-      8: 'up',
+      8: 'strong',
       9: 'down',
       10: 'up',
       11: 'down'
@@ -1297,6 +1514,17 @@ export default [
       8: 2,
       10: 3
     },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 8, label: '2' },
+      { value: 10, label: '3' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast'
   }

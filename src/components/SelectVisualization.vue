@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm.gt-md View mode
+  p(v-if="visualizationSize.width > breakpoint.sm").caption.q-mb-sm View mode
   q-btn(
     round,
     outline,

@@ -30,6 +30,8 @@ const mutations = {
   // payload = palo object
   [types.SELECT_PALO] (state, payload) {
     state.selectedPalo = payload
+    state.preCounts = payload.preCounts
+    state.startBeats = payload.startBeats
   },
 
   [types.SELECT_TEMPO] (state, payload) {
@@ -39,6 +41,16 @@ const mutations = {
   // payload is an array of instrument slugs
   [types.SELECT_INSTRUMENTS] (state, payload) {
     state.selectedInstruments = payload
+  },
+
+  // payload is a pre-count object ({ value: intValue, label: 'Label' })
+  [types.SELECT_PRECOUNT] (state, payload) {
+    state.selectedPreCount = payload
+  },
+
+  // payload is a start beat object ({ value: intValue, label: 'Label' })
+  [types.SELECT_STARTBEAT] (state, payload) {
+    state.selectedStartBeat = payload
   },
 
   // payload = { instrument: item from state.instruments, volume: [value] }

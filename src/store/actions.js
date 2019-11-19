@@ -65,6 +65,14 @@ export const selectInstruments = ({ commit }, payload) => {
   commit(types.SELECT_INSTRUMENTS, payload)
 }
 
+export const selectPreCount = ({ commit }, payload) => {
+  commit(types.SELECT_PRECOUNT, payload)
+}
+
+export const selectStartBeat = ({ commit }, payload) => {
+  commit(types.SELECT_STARTBEAT, payload)
+}
+
 export const changeVolume = ({ commit }, payload) => {
   commit(types.CHANGE_VOLUME, payload)
 }

@@ -21,6 +21,32 @@ const restoreSelectedPalo = store => {
   })
 }
 
+const restoreSelectedPreCount = store => {
+  return new Promise(resolve => {
+    if (storage.getItem('pre-count-' + store.state.selectedPalo.value) !== null) {
+      forEachValue(store.state.preCounts, (preCount, key) => {
+        if (preCount.value === parseInt(storage.getItem('pre-count-' + store.state.selectedPalo.value))) {
+          store.dispatch('selectPreCount', preCount)
+        }
+      })
+    }
+    return resolve()
+  })
+}
+
+const restoreSelectedStartBeat = store => {
+  return new Promise(resolve => {
+    if (storage.getItem('start-beat-' + store.state.selectedPalo.value) !== null) {
+      forEachValue(store.state.startBeats, (startBeat, key) => {
+        if (startBeat.value === parseInt(storage.getItem('start-beat-' + store.state.selectedPalo.value))) {
+          store.dispatch('selectStartBeat', startBeat)
+        }
+      })
+    }
+    return resolve()
+  })
+}
+
 const restoreTempo = store => {
   return new Promise(resolve => {
     let selectedPaloSlug = store.state.selectedPalo.value
@@ -143,6 +169,8 @@ export const restoreLocalStorage = store => {
     return Promise.all([
       restoreVisualization(store),
       restoreSelectedPalo(store),
+      restoreSelectedPreCount(store),
+      restoreSelectedStartBeat(store),
       restoreTempo(store),
       restoreSelectedInstruments(store),
       restoreEighthNotes(store),
@@ -163,19 +191,56 @@ const localStorage = store => {
 
       case types.SELECT_PALO:
         storage.setItem('palo', mutation.payload.value)
-        if (window.localStorage.getItem('tempo-' + mutation.payload.value) !== null) {
-          if (parseInt(window.localStorage.getItem('tempo-' + mutation.payload.value))) {
-            store.dispatch('selectTempo', parseInt(window.localStorage.getItem('tempo-' + mutation.payload.value)))
+        // Select a new tempo
+        if (storage.getItem('tempo-' + mutation.payload.value) !== null) {
+          if (parseInt(storage.getItem('tempo-' + mutation.payload.value))) {
+            store.dispatch('selectTempo', parseInt(storage.getItem('tempo-' + mutation.payload.value)))
           } else {
             store.dispatch('selectTempo', mutation.payload.defaultTempo)
           }
         } else {
           store.dispatch('selectTempo', mutation.payload.defaultTempo)
         }
+        // Select a new pre-count
+        if (storage.getItem('pre-count-' + mutation.payload.value) !== null) {
+          if (parseInt(storage.getItem('pre-count-' + mutation.payload.value))) {
+            forEachValue(store.state.preCounts, (preCount) => {
+              if (preCount.value === parseInt(storage.getItem('pre-count-' + mutation.payload.value))) {
+                store.dispatch('selectPreCount', preCount)
+              }
+            })
+          } else {
+            store.dispatch('selectPreCount', mutation.payload.preCounts[0])
+          }
+        } else {
+          store.dispatch('selectPreCount', mutation.payload.preCounts[0])
+        }
+        // Select a new start beat
+        if (storage.getItem('start-beat-' + mutation.payload.value) !== null) {
+          if (parseInt(storage.getItem('start-beat-' + mutation.payload.value))) {
+            forEachValue(store.state.startBeats, (startBeat) => {
+              if (startBeat.value === parseInt(storage.getItem('start-beat-' + mutation.payload.value))) {
+                store.dispatch('selectStartBeat', startBeat)
+              }
+            })
+          } else {
+            store.dispatch('selectStartBeat', mutation.payload.startBeats[0])
+          }
+        } else {
+          store.dispatch('selectStartBeat', mutation.payload.startBeats[0])
+        }
         break
 
       case types.SELECT_TEMPO:
         storage.setItem('tempo-' + nextState.selectedPalo.value, mutation.payload)
+        break
+
+      case types.SELECT_PRECOUNT:
+        storage.setItem('pre-count-' + nextState.selectedPalo.value, mutation.payload.value)
+        break
+
+      case types.SELECT_STARTBEAT:
+        storage.setItem('start-beat-' + nextState.selectedPalo.value, mutation.payload.value)
         break
 
       case types.SELECT_INSTRUMENTS:

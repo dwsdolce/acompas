@@ -25,7 +25,7 @@ export const playSynth = note => {
      * Detect the audio format to use for playing
      * load sounds by creating the Tone players
  */
-const initSounds = () => {
+const initSounds = async () => {
   return new Promise(resolve => {
     if (new Audio().canPlayType('audio/flac')) {
       aCompas.audioFormat = 'flac'
@@ -45,54 +45,60 @@ const initSounds = () => {
 
     forEachValue(audioSettings, (value, key) => {
       aCompas.sounds[key] = {}
-      forEachValue(value, (v, k) => {
-        let url = path + v.src + '.' + aCompas.audioFormat
-        aCompas.sounds[key][k] = new Tone.Player(url).toMaster()
-        aCompas.sounds[key][k].volume.value = v.volume
-        aCompas.sounds[key][k].volume.default = v.volume
-      })
+      for (let i = 0; i < value.length; i++) {
+        let url = path + value[i].src + '.' + aCompas.audioFormat
+        aCompas.sounds[key][i] = new Tone.Player(url).toMaster()
+        aCompas.sounds[key][i].volume.value = value[i].volume
+        aCompas.sounds[key][i].volume.default = value[i].volume
+      }
     })
     return resolve()
   })
 }
 
-// ==========================
+// ========================
 // Metronome palos settings
-// ==========================
+// ========================
 
-const improviseSequence = (sound, time, value, events, key, eighthNotes) => {
+const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
   // For the "click" sounds, follow the sequence and never improvise
   if (sound === 'click') {
-    aCompas.sounds[sound][value].start(time)
+    aCompas.sounds[sound][value - 1].start(time)
     return
   }
+
   // Pick a probability that the sound occurence is following the pattern
   const improvisationProbability = Math.random()
   const improvisationThreshold = 0.30 // 30% chances that we don't follow the pattern
+  let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
+  if (index < 0) {
+    index += palo.nbBeatsInPattern
+  }
+  let noteIndexInPattern = index % palo.nbBeatsInPattern
   if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
-    if (events === key && eighthNotes && key % 2 !== 0) {
-      aCompas.sounds[sound][value].start(time)
+    if (noteIndexInPattern === key && eighthNotes && key % 2 !== 0) {
+      aCompas.sounds[sound][value - 1].start(time)
     }
-    if (events === key && !eighthNotes && key % 2 === 0) {
-      aCompas.sounds[sound][value].start(time)
+    if (noteIndexInPattern === key && !eighthNotes && key % 2 === 0) {
+      aCompas.sounds[sound][value - 1].start(time)
     }
   } else {
     // Pick a probability that the sound is played
     const playProbability = Math.random()
     const playThreshold = 0.50 // 50% chances that the sound is not played
     if (playProbability > playThreshold) {
-      aCompas.sounds[sound][value].start(time)
+      aCompas.sounds[sound][value - 1].start(time)
     }
   }
 }
 
-const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
-  if (!eighthNotes && (events % 2 !== 0)) {
+const improviseJaleo = (note, time, palo, eighthNotes) => {
+  if (!eighthNotes && (note % 2 !== 0)) {
     return
   }
   let playThreshold = 0.95 // 95% chances that the the sound is not played
   // Check if time is a strong beat
-  if (palo.accents.includes(events)) {
+  if (palo.accents.includes(note)) {
     // if the event is a strong beat, sound occurence will be more probable
     playThreshold = 0.7 // 70% chances that the sound is not played
   }
@@ -105,12 +111,93 @@ const improviseJaleoSequence = (seq, events, time, palo, eighthNotes) => {
   }
 }
 
+const triggerPreCountClick = (store, time, note) => {
+  if (store.state.selectedPreCount.value > 0 && note < store.state.selectedPreCount.value * 2 && note % 2 === 0) {
+    forEachValue(store.state.selectedPalo.beats, (value, key) => {
+      let index = key - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
+      if (index < 0) {
+        index += store.state.selectedPalo.nbBeatsInPattern
+      }
+      if (note === index % store.state.selectedPalo.nbBeatsInPattern) {
+        if (value === 'strong') {
+          aCompas.sounds['click'][0].start(time)
+        } else {
+          aCompas.sounds['click'][1].start(time)
+        }
+      }
+    })
+  }
+}
+
+const appendEventsToSequences = (store) => {
+  // seq is a Tone.Sequence, sound is an instrument track name
+  forEachValue(aCompas.sequences.quarterNotes, (seq, sound) => {
+    let initialSeqLength = seq.length
+    for (let i = 0; i < store.state.selectedPalo.nbBeatsInPattern; i++) {
+      seq.add(initialSeqLength + i, initialSeqLength + i)
+      // triggerAudioOnEvent(store, store.state.selectedPalo, false, sound,
+      //   [initialSeqLength + 1], time, initialSeqLength + i)
+    }
+  })
+  forEachValue(aCompas.sequences.eighthNotes, (seq, sound) => {
+    let initialSeqLength = seq.length
+    for (let i = 0; i < store.state.selectedPalo.nbBeatsInPattern; i++) {
+      seq.add(initialSeqLength + i, initialSeqLength + i)
+      // triggerAudioOnEvent(store, store.state.selectedPalo, true, sound,
+      //   [initialSeqLength + 1], time, initialSeqLength + i)
+    }
+  })
+}
+
+const triggerAudioOnEvent = (store, palo, eighthNotes, sound, time, note) => {
+  // Prepend pre-count beats if required
+  if (sound === 'preCount') {
+    triggerPreCountClick(store, time, note)
+  } else {
+    // Don't play non-preCount sequences if note is during pre-count
+    if (note < store.state.selectedPreCount.value * 2) {
+      return
+    }
+
+    if (sound === 'jaleo') {
+      improviseJaleo(note, time, palo, eighthNotes)
+      return
+    }
+
+    // key is a pulsation number, value is the sound number
+    forEachValue(palo[sound], (value, key) => {
+      key = parseInt(key)
+      let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
+      if (index < 0) {
+        index += palo.nbBeatsInPattern
+      }
+      let noteIndexInPattern = index % palo.nbBeatsInPattern
+      if (eighthNotes && key % 2 !== 0) {
+        if (!store.state.improvise && noteIndexInPattern === key) {
+          aCompas.sounds[sound][value - 1].start(time)
+        }
+        if (store.state.improvise && noteIndexInPattern === key) {
+          improvise(store, palo, sound, time, value, note, key, eighthNotes)
+        }
+      }
+      if (!eighthNotes && key % 2 === 0) {
+        if (!store.state.improvise && noteIndexInPattern === key) {
+          aCompas.sounds[sound][value - 1].start(time)
+        }
+        if (store.state.improvise && noteIndexInPattern === key) {
+          improvise(store, palo, sound, time, value, note, key, eighthNotes)
+        }
+      }
+    })
+  }
+}
+
 /**
  * Builds a compas sequence from a palo, an "is eighthNote ?" boolean and a sound
  * @param {Object} store The Vuex store
  * @param {Object} palo The palo to build sequence for
  * @param {Boolean} eighthNotes Is this a eighthNotes sequence ?
- * @param {String} sound The sound to build sequence with
+ * @param {String} sound The sound to build sequence with (slug)
  * @param {Array} sequence The compas sequence for Tone
  * @return {Object} Returns the Tone sequence object
  */
@@ -118,76 +205,35 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
+
+    // Append new compás events to the sequences as playing goes on
+    let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
+    if (index < 0) {
+      index += store.state.selectedPalo.nbBeatsInPattern
+    }
+    if (sound === 'preCount' && index % store.state.selectedPalo.nbBeatsInPattern === store.state.selectedStartBeat.value) {
+      appendEventsToSequences(store)
+    }
+
     // Call animation on event time.
-    if (sound === store.state.selectedInstruments[0] && note % 2 === 0) {
+    // The preCount track is used to trigger events which will trigger UI modifications
+    if (sound === 'preCount' && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
-        store.commit(types.TRIGGER_EVENT, note / 2)
+        store.commit(types.TRIGGER_EVENT, note)
       }, time) // Use AudioContext time of the event
     }
 
-    if (sound === 'jaleo') {
-      improviseJaleoSequence(seq, note, time, palo, eighthNotes)
-      return
-    }
-
-    // key is a pulsation number, value is the number of clara sound
-    forEachValue(palo[sound], (value, key) => {
-      key = parseInt(key)
-      if (eighthNotes && key % 2 !== 0) {
-        if (!store.state.improvise && note === key) {
-          aCompas.sounds[sound][value].start(time)
-        }
-        if (store.state.improvise && note === key) {
-          improviseSequence(sound, time, value, note, key, eighthNotes)
-        }
-      }
-      if (!eighthNotes && key % 2 === 0) {
-        if (!store.state.improvise && note === key) {
-          aCompas.sounds[sound][value].start(time)
-        }
-        if (store.state.improvise && note === key) {
-          improviseSequence(sound, time, value, note, key, eighthNotes)
-        }
-      }
-    })
+    triggerAudioOnEvent(store, palo, eighthNotes, sound, time, note)
   }, sequence, '8n')
+  // Deactivate sequence looping
+  seq.loop = false
   return seq
 }
 
-const initPalos = store => {
-  return new Promise(resolve => {
-    forEachValue(store.state.palos, palo => {
-      let sequence = []
-      for (let i = 0; i < palo.nbBeatsInPattern; i++) {
-        sequence.push(i)
-      }
-      aCompas.sequences[palo.value] = {
-        quarterNotes: {
-          clara: buildSequence(store, palo, false, 'clara', sequence),
-          sorda: buildSequence(store, palo, false, 'sorda', sequence),
-          cajon: buildSequence(store, palo, false, 'cajon', sequence),
-          udu: buildSequence(store, palo, false, 'udu', sequence),
-          jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
-          click: buildSequence(store, palo, false, 'click', sequence)
-        },
-        eighthNotes: {
-          clara: buildSequence(store, palo, true, 'clara', sequence),
-          sorda: buildSequence(store, palo, true, 'sorda', sequence),
-          cajon: buildSequence(store, palo, true, 'cajon', sequence),
-          udu: buildSequence(store, palo, true, 'udu', sequence),
-          jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
-          click: buildSequence(store, palo, true, 'click', sequence)
-        }
-      }
-    })
-    return resolve()
-  })
-}
-
-// ==========================
+// =====================
 // Metronome user inputs
-// ==========================
+// =====================
 
 const selectTempo = tempo => {
   Tone.Transport.bpm.value = tempo
@@ -195,10 +241,14 @@ const selectTempo = tempo => {
 
 const toggleEighthNotes = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, (seq, key) => {
-      seq.mute = !state.selectedInstruments.includes(key)
+    forEachValue(aCompas.sequences.quarterNotes, (seq, key) => {
+      if (key === 'preCount') {
+        seq.mute = false
+      } else {
+        seq.mute = !state.selectedInstruments.includes(key)
+      }
     })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, (seq, key) => {
+    forEachValue(aCompas.sequences.eighthNotes, (seq, key) => {
       let instrument = state.instruments.find(o => o.value === key)
       if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
         seq.mute = false
@@ -212,10 +262,10 @@ const toggleEighthNotes = state => {
 
 const toggleImprovise = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+    forEachValue(aCompas.sequences.quarterNotes, seq => {
       seq.improvise = state.improvise
     })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+    forEachValue(aCompas.sequences.eighthNotes, seq => {
       seq.improvise = state.improvise
     })
     return resolve()
@@ -224,11 +274,19 @@ const toggleImprovise = state => {
 
 const toggleHumanize = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
-      seq.humanize = state.humanize
+    forEachValue(aCompas.sequences.quarterNotes, (seq, sound) => {
+      if (sound === 'preCount' || sound === 'click') {
+        seq.humanize = false
+      } else {
+        seq.humanize = state.humanize
+      }
     })
-    forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
-      seq.humanize = state.humanize
+    forEachValue(aCompas.sequences.eighthNotes, (seq, sound) => {
+      if (sound === 'preCount' || sound === 'click') {
+        seq.humanize = false
+      } else {
+        seq.humanize = state.humanize
+      }
     })
     return resolve()
   })
@@ -247,15 +305,15 @@ const changeVolume = (prevState, nextState) => {
   })
 }
 
-// ==========================
+// ========================
 // Metronome init functions
-// ==========================
+// ========================
 
 const startSequences = state => {
-  forEachValue(aCompas.sequences[state.selectedPalo.value].quarterNotes, seq => {
+  forEachValue(aCompas.sequences.quarterNotes, seq => {
     seq.start()
   })
-  forEachValue(aCompas.sequences[state.selectedPalo.value].eighthNotes, seq => {
+  forEachValue(aCompas.sequences.eighthNotes, seq => {
     seq.start()
   })
   Tone.Transport.start('+0.1')
@@ -264,12 +322,44 @@ const startSequences = state => {
 const stopAllSequences = () => {
   Tone.Transport.stop()
   forEachValue(aCompas.sequences, notes => {
-    forEachValue(notes, instruments => {
-      forEachValue(instruments, seq => {
-        if (seq.state === 'started') seq.stop()
-      })
+    forEachValue(notes, seq => {
+      if (seq.state === 'started') seq.stop()
     })
   })
+}
+
+const initSequences = store => {
+  let sequence = []
+  let palo = store.state.selectedPalo
+  // Add pre-count to sequence
+  for (let i = 0; i < parseInt(store.state.selectedPreCount.value); i++) {
+    sequence.push(i * 2)
+    sequence.push(i * 2 + 1)
+  }
+  // Add pattern beats to sequence, starting from the selected start beat
+  for (let i = 0; i < palo.nbBeatsInPattern - store.state.selectedStartBeat.value; i++) {
+    sequence.push(store.state.selectedPreCount.value * 2 + i)
+  }
+  // Set aCompas.sequences
+  aCompas.sequences = {
+    quarterNotes: {
+      preCount: buildSequence(store, palo, false, 'preCount', sequence),
+      clara: buildSequence(store, palo, false, 'clara', sequence),
+      sorda: buildSequence(store, palo, false, 'sorda', sequence),
+      cajon: buildSequence(store, palo, false, 'cajon', sequence),
+      udu: buildSequence(store, palo, false, 'udu', sequence),
+      jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
+      click: buildSequence(store, palo, false, 'click', sequence)
+    },
+    eighthNotes: {
+      clara: buildSequence(store, palo, true, 'clara', sequence),
+      sorda: buildSequence(store, palo, true, 'sorda', sequence),
+      cajon: buildSequence(store, palo, true, 'cajon', sequence),
+      udu: buildSequence(store, palo, true, 'udu', sequence),
+      jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
+      click: buildSequence(store, palo, true, 'click', sequence)
+    }
+  }
 }
 
 const activateSequences = state => {
@@ -291,19 +381,19 @@ export const getContext = Tone.context
 
 export const isSupported = Tone.supported
 
-export const initMetronome = async (store, callback) => {
+export const initMetronome = (store) => {
   Loading.show({ delay: 100 })
-  await initSounds()
-  await initPalos(store)
-  await restoreLocalStorage(store)
-  await activateSequences(store.state)
+  initSounds()
+  restoreLocalStorage(store)
+  initSequences(store)
+  activateSequences(store.state)
   Loading.hide()
   return getContext.state
 }
 
-// ==========================
-// Metronome listen store
-// ==========================
+// ================================
+// Metronome store events listening
+// ================================
 
 const metronome = store => {
   let prevState = deepCopy(store.state)
@@ -326,6 +416,7 @@ const metronome = store => {
 
       case types.SELECT_PALO:
         if (!nextState.isPlaying) stopAllSequences()
+        initSequences(store)
         toggleEighthNotes(nextState)
         break
 

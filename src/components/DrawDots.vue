@@ -71,8 +71,14 @@ export default {
       }
     },
     animateDot (v) {
+      let index = v - (this.$store.state.selectedPreCount.value * 2) + this.$store.state.selectedStartBeat.value
+      // index needs to be strictly positive as it will be used with a % operator
+      if (index < 0) {
+        index += this.$store.state.selectedPalo.nbBeatsInPattern
+      }
+      let dotToAnimate = index % this.$store.state.selectedPalo.nbBeatsInPattern
       anime({
-        targets: this.$refs[`dot-${v * 2}`],
+        targets: this.$refs['dot-' + dotToAnimate],
         scale: [
           { value: 1, duration: 0 },
           { value: 2, duration: 500 }
@@ -81,7 +87,7 @@ export default {
         easing: 'linear'
       })
       anime({
-        targets: this.$refs[`nb-${v * 2}`],
+        targets: this.$refs['nb-' + dotToAnimate],
         opacity: [
           { value: 0.6, duration: 0 },
           { value: 1, duration: 500 }

@@ -2,26 +2,32 @@
   .text-grey-1.full-width.q-pa-sm
     .full-width
       q-resize-observer(@resize="onResize")
-      draw-bars(v-if="visualizationMode === 'dots'")
+      draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
     div
       .row.text-center.no-wrap
-        .col-6.col-lg-4
+        .col-6
           .column
             select-palo.q-mb-md
-            select-instruments.q-mb-md
+            select-pre-count.q-mb-md
+            select-start-beat.q-mb-md
             toggle-improvise.q-mb-md
-            toggle-humanize
-        .col-lg-4(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
-          .item-center
-            play
-        .col-6.col-lg-4
+            toggle-humanize.q-mb-md
+        .col-6
           .column
             select-tempo.q-mb-md
+            select-instruments.q-mb-md
             .row.text-center.q-mt-md
-              select-visualization.col
+              .col
+                .item-center
+                  select-visualization.col
               .col(v-if="visualizationSize.width <= breakpoint.sm")
-                play
+                .item-center
+                  play
+      .row.text-center.no-wrap
+        .col-12(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
+          .item-center
+            play
 </template>
 
 <script>
@@ -31,10 +37,12 @@ import StartAudioContext from 'startaudiocontext'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
 import SelectPalo from './SelectPalo'
+import SelectPreCount from './SelectPreCount'
+import SelectStartBeat from './SelectStartBeat'
 import SelectInstruments from './SelectInstruments'
 import ToggleImprovise from './ToggleImprovise'
 import ToggleHumanize from './ToggleHumanize'
-import DrawBars from './DrawBars'
+import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
 import { isSupported, getContext, initMetronome } from '../plugins/metronome'
@@ -44,10 +52,12 @@ export default {
     Play,
     SelectTempo,
     SelectPalo,
+    SelectPreCount,
+    SelectStartBeat,
     SelectInstruments,
     ToggleImprovise,
     ToggleHumanize,
-    DrawBars,
+    DrawDots,
     DrawCounter,
     SelectVisualization
   },
@@ -64,9 +74,6 @@ export default {
       breakpoint: state => state.breakpoint
     })
   },
-  async created () {
-    this.audioContext = await initMetronome(this.$store)
-  },
   mounted () {
     if (!isSupported) this.showDialog()
     document.addEventListener('keypress', event => {
@@ -80,7 +87,10 @@ export default {
     })
   },
   methods: {
-    ...mapActions([ 'startAudioContext' ]),
+    ...mapActions([
+      'startAudioContext',
+      'playStop'
+    ]),
     ...mapMutations({
       getVisualizationSize: 'GET_VISUALIZATION_SIZE'
     }),

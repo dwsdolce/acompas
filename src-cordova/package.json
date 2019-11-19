@@ -1,7 +1,7 @@
 {
     "name": "audio.acompas.app",
     "displayName": "A Compás",
-    "version": "2.1.4",
+    "version": "2.2.0",
     "description": "A flamenco metronome application.",
     "main": "index.js",
     "scripts": {

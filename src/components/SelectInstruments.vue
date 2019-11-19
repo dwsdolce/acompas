@@ -1,11 +1,11 @@
 <template lang="pug">
 div
   p.caption.q-mb-sm Instruments
-  q-btn(
+  q-btn#mixerBtn(
     outline,
     @click="instrumentsDialog = true"
   ) Mixer
-  q-dialog(v-model="instrumentsDialog")
+  q-dialog#mixerDialog(v-model="instrumentsDialog")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Instruments mixer
@@ -23,7 +23,7 @@ div
               :slug="instrument.value"
             )
       q-card-section(align="center")
-        q-btn(
+        q-btn#closeMixerDialogBtn(
           color="primary",
           v-close-popup
         ) Close
@@ -59,3 +59,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+#mixerBtn .q-btn__content
+  text-transform: none
+</style>

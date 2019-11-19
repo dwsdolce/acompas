@@ -11,8 +11,8 @@ export default function createLogger ({
     let prevState = deepCopy(store.state)
 
     store.subscribe((mutation, state) => {
-      // Set this variable to true temporarily to enable logging
-      const loggingEnabled = false
+      // Enable logging ?
+      const loggingEnabled = true
       if (!loggingEnabled) {
         return
       }

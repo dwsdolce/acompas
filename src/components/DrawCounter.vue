@@ -22,9 +22,14 @@ export default {
     })
   },
   watch: {
-    metronomeEvent (value) {
-      this.counter = this.selectedPalo.beatLabels[value * 2]
-      if (this.selectedPalo.accents.includes(value)) {
+    metronomeEvent (v) {
+      let index = v - (this.$store.state.selectedPreCount.value * 2) + this.$store.state.selectedStartBeat.value
+      // index needs to be strictly positive as it will be used with a % operator
+      if (index < 0) {
+        index += this.$store.state.selectedPalo.nbBeatsInPattern
+      }
+      this.counter = this.selectedPalo.beatLabels[index % this.$store.state.selectedPalo.nbBeatsInPattern]
+      if (this.selectedPalo.accents.includes((index % this.$store.state.selectedPalo.nbBeatsInPattern) / 2)) {
         this.className = 'accent'
       } else {
         this.className = ''

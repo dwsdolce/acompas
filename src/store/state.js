@@ -21,6 +21,10 @@ const state = {
     { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }
   ],
   selectedInstruments: [ 'clara', 'sorda' ],
+  preCounts: palosDefaultSettings[2].preCounts,
+  selectedPreCount: palosDefaultSettings[2].preCounts[0],
+  startBeats: palosDefaultSettings[2].startBeats,
+  selectedStartBeat: palosDefaultSettings[2].startBeats[0],
   tempo: palosDefaultSettings[2].defaultTempo,
   improvise: false,
   humanize: false,

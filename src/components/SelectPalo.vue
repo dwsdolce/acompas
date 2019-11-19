@@ -54,6 +54,8 @@ export default {
 </script>
 
 <style lang="stylus">
+#paloBtn .q-btn__content
+  text-transform: none
 .q-option-group > div
   padding 0.2rem 0
 </style>
