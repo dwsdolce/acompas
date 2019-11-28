@@ -129,33 +129,13 @@ const triggerPreCountClick = (store, time, note) => {
   }
 }
 
-const appendEventsToSequences = (store) => {
-  // seq is a Tone.Sequence, sound is an instrument track name
-  forEachValue(aCompas.sequences.quarterNotes, (seq, sound) => {
-    let initialSeqLength = seq.length
-    for (let i = 0; i < store.state.selectedPalo.nbBeatsInPattern; i++) {
-      seq.add(initialSeqLength + i, initialSeqLength + i)
-      // triggerAudioOnEvent(store, store.state.selectedPalo, false, sound,
-      //   [initialSeqLength + 1], time, initialSeqLength + i)
-    }
-  })
-  forEachValue(aCompas.sequences.eighthNotes, (seq, sound) => {
-    let initialSeqLength = seq.length
-    for (let i = 0; i < store.state.selectedPalo.nbBeatsInPattern; i++) {
-      seq.add(initialSeqLength + i, initialSeqLength + i)
-      // triggerAudioOnEvent(store, store.state.selectedPalo, true, sound,
-      //   [initialSeqLength + 1], time, initialSeqLength + i)
-    }
-  })
-}
-
-const triggerAudioOnEvent = (store, palo, eighthNotes, sound, time, note) => {
+const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note) => {
   // Prepend pre-count beats if required
   if (sound === 'preCount') {
     triggerPreCountClick(store, time, note)
   } else {
     // Don't play non-preCount sequences if note is during pre-count
-    if (note < store.state.selectedPreCount.value * 2) {
+    if (note < store.state.selectedPreCount.value * 2 && !isLoop) {
       return
     }
 
@@ -198,36 +178,48 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, time, note) => {
  * @param {Object} palo The palo to build sequence for
  * @param {Boolean} eighthNotes Is this a eighthNotes sequence ?
  * @param {String} sound The sound to build sequence with (slug)
- * @param {Array} sequence The compas sequence for Tone
+ * @param {Array} sequence Array describing the sequence
+ * @param {Boolean} isLoop Are we building a loopable sequence ?
  * @return {Object} Returns the Tone sequence object
  */
-const buildSequence = (store, palo, eighthNotes, sound, sequence) => {
+const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
 
-    // Append new compás events to the sequences as playing goes on
-    let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
-    if (index < 0) {
-      index += store.state.selectedPalo.nbBeatsInPattern
-    }
-    if (sound === 'preCount' && index % store.state.selectedPalo.nbBeatsInPattern === store.state.selectedStartBeat.value) {
-      appendEventsToSequences(store)
+    // Switch from introduction sequences to loop sequences if required
+    if (sound === 'event' && !isLoop && note === sequence[sequence.length - 1]) {
+      forEachValue(aCompas.sequences.quarterNotes.loop, seq => {
+        seq.start()
+      })
+      forEachValue(aCompas.sequences.eighthNotes.loop, seq => {
+        seq.start()
+      })
+      forEachValue(aCompas.sequences.quarterNotes.introduction, seq => {
+        seq.stop()
+      })
+      forEachValue(aCompas.sequences.quarterNotes.introduction, seq => {
+        seq.stop()
+      })
     }
 
     // Call animation on event time.
-    // The preCount track is used to trigger events which will trigger UI modifications
-    if (sound === 'preCount' && note % 2 === 0) {
+    // The event sequence is used to trigger events which will trigger UI modifications
+    if (sound === 'event' && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
         store.commit(types.TRIGGER_EVENT, note)
       }, time) // Use AudioContext time of the event
     }
 
-    triggerAudioOnEvent(store, palo, eighthNotes, sound, time, note)
+    if (sound !== 'event') {
+      triggerAudioOnEvent(store, palo, eighthNotes, sound, isLoop, time, note)
+    }
   }, sequence, '8n')
-  // Deactivate sequence looping
-  seq.loop = false
+  // Set/unset sequence looping
+  seq.loop = isLoop
+  // Set/unset sequence improvise
+  seq.improvise = store.state.improvise && sound !== 'preCount' && sound !== 'click'
   return seq
 }
 
@@ -241,20 +233,24 @@ const selectTempo = tempo => {
 
 const toggleEighthNotes = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences.quarterNotes, (seq, key) => {
-      if (key === 'preCount') {
-        seq.mute = false
-      } else {
-        seq.mute = !state.selectedInstruments.includes(key)
-      }
+    forEachValue(aCompas.sequences.quarterNotes, (sequences, key) => {
+      forEachValue(sequences, (seq, key2) => {
+        if (key2 === 'preCount' || key2 === 'event') {
+          seq.mute = false
+        } else {
+          seq.mute = !state.selectedInstruments.includes(key2)
+        }
+      })
     })
-    forEachValue(aCompas.sequences.eighthNotes, (seq, key) => {
-      let instrument = state.instruments.find(o => o.value === key)
-      if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
-        seq.mute = false
-      } else {
-        seq.mute = true
-      }
+    forEachValue(aCompas.sequences.eighthNotes, (sequences, key) => {
+      forEachValue(sequences, (seq, key2) => {
+        let instrument = state.instruments.find(o => o.value === key2)
+        if (state.selectedInstruments.includes(key2) && instrument.eighthNotes) {
+          seq.mute = false
+        } else {
+          seq.mute = true
+        }
+      })
     })
     return resolve()
   })
@@ -262,11 +258,15 @@ const toggleEighthNotes = state => {
 
 const toggleImprovise = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences.quarterNotes, seq => {
-      seq.improvise = state.improvise
+    forEachValue(aCompas.sequences.quarterNotes, sequences => {
+      forEachValue(sequences, seq => {
+        seq.improvise = state.improvise
+      })
     })
-    forEachValue(aCompas.sequences.eighthNotes, seq => {
-      seq.improvise = state.improvise
+    forEachValue(aCompas.sequences.eighthNotes, sequences => {
+      forEachValue(sequences, seq => {
+        seq.improvise = state.improvise
+      })
     })
     return resolve()
   })
@@ -274,19 +274,17 @@ const toggleImprovise = state => {
 
 const toggleHumanize = state => {
   return new Promise(resolve => {
-    forEachValue(aCompas.sequences.quarterNotes, (seq, sound) => {
-      if (sound === 'preCount' || sound === 'click') {
+    forEachValue(aCompas.sequences.quarterNotes.introduction, (seq, sound) => {
+      if (sound === 'event' || sound === 'preCount' || sound === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = state.humanize
       }
     })
     forEachValue(aCompas.sequences.eighthNotes, (seq, sound) => {
-      if (sound === 'preCount' || sound === 'click') {
-        seq.humanize = false
-      } else {
-        seq.humanize = state.humanize
-      }
+      forEachValue(seq, seq2 => {
+        seq2.humanize = state.humanize
+      })
     })
     return resolve()
   })
@@ -310,54 +308,96 @@ const changeVolume = (prevState, nextState) => {
 // ========================
 
 const startSequences = state => {
-  forEachValue(aCompas.sequences.quarterNotes, seq => {
-    seq.start()
-  })
-  forEachValue(aCompas.sequences.eighthNotes, seq => {
-    seq.start()
-  })
+  if (state.selectedPreCount.value !== 0 || state.selectedStartBeat.value !== 0) {
+    forEachValue(aCompas.sequences.quarterNotes.introduction, seq => {
+      seq.start()
+    })
+    forEachValue(aCompas.sequences.eighthNotes.introduction, seq => {
+      seq.start()
+    })
+  } else {
+    forEachValue(aCompas.sequences.quarterNotes.loop, seq => {
+      seq.start()
+    })
+    forEachValue(aCompas.sequences.eighthNotes.loop, seq => {
+      seq.start()
+    })
+  }
   Tone.Transport.start('+0.1')
 }
 
 const stopAllSequences = () => {
   Tone.Transport.stop()
-  forEachValue(aCompas.sequences, notes => {
-    forEachValue(notes, seq => {
-      if (seq.state === 'started') seq.stop()
+  forEachValue(aCompas.sequences, (sequences, key) => {
+    forEachValue(sequences, notes => {
+      forEachValue(notes, seq => {
+        if (seq.state === 'started') seq.stop()
+      })
     })
   })
 }
 
 const initSequences = store => {
-  let sequence = []
+  let introSeq = []
+  let loopSeq = []
   let palo = store.state.selectedPalo
-  // Add pre-count to sequence
+  // Add pre-count to introduction sequence
   for (let i = 0; i < parseInt(store.state.selectedPreCount.value); i++) {
-    sequence.push(i * 2)
-    sequence.push(i * 2 + 1)
+    introSeq.push(i * 2)
+    introSeq.push(i * 2 + 1)
   }
-  // Add pattern beats to sequence, starting from the selected start beat
-  for (let i = 0; i < palo.nbBeatsInPattern - store.state.selectedStartBeat.value; i++) {
-    sequence.push(store.state.selectedPreCount.value * 2 + i)
+  // Add from start beat to the beat before loop begins to introduction sequence
+  // Remark : the '+ 1' in the for loop condition is here to add a last extra
+  // event at the end of introSeq. On this event, loop sequences are started
+  // and introduction sequences are stopped.
+  for (let i = 0; i < palo.nbBeatsInPattern - store.state.selectedStartBeat.value + 1; i++) {
+    introSeq.push(store.state.selectedPreCount.value * 2 + i)
   }
+  // Add pattern beats to loopable sequence
+  for (let i = 0; i < palo.nbBeatsInPattern; i++) {
+    loopSeq.push(i)
+  }
+
   // Set aCompas.sequences
   aCompas.sequences = {
     quarterNotes: {
-      preCount: buildSequence(store, palo, false, 'preCount', sequence),
-      clara: buildSequence(store, palo, false, 'clara', sequence),
-      sorda: buildSequence(store, palo, false, 'sorda', sequence),
-      cajon: buildSequence(store, palo, false, 'cajon', sequence),
-      udu: buildSequence(store, palo, false, 'udu', sequence),
-      jaleo: buildSequence(store, palo, false, 'jaleo', sequence),
-      click: buildSequence(store, palo, false, 'click', sequence)
+      introduction: {
+        event: buildSequence(store, palo, false, 'event', introSeq, false),
+        preCount: buildSequence(store, palo, false, 'preCount', introSeq, false),
+        clara: buildSequence(store, palo, false, 'clara', introSeq, false),
+        sorda: buildSequence(store, palo, false, 'sorda', introSeq, false),
+        cajon: buildSequence(store, palo, false, 'cajon', introSeq, false),
+        udu: buildSequence(store, palo, false, 'udu', introSeq, false),
+        jaleo: buildSequence(store, palo, false, 'jaleo', introSeq, false),
+        click: buildSequence(store, palo, false, 'click', introSeq, false)
+      },
+      loop: {
+        event: buildSequence(store, palo, false, 'event', loopSeq, true),
+        clara: buildSequence(store, palo, false, 'clara', loopSeq, true),
+        sorda: buildSequence(store, palo, false, 'sorda', loopSeq, true),
+        cajon: buildSequence(store, palo, false, 'cajon', loopSeq, true),
+        udu: buildSequence(store, palo, false, 'udu', loopSeq, true),
+        jaleo: buildSequence(store, palo, false, 'jaleo', loopSeq, true),
+        click: buildSequence(store, palo, false, 'click', loopSeq, true)
+      }
     },
     eighthNotes: {
-      clara: buildSequence(store, palo, true, 'clara', sequence),
-      sorda: buildSequence(store, palo, true, 'sorda', sequence),
-      cajon: buildSequence(store, palo, true, 'cajon', sequence),
-      udu: buildSequence(store, palo, true, 'udu', sequence),
-      jaleo: buildSequence(store, palo, true, 'jaleo', sequence),
-      click: buildSequence(store, palo, true, 'click', sequence)
+      introduction: {
+        clara: buildSequence(store, palo, true, 'clara', introSeq, false),
+        sorda: buildSequence(store, palo, true, 'sorda', introSeq, false),
+        cajon: buildSequence(store, palo, true, 'cajon', introSeq, false),
+        udu: buildSequence(store, palo, true, 'udu', introSeq, false),
+        jaleo: buildSequence(store, palo, true, 'jaleo', introSeq, false),
+        click: buildSequence(store, palo, true, 'click', introSeq, false)
+      },
+      loop: {
+        clara: buildSequence(store, palo, true, 'clara', loopSeq, true),
+        sorda: buildSequence(store, palo, true, 'sorda', loopSeq, true),
+        cajon: buildSequence(store, palo, true, 'cajon', loopSeq, true),
+        udu: buildSequence(store, palo, true, 'udu', loopSeq, true),
+        jaleo: buildSequence(store, palo, true, 'jaleo', loopSeq, true),
+        click: buildSequence(store, palo, true, 'click', loopSeq, true)
+      }
     }
   }
 }

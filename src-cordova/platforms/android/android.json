@@ -10,7 +10,7 @@
           "/*": [
             {
               "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-              "count": 53
+              "count": 68
             }
           ]
         }

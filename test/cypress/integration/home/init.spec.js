@@ -117,7 +117,7 @@ describe('Home page', () => {
     cy.get('#appMain')
       .should('be.visible')
   })
-  it('can select a pre-count and then disable it', () => {
+  it('can open and close the pre-count dialog', () => {
     cy.get('#preCountBtn')
       .click()
     cy.get('#preCountDialog')
@@ -128,7 +128,7 @@ describe('Home page', () => {
     cy.get('#appMain')
       .should('be.visible')
   })
-  it('can select a custom start beat and then set it to the default value', () => {
+  it('can open and close the start beat dialog', () => {
     cy.get('#startBeatBtn')
       .click()
     cy.get('#startBeatDialog')
