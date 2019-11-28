@@ -44,8 +44,11 @@ div
           p: b Palo
           p Use this button to select the flamenco rhythm that you want.
         div
-          p: b Instruments mixer
-          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing quarter notes or eighth notes.
+          p: b Pre-count
+          p Optionaly define a number of beats to use as pre-count for the selected palo.
+        div
+          p: b Start beat
+          p Optionaly change the start beat for the selected palo.
         div
           p: b Improvise
           p If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
@@ -55,6 +58,9 @@ div
         div
           p: b Tempo
           p There are 3 ways to define the tempo: the knob circle, the number input underneath for a more precise setting, and you can decrement/increment the bpm with the + and - buttons.
+        div
+          p: b Instruments mixer
+          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing quarter notes or eighth notes.
         div
           p: b View mode
           p Choose between dots and counter visualisation.
