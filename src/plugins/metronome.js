@@ -60,6 +60,14 @@ const initSounds = async () => {
 // Metronome palos settings
 // ========================
 
+const noteIndexInPattern = (store, i) => {
+  let index = i - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
+  while (index < 0) {
+    index += store.state.selectedPalo.nbBeatsInPattern
+  }
+  return index % store.state.selectedPalo.nbBeatsInPattern
+}
+
 const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
   // For the "click" sounds, follow the sequence and never improvise
   if (sound === 'click') {
@@ -70,16 +78,12 @@ const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
   // Pick a probability that the sound occurence is following the pattern
   const improvisationProbability = Math.random()
   const improvisationThreshold = 0.30 // 30% chances that we don't follow the pattern
-  let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
-  if (index < 0) {
-    index += palo.nbBeatsInPattern
-  }
-  let noteIndexInPattern = index % palo.nbBeatsInPattern
+  let index = noteIndexInPattern(store, note)
   if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
-    if (noteIndexInPattern === key && eighthNotes && key % 2 !== 0) {
+    if (index === key && eighthNotes && key % 2 !== 0) {
       aCompas.sounds[sound][value - 1].start(time)
     }
-    if (noteIndexInPattern === key && !eighthNotes && key % 2 === 0) {
+    if (index === key && !eighthNotes && key % 2 === 0) {
       aCompas.sounds[sound][value - 1].start(time)
     }
   } else {
@@ -114,10 +118,7 @@ const improviseJaleo = (note, time, palo, eighthNotes) => {
 const triggerPreCountClick = (store, time, note) => {
   if (store.state.selectedPreCount.value > 0 && note < store.state.selectedPreCount.value * 2 && note % 2 === 0) {
     forEachValue(store.state.selectedPalo.beats, (value, key) => {
-      let index = key - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
-      if (index < 0) {
-        index += store.state.selectedPalo.nbBeatsInPattern
-      }
+      let index = noteIndexInPattern(store, key)
       if (note === index % store.state.selectedPalo.nbBeatsInPattern) {
         if (value === 'strong') {
           aCompas.sounds['click'][0].start(time)
@@ -147,24 +148,20 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
     // key is a pulsation number, value is the sound number
     forEachValue(palo[sound], (value, key) => {
       key = parseInt(key)
-      let index = note - store.state.selectedPreCount.value * 2 + store.state.selectedStartBeat.value
-      if (index < 0) {
-        index += palo.nbBeatsInPattern
-      }
-      let noteIndexInPattern = index % palo.nbBeatsInPattern
+      let index = noteIndexInPattern(store, note)
       if (eighthNotes && key % 2 !== 0) {
-        if (!store.state.improvise && noteIndexInPattern === key) {
+        if (!store.state.improvise && index === key) {
           aCompas.sounds[sound][value - 1].start(time)
         }
-        if (store.state.improvise && noteIndexInPattern === key) {
+        if (store.state.improvise && index === key) {
           improvise(store, palo, sound, time, value, note, key, eighthNotes)
         }
       }
       if (!eighthNotes && key % 2 === 0) {
-        if (!store.state.improvise && noteIndexInPattern === key) {
+        if (!store.state.improvise && index === key) {
           aCompas.sounds[sound][value - 1].start(time)
         }
-        if (store.state.improvise && noteIndexInPattern === key) {
+        if (store.state.improvise && index === key) {
           improvise(store, palo, sound, time, value, note, key, eighthNotes)
         }
       }
@@ -346,12 +343,11 @@ const initSequences = store => {
     introSeq.push(i * 2)
     introSeq.push(i * 2 + 1)
   }
-  // Add from start beat to the beat before loop begins to introduction sequence
-  // Remark : the '+ 1' in the for loop condition is here to add a last extra
-  // event at the end of introSeq. On this event, loop sequences are started
-  // and introduction sequences are stopped.
-  for (let i = 0; i < palo.nbBeatsInPattern - store.state.selectedStartBeat.value + 1; i++) {
-    introSeq.push(store.state.selectedPreCount.value * 2 + i)
+  // Add beats to introduction sequence until loop begins
+  let i = parseInt(store.state.selectedPreCount.value) * 2
+  while (i % palo.nbBeatsInPattern !== 1) {
+    introSeq.push(i)
+    i++
   }
   // Add pattern beats to loopable sequence
   for (let i = 0; i < palo.nbBeatsInPattern; i++) {
