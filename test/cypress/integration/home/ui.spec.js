@@ -1,5 +1,3 @@
-import * as ctx from  '../../../../quasar.conf.js'
-
 import palosDefaultSettings from '../../../../src/store/data/palosDefaultSettings'
 
 describe('Home page', () => {

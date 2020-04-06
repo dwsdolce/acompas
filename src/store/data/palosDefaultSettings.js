@@ -9,7 +9,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [ 0, 3, 7, 8, 10 ],
+    accents: [ 0, 3, 6, 8, 10 ],
     clara: {
       0: 1, // 12 >
       2: 3, // 1
@@ -18,9 +18,9 @@ export default [
       6: 1, // 3 >
       8: 3, // 4
       10: 3, // 5
-      12: 3, // 6
+      12: 1, // 6
       13: 2,
-      14: 1, // 7 >
+      14: 3, // 7 >
       15: 2,
       16: 1, // 8 >
       18: 3, // 9
@@ -41,10 +41,10 @@ export default [
       9: 3,
       10: 2, // 5
       11: 3,
-      12: 2, // 6
+      12: 1, // 6
       13: 3,
-      14: 1, // 7 >
-      15: 1,
+      14: 2, // 7 >
+      15: 3,
       16: 1, // 8 >
       17: 3,
       18: 2, // 9
@@ -67,9 +67,9 @@ export default [
       9: 2,
       10: 1, // 5
       11: 2,
-      12: 1, // 6
+      12: 3, // 6
       13: 2,
-      14: 3, // 7 >
+      14: 1, // 7 >
       15: 1,
       16: 3, // 8 >
       17: 2,
@@ -88,8 +88,8 @@ export default [
       6: 1, // 3 >
       8: 2, // 4
       10: 2, // 5
-      12: 2, // 6
-      14: 1, // 7
+      12: 1, // 6
+      14: 2, // 7
       15: 3,
       16: 1, // 8
       18: 2, // 9
@@ -124,9 +124,9 @@ export default [
       9: 'down',
       10: 'up',
       11: 'down',
-      12: 'up',
+      12: 'strong',
       13: 'down',
-      14: 'strong',
+      14: 'up',
       15: 'down',
       16: 'strong',
       17: 'down',
@@ -181,7 +181,12 @@ export default [
       { value: 22, label: '11' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is por buleria'
+    fastMessage: 'Your tempo is por buleria',
+    longLabel: 'Alegría',
+    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary". Alegría means "joy" in Spanish.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
+    cities: 'Cádiz',
+    videoExample: 'https://www.youtube.com/watch?v=M4x02TRlaqw'
   },
   {
     id: 2,
@@ -287,7 +292,12 @@ export default [
       { value: 10, label: '6' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: '6 beats Bulería',
+    doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary. It can be seen as the first half of a 12 beats bulería.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
+    cities: 'Jerez de la Frontera',
+    videoExample: null
   },
   {
     id: 3,
@@ -468,7 +478,12 @@ export default [
       { value: 22, label: '11' }
     ],
     slowMessage: 'Your rhythm is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: '12 beats Bulería',
+    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary".',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
+    cities: 'Jerez de la Frontera and others',
+    videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
   },
   {
     id: 4,
@@ -650,7 +665,12 @@ export default [
       { value: 22, label: '11' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: '12 beats Bulería (variation)',
+    doc: 'In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
+    cities: 'Jerez de la Frontera and others',
+    videoExample: null
   },
   {
     id: 5,
@@ -833,7 +853,12 @@ export default [
       { value: 22, label: '11' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Fandangos',
+    doc: 'This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Fandango',
+    cities: 'Huelva, Málaga, and others',
+    videoExample: 'https://www.youtube.com/watch?v=RS8sy3gdb_Y'
   },
   {
     id: 6,
@@ -951,7 +976,12 @@ export default [
       { value: 14, label: '4' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Rumba',
+    doc: 'Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Rumba_flamenca',
+    cities: 'Barcelona and others',
+    videoExample: 'https://www.youtube.com/watch?v=2oyhlad64-s'
   },
   {
     id: 7,
@@ -1136,7 +1166,12 @@ export default [
       { value: 22, label: '11' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Siguiriya',
+    doc: 'Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Siguiriyas',
+    cities: 'Sevilla, Cádiz and others',
+    videoExample: 'https://www.youtube.com/watch?v=3u66TxY1S88'
   },
   {
     id: 8,
@@ -1303,7 +1338,12 @@ export default [
       { value: 22, label: '12' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is solea por bulería or alegría'
+    fastMessage: 'Your tempo is solea por bulería or alegría',
+    longLabel: 'Soleá',
+    doc: 'Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Sole%C3%A1',
+    cities: 'Sevilla, Cádiz and others',
+    videoExample: 'https://www.youtube.com/watch?v=U9iw1gMVoO0'
   },
   {
     id: 9,
@@ -1425,7 +1465,12 @@ export default [
       { value: 14, label: '4' }
     ],
     slowMessage: 'Your tempo is por tientos',
-    fastMessage: 'Your tempo is por rumba'
+    fastMessage: 'Your tempo is por rumba',
+    longLabel: 'Tangos',
+    doc: 'Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Tango_(flamenco)',
+    cities: null,
+    videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'
   },
   {
     id: 10,
@@ -1526,6 +1571,11 @@ export default [
       { value: 10, label: '3' }
     ],
     slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast'
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Sevillanas',
+    doc: 'Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz. Remark : our example pattern is made of 2 bars.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
+    cities: 'Sevilla',
+    videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
   }
 ]

@@ -27,6 +27,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="about:*" />
     <allow-intent href="market:*" />
     <config-file parent="/*" target="AndroidManifest.xml">
         <uses-permission android:name="android.permission.INTERNET" />

@@ -45,7 +45,7 @@ import ToggleHumanize from './ToggleHumanize'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
-import { isSupported, getContext, initMetronome } from '../plugins/metronome'
+import { isSupported, getContext, initMetronome, metronomeData } from '../plugins/metronome'
 
 export default {
   components: {
@@ -84,6 +84,9 @@ export default {
     StartAudioContext(getContext, '#playBtn').then(async () => {
       this.audioContextState = await initMetronome(this.$store)
       if (this.audioContextState === 'running') this.startAudioContext()
+      // "export" metronomeData as a window object to make it available for testing
+      // See test/cypress/integration/home/metronomePlugin.spec.js
+      window.metronomeData = metronomeData
     })
   },
   methods: {
