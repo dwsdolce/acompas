@@ -232,12 +232,17 @@ const selectTempo = tempo => {
 
 const toggleEighthNotes = state => {
   return new Promise(resolve => {
+    // Do nothing if sequences have not been initialized
+    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
+      return resolve()
+    }
     forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, key) => {
       if (key === 'preCount' || key === 'event') {
         seq.mute = false
       } else {
         seq.mute = !state.selectedInstruments.includes(key)
       }
+      // console.log('seq.mute quarterNotes.introduction : ', seq.mute)
     })
     forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, key) => {
       if (key === 'preCount' || key === 'event') {
@@ -245,22 +250,29 @@ const toggleEighthNotes = state => {
       } else {
         seq.mute = !state.selectedInstruments.includes(key)
       }
+      // console.log('seq.mute quarterNotes.loop : ', seq.mute)
     })
     forEachValue(metronomeData.sequences.eighthNotes.introduction, (seq, key) => {
       let instrument = state.instruments.find(o => o.value === key)
-      if (state.selectedInstruments.includes(key) && instrument.eightNotes) {
+      // console.log('instrument : ', instrument)
+      // console.log('key : ', key)
+      if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
         seq.mute = false
       } else {
         seq.mute = true
       }
+      // console.log('seq.mute eighthNotes.introduction : ', seq.mute)
     })
     forEachValue(metronomeData.sequences.eighthNotes.loop, (seq, key) => {
       let instrument = state.instruments.find(o => o.value === key)
-      if (state.selectedInstruments.includes(key) && instrument.eightNotes) {
+      // console.log('instrument : ', instrument)
+      // console.log('key : ', key)
+      if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
         seq.mute = false
       } else {
         seq.mute = true
       }
+      // console.log('seq.mute eighthNotes.loop : ', seq.mute)
     })
     return resolve()
   })
@@ -318,7 +330,7 @@ const changeVolume = (prevState, nextState) => {
 // ========================
 
 const startSequences = state => {
-  if (metronomeData.sequences.quarterNotes.introduction.length !== 0) {
+  if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
     // console.log('starting introduction')
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
       seq.start()
@@ -367,7 +379,7 @@ const initSequences = (store, nextState) => {
   // TODO FIXME
   // console.log('preCount: ', nextState.selectedPreCount.value)
   if (parseInt(nextState.selectedPreCount.value) !== 0 || parseInt(nextState.selectedStartBeat.value) !== 0) {
-    let i = noteIndexInPattern(store, parseInt(nextState.selectedStartBeat.value))
+    let i = noteIndexInPattern(store, parseInt(nextState.selectedStartBeat.value) - parseInt(nextState.selectedPreCount.value) * 2 + palo.nbBeatsInPattern)
     // console.log('nbBeatsInPattern: ', palo.nbBeatsInPattern)
     while (i % palo.nbBeatsInPattern !== 1) {
       // console.log('pushing', i)
