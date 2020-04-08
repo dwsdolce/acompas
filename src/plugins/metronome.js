@@ -280,14 +280,20 @@ const toggleEighthNotes = state => {
 
 const toggleImprovise = state => {
   return new Promise(resolve => {
+    // Do nothing if sequences have not been initialized
+    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
+      return resolve()
+    }
     forEachValue(metronomeData.sequences.quarterNotes, sequences => {
       forEachValue(sequences, seq => {
         seq.improvise = state.improvise
+        // console.log('seq.improvise : ', state.improvise)
       })
     })
     forEachValue(metronomeData.sequences.eighthNotes, sequences => {
       forEachValue(sequences, seq => {
         seq.improvise = state.improvise
+        // console.log('seq.improvise : ', state.improvise)
       })
     })
     return resolve()
@@ -296,16 +302,30 @@ const toggleImprovise = state => {
 
 const toggleHumanize = state => {
   return new Promise(resolve => {
+    // Do nothing if sequences have not been initialized
+    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
+      return resolve()
+    }
     forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, sound) => {
       if (sound === 'event' || sound === 'preCount' || sound === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = state.humanize
       }
+      // console.log('quarterNotes.introduction humanize : ', seq.humanize)
+    })
+    forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, sound) => {
+      if (sound === 'event' || sound === 'preCount' || sound === 'click') {
+        seq.humanize = false
+      } else {
+        seq.humanize = state.humanize
+      }
+      // console.log('quarterNotes.loop humanize : ', seq.humanize)
     })
     forEachValue(metronomeData.sequences.eighthNotes, (seq, sound) => {
       forEachValue(seq, seq2 => {
         seq2.humanize = state.humanize
+        // console.log('eighthNotes humanize : ', state.humanize)
       })
     })
     return resolve()
@@ -464,6 +484,8 @@ const metronome = store => {
       case types.PLAY:
         initSequences(store, nextState)
         toggleEighthNotes(nextState)
+        toggleImprovise(nextState)
+        toggleHumanize(nextState)
         startSequences(nextState)
         break
 
