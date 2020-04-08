@@ -967,7 +967,11 @@ export default [
       { value: 1, label: '1' },
       { value: 2, label: '2 (half a compás)' },
       { value: 3, label: '3' },
-      { value: 4, label: '4 (one compás)' }
+      { value: 4, label: '4 (one compás)' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (one compás and a half)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8 (two compás)' }
     ],
     startBeats: [
       { value: 0, label: '1 (default)' },
@@ -1456,7 +1460,11 @@ export default [
       { value: 1, label: '1' },
       { value: 2, label: '2 (half a compás)' },
       { value: 3, label: '3' },
-      { value: 4, label: '4 (one compás)' }
+      { value: 4, label: '4 (one compás)' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (one compás and a half)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8 (two compás)' }
     ],
     startBeats: [
       { value: 0, label: '1 (default)' },
@@ -1563,7 +1571,10 @@ export default [
       { value: 0, label: 'Off' },
       { value: 1, label: '1' },
       { value: 2, label: '2' },
-      { value: 3, label: '3 (one compás)' }
+      { value: 3, label: '3 (one compás)' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (two compás)' }
     ],
     startBeats: [
       { value: 0, label: '1 (default)' },
