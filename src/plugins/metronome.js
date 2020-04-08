@@ -376,10 +376,9 @@ const initSequences = (store, nextState) => {
     introSeq.push(i * 2 + 1)
   }
   // Add beats to introduction sequence until loop begins
-  // TODO FIXME
   // console.log('preCount: ', nextState.selectedPreCount.value)
   if (parseInt(nextState.selectedPreCount.value) !== 0 || parseInt(nextState.selectedStartBeat.value) !== 0) {
-    let i = noteIndexInPattern(store, parseInt(nextState.selectedStartBeat.value) - parseInt(nextState.selectedPreCount.value) * 2 + palo.nbBeatsInPattern)
+    let i = introSeq.length
     // console.log('nbBeatsInPattern: ', palo.nbBeatsInPattern)
     while (i % palo.nbBeatsInPattern !== 1) {
       // console.log('pushing', i)
@@ -391,7 +390,8 @@ const initSequences = (store, nextState) => {
   for (let i = 0; i < palo.nbBeatsInPattern; i++) {
     loopSeq.push(i)
   }
-  // console.log(introSeq, loopSeq)
+  // console.log('introSeq : ', introSeq)
+  // console.log('loopSeq : ', loopSeq)
 
   // Build all sequences
   let sequences = {
