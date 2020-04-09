@@ -185,30 +185,29 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
+    // console.log('note: ', note)
 
     // Switch from introduction sequences to loop sequences if required
     if (sound === 'event' && !isLoop && note === sequence[sequence.length - 1]) {
+      // console.log('Switching from introduction to loop')
+      stopAllSequences()
       forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
         seq.start()
       })
       forEachValue(metronomeData.sequences.eighthNotes.loop, seq => {
         seq.start()
       })
-      forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
-        seq.stop()
-      })
-      forEachValue(metronomeData.sequences.eighthNotes.introduction, seq => {
-        seq.stop()
-      })
+      Tone.Transport.start()
     }
 
     // Call animation on event time.
     // The event sequence is used to trigger events which will trigger UI modifications
-    if (sound === 'event' && note % 2 === 0) {
+    if (sound === 'event' && !eighthNotes && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
         store.commit(types.TRIGGER_EVENT, note)
       }, time) // Use AudioContext time of the event
+      // console.log('TRIGGER_EVENT note index : ', note)
     }
 
     if (sound !== 'event') {
