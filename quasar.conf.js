@@ -66,8 +66,17 @@ module.exports = function (ctx) {
       ],
 
       //iconSet: 'ionicons-v4'
-      iconSet: 'material-icons'
+      iconSet: 'material-icons',
+
+      // Enable body classes from the Screen plugin https://quasar.dev/options/screen-plugin
+      config: {
+        screen: {
+          bodyClasses: true
+        }
+      }
+
       // lang: 'de' // Quasar language
+
     },
 
     supportIE: false,

@@ -118,3 +118,11 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+body.screen--xs
+ .caption
+    margin-bottom: 4px
+  .q-mb-md
+    margin-bottom: 6px
+</style>
