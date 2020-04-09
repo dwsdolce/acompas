@@ -3,8 +3,10 @@ div
   p.caption.q-mb-sm Improvise
   q-toggle(
     :value="improvise",
-    @input="toggleImprovise"
-  ).primary
+    @input="toggleImprovise",
+    color="primary",
+    keep-color
+  )
 </template>
 
 <script>

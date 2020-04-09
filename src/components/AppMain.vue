@@ -120,9 +120,15 @@ export default {
 </script>
 
 <style lang="stylus">
+.caption
+  color: $primary
+  text-transform: uppercase
+  font-weight: bold
+  font-size: 14px
 body.screen--xs
  .caption
     margin-bottom: 4px
+    font-size: 13px
   .q-mb-md
     margin-bottom: 6px
 </style>

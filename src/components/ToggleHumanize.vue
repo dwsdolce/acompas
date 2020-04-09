@@ -3,8 +3,10 @@ div
   p.caption.q-mb-sm Humanize
   q-toggle(
     :value="humanize",
-    @input="toggleHumanize"
-  ).primary
+    @input="toggleHumanize",
+    color="primary",
+    keep-color
+  )
 </template>
 
 <script>

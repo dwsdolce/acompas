@@ -21,4 +21,7 @@ export default {
 <style lang="stylus" scoped>
 .q-page
   align-items: center
+  #appMain
+    .screen--xs &
+      padding: 2px;
 </style>
