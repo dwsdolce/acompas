@@ -1,7 +1,7 @@
 {
   "@quasar/icon-genie": {
     "minify_dev": "pngquant",
-    "minify_build": "zopfli",
+    "minify_build": "optipng",
     "cordova": {
       "background_color": "#212121",
       "splashscreen_type": "generate"
