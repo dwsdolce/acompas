@@ -119,7 +119,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .caption
   color: $primary
   text-transform: uppercase
