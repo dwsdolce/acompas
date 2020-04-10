@@ -9,7 +9,7 @@ div
   q-dialog#preCountDialog(v-model="preCountDialog")
     q-card(style="width: 100%;")
       q-card-section
-        .text-h6.text-center Number of beats for the pre-count
+        .text-h6.text-center Number of pre-count beats
       q-card-section
         q-option-group(
           type="radio",
