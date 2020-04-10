@@ -76,7 +76,7 @@ div
       q-card-section
         div
           div
-            p.q-mb-sm: b Allow this app to send us some usage data ?
+            p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
             q-toggle#toggleTrackVisits(
               :value="trackVisits",
               @input="toggleTrackVisits"
