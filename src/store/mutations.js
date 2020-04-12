@@ -1,9 +1,6 @@
 import * as types from './mutation-types'
 
 const mutations = {
-  [types.START_AUDIO_CONTEXT] (state) {
-    state.isUnlocked = true
-  },
 
   [types.TOGGLE_SIDE_MENU] (state) {
     state.shownSideMenu = !state.shownSideMenu

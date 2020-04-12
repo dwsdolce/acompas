@@ -466,7 +466,6 @@ export const initMetronome = (store) => {
   initSounds()
   restoreLocalStorage(store)
   Loading.hide()
-  return getContext.state
 }
 
 // ================================

@@ -33,7 +33,6 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
-import StartAudioContext from 'startaudiocontext'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
 import SelectPalo from './SelectPalo'
@@ -45,7 +44,7 @@ import ToggleHumanize from './ToggleHumanize'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
-import { isSupported, getContext, initMetronome, metronomeData } from '../plugins/metronome'
+import { isSupported, initMetronome } from '../plugins/metronome'
 
 export default {
   components: {
@@ -60,11 +59,6 @@ export default {
     DrawDots,
     DrawCounter,
     SelectVisualization
-  },
-  data () {
-    return {
-      audioContextState: null
-    }
   },
   computed: {
     ...mapState({
@@ -81,17 +75,10 @@ export default {
         this.playStop()
       }
     })
-    StartAudioContext(getContext, '#playBtn').then(async () => {
-      this.audioContextState = await initMetronome(this.$store)
-      if (this.audioContextState === 'running') this.startAudioContext()
-      // "export" metronomeData as a window object to make it available for testing
-      // See test/cypress/integration/home/metronomePlugin.spec.js
-      window.metronomeData = metronomeData
-    })
+    initMetronome(this.$store)
   },
   methods: {
     ...mapActions([
-      'startAudioContext',
       'playStop'
     ]),
     ...mapMutations({

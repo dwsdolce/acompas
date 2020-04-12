@@ -2,10 +2,6 @@ import { Notify } from 'quasar'
 import * as types from './mutation-types'
 import { forEachValue } from '../assets/utils'
 
-export const startAudioContext = ({ commit }) => {
-  commit(types.START_AUDIO_CONTEXT)
-}
-
 export const toggleSideMenu = ({ commit }) => {
   commit(types.TOGGLE_SIDE_MENU)
 }

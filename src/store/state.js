@@ -1,7 +1,6 @@
 import palosDefaultSettings from './data/palosDefaultSettings'
 
 const state = {
-  isUnlocked: false,
   shownSideMenu: true,
   visualizationModes: [
     { label: 'Dots', value: 'dots' },
