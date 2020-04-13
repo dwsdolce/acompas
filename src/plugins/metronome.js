@@ -372,7 +372,8 @@ const stopAllSequences = () => {
   forEachValue(metronomeData.sequences, (sequences, key) => {
     forEachValue(sequences, notes => {
       forEachValue(notes, seq => {
-        if (seq.state === 'started') seq.stop()
+        if (seq !== null && seq.state === 'started') seq.stop()
+        if (seq !== null) seq.dispose()
       })
     })
   })
@@ -495,7 +496,7 @@ const metronome = store => {
         break
 
       case types.SELECT_PALO:
-        if (!nextState.isPlaying) stopAllSequences()
+        if (nextState.isPlaying) stopAllSequences()
         break
 
       case types.CHANGE_VOLUME:
