@@ -480,7 +480,7 @@ export default [
     slowMessage: 'Your rhythm is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '12 beats Bulería',
-    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary".',
+    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     cities: 'Jerez de la Frontera and others',
     videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
