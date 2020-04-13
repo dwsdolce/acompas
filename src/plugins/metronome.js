@@ -482,6 +482,7 @@ const metronome = store => {
         toggleEighthNotes(nextState)
         toggleImprovise(nextState)
         toggleHumanize(nextState)
+        selectTempo(nextState.tempo)
         startSequences(nextState)
         break
 
