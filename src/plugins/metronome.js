@@ -189,15 +189,13 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
 
     // Switch from introduction sequences to loop sequences if required
     if (sound === 'event' && !isLoop && note === sequence[sequence.length - 1]) {
-      // console.log('Switching from introduction to loop')
-      stopAllSequences()
+      // console.log('Starting loop')
       forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
         seq.start()
       })
       forEachValue(metronomeData.sequences.eighthNotes.loop, seq => {
         seq.start()
       })
-      Tone.Transport.start()
     }
 
     // Call animation on event time.
