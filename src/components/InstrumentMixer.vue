@@ -14,6 +14,7 @@ tr
       :value="instrument.eighthNotes",
       @input="handleToggleEighthNotes($event)",
       v-if="instrument.value !== 'jaleo' && instrument.value !== 'click'",
+      :disable="!isChecked"
       color="primary",
       keep-color
     ).primary
