@@ -31,14 +31,14 @@ const initSounds = async () => {
   return new Promise(resolve => {
     if (new Audio().canPlayType('audio/flac')) {
       metronomeData.audioFormat = 'flac'
-    } else if (new Audio().canPlayType('audio/ogg')) {
-      metronomeData.audioFormat = 'ogg'
     } else if (new Audio().canPlayType('audio/mpeg')) {
       metronomeData.audioFormat = 'mp3'
     } else if (new Audio().canPlayType('audio/mp4')) {
       metronomeData.audioFormat = 'mp4'
     } else if (new Audio().canPlayType('audio/wav')) {
       metronomeData.audioFormat = 'wav'
+    } else if (new Audio().canPlayType('audio/ogg')) {
+      metronomeData.audioFormat = 'ogg'
     } else {
       throw new Error('None of the available audio formats can be played')
     }
