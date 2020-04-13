@@ -17,6 +17,16 @@ div
       q-item-section(avatar)
         q-icon(name="android")
       q-item-section Get the Android app
+    q-expansion-item(icon="public", label="Follow")
+      q-list(no-border, link, inset-separator)
+        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/acompas.org/')")
+          q-item-section(avatar)
+            q-icon(name="ion-logo-facebook")
+          q-item-section Facebook
+        q-item(clickable, v-ripple, @click="launch('https://twitter.com/acompas_org')")
+          q-item-section(avatar)
+            q-icon(name="ion-logo-twitter")
+          q-item-section Twitter
     q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
