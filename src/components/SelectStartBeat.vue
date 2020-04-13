@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm Start beat
+  p.caption Start beat
   q-btn#startBeatBtn(
     outline,
     color="white",
@@ -57,12 +57,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-#startBeatBtn .q-btn__content
-  text-transform: none
-.q-option-group > div
-  padding 0
-  .q-radio__inner
-    padding: 0px
-</style>

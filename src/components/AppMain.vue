@@ -9,21 +9,22 @@
         .col-6
           .column
             select-palo.q-mb-md
-            select-pre-count.q-mb-md
             select-start-beat.q-mb-md
+            select-instruments.q-mb-md
             toggle-improvise.q-mb-md
             toggle-humanize.q-mb-md
         .col-6
           .column
             select-tempo.q-mb-md
-            select-instruments.q-mb-md
-            .row.text-center.q-mt-md
-              .col
+            .row
+              .col.col-md-12
                 .item-center
-                  select-visualization.col
-              .col(v-if="visualizationSize.width <= breakpoint.sm")
+                  select-visualization.q-mb-md
+              .col.col-md-12
                 .item-center
-                  play
+                  select-pre-count.q-mb-md
+            .item-center
+              play(v-if="visualizationSize.width <= breakpoint.sm")
       .row.text-center.no-wrap
         .col-12(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
           .item-center
@@ -105,17 +106,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-.caption
-  color: $primary
-  text-transform: uppercase
-  font-weight: bold
-  font-size: 14px
-body.screen--xs
- .caption
-    margin-bottom: 4px
-    font-size: 13px
-  .q-mb-md
-    margin-bottom: 6px
-</style>

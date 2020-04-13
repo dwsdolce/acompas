@@ -1,0 +1,60 @@
+<template lang="pug">
+span.q-ml-sm
+  q-btn#paloHelpBtn(
+    dense,
+    round,
+    flat,
+    size="14px",
+    icon="help",
+    @click="paloHelpDialog = true"
+  )
+  q-dialog#paloHelpDialog(v-model="paloHelpDialog")
+    q-card(style="width: 100%;")
+      q-card-section
+        .text-h6.text-center {{ selectedPaloLongLabel }}
+        p {{ selectedPaloDoc }}
+        p {{ selectedPaloCities }}
+        p Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPaloWikipediaUrl)")]
+        p Example video : #[q-btn(round, icon="link", @click="launch(selectedPaloVideoExample)")]
+      q-card-section(align="center")
+        q-btn#closePaloHelpDialogBtn(
+          color="primary",
+          v-close-popup
+        ) Close
+</template>
+
+<script>
+import { openURL, Platform } from 'quasar'
+import { mapState } from 'vuex'
+
+export default {
+  props: [ 'palo' ],
+  data () {
+    return {
+      value: this.palo,
+      paloHelpDialog: false
+    }
+  },
+  computed: {
+    ...mapState({
+      palos: state => state.palos,
+      selectedPalo (state) { return state.palos.find(palo => palo.value === this.value) },
+      selectedPaloLabel (state) { return this.selectedPalo.label },
+      selectedPaloLongLabel (state) { return this.selectedPalo.longLabel },
+      selectedPaloDoc (state) { return this.selectedPalo.doc },
+      selectedPaloCities (state) { return this.selectedPalo.cities ? 'Cities : ' + this.selectedPalo.cities : '' },
+      selectedPaloWikipediaUrl (state) { return this.selectedPalo.wikipediaUrl },
+      selectedPaloVideoExample (state) { return this.selectedPalo.videoExample }
+    })
+  },
+  methods: {
+    launch (url) {
+      if (Platform.is.cordova) {
+        cordova.InAppBrowser.open(url, '_system')
+        return
+      }
+      openURL(url)
+    }
+  }
+}
+</script>

@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm Pre-count
+  p.caption Pre-count
   q-btn#preCountBtn(
     outline,
     color="white",
@@ -57,10 +57,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-#preCountBtn .q-btn__content
-  text-transform: none
-.q-option-group > div
-  padding 0
-</style>

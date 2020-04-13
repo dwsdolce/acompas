@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm Humanize
+  p.caption Humanize
   q-toggle(
     :value="humanize",
     @input="toggleHumanize",

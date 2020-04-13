@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm Instruments
+  p.caption Instruments
   q-btn#mixerBtn(
     outline,
     @click="instrumentsDialog = true"
@@ -59,8 +59,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-#mixerBtn .q-btn__content
-  text-transform: none
-</style>

@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption.q-mb-sm Improvise
+  p.caption Improvise
   q-toggle(
     :value="improvise",
     @input="toggleImprovise",

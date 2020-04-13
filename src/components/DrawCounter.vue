@@ -41,5 +41,5 @@ export default {
 
 <style lang="stylus" scoped>
 .accent
-  color firebrick
+  color: firebrick
 </style>

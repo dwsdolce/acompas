@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .column.items-center
-    p.caption.q-mb-sm Tempo
+    p.caption Tempo
     q-knob(
       color="primary",
       track-color="grey-1",
@@ -13,7 +13,7 @@ div
       :thickness="0.1",
       @input="selectTempo"
     ).text-weight-light.q-mb-md
-    .row.full-width.items-center
+    .row.items-center
       .col-xs-3
         q-btn(
           outline,
@@ -21,7 +21,7 @@ div
           color="white",
           :size="screen.lt.md ? 'sm' : 'md'",
           @click="decrement"
-        )
+        ).q-mr-md
           q-icon(name="remove")
       .col-xs-6
         q-input(
@@ -39,7 +39,7 @@ div
           color="white",
           :size="screen.lt.md ? 'sm' : 'md'",
           @click="increment"
-        )
+        ).q-ml-md
           q-icon(name="add")
 </template>
 
@@ -70,12 +70,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-/* @import '~variables'
-@media (min-width $breakpoint-md-min)
-  .increment
-    order 1000
-  .decrement
-    order -1000 */
-</style>

@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    p.caption.auto Eighth-notes
+    p.caption Eighth-notes
     q-toggle(
       icon="audiotrack",
       :value="eighthNotes",
