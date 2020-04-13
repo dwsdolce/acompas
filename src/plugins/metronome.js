@@ -98,15 +98,15 @@ const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
   }
 }
 
-const improviseJaleo = (note, time, palo, eighthNotes) => {
+const improviseJaleo = (store, note, time, palo, eighthNotes) => {
   if (!eighthNotes && (note % 2 !== 0)) {
     return
   }
   let playThreshold = 0.95 // 95% chances that the the sound is not played
   // Check if time is a strong beat
-  if (palo.accents.includes(note)) {
+  if (palo.accents.includes(noteIndexInPattern(store, note))) {
     // if the event is a strong beat, sound occurence will be more probable
-    playThreshold = 0.7 // 70% chances that the sound is not played
+    playThreshold = 0.80 // 80% chances that the sound is not played
   }
   const playProbability = Math.random()
   if (playProbability > playThreshold) {
@@ -143,7 +143,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
     }
 
     if (sound === 'jaleo') {
-      improviseJaleo(note, time, palo, eighthNotes)
+      improviseJaleo(store, note, time, palo, eighthNotes)
       return
     }
 
@@ -364,7 +364,7 @@ const startSequences = state => {
       seq.start()
     })
   }
-  Tone.Transport.start('+0.1')
+  Tone.Transport.start('+0.07')
 }
 
 const stopAllSequences = () => {
@@ -383,8 +383,8 @@ const initSequences = (store, nextState) => {
   let introSeq = []
   let loopSeq = []
   let palo = nextState.selectedPalo
-  metronomeData.preCount = nextState.selectedPreCount.value
-  metronomeData.startBeat = nextState.selectedStartBeat.value
+  metronomeData.preCount = parseInt(nextState.selectedPreCount.value)
+  metronomeData.startBeat = parseInt(nextState.selectedStartBeat.value)
   // console.log(palo.label)
   // Add pre-count to introduction sequence
   for (let i = 0; i < parseInt(nextState.selectedPreCount.value); i++) {
@@ -394,7 +394,7 @@ const initSequences = (store, nextState) => {
   }
   // Add beats to introduction sequence until loop begins
   // console.log('preCount: ', nextState.selectedPreCount.value)
-  if (parseInt(nextState.selectedPreCount.value) !== 0 || parseInt(nextState.selectedStartBeat.value) !== 0) {
+  if (metronomeData.preCount !== 0 || metronomeData.startBeat !== 0) {
     let i = introSeq.length
     // console.log('nbBeatsInPattern: ', palo.nbBeatsInPattern)
     while (i % palo.nbBeatsInPattern !== 1) {

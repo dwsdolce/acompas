@@ -12,8 +12,10 @@ tr
     q-toggle(
       icon="audiotrack",
       :value="instrument.eighthNotes",
-      :disable="!isChecked || isClick"
-      @input="handleToggleEighthNotes($event)"
+      @input="handleToggleEighthNotes($event)",
+      v-if="instrument.value !== 'jaleo' && instrument.value !== 'click'",
+      color="primary",
+      keep-color
     ).primary
   td(style="width: 100%;")
     q-slider(
@@ -23,7 +25,7 @@ tr
       :step="1",
       label,
       snap,
-      :disable="!isChecked"
+      :disable="!isChecked",
       @change="handleChangeVolume($event)"
     )
 </template>
