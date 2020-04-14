@@ -267,12 +267,12 @@ export default [
       11: 'down'
     },
     beatLabels: {
-      0: 1,
-      2: 2,
-      4: 3,
-      6: 4,
-      8: 5,
-      10: 6
+      0: 6,
+      2: 1,
+      4: 2,
+      6: 3,
+      8: 4,
+      10: 5
     },
     preCounts: [
       { value: 0, label: 'Off' },
@@ -284,12 +284,12 @@ export default [
       { value: 6, label: '6 (one compás)' }
     ],
     startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 2, label: '2' },
-      { value: 4, label: '3' },
-      { value: 6, label: '4 (half a compás)' },
-      { value: 8, label: '5' },
-      { value: 10, label: '6' }
+      { value: 0, label: '6 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3 (half a compás)' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
