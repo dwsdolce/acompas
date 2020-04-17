@@ -58,81 +58,81 @@ export default {
   jaleo: [
     {
       src: 'jaleo/jaleo_1',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_2',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_3',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_4',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_5',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_6',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_7',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_8',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_9',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_10',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_11',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_12',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_13',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_14',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_15',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_16',
-      volume: -2
+      volume: -4
     },
     {
       src: 'jaleo/jaleo_17',
-      volume: -2
+      volume: -4
     }
   ],
   click: [
     {
       src: 'click/click_1',
-      volume: -8
+      volume: -9
     },
     {
       src: 'click/click_2',
-      volume: -8
+      volume: -9
     }
   ]
 }
