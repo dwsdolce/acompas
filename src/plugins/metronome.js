@@ -151,7 +151,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
     forEachValue(palo[sound], (value, key) => {
       key = parseInt(key)
       let index = noteIndexInPattern(store, note)
-      if (eighthNotes && key % 2 !== 0) {
+      if (eighthNotes && (key % 2 !== 0)) {
         if (!store.state.improvise && index === key) {
           metronomeData.sounds[sound][value - 1].start(time)
         }
@@ -159,7 +159,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
           improvise(store, palo, sound, time, value, note, key, eighthNotes)
         }
       }
-      if (!eighthNotes && key % 2 === 0) {
+      if (!eighthNotes && (key % 2 === 0)) {
         if (!store.state.improvise && index === key) {
           metronomeData.sounds[sound][value - 1].start(time)
         }
@@ -214,8 +214,6 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
   }, sequence, '8n')
   // Set/unset sequence looping
   seq.loop = isLoop
-  // Set/unset sequence improvise
-  seq.improvise = store.state.improvise && sound !== 'preCount' && sound !== 'click'
   return seq
 }
 
@@ -270,28 +268,6 @@ const toggleEighthNotes = state => {
         seq.mute = true
       }
       // console.log('seq.mute eighthNotes.loop : ', seq.mute)
-    })
-    return resolve()
-  })
-}
-
-const toggleImprovise = state => {
-  return new Promise(resolve => {
-    // Do nothing if sequences have not been initialized
-    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
-      return resolve()
-    }
-    forEachValue(metronomeData.sequences.quarterNotes, sequences => {
-      forEachValue(sequences, seq => {
-        seq.improvise = state.improvise
-        // console.log('seq.improvise : ', state.improvise)
-      })
-    })
-    forEachValue(metronomeData.sequences.eighthNotes, sequences => {
-      forEachValue(sequences, seq => {
-        seq.improvise = state.improvise
-        // console.log('seq.improvise : ', state.improvise)
-      })
     })
     return resolve()
   })
@@ -364,7 +340,7 @@ const startSequences = state => {
       seq.start()
     })
   }
-  Tone.Transport.start('+0.07')
+  Tone.Transport.start('+0.1')
 }
 
 const stopAllSequences = () => {
@@ -481,7 +457,6 @@ const metronome = store => {
       case types.PLAY:
         initSequences(store, nextState)
         toggleEighthNotes(nextState)
-        toggleImprovise(nextState)
         toggleHumanize(nextState)
         selectTempo(nextState.tempo)
         startSequences(nextState)
@@ -508,12 +483,6 @@ const metronome = store => {
       case types.ENABLE_EIGHTHNOTES:
       case types.DISABLE_EIGHTHNOTES:
         toggleEighthNotes(nextState)
-        break
-
-      case types.TOGGLE_IMPROVISE:
-      case types.ENABLE_IMPROVISE:
-      case types.DISABLE_IMPROVISE:
-        toggleImprovise(nextState)
         break
 
       case types.TOGGLE_HUMANIZE:
