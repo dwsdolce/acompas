@@ -372,10 +372,15 @@ export const getContext = Tone.context
 export const isSupported = Tone.supported
 
 export const initMetronome = (store) => {
-  Loading.show({ delay: 100 })
+  Loading.show({
+    delay: 100,
+    message: 'Loading audio samples'
+  })
   initSounds()
   restoreLocalStorage(store)
-  Loading.hide()
+  Tone.Buffer.on('load', () => {
+    Loading.hide()
+  })
 }
 
 // ================================
