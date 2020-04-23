@@ -147,11 +147,12 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
       return
     }
 
+    let instrument = store.state.instruments.find(o => o.value === sound)
     // key is a pulsation number, value is the sound number
     forEachValue(palo[sound], (value, key) => {
       key = parseInt(key)
       let index = noteIndexInPattern(store, note)
-      if (eighthNotes && (key % 2 !== 0)) {
+      if (eighthNotes && instrument.eighthNotes && (key % 2 !== 0)) {
         if (!store.state.improvise && index === key) {
           metronomeData.sounds[sound][value - 1].start(time)
         }
@@ -185,30 +186,17 @@ const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
-    // console.log('note: ', note)
-
-    // Switch from introduction sequences to loop sequences if required
-    if (sound === 'event' && !isLoop && note === sequence[sequence.length - 1]) {
-      // console.log('Starting loop')
-      forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
-        seq.start()
-      })
-      forEachValue(metronomeData.sequences.eighthNotes.loop, seq => {
-        seq.start()
-      })
-    }
 
     // Call animation on event time.
-    // The event sequence is used to trigger events which will trigger UI modifications
+    // The 'event' sequence is used to trigger events which will trigger UI modifications
     if (sound === 'event' && !eighthNotes && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
         store.commit(types.TRIGGER_EVENT, note)
       }, time) // Use AudioContext time of the event
-      // console.log('TRIGGER_EVENT note index : ', note)
     }
 
-    if (sound !== 'event') {
+    if (sound !== 'event' && (sound === 'preCount' || store.state.selectedInstruments.includes(sound))) {
       triggerAudioOnEvent(store, palo, eighthNotes, sound, isLoop, time, note)
     }
   }, sequence, '8n')
@@ -225,54 +213,6 @@ const selectTempo = tempo => {
   Tone.Transport.bpm.value = tempo
 }
 
-const toggleEighthNotes = state => {
-  return new Promise(resolve => {
-    // Do nothing if sequences have not been initialized
-    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
-      return resolve()
-    }
-    forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, key) => {
-      if (key === 'preCount' || key === 'event') {
-        seq.mute = false
-      } else {
-        seq.mute = !state.selectedInstruments.includes(key)
-      }
-      // console.log('seq.mute quarterNotes.introduction : ', seq.mute)
-    })
-    forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, key) => {
-      if (key === 'preCount' || key === 'event') {
-        seq.mute = false
-      } else {
-        seq.mute = !state.selectedInstruments.includes(key)
-      }
-      // console.log('seq.mute quarterNotes.loop : ', seq.mute)
-    })
-    forEachValue(metronomeData.sequences.eighthNotes.introduction, (seq, key) => {
-      let instrument = state.instruments.find(o => o.value === key)
-      // console.log('instrument : ', instrument)
-      // console.log('key : ', key)
-      if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
-        seq.mute = false
-      } else {
-        seq.mute = true
-      }
-      // console.log('seq.mute eighthNotes.introduction : ', seq.mute)
-    })
-    forEachValue(metronomeData.sequences.eighthNotes.loop, (seq, key) => {
-      let instrument = state.instruments.find(o => o.value === key)
-      // console.log('instrument : ', instrument)
-      // console.log('key : ', key)
-      if (state.selectedInstruments.includes(key) && instrument.eighthNotes) {
-        seq.mute = false
-      } else {
-        seq.mute = true
-      }
-      // console.log('seq.mute eighthNotes.loop : ', seq.mute)
-    })
-    return resolve()
-  })
-}
-
 const toggleHumanize = state => {
   return new Promise(resolve => {
     // Do nothing if sequences have not been initialized
@@ -285,7 +225,6 @@ const toggleHumanize = state => {
       } else {
         seq.humanize = state.humanize
       }
-      // console.log('quarterNotes.introduction humanize : ', seq.humanize)
     })
     forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, sound) => {
       if (sound === 'event' || sound === 'preCount' || sound === 'click') {
@@ -293,12 +232,10 @@ const toggleHumanize = state => {
       } else {
         seq.humanize = state.humanize
       }
-      // console.log('quarterNotes.loop humanize : ', seq.humanize)
     })
     forEachValue(metronomeData.sequences.eighthNotes, (seq, sound) => {
       forEachValue(seq, seq2 => {
         seq2.humanize = state.humanize
-        // console.log('eighthNotes humanize : ', state.humanize)
       })
     })
     return resolve()
@@ -324,15 +261,20 @@ const changeVolume = (prevState, nextState) => {
 
 const startSequences = state => {
   if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
-    // console.log('starting introduction')
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
       seq.start()
     })
     forEachValue(metronomeData.sequences.eighthNotes.introduction, seq => {
       seq.start()
     })
+    let loopStart = '0:' + (metronomeData.sequences.quarterNotes.introduction.event.length / 2)
+    forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
+      seq.start(loopStart, loopStart)
+    })
+    forEachValue(metronomeData.sequences.eighthNotes.loop, seq => {
+      seq.start(loopStart, loopStart)
+    })
   } else {
-    // console.log('starting loop')
     forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
       seq.start()
     })
@@ -356,26 +298,21 @@ const stopAllSequences = () => {
 }
 
 const initSequences = (store, nextState) => {
-  // console.log('initSequences')
   let introSeq = []
   let loopSeq = []
   let palo = nextState.selectedPalo
   metronomeData.preCount = parseInt(nextState.selectedPreCount.value)
   metronomeData.startBeat = parseInt(nextState.selectedStartBeat.value)
-  // console.log(palo.label)
   // Add pre-count to introduction sequence
-  for (let i = 0; i < parseInt(nextState.selectedPreCount.value); i++) {
-    // console.log('pushing ', i * 2, i * 2 + 1)
+  for (let i = 0; i < metronomeData.preCount; i++) {
     introSeq.push(i * 2)
     introSeq.push(i * 2 + 1)
   }
   // Add beats to introduction sequence until loop begins
-  // console.log('preCount: ', nextState.selectedPreCount.value)
   if (metronomeData.preCount !== 0 || metronomeData.startBeat !== 0) {
     let i = introSeq.length
-    // console.log('nbBeatsInPattern: ', palo.nbBeatsInPattern)
-    while (i % palo.nbBeatsInPattern !== 1) {
-      // console.log('pushing', i)
+    // Add items to introSeq until we find a beat with index 0 in the pattern
+    while ((metronomeData.startBeat - metronomeData.preCount * 2 + i) % palo.nbBeatsInPattern !== 0) {
       introSeq.push(i)
       i++
     }
@@ -384,8 +321,6 @@ const initSequences = (store, nextState) => {
   for (let i = 0; i < palo.nbBeatsInPattern; i++) {
     loopSeq.push(i)
   }
-  // console.log('introSeq : ', introSeq)
-  // console.log('loopSeq : ', loopSeq)
 
   // Build all sequences
   let sequences = {
@@ -456,7 +391,6 @@ const metronome = store => {
     switch (mutation.type) {
       case types.PLAY:
         initSequences(store, nextState)
-        toggleEighthNotes(nextState)
         toggleHumanize(nextState)
         selectTempo(nextState.tempo)
         startSequences(nextState)
@@ -476,13 +410,6 @@ const metronome = store => {
 
       case types.CHANGE_VOLUME:
         changeVolume(prevState, nextState)
-        break
-
-      case types.SELECT_INSTRUMENTS:
-      case types.TOGGLE_EIGHTHNOTES:
-      case types.ENABLE_EIGHTHNOTES:
-      case types.DISABLE_EIGHTHNOTES:
-        toggleEighthNotes(nextState)
         break
 
       case types.TOGGLE_HUMANIZE:

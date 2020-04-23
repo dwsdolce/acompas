@@ -1554,7 +1554,7 @@ export default [
       5: 'down',
       6: 'strong',
       7: 'down',
-      8: 'strong',
+      8: 'up',
       9: 'down',
       10: 'up',
       11: 'down'
