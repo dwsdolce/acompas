@@ -18,7 +18,9 @@ Insomnia.install = function () {
   return window.plugins.insomnia
 }
 
-if (typeof cordova !== 'undefined') {
+// See https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin/issues/7
+// for the "typeof window.plugins !== 'undefined'" part
+if (typeof cordova !== 'undefined' && typeof window.plugins !== 'undefined') {
   cordova.addConstructor(Insomnia.install)
   // Disable screen lock
   window.plugins.insomnia.keepAwake()
