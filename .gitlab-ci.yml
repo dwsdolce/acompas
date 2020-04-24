@@ -19,7 +19,7 @@ build_web_job:
     - apt-get update
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
-    - apt-get install -y -qq nodejs git rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+    - apt-get install -y -qq nodejs git make rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
     - $YARN install
     # Temporary workaround due to https://github.com/quasarframework/quasar-testing/issues/105
     # - npx quasar dev & sleep 45 && npx cypress run --config baseUrl=http://localhost:8080/
