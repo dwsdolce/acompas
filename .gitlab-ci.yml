@@ -3,21 +3,23 @@ stages:
 
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
+  APT_GET: "DEBIAN_FRONTEND=noninteractive apt-get"
 
 # Jobs
 
 build_web_job:
   script:
-    - apt-get -y -qq update
-    - apt-get -y -qq dist-upgrade
-    - apt-get -y -qq install curl gnupg
+    - ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
+    - $APT_GET -y -qq update
+    - $APT_GET -y -qq dist-upgrade
+    - $APT_GET -y -qq install curl gnupg
     - curl -sL https://deb.nodesource.com/setup_14.x | bash -
     - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
     - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-    - apt-get update
+    - $APT_GET update
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
-    - apt-get install -y -qq nodejs git rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+    - $APT_GET install -y -qq nodejs git rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
     - $YARN install
     # Temporary workaround due to https://github.com/quasarframework/quasar-testing/issues/105
     # - npx quasar dev & sleep 45 && npx cypress run --config baseUrl=http://localhost:8080/
