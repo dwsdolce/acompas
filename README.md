@@ -24,13 +24,23 @@ It is based on the following technologies :
 
 ## Cloning and building the source code
 
+Before anything, you need Node.js 13.x installed on your machine. See the nodejs.org
+[download page](https://nodejs.org/en/download/). If using Linux, consider
+[installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
+
 ``` bash
+# install requirements
+sudo npm install -g --unsafe-perm @quasar/cli @quasar/icongenie
+
 # cloning the git repository
 git clone https://gitlab.com/acompas/acompas.git
 cd acompas
 
 # install dependencies
 yarn install
+
+# build the icons
+./icongenie.sh
 
 # serve with hot reload at localhost:8080
 npx quasar dev

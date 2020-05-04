@@ -1,29 +1,18 @@
-.quasar
 .DS_Store
 .thumbs.db
 node_modules
+
+# Quasar core related directories
+.quasar
 /dist
+
+# Cordova related directories and files
 /src-cordova/node_modules
-/src-cordova/platforms/android/.gradle
-/src-cordova/platforms/android/app/build/*
-/src-cordova/platforms/android/CordovaLib/build/*
+/src-cordova/platforms
+/src-cordova/plugins
 /src-cordova/www
-/src-cordova/platforms/android/app/src/main/assets/www/*
-/src/statics/icons/apple-icon-*.png
-/src/statics/icons/favicon.ico
-/src/statics/icons/favicon-*.png
-/src/statics/icons/icon-*.png
-/src/statics/icons/safari-pinned-tab.svg
-/src/statics/icons/ms-icon-144x144.png
-/src/statics/app-logo-128x128.png
-/src-cordova/res/screen/*
-/src-cordova/res/ios
-/src-cordova/platforms/android/app/src/main/res/drawable-*
-/src-cordova/platforms/android/CordovaLib/CordovaLib.iml
-/src-cordova/platforms/android/android.iml
-/src-cordova/platforms/android/app/app.iml
-/test/cypress/screenshots
-/test/cypress/videos
+
+# Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -35,3 +24,10 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# A Compas specific ignores
+/src/statics/icons/favicon.ico
+/src/statics/icons/favicon-*.png
+/src-cordova/res
+/test/cypress/screenshots
+/test/cypress/videos
