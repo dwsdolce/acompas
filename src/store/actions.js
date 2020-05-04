@@ -29,7 +29,23 @@ export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload
 }
 
 export const selectTempo = ({ commit, state }, payload) => {
+  // On mobile devices, the number input lets the user type the values he/she
+  // wants. So the payload (i.e. new tempo) variable can be '' or any number.
+  if (payload === '') {
+    return
+  }
   let tempo = parseInt(payload)
+  // On mobile devices, the payload variable can contain number < minTempo or
+  // a number > maxTempo.
+  if (tempo < state.selectedPalo.minTempo || tempo > state.selectedPalo.maxTempo) {
+    Notify.create({
+      message: 'Tempo must be between ' + state.selectedPalo.minTempo + ' and ' +
+        state.selectedPalo.maxTempo + ' bpm !',
+      color: 'secondary',
+      icon: 'warning'
+    })
+    return
+  }
   commit(types.SELECT_TEMPO, tempo)
   if (tempo > state.selectedPalo.fastTempo && !state.isTooFast) {
     commit(types.SHOW_FAST_MESSAGE)

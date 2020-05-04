@@ -10,7 +10,7 @@
           .column
             select-palo.q-mb-md
             select-start-beat.q-mb-md
-            select-instruments.q-mb-md
+            select-pre-count.q-mb-md
             toggle-improvise.q-mb-md
             toggle-humanize.q-mb-md
         .col-6
@@ -22,7 +22,7 @@
                   select-visualization.q-mb-md
               .col.col-md-12
                 .item-center
-                  select-pre-count.q-mb-md
+                  select-instruments.q-mb-md
             .item-center
               play(v-if="visualizationSize.width <= breakpoint.sm")
       .row.text-center.no-wrap

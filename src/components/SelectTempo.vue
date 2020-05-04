@@ -19,7 +19,7 @@ div
           outline,
           round,
           color="white",
-          :size="screen.lt.md ? 'sm' : 'md'",
+          :size="screen.lt.sm ? 'xs' : 'md'",
           @click="decrement"
         ).q-mr-md
           q-icon(name="remove")
@@ -37,7 +37,7 @@ div
           outline,
           round,
           color="white",
-          :size="screen.lt.md ? 'sm' : 'md'",
+          :size="screen.lt.sm ? 'xs' : 'md'",
           @click="increment"
         ).q-ml-md
           q-icon(name="add")

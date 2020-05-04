@@ -5,8 +5,8 @@
     "quality": "10",
     "themeColor": "212121",
     "padding": [
-      4,
-      4
+      1,
+      1
     ],
     "include": [
       "all"
