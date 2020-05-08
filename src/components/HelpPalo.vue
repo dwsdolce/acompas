@@ -31,14 +31,13 @@ export default {
   props: [ 'palo' ],
   data () {
     return {
-      value: this.palo,
       paloHelpDialog: false
     }
   },
   computed: {
     ...mapState({
       palos: state => state.palos,
-      selectedPalo (state) { return state.palos.find(palo => palo.value === this.value) },
+      selectedPalo (state) { return state.palos.find(palo => palo.value === this.palo) },
       selectedPaloLabel (state) { return this.selectedPalo.label },
       selectedPaloLongLabel (state) { return this.selectedPalo.longLabel },
       selectedPaloDoc (state) { return this.selectedPalo.doc },

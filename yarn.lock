@@ -879,10 +879,10 @@
   resolved "https://registry.yarnpkg.com/@positron/stack-trace/-/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@1.8.4":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.8.4.tgz#aa58499256827fa61c4000a65e0c41847b6cc7fd"
-  integrity sha512-rdrgE94+bykmy5d5rtgaA8ad0BFL/RzCGm5IlPizcyJyO+UOIXoY1jmi4RQrjpE8gzAj/JByvtocc5Rp0uMmtw==
+"@quasar/app@1.8.5":
+  version "1.8.5"
+  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.8.5.tgz#d1e008eceac60ff2944d54f84eefd0b0acd3ecbb"
+  integrity sha512-ChQc40fUPegLqg/6KoyxBuvtfR0SaxyvButVSW2wuIRQAxK5Xu4x0S4XT2/Eo53OULx3hLw+Oqd5uG6Y/IdqFg==
   dependencies:
     "@quasar/babel-preset-app" "1.1.9"
     "@quasar/fastclick" "1.1.4"
@@ -997,10 +997,10 @@
   resolved "https://registry.yarnpkg.com/@quasar/fastclick/-/fastclick-1.1.4.tgz#21ed3e9a4387dcb43022a08af4ef08a5f1abf159"
   integrity sha512-i9wbyV4iT+v4KhtHJynUFhH5LiEPvAEgSnwMqPN4hf/8uRe82nDl5qP5agrp2el1h0HzyBpbvHaW7NB0BPrtvA==
 
-"@quasar/quasar-app-extension-testing-e2e-cypress@^1.0.0-beta.10":
-  version "1.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-testing-e2e-cypress/-/quasar-app-extension-testing-e2e-cypress-1.0.0-beta.10.tgz#47a598210301e03a29820d577a93c6136b008a32"
-  integrity sha512-IuOy0vcAhMZjv82sMkwOX0OuSy8BXKjz/Km2b5RdLGIOZtvFV9GL+Tvx6XH4iNTD1VCgaBo/f0bGrPdisIGgag==
+"@quasar/quasar-app-extension-testing-e2e-cypress@^1.0.0-beta.11":
+  version "1.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-testing-e2e-cypress/-/quasar-app-extension-testing-e2e-cypress-1.0.0-beta.11.tgz#717ec35e44759da5d95a9b7ac57bb281811a0db3"
+  integrity sha512-wEMgGITFEre9EFym9bQsub0Ol9w3cPhbUN2YAv7zMqtcpUwam5KQ0h4Us8g/gcnHTVw65Pnkh++UKTWlYJoz/Q==
   dependencies:
     cypress "^3.3.1"
 
@@ -8372,10 +8372,10 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-quasar@^1.10.4:
-  version "1.10.4"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.10.4.tgz#d5e39aa08ea6cf80b46604afe16250b3f21ef2b8"
-  integrity sha512-HYip9HsLWom7fR9mOSo3FbaqzBRj9hkmfvDc/f178m+K/3W2C1y+X4RXbeWbS5Nxhyqx9/GT2I0sXpL2YgJ64g==
+quasar@^1.10.5:
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.10.5.tgz#2a96416000ac8432c636c4076e192888e4fef617"
+  integrity sha512-Y6wrOWWySEIQENorvWxVPph7McZxuZZdBVppq/4SWcazTkwfOiiPKDDANqk79wlD6+6Fw4pmnKW//T8koFHDsQ==
 
 query-string@^4.1.0:
   version "4.3.4"
