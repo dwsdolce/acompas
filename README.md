@@ -28,9 +28,12 @@ Before anything, you need Node.js 13.x installed on your machine. See the nodejs
 [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
+You also need [yarn](https://classic.yarnpkg.com/en/docs/install/) installed.
+
 ``` bash
 # install requirements
-sudo npm install -g --unsafe-perm @quasar/cli @quasar/icongenie
+sudo npm install -g @quasar/cli
+sudo npm install -g --unsafe-perm @quasar/icongenie
 
 # cloning the git repository
 git clone https://gitlab.com/acompas/acompas.git
