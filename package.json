@@ -14,15 +14,15 @@
     "test:e2e:CI": "cypress run"
   },
   "dependencies": {
-    "@quasar/extras": "^1.8.1",
+    "@quasar/extras": "^1.8.2",
     "animejs": "^3.1.0",
     "axios": "^0.19.0",
-    "quasar": "^1.11.3"
+    "quasar": "^1.12.8"
   },
   "devDependencies": {
-    "@quasar/app": "1.8.8",
+    "@quasar/app": "1.9.6",
     "@quasar/quasar-app-extension-testing": "^1.0.0",
-    "@quasar/quasar-app-extension-testing-e2e-cypress": "^1.0.0-beta.11",
+    "@quasar/quasar-app-extension-testing-e2e-cypress": "^1.0.0-beta.12",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
