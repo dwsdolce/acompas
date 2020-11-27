@@ -29,15 +29,16 @@ export const playSynth = note => {
  */
 const initSounds = async () => {
   return new Promise(resolve => {
-    if (new Audio().canPlayType('audio/flac')) {
+    const audio = new Audio()
+    if (audio.canPlayType('audio/flac')) {
       metronomeData.audioFormat = 'flac'
-    } else if (new Audio().canPlayType('audio/mpeg')) {
+    } else if (audio.canPlayType('audio/mpeg')) {
       metronomeData.audioFormat = 'mp3'
-    } else if (new Audio().canPlayType('audio/mp4')) {
+    } else if (audio.canPlayType('audio/mp4')) {
       metronomeData.audioFormat = 'mp4'
-    } else if (new Audio().canPlayType('audio/wav')) {
+    } else if (audio.canPlayType('audio/wav')) {
       metronomeData.audioFormat = 'wav'
-    } else if (new Audio().canPlayType('audio/ogg')) {
+    } else if (audio.canPlayType('audio/ogg')) {
       metronomeData.audioFormat = 'ogg'
     } else {
       throw new Error('None of the available audio formats can be played')
@@ -331,6 +332,7 @@ const initSequences = (store, nextState) => {
         clara: buildSequence(store, palo, false, 'clara', introSeq, false),
         sorda: buildSequence(store, palo, false, 'sorda', introSeq, false),
         cajon: buildSequence(store, palo, false, 'cajon', introSeq, false),
+        nudillo: buildSequence(store, palo, false, 'nudillo', introSeq, false),
         udu: buildSequence(store, palo, false, 'udu', introSeq, false),
         jaleo: buildSequence(store, palo, false, 'jaleo', introSeq, false),
         click: buildSequence(store, palo, false, 'click', introSeq, false)
@@ -340,6 +342,7 @@ const initSequences = (store, nextState) => {
         clara: buildSequence(store, palo, false, 'clara', loopSeq, true),
         sorda: buildSequence(store, palo, false, 'sorda', loopSeq, true),
         cajon: buildSequence(store, palo, false, 'cajon', loopSeq, true),
+        nudillo: buildSequence(store, palo, false, 'nudillo', loopSeq, true),
         udu: buildSequence(store, palo, false, 'udu', loopSeq, true),
         jaleo: buildSequence(store, palo, false, 'jaleo', loopSeq, true),
         click: buildSequence(store, palo, false, 'click', loopSeq, true)
@@ -350,6 +353,7 @@ const initSequences = (store, nextState) => {
         clara: buildSequence(store, palo, true, 'clara', introSeq, false),
         sorda: buildSequence(store, palo, true, 'sorda', introSeq, false),
         cajon: buildSequence(store, palo, true, 'cajon', introSeq, false),
+        nudillo: buildSequence(store, palo, true, 'nudillo', introSeq, false),
         udu: buildSequence(store, palo, true, 'udu', introSeq, false),
         jaleo: buildSequence(store, palo, true, 'jaleo', introSeq, false),
         click: buildSequence(store, palo, true, 'click', introSeq, false)
@@ -358,6 +362,7 @@ const initSequences = (store, nextState) => {
         clara: buildSequence(store, palo, true, 'clara', loopSeq, true),
         sorda: buildSequence(store, palo, true, 'sorda', loopSeq, true),
         cajon: buildSequence(store, palo, true, 'cajon', loopSeq, true),
+        nudillo: buildSequence(store, palo, true, 'nudillo', loopSeq, true),
         udu: buildSequence(store, palo, true, 'udu', loopSeq, true),
         jaleo: buildSequence(store, palo, true, 'jaleo', loopSeq, true),
         click: buildSequence(store, palo, true, 'click', loopSeq, true)

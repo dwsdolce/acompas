@@ -15,6 +15,7 @@ const state = {
     { label: 'Claras', value: 'clara', eighthNotes: false, volume: 0 },
     { label: 'Sordas', value: 'sorda', eighthNotes: false, volume: 0 },
     { label: 'Cajon', value: 'cajon', eighthNotes: false, volume: 0 },
+    { label: 'Nudillos', value: 'nudillo', eighthNotes: false, volume: 0 },
     { label: 'Udu', value: 'udu', eighthNotes: false, volume: 0 },
     { label: 'Jaleo', value: 'jaleo', eighthNotes: false, volume: 0 },
     { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }

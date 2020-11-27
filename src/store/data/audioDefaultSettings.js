@@ -2,35 +2,35 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 0
+      volume: 10
     },
     {
       src: 'clara/clara_2',
-      volume: 0
+      volume: 10
     },
     {
       src: 'clara/clara_3',
-      volume: -2
+      volume: 10
     }
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: -2
+      volume: 10
     },
     {
       src: 'sorda/sorda_2',
-      volume: -4
+      volume: 15
     },
     {
       src: 'sorda/sorda_3',
-      volume: -6
+      volume: 15
     }
   ],
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: -8
+      volume: -6
     },
     {
       src: 'cajon/cajon_2',
@@ -39,6 +39,16 @@ export default {
     {
       src: 'cajon/cajon_3',
       volume: -6
+    }
+  ],
+  nudillo: [
+    {
+      src: 'nudillo/nudillo_1',
+      volume: 5
+    },
+    {
+      src: 'nudillo/nudillo_2',
+      volume: 5
     }
   ],
   udu: [
@@ -128,11 +138,11 @@ export default {
   click: [
     {
       src: 'click/click_1',
-      volume: -9
+      volume: -20
     },
     {
       src: 'click/click_2',
-      volume: -9
+      volume: -20
     }
   ]
 }
