@@ -21,6 +21,7 @@ const state = {
     { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }
   ],
   selectedInstruments: [ 'clara', 'sorda' ],
+  noEighthNotes: [ 'jaleo', 'click', 'nudillo' ],
   preCounts: palosDefaultSettings[2].preCounts,
   selectedPreCount: palosDefaultSettings[2].preCounts[0],
   startBeats: palosDefaultSettings[2].startBeats,
