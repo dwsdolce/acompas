@@ -1,4 +1,4 @@
-import Tone from 'tone'
+import * as Tone from 'tone'
 import { Loading } from 'quasar'
 import { deepCopy, forEachValue } from '../assets/utils'
 import * as types from '../store/mutation-types'
@@ -13,7 +13,7 @@ export const metronomeData = {
   startBeat: null
 }
 
-const synth = new Tone.Synth().toMaster()
+const synth = new Tone.Synth().toDestination()
 
 export const playSynth = note => {
   synth.triggerAttackRelease(note, 4)
@@ -50,7 +50,7 @@ const initSounds = async () => {
       metronomeData.sounds[key] = {}
       for (let i = 0; i < value.length; i++) {
         let url = path + value[i].src + '.' + metronomeData.audioFormat
-        metronomeData.sounds[key][i] = new Tone.Player(url).toMaster()
+        metronomeData.sounds[key][i] = new Tone.Player(url).toDestination()
         metronomeData.sounds[key][i].volume.value = value[i].volume
         metronomeData.sounds[key][i].volume.default = value[i].volume
       }
@@ -383,9 +383,7 @@ export const initMetronome = (store) => {
   })
   initSounds()
   restoreLocalStorage(store)
-  Tone.Buffer.on('load', () => {
-    Loading.hide()
-  })
+  if (Tone.loaded()) Loading.hide()
 }
 
 // ================================
