@@ -15,11 +15,12 @@
           img(:src="'statics/AClogo.png'" alt="A Compás" style="margin-top: 6px;")
 
     q-drawer(
-      v-model="leftDrawerOpen",
       bordered,
-      content-class="bg-grey-2"
+      v-model="leftDrawerOpen",
+      content-class="bg-grey-2",
+      :breakpoint="1439"
     )
-      SideMenu#sideMenu
+      side-menu#sideMenu
 
     q-page-container
       router-view
@@ -33,7 +34,7 @@ export default {
   name: 'MyLayout',
   data () {
     return {
-      leftDrawerOpen: this.$q.screen.gt.lg
+      leftDrawerOpen: this.$q.screen.gt.md
     }
   },
   methods: {

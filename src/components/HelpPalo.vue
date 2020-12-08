@@ -13,7 +13,7 @@ span.q-ml-sm
       q-card-section
         .text-h6.text-center {{ selectedPaloLongLabel }}
         p {{ selectedPaloDoc }}
-        p {{ selectedPaloCities }}
+        p {{ selectedPaloPlaces }}
         p Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPaloWikipediaUrl)")]
         p Example video : #[q-btn(round, icon="link", @click="launch(selectedPaloVideoExample)")]
       q-card-section(align="center")
@@ -41,7 +41,7 @@ export default {
       selectedPaloLabel (state) { return this.selectedPalo.label },
       selectedPaloLongLabel (state) { return this.selectedPalo.longLabel },
       selectedPaloDoc (state) { return this.selectedPalo.doc },
-      selectedPaloCities (state) { return this.selectedPalo.cities ? 'Cities : ' + this.selectedPalo.cities : '' },
+      selectedPaloPlaces (state) { return this.selectedPalo.places ? 'Places : ' + this.selectedPalo.places : '' },
       selectedPaloWikipediaUrl (state) { return this.selectedPalo.wikipediaUrl },
       selectedPaloVideoExample (state) { return this.selectedPalo.videoExample }
     })

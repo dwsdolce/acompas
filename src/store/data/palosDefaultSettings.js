@@ -199,7 +199,7 @@ export default [
     longLabel: 'Alegría',
     doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary". Alegría means "joy" in Spanish.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
-    cities: 'Cádiz',
+    places: 'Cádiz',
     videoExample: 'https://www.youtube.com/watch?v=M4x02TRlaqw'
   },
   {
@@ -318,7 +318,7 @@ export default [
     longLabel: '6 beats Bulería',
     doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary. It can be seen as the first half of a 12 beats bulería.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
-    cities: 'Jerez de la Frontera',
+    places: 'Jerez de la Frontera',
     videoExample: null
   },
   {
@@ -382,23 +382,23 @@ export default [
       2: 2, // 1
       3: 3,
       4: 2, // 2
-      5: 3,
-      6: 1, // 3 >
+      5: 2,
+      6: 3, // 3 >
       7: 2,
       8: 2, // 4
-      9: 3,
+      9: 2,
       10: 2, // 5
-      11: 3,
+      11: 2,
       12: 1, // 6 >
       13: 2,
-      14: 3, // 7
-      15: 2,
+      14: 2, // 7
+      15: 3,
       16: 1, // 8 >
       17: 2,
-      18: 3, // 9
-      19: 2,
+      18: 2, // 9
+      19: 3,
       20: 1, // 10 >
-      22: 3 // 11
+      22: 2 // 11
     },
     nudillo: {
       0: 1,
@@ -516,7 +516,7 @@ export default [
     longLabel: '12 beats Bulería',
     doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
-    cities: 'Jerez de la Frontera and others',
+    places: 'Jerez de la Frontera and others',
     videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
   },
   {
@@ -717,7 +717,7 @@ export default [
     longLabel: '12 beats Bulería (variation)',
     doc: 'In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
-    cities: 'Jerez de la Frontera and others',
+    places: 'Jerez de la Frontera and others',
     videoExample: null
   },
   {
@@ -919,7 +919,7 @@ export default [
     longLabel: 'Fandangos',
     doc: 'This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Fandango',
-    cities: 'Huelva, Málaga, and others',
+    places: 'Huelva, Málaga, and others',
     videoExample: 'https://www.youtube.com/watch?v=RS8sy3gdb_Y'
   },
   {
@@ -1056,7 +1056,7 @@ export default [
     longLabel: 'Rumba',
     doc: 'Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Rumba_flamenca',
-    cities: 'Barcelona and others',
+    places: 'Barcelona and others',
     videoExample: 'https://www.youtube.com/watch?v=2oyhlad64-s'
   },
   {
@@ -1260,7 +1260,7 @@ export default [
     longLabel: 'Siguiriya',
     doc: 'Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Siguiriyas',
-    cities: 'Sevilla, Cádiz and others',
+    places: 'Sevilla, Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=3u66TxY1S88'
   },
   {
@@ -1275,40 +1275,40 @@ export default [
     nbBeatsInPattern: 24,
     accents: [ 2, 5, 7, 9, 11 ],
     clara: {
-      0: 3,
+      0: 3, // 1
       1: 1,
       2: 2, // 2
-      4: 1,
-      6: 3,
+      4: 1, // 3 >
+      6: 3, // 4
       7: 1,
       8: 2, // 5
       10: 1, // 6 >
-      12: 3,
+      12: 3, // 7
       13: 2,
       14: 1, // 8 >
-      16: 3,
+      16: 3, // 9
       17: 2,
       18: 1, // 10 >
       20: 3, // 11
       22: 1 // 12 >
     },
     sorda: {
-      0: 3,
+      0: 3, // 1
       1: 2,
-      2: 3,
+      2: 3, // 2
       3: 2,
-      4: 1,
-      5: 2,
+      4: 1, // 3
+      // 5: 2,
       6: 3,
       7: 2,
       8: 3,
       9: 2,
       10: 1, // 6 >
-      11: 2,
+      // 11: 2,
       12: 3,
       13: 2,
-      14: 1,
-      15: 2,
+      14: 1, // 8 >
+      // 15: 2,
       16: 3,
       17: 2,
       18: 1,
@@ -1446,7 +1446,7 @@ export default [
     longLabel: 'Soleá',
     doc: 'Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sole%C3%A1',
-    cities: 'Sevilla, Cádiz and others',
+    places: 'Sevilla, Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=U9iw1gMVoO0'
   },
   {
@@ -1587,7 +1587,7 @@ export default [
     longLabel: 'Tangos',
     doc: 'Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Tango_(flamenco)',
-    cities: null,
+    places: 'Granada, Málaga, Extremadura',
     videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'
   },
   {
@@ -1706,7 +1706,50 @@ export default [
     longLabel: 'Sevillanas',
     doc: 'Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz. Remark : our example pattern is made of 2 bars.',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
-    cities: 'Sevilla',
+    places: 'Sevilla',
     videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
+  },
+  {
+    id: 11,
+    label: 'No compás',
+    value: 'no-compas',
+    minTempo: 15,
+    maxTempo: 300,
+    defaultTempo: 120,
+    slowTempo: 50,
+    fastTempo: 200,
+    nbBeatsInPattern: 1,
+    accents: [],
+    clara: {
+      0: 1,
+      1: 2
+    },
+    sorda: {
+      0: 1,
+      1: 2
+    },
+    cajon: {
+      0: 1,
+      1: 2
+    },
+    nudillo: {
+      0: 1
+    },
+    udu: {
+      0: 1,
+      1: 2
+    },
+    click: {
+      0: 1
+    },
+    beats: {
+      0: 'down'
+    },
+    beatLabels: {},
+    preCounts: [],
+    startBeats: [],
+    slowMessage: 'Your tempo is very slow',
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'A simple metronome click'
   }
 ]

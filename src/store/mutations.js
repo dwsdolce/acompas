@@ -52,20 +52,24 @@ const mutations = {
 
   // payload = { instrument: item from state.instruments, volume: [value] }
   [types.CHANGE_VOLUME] (state, payload) {
-    payload.instrument.volume = payload.volume
+    let instrument = state.instruments.find(i => i.value === payload.instrument.value)
+    instrument.volume = payload.volume
   },
 
   // payload = item from state.instruments
   [types.TOGGLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = !payload.eighthNotes
+    let instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = !instrument.eighthNotes
   },
 
   [types.ENABLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = true
+    let instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = true
   },
 
   [types.DISABLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = false
+    let instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = false
   },
 
   [types.TOGGLE_IMPROVISE] (state) {

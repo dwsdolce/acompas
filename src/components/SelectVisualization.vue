@@ -2,7 +2,6 @@
 div
   p.caption View mode
   q-btn(
-    round,
     outline,
     icon="remove_red_eye",
     @click="visualizationDialog = true"
@@ -35,8 +34,7 @@ export default {
     ...mapState({
       visualizationModes: state => state.visualizationModes,
       selectedVisualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize,
-      breakpoint: state => state.breakpoint
+      visualizationSize: state => state.visualizationSize
     })
   },
   methods: {

@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  .column.items-center
+  div
     p.caption Tempo
     q-knob(
       color="primary",
@@ -9,43 +9,42 @@ div
       :min="minTempo",
       :max="maxTempo",
       show-value,
-      size="120px",
-      :thickness="0.1",
+      size="152px",
+      :thickness="0.12",
       @input="selectTempo"
     ).text-weight-light.q-mb-md
-    .row.items-center
-      .col-xs-3
-        q-btn(
-          outline,
-          round,
-          color="white",
-          :size="screen.lt.sm ? 'sm' : 'md'",
-          @click="decrement"
-        ).q-mr-md
-          q-icon(name="remove")
-      .col-xs-6
-        q-input(
-          dark,
-          type="number",
-          :value="tempo",
-          :min="0",
-          :max="300",
-          @input="selectTempo"
-        )
-      .col-xs-3
-        q-btn(
-          outline,
-          round,
-          color="white",
-          :size="screen.lt.sm ? 'sm' : 'md'",
-          @click="increment"
-        ).q-ml-md
-          q-icon(name="add")
+  .row.justify-center.items-center
+    .col-2.q-mr-md-md
+      q-btn(
+        outline,
+        round,
+        color="white",
+        :size="$q.screen.lt.md ? 'sm' : 'md'",
+        @click="decrement"
+      )
+        q-icon(name="remove")
+    .col-6.col-md-4.col-lg-3.col-xl-2
+      q-input(
+        dark,
+        type="number",
+        :value="tempo",
+        :min="0",
+        :max="300",
+        @input="selectTempo"
+      )
+    .col-2.q-ml-md-md
+      q-btn(
+        outline,
+        round,
+        color="white",
+        :size="$q.screen.lt.md ? 'sm' : 'md'",
+        @click="increment"
+      )
+        q-icon(name="add")
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { Screen } from 'quasar'
 
 export default {
   computed: {
@@ -54,8 +53,7 @@ export default {
       palo: state => state.selectedPalo,
       maxTempo: state => state.selectedPalo.maxTempo,
       minTempo: state => state.selectedPalo.minTempo
-    }),
-    screen () { return Screen }
+    })
   },
   methods: {
     ...mapActions([
@@ -70,3 +68,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+  .custom-input
+    max-width: 300px
+</style>

@@ -19,6 +19,8 @@ export const playSynth = note => {
   synth.triggerAttackRelease(note, 4)
 }
 
+// const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 // ==========================
 // Metronome initial settings
 // ==========================
@@ -71,10 +73,11 @@ const noteIndexInPattern = (store, i) => {
   return index % store.state.selectedPalo.nbBeatsInPattern
 }
 
-const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
+const improvise = (store, type, time, value, note, key, eighthNotes) => {
   // For the "click" sounds, follow the sequence and never improvise
-  if (sound === 'click') {
-    metronomeData.sounds[sound][value - 1].start(time)
+  let sound = metronomeData.sounds[type][value - 1]
+  if (type === 'click') {
+    sound.start(time)
     return
   }
 
@@ -84,17 +87,17 @@ const improvise = (store, palo, sound, time, value, note, key, eighthNotes) => {
   let index = noteIndexInPattern(store, note)
   if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
     if (index === key && eighthNotes && key % 2 !== 0) {
-      metronomeData.sounds[sound][value - 1].start(time)
+      sound.start(time)
     }
     if (index === key && !eighthNotes && key % 2 === 0) {
-      metronomeData.sounds[sound][value - 1].start(time)
+      sound.start(time)
     }
   } else {
     // Pick a probability that the sound is played
     const playProbability = Math.random()
     const playThreshold = 0.50 // 50% chances that the sound is not played
     if (playProbability > playThreshold) {
-      metronomeData.sounds[sound][value - 1].start(time)
+      sound.start(time)
     }
   }
 }
@@ -133,9 +136,9 @@ const triggerPreCountClick = (store, time, note) => {
   }
 }
 
-const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note) => {
+const triggerAudioOnEvent = (store, palo, eighthNotes, type, isLoop, time, note) => {
   // Prepend pre-count beats if required
-  if (sound === 'preCount') {
+  if (type === 'preCount') {
     triggerPreCountClick(store, time, note)
   } else {
     // Don't play non-preCount sequences if note is during pre-count
@@ -143,30 +146,31 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
       return
     }
 
-    if (sound === 'jaleo') {
+    if (type === 'jaleo') {
       improviseJaleo(store, note, time, palo, eighthNotes)
       return
     }
 
-    let instrument = store.state.instruments.find(o => o.value === sound)
+    let instrument = store.state.instruments.find(o => o.value === type)
     // key is a pulsation number, value is the sound number
-    forEachValue(palo[sound], (value, key) => {
+    forEachValue(palo[type], (value, key) => {
+      let sound = metronomeData.sounds[type][value - 1]
       key = parseInt(key)
       let index = noteIndexInPattern(store, note)
       if (eighthNotes && instrument.eighthNotes && (key % 2 !== 0)) {
         if (!store.state.improvise && index === key) {
-          metronomeData.sounds[sound][value - 1].start(time)
+          sound.start(time)
         }
         if (store.state.improvise && index === key) {
-          improvise(store, palo, sound, time, value, note, key, eighthNotes)
+          improvise(store, palo, type, time, value, note, key, eighthNotes)
         }
       }
       if (!eighthNotes && (key % 2 === 0)) {
         if (!store.state.improvise && index === key) {
-          metronomeData.sounds[sound][value - 1].start(time)
+          sound.start(time)
         }
         if (store.state.improvise && index === key) {
-          improvise(store, palo, sound, time, value, note, key, eighthNotes)
+          improvise(store, palo, type, time, value, note, key, eighthNotes)
         }
       }
     })
@@ -178,29 +182,29 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, sound, isLoop, time, note
  * @param {Object} store The Vuex store
  * @param {Object} palo The palo to build sequence for
  * @param {Boolean} eighthNotes Is this a eighthNotes sequence ?
- * @param {String} sound The sound to build sequence with (slug)
+ * @param {String} type The sound to build sequence with (slug)
  * @param {Array} sequence Array describing the sequence
  * @param {Boolean} isLoop Are we building a loopable sequence ?
  * @return {Object} Returns the Tone sequence object
  */
-const buildSequence = (store, palo, eighthNotes, sound, sequence, isLoop) => {
+const buildSequence = (store, palo, eighthNotes, type, sequence, isLoop) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
   let seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
 
+    if (type !== 'event' && (type === 'preCount' || store.state.selectedInstruments.includes(type))) {
+      triggerAudioOnEvent(store, palo, eighthNotes, type, isLoop, time, note)
+    }
+
     // Call animation on event time.
     // The 'event' sequence is used to trigger events which will trigger UI modifications
-    if (sound === 'event' && !eighthNotes && note % 2 === 0) {
+    if (type === 'event' && !eighthNotes && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
         store.commit(types.TRIGGER_EVENT, note)
       }, time) // Use AudioContext time of the event
     }
-
-    if (sound !== 'event' && (sound === 'preCount' || store.state.selectedInstruments.includes(sound))) {
-      triggerAudioOnEvent(store, palo, eighthNotes, sound, isLoop, time, note)
-    }
-  }, sequence, '8n')
+  }, sequence)
   // Set/unset sequence looping
   seq.loop = isLoop
   return seq
@@ -220,21 +224,21 @@ const toggleHumanize = state => {
     if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
       return resolve()
     }
-    forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, sound) => {
-      if (sound === 'event' || sound === 'preCount' || sound === 'click') {
+    forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, type) => {
+      if (type === 'event' || type === 'preCount' || type === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = state.humanize
       }
     })
-    forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, sound) => {
-      if (sound === 'event' || sound === 'preCount' || sound === 'click') {
+    forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, type) => {
+      if (type === 'event' || type === 'preCount' || type === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = state.humanize
       }
     })
-    forEachValue(metronomeData.sequences.eighthNotes, (seq, sound) => {
+    forEachValue(metronomeData.sequences.eighthNotes, (seq) => {
       forEachValue(seq, seq2 => {
         seq2.humanize = state.humanize
       })
@@ -261,19 +265,23 @@ const changeVolume = (prevState, nextState) => {
 // ========================
 
 const startSequences = state => {
+  let offset = metronomeData.sequences.quarterNotes.introduction.event.length
+  let loopStart = '0:' + offset / 2
+
   if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
       seq.start()
+      seq.stop(loopStart)
     })
     forEachValue(metronomeData.sequences.eighthNotes.introduction, seq => {
       seq.start()
+      seq.stop(loopStart)
     })
-    let loopStart = '0:' + (metronomeData.sequences.quarterNotes.introduction.event.length / 2)
     forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
-      seq.start(loopStart, loopStart)
+      seq.start(loopStart, offset)
     })
     forEachValue(metronomeData.sequences.eighthNotes.loop, seq => {
-      seq.start(loopStart, loopStart)
+      seq.start(loopStart, offset)
     })
   } else {
     forEachValue(metronomeData.sequences.quarterNotes.loop, seq => {
@@ -283,6 +291,7 @@ const startSequences = state => {
       seq.start()
     })
   }
+  Tone.start()
   Tone.Transport.start('+0.1')
 }
 
@@ -302,13 +311,16 @@ const initSequences = (store, nextState) => {
   let introSeq = []
   let loopSeq = []
   let palo = nextState.selectedPalo
+
   metronomeData.preCount = parseInt(nextState.selectedPreCount.value)
   metronomeData.startBeat = parseInt(nextState.selectedStartBeat.value)
+
   // Add pre-count to introduction sequence
   for (let i = 0; i < metronomeData.preCount; i++) {
     introSeq.push(i * 2)
     introSeq.push(i * 2 + 1)
   }
+
   // Add beats to introduction sequence until loop begins
   if (metronomeData.preCount !== 0 || metronomeData.startBeat !== 0) {
     let i = introSeq.length
@@ -318,6 +330,7 @@ const initSequences = (store, nextState) => {
       i++
     }
   }
+
   // Add pattern beats to loopable sequence
   for (let i = 0; i < palo.nbBeatsInPattern; i++) {
     loopSeq.push(i)
@@ -376,7 +389,7 @@ export const getContext = Tone.context
 
 export const isSupported = Tone.supported
 
-export const initMetronome = (store) => {
+export const initMetronome = async (store) => {
   Loading.show({
     delay: 100,
     message: 'Loading audio samples'

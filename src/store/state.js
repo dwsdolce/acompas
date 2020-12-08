@@ -7,20 +7,20 @@ const state = {
     { label: 'Counter', value: 'counter' }
   ],
   visualizationSize: {},
-  breakpoint: { xs: 599, sm: 1023, md: 1439, lg: 1919 },
   selectedVisualizationMode: 'dots',
   palos: palosDefaultSettings,
   selectedPalo: palosDefaultSettings[2],
   instruments: [
     { label: 'Claras', value: 'clara', eighthNotes: false, volume: 0 },
     { label: 'Sordas', value: 'sorda', eighthNotes: false, volume: 0 },
-    { label: 'Cajon', value: 'cajon', eighthNotes: false, volume: 0 },
     { label: 'Nudillos', value: 'nudillo', eighthNotes: false, volume: 0 },
+    { label: 'Cajon', value: 'cajon', eighthNotes: false, volume: 0 },
     { label: 'Udu', value: 'udu', eighthNotes: false, volume: 0 },
     { label: 'Jaleo', value: 'jaleo', eighthNotes: false, volume: 0 },
     { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }
   ],
-  selectedInstruments: [ 'clara', 'sorda' ],
+  selectedInstruments: [ 'clara', 'nudillo' ],
+  defaultSelectedInstruments: [ 'clara', 'nudillo' ],
   noEighthNotes: [ 'jaleo', 'click', 'nudillo' ],
   preCounts: palosDefaultSettings[2].preCounts,
   selectedPreCount: palosDefaultSettings[2].preCounts[0],

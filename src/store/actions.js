@@ -15,11 +15,11 @@ export const playStop = ({ commit, state }) => {
   }
 }
 
-export const selectVisualizationMode = ({ commit, state }, payload) => {
+export const selectVisualizationMode = ({ commit }, payload) => {
   commit(types.SELECT_VISUALIZATION_MODE, payload)
 }
 
-export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload is a palo slug
+export const selectPalo = ({ commit, state }, payload) => { // payload is a palo slug
   if (state.isPlaying) commit(types.STOP)
   forEachValue(state.palos, palo => {
     if (palo.value === payload) {
@@ -157,4 +157,15 @@ export const openPrivacyDialog = ({ commit }) => {
 
 export const closePrivacyDialog = ({ commit }) => {
   commit(types.CLOSE_PRIVACYDIALOG)
+}
+
+export const restoreDefault = ({ dispatch, state }) => {
+  dispatch('selectInstruments', state.defaultSelectedInstruments)
+  dispatch('selectTempo', state.selectedPalo.defaultTempo)
+  forEachValue(state.instruments, instrument => {
+    dispatch('disableEighthNotes', instrument)
+    dispatch('changeVolume', { instrument: instrument, volume: 0 })
+  })
+  dispatch('disableHumanize')
+  dispatch('disableImprovise')
 }

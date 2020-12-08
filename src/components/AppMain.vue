@@ -5,30 +5,27 @@
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
     div
-      .row.text-center.no-wrap
-        .col-6
-          .column
-            select-palo.q-mb-md
-            select-start-beat.q-mb-md
-            select-pre-count.q-mb-md
-            toggle-improvise.q-mb-md
-            toggle-humanize.q-mb-md
-        .col-6
-          .column
-            select-tempo.q-mb-md
-            .row
-              .col.col-md-12
-                .item-center
-                  select-visualization.q-mb-md
-              .col.col-md-12
-                .item-center
-                  select-instruments.q-mb-md
-            .item-center
-              play(v-if="visualizationSize.width <= breakpoint.sm")
-      .row.text-center.no-wrap
-        .col-12(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
-          .item-center
-            play
+      .row.text-center.justify-center.no-wrap
+        .col-6.col-md-5
+          select-palo.q-mb-md
+          select-start-beat.q-mb-md
+          select-pre-count.q-mb-md
+          toggle-improvise.q-mb-md
+          toggle-humanize
+        .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
+          play
+        .col-6.col-md-5
+          select-tempo.q-mb-md
+          .row.justify-center.q-mb-md
+            .col.col-lg-4.col-xl-2
+              select-instruments
+            .col.col-lg-4.col-xl-2
+              select-visualization
+          .row.justify-center
+            .col.col-lg-4.col-xl-2(v-if="$q.screen.lt.lg || $q.screen.lg").flex.justify-center.content-end
+              play
+            .col.col-lg-4.col-xl-2
+              reset
 </template>
 
 <script>
@@ -45,6 +42,7 @@ import ToggleHumanize from './ToggleHumanize'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
+import Reset from './Reset'
 import { isSupported, initMetronome } from '../plugins/metronome'
 
 export default {
@@ -59,14 +57,14 @@ export default {
     ToggleHumanize,
     DrawDots,
     DrawCounter,
-    SelectVisualization
+    SelectVisualization,
+    Reset
   },
   computed: {
     ...mapState({
       isPlaying: state => state.isPlaying,
       visualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize,
-      breakpoint: state => state.breakpoint
+      visualizationSize: state => state.visualizationSize
     })
   },
   mounted () {
