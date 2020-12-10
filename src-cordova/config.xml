@@ -98,6 +98,7 @@
         <splash src="res/screen/ios/Default@2x~ipad~comany.png" />
     </platform>
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.3" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^4.1.0" />
     <feature name="Insomnia">
         <param name="android-package" value="nl.xservices.plugins.Insomnia" />
     </feature>
