@@ -125,7 +125,7 @@ cordova platform add ios
 npm install -g ios-deploy
 
 # Check cordova requirements (run this in the src-cordova/ folder)
-npx cordova requirements
+cordova requirements
 
 # If you don't have Cocoapods installed
 # You may have to install ruby with either:
