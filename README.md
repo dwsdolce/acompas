@@ -116,17 +116,19 @@ This section needs an update
 quasar build
 
 # Install dependencies
-cd ./cordova
+cd ./src-cordova
 npm install
 
 cordova platform add ios
 
-# Check cordova requirements (run this in the cordova/ folder)
-cordova requirements
-
-# Fullfill the requirements
+# This is one of the requirements
 npm install -g ios-deploy
-# Install ruby with either:
+
+# Check cordova requirements (run this in the src-cordova/ folder)
+npx cordova requirements
+
+# If you don't have Cocoapods installed
+# You may have to install ruby with either:
 # $ sudo apt-get install ruby-full
 # $ sudo yum install ruby
 # $ sudo emerge dev-lang/ruby
