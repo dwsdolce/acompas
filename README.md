@@ -119,8 +119,6 @@ quasar build
 cd ./src-cordova
 npm install
 
-cordova platform add ios
-
 # This is one of the requirements
 npm install -g ios-deploy
 
