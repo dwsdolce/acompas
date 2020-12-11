@@ -108,47 +108,35 @@ quasar build -m cordova -T android
 ```
 
 ## iOS app
-
-This section needs an update
-
+### Setup
 ``` bash
 # Build app
 quasar build
 
-# Install dependencies
-cd ./src-cordova # ALL following commands should be run in this directory
-npm install
-
-# This is one of the requirements
+# This is one of cordova's commonly missing requirements
 npm install -g ios-deploy
-
-# Cordova won't be aware of iOS platform if you don't execute this
-cordova platform add ios
-
-# Check cordova requirements
-cordova requirements
-
-# If you don't have Cocoapods installed
-# You may have to install ruby with either:
-# $ sudo apt-get install ruby-full
-# $ sudo yum install ruby
-# $ sudo emerge dev-lang/ruby
-# $ sudo pacman -S ruby
-# $ brew install ruby
-# $ pkg install runtime/ruby-18
-# $ ./configure $ make $ sudo make install
-# Then (use sudo if encounter permission issues):
-gem update --system
-gem install cocoapods
-# Or use brew
-brew install cocoapods
-
-# BACK in root directory
-cd ..
 
 # Build and run iOS archive in debug mode
 quasar dev -m ios
 
 # Build iOS archive for production
 quasar build -m ios
+```
+
+### Troubleshooting
+```
+# In case you have any build issue, go to src-cordova
+cd ./src-cordova
+
+# Install dependencies
+npm install
+
+# Cordova may not be aware of the iOS platform if you don't execute this
+cordova platform add ios
+
+# Check cordova requirements: this command should give you leads to complete your setup
+cordova requirements
+
+# In case cocoapods is missing in your environment, install it
+# https://guides.cocoapods.org/using/getting-started.html
 ```
