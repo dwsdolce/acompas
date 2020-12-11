@@ -116,13 +116,16 @@ This section needs an update
 quasar build
 
 # Install dependencies
-cd ./src-cordova
+cd ./src-cordova # ALL following commands should be run in this directory
 npm install
 
 # This is one of the requirements
 npm install -g ios-deploy
 
-# Check cordova requirements (run this in the src-cordova/ folder)
+# Cordova won't be aware of iOS platform if you don't execute this
+cordova platform add ios
+
+# Check cordova requirements
 cordova requirements
 
 # If you don't have Cocoapods installed
@@ -137,7 +140,11 @@ cordova requirements
 # Then (use sudo if encounter permission issues):
 gem update --system
 gem install cocoapods
-pod setup
+# Or use brew
+brew install cocoapods
+
+# BACK in root directory
+cd ..
 
 # Build and run iOS archive in debug mode
 quasar dev -m ios
