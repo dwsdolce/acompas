@@ -54,7 +54,7 @@ export default {
     {
       src: 'nudillo/nudillo_1',
       decay: 1,
-      volume: 0
+      volume: 8
     },
     {
       src: 'nudillo/nudillo_2',

@@ -168,4 +168,5 @@ export const restoreDefault = ({ dispatch, state }) => {
   })
   dispatch('disableHumanize')
   dispatch('disableImprovise')
+  dispatch('selectVisualizationMode', 'dots')
 }

@@ -1711,14 +1711,14 @@ export default [
   },
   {
     id: 11,
-    label: 'No compás',
+    label: 'Simple click',
     value: 'no-compas',
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 120,
     slowTempo: 50,
     fastTempo: 200,
-    nbBeatsInPattern: 1,
+    nbBeatsInPattern: 2,
     accents: [],
     clara: {
       0: 1,
@@ -1737,17 +1737,24 @@ export default [
     },
     udu: {
       0: 1,
-      1: 2
+      1: 3
     },
     click: {
       0: 1
     },
     beats: {
-      0: 'down'
+      0: 'strong',
+      1: 'down'
     },
-    beatLabels: {},
-    preCounts: [],
-    startBeats: [],
+    beatLabels: {
+      0: 1
+    },
+    preCounts: [
+      { value: 0, label: 'Off' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' }
+    ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'A simple metronome click'

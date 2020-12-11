@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   p.caption Palo
-    help-palo(:palo="selectedPalo")
+    help-palo(v-show="selectedPalo !== 'no-compas'", :palo="selectedPalo")
   q-btn#paloBtn(
     outline,
     color="white",

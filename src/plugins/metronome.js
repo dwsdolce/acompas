@@ -73,9 +73,8 @@ const noteIndexInPattern = (store, i) => {
   return index % store.state.selectedPalo.nbBeatsInPattern
 }
 
-const improvise = (store, type, time, value, note, key, eighthNotes) => {
+const improvise = (store, type, time, sound, note, key, eighthNotes) => {
   // For the "click" sounds, follow the sequence and never improvise
-  let sound = metronomeData.sounds[type][value - 1]
   if (type === 'click') {
     sound.start(time)
     return
@@ -162,7 +161,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, type, isLoop, time, note)
           sound.start(time)
         }
         if (store.state.improvise && index === key) {
-          improvise(store, palo, type, time, value, note, key, eighthNotes)
+          improvise(store, type, time, sound, note, key, eighthNotes)
         }
       }
       if (!eighthNotes && (key % 2 === 0)) {
@@ -170,7 +169,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, type, isLoop, time, note)
           sound.start(time)
         }
         if (store.state.improvise && index === key) {
-          improvise(store, palo, type, time, value, note, key, eighthNotes)
+          improvise(store, type, time, sound, note, key, eighthNotes)
         }
       }
     })
@@ -201,7 +200,11 @@ const buildSequence = (store, palo, eighthNotes, type, sequence, isLoop) => {
     if (type === 'event' && !eighthNotes && note % 2 === 0) {
       Tone.Draw.schedule(() => {
         // Animation triggered from store mutation, invoked close to AudioContext time
-        store.commit(types.TRIGGER_EVENT, note)
+        if (palo.value === 'no-compas') {
+          store.commit(types.TRIGGER_EVENT, store.state.metronomeEvent === 0 ? 2 : 0)
+        } else {
+          store.commit(types.TRIGGER_EVENT, note)
+        }
       }, time) // Use AudioContext time of the event
     }
   }, sequence)

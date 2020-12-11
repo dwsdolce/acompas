@@ -3,7 +3,7 @@
   q-resize-observer(@resize="onResize")
   .column(v-for="(n, i) in beatLabels")
     .dot(:style="getDotStyle(i)", :ref="`dot-${i}`").item-center.q-mb-md
-    span(:style="getNbStyle(i)", :ref="`nb-${i}`").text-center {{ n }}
+    span(v-if="selectedPalo.value !== 'no-compas'", :style="getNbStyle(i)", :ref="`nb-${i}`").text-center {{ n }}
 </template>
 
 <script>

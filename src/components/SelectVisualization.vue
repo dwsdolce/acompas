@@ -4,8 +4,15 @@ div
   q-btn(
     outline,
     icon="remove_red_eye",
+    :disable="selectedPalo.value === 'no-compas'",
     @click="visualizationDialog = true"
   )
+    q-tooltip(
+      v-if="selectedPalo.value === 'no-compas'",
+      anchor="top middle",
+      self="bottom middle",
+      :offset="[10, 10]"
+    ) This option is disabled for this palo.
   q-dialog(v-model="visualizationDialog")
     q-card(style="width: 100%;")
       q-card-section
@@ -34,7 +41,8 @@ export default {
     ...mapState({
       visualizationModes: state => state.visualizationModes,
       selectedVisualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize
+      visualizationSize: state => state.visualizationSize,
+      selectedPalo: state => state.selectedPalo
     })
   },
   methods: {
