@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="701000455" id="audio.acompas.app" version="2.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="701000456" id="audio.acompas.app" version="2.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>A Compás</name>
     <description>A flamenco metronome</description>
     <author email="olivier@ricordeau.org" href="https://acompas.org">
@@ -17,7 +17,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <preference name="android-minSdkVersion" value="24" />
-        <preference name="android-targetSdkVersion" value="28" />
+        <preference name="android-targetSdkVersion" value="29" />
         <config-file parent="/*" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
@@ -103,7 +103,6 @@
         <param name="android-package" value="nl.xservices.plugins.Insomnia" />
     </feature>
     <plugin name="cordova-plugin-insomnia" spec="https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git" />
-    <engine name="android" spec="^8.1.0" />
     <allow-navigation href="about:*" />
     <preference name="SplashMaintainAspectRatio" value="true" />
 </widget>

@@ -75,15 +75,26 @@ npx cypress open --config baseUrl=http://localhost:8080/
 You must first install Oracle's Java JDK 8 and set the JAVA_HOME environment
 variable in your shell.
 
-Furthermore, you need to install Google's Android SDK (pick it from the "Command
-line tools only" section [here](https://developer.android.com/studio)). You
-must set the ANDROID_HOME and ANDROID_SDK_HOME environment variables in your shell.
+Furthermore, you need to install Google's Android Studio (get it
+[here](https://developer.android.com/studio)). Install the SDK from Android
+Studio. You must set the ANDROID_SDK_ROOT and ANDROID_SDK_HOME environment
+variables in your shell and extend the your PATH environment variable.
+
+- Remark : if you open the app as a an Android Studio project by selecting
+"src-cordova/platforms/android" as a project folder, the IDE will propose
+you to update the Android Gradle plugin. The
+[Quasar documentation](https://quasar.dev/quasar-cli/developing-cordova-apps/preparation#4.-Start-Developing)
+says : don't do this proposed upgrade !
+
+- Remark 2 : you don't need to create an Android Studio project, but you can use
+Android Studio as a tool to install the SDK (From the menu : Tools > SDK
+Manager) and manage your AVDs (Tools > AVD Manager).
 
 Here is an example ~/.bashrc configuration :
 
 ``` bash
-export ANDROID_HOME=/path/to/android
-export ANDROID_SDK_HOME=/home/olivier
+export ANDROID_SDK_ROOT=/path/to/android-sdk
+export ANDROID_SDK_HOME=/home/username
 export JAVA_HOME=/path/to/jdk
 export PATH=$ANDROID_HOME/tools/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$JAVA_HOME/bin:$PATH
 ```
@@ -94,10 +105,6 @@ Here are the commands for building / running the Android app :
 # Global cordova install
 sudo npm i -g cordova
 
-# Check cordova requirements (run this in the src-cordova/ folder)
-cd ./src-cordova
-cordova requirements
-
 # Build and run android apk in debug mode
 cd /path/to/acompas
 quasar dev -m cordova -T android
@@ -107,12 +114,24 @@ cd /path/to/acompas
 quasar build -m cordova -T android
 ```
 
+### Troubleshooting
+
+Here are a few commands that might help :
+
+```bash
+# Go to the Cordova project folder
+cd ./src-cordova
+# Install npm dependencies
+npm install
+# Check cordova requirements
+cordova requirements
+# Prepare project
+cordova prepare
+```
+
 ## iOS app
 ### Setup
 ``` bash
-# Build app
-quasar build
-
 # This is one of cordova's commonly missing requirements
 npm install -g ios-deploy
 

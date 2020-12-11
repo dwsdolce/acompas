@@ -1,10 +1,10 @@
 {
   "name": "acompas",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A flamenco metronome",
   "productName": "A Compás",
   "cordovaId": "audio.acompas.app",
-  "author": "Olivier Ricordeau <olivier@ricordeau.org>",
+  "author": "A Compás Team",
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
