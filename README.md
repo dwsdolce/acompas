@@ -138,4 +138,10 @@ cordova requirements
 gem update --system
 gem install cocoapods
 pod setup
+
+# Build and run iOS archive in debug mode
+quasar dev -m ios
+
+# Build iOS archive for production
+quasar build -m ios
 ```
