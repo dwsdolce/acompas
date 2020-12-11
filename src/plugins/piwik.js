@@ -30,26 +30,34 @@ const initPiwik = () => {
 
 const piwik = store => {
   store.subscribe((mutation, state) => {
-    // Do nothing if visits tracking is disabled
-    if (!state.trackVisits) {
-      return
-    }
     switch (mutation.type) {
       case types.INITIALIZE_TRACKING:
         initPiwik()
         break
 
       case types.PLAY:
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
         window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
         playStartTime = getContext.currentTime
         break
 
       case types.STOP:
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
         window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
           Math.round(getContext.currentTime - playStartTime)])
         break
 
       case types.SELECT_PALO:
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
         window._paq.push(['trackEvent', 'PaloSwitch', 'Set', state.selectedPalo.label])
         break
     }

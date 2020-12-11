@@ -46,24 +46,24 @@ yarn install
 ./icongenie.sh
 
 # serve with hot reload at localhost:8080
-npx quasar dev
+quasar dev
 
 # build for production with minification
-npx quasar build
+quasar build
 ```
 
 ## Automated testing
 
 ``` bash
 # run the test suite in headless mode
-npx quasar test --e2e cypress
+quasar test --e2e cypress
 ```
 It's also possible to serve the app and run Cypress with different
 commands. This is helpful while writing test scenarios.
 
 ``` bash
 # first terminal :
-npx quasar dev
+quasar dev
 # second terminal (run Cypress) :
 npx cypress run --config baseUrl=http://localhost:8080/
 # second terminal (open Cypress with hot reload) :
@@ -96,15 +96,15 @@ sudo npm i -g cordova
 
 # Check cordova requirements (run this in the src-cordova/ folder)
 cd ./src-cordova
-npx cordova requirements
+cordova requirements
 
 # Build and run android apk in debug mode
 cd /path/to/acompas
-npx quasar dev -m cordova -T android
+quasar dev -m cordova -T android
 
 # Build android apk in production mode
 cd /path/to/acompas
-npx quasar build -m cordova -T android
+quasar build -m cordova -T android
 ```
 
 ## iOS app
@@ -113,16 +113,16 @@ This section needs an update
 
 ``` bash
 # Build app
-npx quasar build
+quasar build
 
 # Install dependencies
 cd ./cordova
 npm install
 
-npx cordova platform add ios
+cordova platform add ios
 
 # Check cordova requirements (run this in the cordova/ folder)
-npx cordova requirements
+cordova requirements
 
 # Fullfill the requirements
 npm install -g ios-deploy
