@@ -14,6 +14,10 @@ It is based on the following technologies :
  - [Vuex](https://vuex.vuejs.org)
  - [Tonejs](https://tonejs.github.io)
 
+## Team
+
+You can [talk with the team on Slack](https://acompas-org.slack.com)
+
 ## Thanks
 
  - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
