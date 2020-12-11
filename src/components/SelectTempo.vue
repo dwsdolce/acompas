@@ -31,6 +31,7 @@ div
         :min="0",
         :max="300",
         @input="selectTempo"
+        class="q-mx-md"
       )
     .col-2.q-ml-md-md
       q-btn(
