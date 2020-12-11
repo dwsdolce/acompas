@@ -14,7 +14,7 @@
     "test:e2e:CI": "cypress run"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.10",
+    "@quasar/extras": "^1.9.11",
     "animejs": "^3.1.0",
     "axios": "^0.19.0",
     "quasar": "^1.14.7"
