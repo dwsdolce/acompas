@@ -128,6 +128,9 @@ quasar build -m ios
 # In case you have any build issue, go to src-cordova
 cd ./src-cordova
 
+# Let's make as if this directory is a valid cordova workspace
+mkdir www
+
 # Install dependencies
 npm install
 
