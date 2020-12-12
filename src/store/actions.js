@@ -169,4 +169,6 @@ export const restoreDefault = ({ dispatch, state }) => {
   dispatch('disableHumanize')
   dispatch('disableImprovise')
   dispatch('selectVisualizationMode', 'dots')
+  dispatch('selectPreCount', state.selectedPalo.preCounts[0])
+  dispatch('selectStartBeat', state.selectedPalo.startBeats[0])
 }
