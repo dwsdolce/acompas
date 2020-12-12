@@ -10,7 +10,7 @@ div
   q-dialog(v-model="resetDialog")
     q-card(style="width: 100%;")
       q-card-section
-        .text-h6.text-center Restore default params
+        .text-h6.text-center Restore default parameters
         p.text-center Warning! This will delete your metronome settings.
       q-card-section
         q-option-group(

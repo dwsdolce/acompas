@@ -74,6 +74,9 @@ div
         div
           p: b View mode
           p Choose between dots and counter visualisation.
+        div
+          p: b Reset
+          p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
       q-card-section(align="center")
         q-btn#closeHelpBtn(
           color="primary",
