@@ -304,7 +304,7 @@ const localStorage = store => {
         break
 
       case types.RESET_ALL:
-        restoreLocalStorage()
+        restoreLocalStorage(store)
         break
     }
   })
