@@ -1,4 +1,5 @@
 import * as types from './mutation-types'
+import palosDefaultSettings from './data/palosDefaultSettings'
 
 const mutations = {
 
@@ -143,6 +144,10 @@ const mutations = {
   // payload = Tonejs time event
   [types.TRIGGER_EVENT] (state, payload) {
     state.metronomeEvent = payload
+  },
+
+  [types.RESET_ALL] (state) {
+    state.selectedPalo = palosDefaultSettings[2]
   }
 }
 

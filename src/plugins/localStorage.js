@@ -302,6 +302,10 @@ const localStorage = store => {
       case types.ENABLE_TRACKINGCHOSEN:
         storage.setItem('tracking_chosen', nextState.trackingChosen)
         break
+
+      case types.RESET_ALL:
+        restoreLocalStorage()
+        break
     }
   })
 }
