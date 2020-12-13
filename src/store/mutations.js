@@ -146,7 +146,7 @@ const mutations = {
     state.metronomeEvent = payload
   },
 
-  [types.RESET_ALL] (state) {
+  [types.RESET_STORAGE] (state) {
     state.selectedPalo = palosDefaultSettings[2]
   }
 }

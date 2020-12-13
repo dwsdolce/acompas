@@ -30,34 +30,31 @@ export const playSynth = note => {
      * load sounds by creating the Tone players
  */
 const initSounds = async () => {
-  return new Promise(resolve => {
-    const audio = new Audio()
-    if (audio.canPlayType('audio/flac')) {
-      metronomeData.audioFormat = 'flac'
-    } else if (audio.canPlayType('audio/mpeg')) {
-      metronomeData.audioFormat = 'mp3'
-    } else if (audio.canPlayType('audio/mp4')) {
-      metronomeData.audioFormat = 'mp4'
-    } else if (audio.canPlayType('audio/wav')) {
-      metronomeData.audioFormat = 'wav'
-    } else if (audio.canPlayType('audio/ogg')) {
-      metronomeData.audioFormat = 'ogg'
-    } else {
-      throw new Error('None of the available audio formats can be played')
+  const audio = new Audio()
+  if (audio.canPlayType('audio/flac')) {
+    metronomeData.audioFormat = 'flac'
+  } else if (audio.canPlayType('audio/mpeg')) {
+    metronomeData.audioFormat = 'mp3'
+  } else if (audio.canPlayType('audio/mp4')) {
+    metronomeData.audioFormat = 'mp4'
+  } else if (audio.canPlayType('audio/wav')) {
+    metronomeData.audioFormat = 'wav'
+  } else if (audio.canPlayType('audio/ogg')) {
+    metronomeData.audioFormat = 'ogg'
+  } else {
+    throw new Error('None of the available audio formats can be played')
+  }
+
+  let path = 'statics/audio/'
+
+  forEachValue(audioSettings, (value, key) => {
+    metronomeData.sounds[key] = {}
+    for (let i = 0; i < value.length; i++) {
+      let url = path + value[i].src + '.' + metronomeData.audioFormat
+      metronomeData.sounds[key][i] = new Tone.Player(url).toDestination()
+      metronomeData.sounds[key][i].volume.value = value[i].volume
+      metronomeData.sounds[key][i].volume.default = value[i].volume
     }
-
-    let path = 'statics/audio/'
-
-    forEachValue(audioSettings, (value, key) => {
-      metronomeData.sounds[key] = {}
-      for (let i = 0; i < value.length; i++) {
-        let url = path + value[i].src + '.' + metronomeData.audioFormat
-        metronomeData.sounds[key][i] = new Tone.Player(url).toDestination()
-        metronomeData.sounds[key][i].volume.value = value[i].volume
-        metronomeData.sounds[key][i].volume.default = value[i].volume
-      }
-    })
-    return resolve()
   })
 }
 
@@ -221,45 +218,38 @@ const selectTempo = tempo => {
   Tone.Transport.bpm.value = tempo
 }
 
-const toggleHumanize = state => {
-  return new Promise(resolve => {
-    // Do nothing if sequences have not been initialized
-    if (typeof metronomeData.sequences.quarterNotes === 'undefined') {
-      return resolve()
+const toggleHumanize = async state => {
+  // Do nothing if sequences have not been initialized
+  if (typeof metronomeData.sequences.quarterNotes === 'undefined') return
+
+  forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, type) => {
+    if (type === 'event' || type === 'preCount' || type === 'click') {
+      seq.humanize = false
+    } else {
+      seq.humanize = state.humanize
     }
-    forEachValue(metronomeData.sequences.quarterNotes.introduction, (seq, type) => {
-      if (type === 'event' || type === 'preCount' || type === 'click') {
-        seq.humanize = false
-      } else {
-        seq.humanize = state.humanize
-      }
+  })
+  forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, type) => {
+    if (type === 'event' || type === 'preCount' || type === 'click') {
+      seq.humanize = false
+    } else {
+      seq.humanize = state.humanize
+    }
+  })
+  forEachValue(metronomeData.sequences.eighthNotes, (seq) => {
+    forEachValue(seq, seq2 => {
+      seq2.humanize = state.humanize
     })
-    forEachValue(metronomeData.sequences.quarterNotes.loop, (seq, type) => {
-      if (type === 'event' || type === 'preCount' || type === 'click') {
-        seq.humanize = false
-      } else {
-        seq.humanize = state.humanize
-      }
-    })
-    forEachValue(metronomeData.sequences.eighthNotes, (seq) => {
-      forEachValue(seq, seq2 => {
-        seq2.humanize = state.humanize
-      })
-    })
-    return resolve()
   })
 }
 
-const changeVolume = (prevState, nextState) => {
-  return new Promise(resolve => {
-    forEachValue(nextState.instruments, (instrument, key) => {
-      if (instrument.volume !== prevState.instruments[key].volume) {
-        forEachValue(metronomeData.sounds[instrument.value], sound => {
-          sound.volume.value = instrument.volume + sound.volume.default
-        })
-      }
-    })
-    return resolve()
+const changeVolume = async (prevState, nextState) => {
+  forEachValue(nextState.instruments, (instrument, key) => {
+    if (instrument.volume !== prevState.instruments[key].volume) {
+      forEachValue(metronomeData.sounds[instrument.value], sound => {
+        sound.volume.value = instrument.volume + sound.volume.default
+      })
+    }
   })
 }
 
@@ -397,8 +387,8 @@ export const initMetronome = async (store) => {
     delay: 100,
     message: 'Loading audio samples'
   })
-  initSounds()
-  restoreLocalStorage(store)
+  await initSounds()
+  await restoreLocalStorage(store)
   if (Tone.loaded()) Loading.hide()
 }
 

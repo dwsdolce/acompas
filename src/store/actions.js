@@ -160,6 +160,8 @@ export const closePrivacyDialog = ({ commit }) => {
 }
 
 export const restoreDefault = ({ dispatch, commit, state }, payload) => {
+  if (payload === 'all') commit(types.RESET_STORAGE)
+
   dispatch('selectInstruments', state.defaultSelectedInstruments)
   dispatch('selectTempo', state.selectedPalo.defaultTempo)
   forEachValue(state.instruments, instrument => {
@@ -171,7 +173,4 @@ export const restoreDefault = ({ dispatch, commit, state }, payload) => {
   dispatch('selectVisualizationMode', 'dots')
   dispatch('selectPreCount', state.selectedPalo.preCounts[0])
   dispatch('selectStartBeat', state.selectedPalo.startBeats[0])
-  if (payload === 'all') {
-    commit(types.RESET_ALL)
-  }
 }
