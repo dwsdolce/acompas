@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption View mode
+  p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
   q-btn(
     outline,
     icon="remove_red_eye",

@@ -9,7 +9,7 @@ div
       :min="minTempo",
       :max="maxTempo",
       show-value,
-      size="152px",
+      size="130px",
       :thickness="0.12",
       @input="selectTempo"
     ).text-weight-light.q-mb-md

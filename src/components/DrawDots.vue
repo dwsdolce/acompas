@@ -26,7 +26,9 @@ export default {
   computed: {
     ...mapState({
       selectedPalo: state => state.selectedPalo,
-      nbBeats: state => state.selectedPalo.nbBeatsInPattern,
+      nbBeatsInPattern: state => state.selectedPalo.nbBeatsInPattern,
+      selectedPreCount: state => state.selectedPreCount,
+      selectedStartBeat: state => state.selectedStartBeat,
       beatLabels: state => state.selectedPalo.beatLabels,
       accents: state => state.selectedPalo.accents,
       metronomeEvent: state => state.metronomeEvent
@@ -39,7 +41,7 @@ export default {
   },
   methods: {
     onResize (size) {
-      let computedDotSize = size.width / this.nbBeats / 2
+      let computedDotSize = size.width / this.nbBeatsInPattern / 2
       if (computedDotSize < this.minDotSize) {
         this.dotSize = this.minDotSize
       } else if (computedDotSize > this.maxDotSize) {
@@ -71,12 +73,12 @@ export default {
       }
     },
     animateDot (v) {
-      let index = v - (this.$store.state.selectedPreCount.value * 2) + this.$store.state.selectedStartBeat.value
+      let index = v - (this.selectedPreCount.value * 2) + this.selectedStartBeat.value
       // index needs to be strictly positive as it will be used with a % operator
       if (index < 0) {
-        index += this.$store.state.selectedPalo.nbBeatsInPattern
+        index += this.nbBeatsInPattern
       }
-      let dotToAnimate = index % this.$store.state.selectedPalo.nbBeatsInPattern
+      let dotToAnimate = index % this.nbBeatsInPattern
       anime({
         targets: this.$refs['dot-' + dotToAnimate],
         scale: [
