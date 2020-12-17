@@ -71,6 +71,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .custom-input
-    max-width: 300px
+.custom-input
+  max-width 300px
 </style>

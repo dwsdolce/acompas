@@ -2,7 +2,6 @@ import * as types from './mutation-types'
 import palosDefaultSettings from './data/palosDefaultSettings'
 
 const mutations = {
-
   [types.TOGGLE_SIDE_MENU] (state) {
     state.shownSideMenu = !state.shownSideMenu
   },
@@ -148,6 +147,18 @@ const mutations = {
 
   [types.RESET_STORAGE] (state) {
     state.selectedPalo = palosDefaultSettings[2]
+  },
+
+  [types.TUNING_FORK_PLAY] (state) {
+    state.tuningFork.isPlaying = true
+  },
+
+  [types.TUNING_FORK_STOP] (state) {
+    state.tuningFork.isPlaying = false
+  },
+
+  [types.TUNING_CHANGE_NOTE] (state, payload) {
+    state.tuningFork.activeNote = payload
   }
 }
 

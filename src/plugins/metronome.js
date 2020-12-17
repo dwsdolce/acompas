@@ -5,6 +5,66 @@ import * as types from '../store/mutation-types'
 import audioSettings from '../store/data/audioDefaultSettings'
 import { restoreLocalStorage } from './localStorage'
 
+// const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+// ========================
+// Tuning fork functions
+// ========================
+
+export const tuningData = {
+  sequence: null,
+  reverb: null,
+  synth: null
+}
+
+tuningData.reverb = new Tone.Reverb({
+  'wet': 1,
+  'decay': 1.5,
+  'preDelay': 0.01
+}).toDestination()
+
+tuningData.synth = new Tone.Synth().connect(tuningData.reverb).set({
+  envelope: {
+    attack: 0.01,
+    decay: 1,
+    sustain: 1,
+    release: 10
+  }
+})
+
+export const TuningForkPlayNote = async note => {
+  await Tone.start()
+  tuningData.synth.triggerAttackRelease(note, 1)
+}
+
+const initTuningForkSequence = store => {
+  let seq = new Tone.Sequence((time, note) => {
+    tuningData.synth.triggerAttackRelease(note, 1, time)
+    Tone.Draw.schedule(() => {
+      store.commit(types.TUNING_CHANGE_NOTE, note)
+    }, time)
+  }, store.state.tuningFork.notes)
+
+  seq.loop = true
+  tuningData.sequence = seq
+}
+
+const startTuningForkSequence = async () => {
+  await Tone.start()
+  Tone.Transport.bpm.value = 20
+  tuningData.sequence.start()
+  Tone.Transport.start('+0.1')
+}
+
+const stopTuningForkSequence = async () => {
+  Tone.Transport.stop()
+  tuningData.sequence.stop()
+}
+
+// ==========================
+// Metronome initial settings
+// ==========================
+
 export const metronomeData = {
   audioFormat: null,
   sounds: {},
@@ -12,18 +72,6 @@ export const metronomeData = {
   preCount: null,
   startBeat: null
 }
-
-const synth = new Tone.Synth().toDestination()
-
-export const playSynth = note => {
-  synth.triggerAttackRelease(note, 4)
-}
-
-// const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-// ==========================
-// Metronome initial settings
-// ==========================
 
 /**
      * Detect the audio format to use for playing
@@ -257,9 +305,11 @@ const changeVolume = async (prevState, nextState) => {
 // Metronome init functions
 // ========================
 
-const startSequences = state => {
+const startSequences = async () => {
   let offset = metronomeData.sequences.quarterNotes.introduction.event.length
   let loopStart = '0:' + offset / 2
+
+  await Tone.start()
 
   if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
@@ -284,7 +334,6 @@ const startSequences = state => {
       seq.start()
     })
   }
-  Tone.start()
   Tone.Transport.start('+0.1')
 }
 
@@ -399,14 +448,28 @@ export const initMetronome = async (store) => {
 const metronome = store => {
   let prevState = deepCopy(store.state)
 
-  store.subscribe((mutation, state) => {
+  store.subscribe(async (mutation, state) => {
     let nextState = deepCopy(state)
 
     switch (mutation.type) {
+      case types.TUNING_FORK_PLAY:
+        store.commit(types.STOP)
+        await initTuningForkSequence(store)
+        startTuningForkSequence()
+        break
+
+      case types.TUNING_FORK_STOP:
+        stopTuningForkSequence()
+        store.commit(types.TUNING_CHANGE_NOTE, null)
+        break
+
+      case types.TUNING_CHANGE_NOTE:
+        break
+
       case types.PLAY:
-        initSequences(store, nextState)
-        toggleHumanize(nextState)
-        selectTempo(nextState.tempo)
+        await initSequences(store, nextState)
+        await toggleHumanize(nextState)
+        await selectTempo(nextState.tempo)
         startSequences(nextState)
         break
 

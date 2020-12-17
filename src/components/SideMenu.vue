@@ -121,26 +121,16 @@ div
 
 <script>
 import { openURL, Platform } from 'quasar'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import TuningFork from 'components/TuningFork'
 
 export default {
   components: { TuningFork },
-  methods: {
-    launch (url) {
-      if (Platform.is.cordova) {
-        cordova.InAppBrowser.open(url, '_system')
-        return
-      }
-      openURL(url)
-    },
-    ...mapActions([
-      'toggleTrackVisits',
-      'enableTrackVisits',
-      'enableTrackingChosen',
-      'openPrivacyDialog',
-      'closePrivacyDialog'
-    ])
+  data () {
+    return {
+      helpDialog: false,
+      tuningDialog: false
+    }
   },
   computed: {
     ...mapState({
@@ -148,10 +138,28 @@ export default {
       privacyDialogOpen: state => state.privacyDialogOpen
     })
   },
-  data () {
-    return {
-      helpDialog: false,
-      tuningDialog: false
+  watch: {
+    tuningDialog (v) {
+      if (!v) this.stopTuningFork()
+    }
+  },
+  methods: {
+    ...mapMutations({
+      stopTuningFork: 'TUNING_FORK_STOP'
+    }),
+    ...mapActions([
+      'toggleTrackVisits',
+      'enableTrackVisits',
+      'enableTrackingChosen',
+      'openPrivacyDialog',
+      'closePrivacyDialog'
+    ]),
+    launch (url) {
+      if (Platform.is.cordova) {
+        cordova.InAppBrowser.open(url, '_system')
+        return
+      }
+      openURL(url)
     }
   }
 }
