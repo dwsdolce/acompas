@@ -83,19 +83,19 @@ export default {
         targets: this.$refs['dot-' + dotToAnimate],
         scale: [
           { value: 1, duration: 0 },
-          { value: 2, duration: 500 }
+          { value: 2, duration: 1000 }
         ],
         direction: 'reverse',
-        easing: 'linear'
+        easing: 'easeInSine'
       })
       anime({
         targets: this.$refs['nb-' + dotToAnimate],
         opacity: [
           { value: 0.6, duration: 0 },
-          { value: 1, duration: 500 }
+          { value: 1, duration: 1000 }
         ],
         direction: 'reverse',
-        easing: 'linear'
+        easing: 'easeInSine'
       })
     }
   }
