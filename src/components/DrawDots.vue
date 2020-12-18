@@ -36,7 +36,7 @@ export default {
   },
   watch: {
     metronomeEvent (v) {
-      this.animateDot(v)
+      if (v !== null) this.animateDot(v)
     }
   },
   methods: {

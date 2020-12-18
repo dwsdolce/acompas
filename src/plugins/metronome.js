@@ -52,13 +52,13 @@ const initTuningForkSequence = store => {
 const startTuningForkSequence = async () => {
   await Tone.start()
   Tone.Transport.bpm.value = 20
+  await Tone.Transport.start('+0.1')
   tuningData.sequence.start()
-  Tone.Transport.start('+0.1')
 }
 
 const stopTuningForkSequence = async () => {
-  Tone.Transport.stop()
   tuningData.sequence.stop()
+  Tone.Transport.stop()
 }
 
 // ==========================
@@ -311,6 +311,7 @@ const startSequences = async () => {
   const loopStart = '0:' + offset / 2
 
   await Tone.start()
+  await Tone.Transport.start('+0.1')
 
   if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
@@ -335,11 +336,9 @@ const startSequences = async () => {
       seq.start()
     })
   }
-  Tone.Transport.start('+0.1')
 }
 
 const stopAllSequences = () => {
-  Tone.Transport.stop()
   forEachValue(metronomeData.sequences, (sequences, key) => {
     forEachValue(sequences, notes => {
       forEachValue(notes, seq => {
@@ -348,6 +347,7 @@ const stopAllSequences = () => {
       })
     })
   })
+  Tone.Transport.stop()
 }
 
 const initSequences = (store, nextState) => {
