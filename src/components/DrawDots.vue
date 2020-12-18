@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     onResize (size) {
-      let computedDotSize = size.width / this.nbBeatsInPattern / 2
+      const computedDotSize = size.width / this.nbBeatsInPattern / 2
       if (computedDotSize < this.minDotSize) {
         this.dotSize = this.minDotSize
       } else if (computedDotSize > this.maxDotSize) {
@@ -78,7 +78,7 @@ export default {
       if (index < 0) {
         index += this.nbBeatsInPattern
       }
-      let dotToAnimate = index % this.nbBeatsInPattern
+      const dotToAnimate = index % this.nbBeatsInPattern
       anime({
         targets: this.$refs['dot-' + dotToAnimate],
         scale: [

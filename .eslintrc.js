@@ -36,6 +36,8 @@ module.exports = {
     // allow paren-less arrow functions
     'arrow-parens': 'off',
     'one-var': 'off',
+    'array-bracket-spacing': ['error', 'always'],
+    'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
 
     'import/first': 'off',
     'import/named': 'error',

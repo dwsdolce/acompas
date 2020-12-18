@@ -12,7 +12,7 @@
           q-icon(name="menu")
 
         q-toolbar-title
-          img(:src="'statics/AClogo.png'" alt="A Compás" style="margin-top: 6px;")
+          img(:src="'AClogo.png'" alt="A Compás" style="margin-top: 6px;")
 
     q-drawer(
       bordered,

@@ -37,7 +37,7 @@ const restoreSelectedStartBeat = store => {
 }
 
 const restoreTempo = store => {
-  let selectedPaloSlug = store.state.selectedPalo.value
+  const selectedPaloSlug = store.state.selectedPalo.value
   if (storage.getItem(`tempo-${selectedPaloSlug}`) !== null) {
     if (parseInt(storage.getItem(`tempo-${selectedPaloSlug}`))) {
       store.dispatch(`selectTempo`, parseInt(storage.getItem(`tempo-${selectedPaloSlug}`)))
@@ -47,7 +47,7 @@ const restoreTempo = store => {
 
 const restoreSelectedInstruments = store => {
   if (storage.getItem(`selected-instruments`) !== null) {
-    let selectedInstrumentsParsed = JSON.parse(storage.getItem(`selected-instruments`))
+    const selectedInstrumentsParsed = JSON.parse(storage.getItem(`selected-instruments`))
     if (selectedInstrumentsParsed) {
       store.dispatch(`selectInstruments`, selectedInstrumentsParsed)
     }
@@ -71,7 +71,7 @@ const restoreInstrumentsVolumes = store => {
   forEachValue(store.state.instruments, (v, k) => {
     if (storage.getItem(v.value + `-volume`) !== null) {
       if (parseInt(storage.getItem(v.value + `-volume`))) {
-        let payload = {}
+        const payload = {}
         payload.instrument = v
         payload.volume = parseInt(storage.getItem(v.value + `-volume`))
         store.dispatch(`changeVolume`, payload)
@@ -151,7 +151,7 @@ export const restoreLocalStorage = async store => {
 
 const localStorage = store => {
   store.subscribe((mutation, state) => {
-    let nextState = deepCopy(state)
+    const nextState = deepCopy(state)
     switch (mutation.type) {
       case types.SELECT_VISUALIZATION_MODE:
         storage.setItem(`visualization-mode`, mutation.payload)

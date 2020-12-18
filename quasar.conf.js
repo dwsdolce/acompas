@@ -24,40 +24,7 @@ module.exports = function (ctx) {
 
     // framework: 'all', // --- includes everything; for dev only!
     framework: {
-      components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QBtnGroup',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        'QExpansionItem',
-        'QDialog',
-        'QCard',
-        'QCardSection',
-        'QCardActions',
-        'QResizeObserver',
-        'QOptionGroup',
-        'QToggle',
-        'QCheckbox',
-        'QSlider',
-        'QKnob',
-        'QInput',
-        'QTooltip'
-      ],
-
-      directives: [
-        'Ripple',
-        'ClosePopup'
-      ],
+      importStrategy: 'auto',
 
       // Quasar plugins
       plugins: [
@@ -79,8 +46,6 @@ module.exports = function (ctx) {
       // lang: 'de' // Quasar language
 
     },
-
-    supportIE: false,
 
     build: {
       scopeHoisting: true,

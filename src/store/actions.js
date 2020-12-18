@@ -34,7 +34,7 @@ export const selectTempo = ({ commit, state }, payload) => {
   if (payload === '') {
     return
   }
-  let tempo = parseInt(payload)
+  const tempo = parseInt(payload)
   // On mobile devices, the payload variable can contain number < minTempo or
   // a number > maxTempo.
   if (tempo < state.selectedPalo.minTempo || tempo > state.selectedPalo.maxTempo) {

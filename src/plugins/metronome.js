@@ -18,9 +18,9 @@ export const tuningData = {
 }
 
 tuningData.reverb = new Tone.Reverb({
-  'wet': 1,
-  'decay': 1.5,
-  'preDelay': 0.01
+  wet: 1,
+  decay: 1.5,
+  preDelay: 0.01
 }).toDestination()
 
 tuningData.synth = new Tone.Synth().connect(tuningData.reverb).set({
@@ -38,7 +38,7 @@ export const TuningForkPlayNote = async note => {
 }
 
 const initTuningForkSequence = store => {
-  let seq = new Tone.Sequence((time, note) => {
+  const seq = new Tone.Sequence((time, note) => {
     tuningData.synth.triggerAttackRelease(note, 1, time)
     Tone.Draw.schedule(() => {
       store.commit(types.TUNING_CHANGE_NOTE, note)
@@ -93,12 +93,12 @@ const initSounds = async () => {
     throw new Error('None of the available audio formats can be played')
   }
 
-  let path = 'statics/audio/'
+  const path = 'audio/'
 
   forEachValue(audioSettings, (value, key) => {
     metronomeData.sounds[key] = {}
     for (let i = 0; i < value.length; i++) {
-      let url = path + value[i].src + '.' + metronomeData.audioFormat
+      const url = path + value[i].src + '.' + metronomeData.audioFormat
       metronomeData.sounds[key][i] = new Tone.Player(url).toDestination()
       metronomeData.sounds[key][i].volume.value = value[i].volume
       metronomeData.sounds[key][i].volume.default = value[i].volume
@@ -128,7 +128,8 @@ const improvise = (store, type, time, sound, note, key, eighthNotes) => {
   // Pick a probability that the sound occurence is following the pattern
   const improvisationProbability = Math.random()
   const improvisationThreshold = 0.30 // 30% chances that we don't follow the pattern
-  let index = noteIndexInPattern(store, note)
+  const index = noteIndexInPattern(store, note)
+
   if (improvisationProbability > improvisationThreshold) { // Follow the pattern ?
     if (index === key && eighthNotes && key % 2 !== 0) {
       sound.start(time)
@@ -159,21 +160,21 @@ const improviseJaleo = (store, note, time, palo, eighthNotes) => {
   const playProbability = Math.random()
   if (playProbability > playThreshold) {
     // Pick a random index in the available jaleo sounds
-    const jaleoSoundsCount = Object.keys(metronomeData.sounds['jaleo']).length
-    let randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
-    metronomeData.sounds['jaleo'][randomIndex].start(time)
+    const jaleoSoundsCount = Object.keys(metronomeData.sounds.jaleo).length
+    const randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
+    metronomeData.sounds.jaleo[randomIndex].start(time)
   }
 }
 
 const triggerPreCountClick = (store, time, note) => {
   if (metronomeData.preCount > 0 && note < metronomeData.preCount * 2 && note % 2 === 0) {
     forEachValue(store.state.selectedPalo.beats, (value, key) => {
-      let index = noteIndexInPattern(store, key)
+      const index = noteIndexInPattern(store, key)
       if (note === index % store.state.selectedPalo.nbBeatsInPattern) {
         if (value === 'strong') {
-          metronomeData.sounds['click'][0].start(time)
+          metronomeData.sounds.click[0].start(time)
         } else {
-          metronomeData.sounds['click'][1].start(time)
+          metronomeData.sounds.click[1].start(time)
         }
       }
     })
@@ -195,12 +196,12 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, type, isLoop, time, note)
       return
     }
 
-    let instrument = store.state.instruments.find(o => o.value === type)
+    const instrument = store.state.instruments.find(o => o.value === type)
     // key is a pulsation number, value is the sound number
     forEachValue(palo[type], (value, key) => {
-      let sound = metronomeData.sounds[type][value - 1]
+      const sound = metronomeData.sounds[type][value - 1]
       key = parseInt(key)
-      let index = noteIndexInPattern(store, note)
+      const index = noteIndexInPattern(store, note)
       if (eighthNotes && instrument.eighthNotes && (key % 2 !== 0)) {
         if (!store.state.improvise && index === key) {
           sound.start(time)
@@ -233,7 +234,7 @@ const triggerAudioOnEvent = (store, palo, eighthNotes, type, isLoop, time, note)
  */
 const buildSequence = (store, palo, eighthNotes, type, sequence, isLoop) => {
   // 'note' is an occurence of an element inside the sequence variable (integer)
-  let seq = new Tone.Sequence((time, note) => {
+  const seq = new Tone.Sequence((time, note) => {
     note = parseInt(note)
 
     if (type !== 'event' && (type === 'preCount' || store.state.selectedInstruments.includes(type))) {
@@ -306,8 +307,8 @@ const changeVolume = async (prevState, nextState) => {
 // ========================
 
 const startSequences = async () => {
-  let offset = metronomeData.sequences.quarterNotes.introduction.event.length
-  let loopStart = '0:' + offset / 2
+  const offset = metronomeData.sequences.quarterNotes.introduction.event.length
+  const loopStart = '0:' + offset / 2
 
   await Tone.start()
 
@@ -350,9 +351,9 @@ const stopAllSequences = () => {
 }
 
 const initSequences = (store, nextState) => {
-  let introSeq = []
-  let loopSeq = []
-  let palo = nextState.selectedPalo
+  const introSeq = []
+  const loopSeq = []
+  const palo = nextState.selectedPalo
 
   metronomeData.preCount = parseInt(nextState.selectedPreCount.value)
   metronomeData.startBeat = parseInt(nextState.selectedStartBeat.value)
@@ -379,7 +380,7 @@ const initSequences = (store, nextState) => {
   }
 
   // Build all sequences
-  let sequences = {
+  const sequences = {
     quarterNotes: {
       introduction: {
         event: buildSequence(store, palo, false, 'event', introSeq, false),
@@ -449,7 +450,7 @@ const metronome = store => {
   let prevState = deepCopy(store.state)
 
   store.subscribe(async (mutation, state) => {
-    let nextState = deepCopy(state)
+    const nextState = deepCopy(state)
 
     switch (mutation.type) {
       case types.TUNING_FORK_PLAY:
