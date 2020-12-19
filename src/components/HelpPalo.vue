@@ -14,8 +14,8 @@ span.q-ml-sm
         .text-h6.text-center {{ selectedPaloLongLabel }}
         p {{ selectedPaloDoc }}
         p {{ selectedPaloPlaces }}
-        p Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPaloWikipediaUrl)")]
-        p Example video : #[q-btn(round, icon="link", @click="launch(selectedPaloVideoExample)")]
+        p(v-if="selectedPaloWikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPaloWikipediaUrl)")]
+        p(v-if="selectedPaloVideoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPaloVideoExample)")]
       q-card-section(align="center")
         q-btn#closePaloHelpDialogBtn(
           color="primary",

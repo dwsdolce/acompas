@@ -1061,6 +1061,125 @@ export default [
   },
   {
     id: 7,
+    label: 'Sevillanas',
+    value: 'sevillana',
+    minTempo: 15,
+    maxTempo: 200,
+    defaultTempo: 130,
+    slowTempo: 110,
+    fastTempo: 170,
+    nbBeatsInPattern: 12,
+    accents: [ 0, 3 ],
+    clara: {
+      0: 1, // 1 >
+      1: 2,
+      2: 3, // 2
+      3: 1,
+      4: 3, // 3
+      6: 1, // 4 >
+      7: 2,
+      8: 1, // 5 >
+      10: 3 // 6
+    },
+    sorda: {
+      0: 1,
+      1: 2,
+      2: 3,
+      3: 2,
+      4: 3,
+      5: 2,
+      6: 1,
+      7: 2,
+      8: 1,
+      9: 2,
+      10: 3,
+      11: 2
+    },
+    cajon: {
+      0: 1, // 1 >
+      1: 2,
+      2: 3, // 2
+      3: 2,
+      4: 3, // 3
+      5: 2,
+      6: 1, // 4 >
+      7: 2,
+      8: 1, // 5 >
+      9: 2,
+      10: 3, // 6
+      11: 2
+    },
+    nudillo: {
+      0: 1,
+      2: 2,
+      4: 2,
+      6: 1,
+      8: 1,
+      10: 2
+    },
+    udu: {
+      0: 1,
+      2: 2,
+      3: 3,
+      4: 2,
+      6: 1,
+      7: 2,
+      8: 1
+    },
+    click: {
+      0: 1,
+      2: 2,
+      4: 2,
+      6: 1,
+      8: 2,
+      10: 2
+    },
+    beats: {
+      0: 'strong',
+      1: 'down',
+      2: 'up',
+      3: 'down',
+      4: 'up',
+      5: 'down',
+      6: 'strong',
+      7: 'down',
+      8: 'up',
+      9: 'down',
+      10: 'up',
+      11: 'down'
+    },
+    beatLabels: {
+      0: 1,
+      2: 2,
+      4: 3,
+      6: 1,
+      8: 2,
+      10: 3
+    },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3 (one compás)' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (two compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 8, label: '2' },
+      { value: 10, label: '3' }
+    ],
+    slowMessage: 'Your tempo is very slow',
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Sevillanas',
+    doc: 'Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz. Remark : our example pattern is made of 2 bars.',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
+    places: 'Sevilla',
+    videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
+  },
+  {
+    id: 8,
     label: 'Siguiriya',
     value: 'siguiriya',
     minTempo: 15,
@@ -1264,7 +1383,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=3u66TxY1S88'
   },
   {
-    id: 8,
+    id: 9,
     label: 'Soleá',
     value: 'solea',
     minTempo: 15,
@@ -1450,7 +1569,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=U9iw1gMVoO0'
   },
   {
-    id: 9,
+    id: 10,
     label: 'Tangos',
     value: 'tangos',
     minTempo: 15,
@@ -1591,71 +1710,74 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'
   },
   {
-    id: 10,
-    label: 'Sevillanas',
-    value: 'sevillana',
-    minTempo: 15,
-    maxTempo: 200,
-    defaultTempo: 130,
-    slowTempo: 110,
-    fastTempo: 170,
+    id: 11,
+    label: 'Tanguillos',
+    value: 'tanguillos',
+    minTempo: 30,
+    maxTempo: 230,
+    defaultTempo: 150,
+    slowTempo: 90,
+    fastTempo: 200,
     nbBeatsInPattern: 12,
     accents: [ 0, 3 ],
     clara: {
-      0: 1, // 1 >
-      1: 2,
-      2: 3, // 2
-      3: 1,
-      4: 3, // 3
-      6: 1, // 4 >
-      7: 2,
-      8: 1, // 5 >
-      10: 3 // 6
+      0: 3, // 1
+      1: 1,
+      2: 1, // 2 >
+      3: 2,
+      4: 1, // 3
+      5: 2,
+      6: 3, // 1 >
+      7: 1,
+      8: 1, // 2
+      9: 2,
+      10: 1
     },
     sorda: {
-      0: 1,
+      0: 3,
       1: 2,
-      2: 3,
+      2: 1,
       3: 2,
-      4: 3,
+      4: 1,
       5: 2,
-      6: 1,
+      6: 3,
       7: 2,
       8: 1,
       9: 2,
-      10: 3,
+      10: 1,
       11: 2
     },
     cajon: {
-      0: 1, // 1 >
-      1: 2,
-      2: 3, // 2
-      3: 2,
+      0: 1, // 1
+      1: 3,
+      2: 3, // 2 >
+      3: 1,
       4: 3, // 3
       5: 2,
       6: 1, // 4 >
-      7: 2,
-      8: 1, // 5 >
-      9: 2,
-      10: 3, // 6
-      11: 2
+      7: 3,
+      8: 3, // 5
+      9: 1,
+      10: 3
     },
     nudillo: {
       0: 1,
       2: 2,
       4: 2,
       6: 1,
-      8: 1,
+      8: 2,
       10: 2
     },
     udu: {
       0: 1,
-      2: 2,
+      1: 3,
+      2: 3,
       3: 3,
-      4: 2,
+      4: 3,
       6: 1,
-      7: 2,
-      8: 1
+      7: 3,
+      8: 3,
+      10: 3
     },
     click: {
       0: 1,
@@ -1689,28 +1811,29 @@ export default [
     },
     preCounts: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3 (one compás)' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (two compás)' }
+      { value: 1, label: '2' },
+      { value: 2, label: '3' },
+      { value: 3, label: '4 (one compás)' },
+      { value: 4, label: '5' },
+      { value: 5, label: '6' }
     ],
     startBeats: [
       { value: 0, label: '1 (default)' },
-      { value: 8, label: '2' },
-      { value: 10, label: '3' }
+      { value: 2, label: '2' },
+      { value: 4, label: '3' },
+      { value: 6, label: '4 (half a compás)' },
+      { value: 8, label: '5' },
+      { value: 10, label: '6' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
-    longLabel: 'Sevillanas',
-    doc: 'Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz. Remark : our example pattern is made of 2 bars.',
-    wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
-    places: 'Sevilla',
-    videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
+    longLabel: 'Tanguillos de Cádiz',
+    doc: 'Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3. There is an accent on the first beat and sometimes… on the 2 and a half. Remark : our example pattern is made of 2 bars.',
+    places: 'Cádiz and others',
+    videoExample: 'https://www.youtube.com/watch?v=AzvKavPKrXw'
   },
   {
-    id: 11,
+    id: 12,
     label: 'Simple click',
     value: 'no-compas',
     minTempo: 15,
