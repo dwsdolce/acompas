@@ -1196,10 +1196,10 @@
   resolved "https://registry.yarnpkg.com/@positron/stack-trace/-/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@2.1.11":
-  version "2.1.11"
-  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-2.1.11.tgz#f96290ffee8c582018f28a8ecaa19a8cd99f3750"
-  integrity sha512-MX01izfk1cAFcRVj4IpU6fneQW14oeq4oAPdCqJDjYY1I1M3kYBFG+WvgfvZJxfTGiaVNP6xKWKkU1wIUNgbIw==
+"@quasar/app@2.1.13":
+  version "2.1.13"
+  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-2.1.13.tgz#63ac26685725472e5619d4a2b340acee61d87d2e"
+  integrity sha512-L+j0ePAIhxWxRnUN48W/pQVRUzq0cPX8DbXpeIUh+F29oCAnq4Zk+bwefiT1HFQ253kpjW26x7fwLeuL8YqvdA==
   dependencies:
     "@quasar/babel-preset-app" "2.0.1"
     "@quasar/fastclick" "1.1.4"
@@ -1305,10 +1305,10 @@
     core-js "^3.6.5"
     core-js-compat "^3.6.5"
 
-"@quasar/extras@^1.9.11":
-  version "1.9.11"
-  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.9.11.tgz#95f7ef34c77d7cf9bb7db6115bfb5cc4a69bcbab"
-  integrity sha512-HI50hWZVfdcdg1TKldQxgZRr05tEX4sSJQ5TAx8no5RghjrHpSuVuwDstIFmsUM0WgTGzE89S3Aqgvr7tS4dIg==
+"@quasar/extras@^1.9.12":
+  version "1.9.12"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.9.12.tgz#33e8079d194ac64dabef570750b528db831fe52d"
+  integrity sha512-RZxwvOBYfptUUFUz81fsgRCaifB/rdwRvb7+/+ng5OQyK+VqRoCJZK6GDWNZPj0wbNNyKprX28Mem3TNWTHCMg==
 
 "@quasar/fastclick@1.1.4":
   version "1.1.4"
@@ -4335,7 +4335,7 @@ eslint-plugin-import@2.22.1:
     resolve "^1.17.0"
     tsconfig-paths "^3.9.0"
 
-eslint-plugin-node@^11.1.0:
+eslint-plugin-node@11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-11.1.0.tgz#c95544416ee4ada26740a30474eefc5402dc671d"
   integrity sha512-oUwtPJ1W0SKD0Tr+wqu92c5xuCeQqB3hSCHasn/ZgjFdA9iDGNkNf2Zi9ztY7X+hNuMib23LNGRm6+uN+KLE3g==

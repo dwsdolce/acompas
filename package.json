@@ -13,14 +13,13 @@
     "test:e2e:CI": "cypress run"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.11",
+    "@quasar/extras": "^1.9.12",
     "animejs": "^3.2.1",
     "axios": "^0.21.0",
-    "eslint-plugin-node": "^11.1.0",
     "quasar": "^1.14.7"
   },
   "devDependencies": {
-    "@quasar/app": "2.1.11",
+    "@quasar/app": "2.1.13",
     "@quasar/quasar-app-extension-testing": "^1.0.3",
     "@quasar/quasar-app-extension-testing-e2e-cypress": "^2.0.4",
     "@vue/eslint-config-standard": "6.0.0",
