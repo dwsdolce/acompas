@@ -169,6 +169,14 @@ const localStorage = store => {
         } else {
           store.dispatch(`selectTempo`, mutation.payload.defaultTempo)
         }
+
+        // Select a new tempo
+        if (storage.getItem(`swing-${mutation.payload.value}`) !== null) {
+          store.dispatch(`selectSwing`, parseFloat(storage.getItem(`swing-${mutation.payload.value}`)))
+        } else {
+          store.dispatch(`selectSwing`, 0)
+        }
+
         // Select a new pre-count
         if (storage.getItem(`pre-count-${mutation.payload.value}`) !== null) {
           if (parseInt(storage.getItem(`pre-count-${mutation.payload.value}`))) {
@@ -183,6 +191,7 @@ const localStorage = store => {
         } else {
           store.dispatch(`selectPreCount`, mutation.payload.preCounts[0])
         }
+
         // Select a new start beat
         if (storage.getItem(`start-beat-${mutation.payload.value}`) !== null) {
           if (parseInt(storage.getItem(`start-beat-${mutation.payload.value}`))) {
@@ -201,6 +210,10 @@ const localStorage = store => {
 
       case types.SELECT_TEMPO:
         storage.setItem(`tempo-${nextState.selectedPalo.value}`, mutation.payload)
+        break
+
+      case types.SELECT_SWING:
+        storage.setItem(`swing-${nextState.selectedPalo.value}`, mutation.payload)
         break
 
       case types.SELECT_PRECOUNT:
@@ -274,6 +287,7 @@ const localStorage = store => {
       case types.RESET_STORAGE:
         forEachValue(palosDefaultSettings, palo => {
           storage.setItem(`tempo-${palo.value}`, palo.defaultTempo)
+          storage.setItem(`swing-${palo.value}`, 0)
           storage.setItem(`pre-count-${palo.value}`, 0)
           storage.setItem(`start-beat-${palo.value}`, 0)
         })

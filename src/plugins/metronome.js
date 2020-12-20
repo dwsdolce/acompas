@@ -267,6 +267,10 @@ const selectTempo = tempo => {
   Tone.Transport.bpm.value = tempo
 }
 
+const selectSwing = swing => {
+  Tone.Transport.swing = swing
+}
+
 const toggleHumanize = async state => {
   // Do nothing if sequences have not been initialized
   if (typeof metronomeData.sequences.quarterNotes === 'undefined') return
@@ -471,6 +475,7 @@ const metronome = store => {
         await initSequences(store, nextState)
         await toggleHumanize(nextState)
         await selectTempo(nextState.tempo)
+        await selectSwing(nextState.swing)
         startSequences(nextState)
         break
 
@@ -480,6 +485,10 @@ const metronome = store => {
 
       case types.SELECT_TEMPO:
         selectTempo(nextState.tempo)
+        break
+
+      case types.SELECT_SWING:
+        selectSwing(nextState.swing)
         break
 
       case types.SELECT_PALO:

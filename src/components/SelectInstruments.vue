@@ -3,8 +3,9 @@ div
   p.caption Instruments
   q-btn#mixerBtn(
     outline,
+    icon="tune",
     @click="instrumentsDialog = true"
-  ) Mixer
+  )
   q-dialog#mixerDialog(v-model="instrumentsDialog")
     q-card(style="width: 100%;")
       q-card-section

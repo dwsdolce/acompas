@@ -10,8 +10,7 @@
           select-palo.q-mb-md
           select-start-beat.q-mb-md
           select-pre-count.q-mb-md
-          toggle-improvise.q-mb-md
-          toggle-humanize
+          rythm-options
         .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
           play
         .col-6.col-md-5
@@ -33,12 +32,11 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
+import RythmOptions from './RythmOptions'
 import SelectPalo from './SelectPalo'
 import SelectPreCount from './SelectPreCount'
 import SelectStartBeat from './SelectStartBeat'
 import SelectInstruments from './SelectInstruments'
-import ToggleImprovise from './ToggleImprovise'
-import ToggleHumanize from './ToggleHumanize'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
@@ -49,12 +47,11 @@ export default {
   components: {
     Play,
     SelectTempo,
+    RythmOptions,
     SelectPalo,
     SelectPreCount,
     SelectStartBeat,
     SelectInstruments,
-    ToggleImprovise,
-    ToggleHumanize,
     DrawDots,
     DrawCounter,
     SelectVisualization,

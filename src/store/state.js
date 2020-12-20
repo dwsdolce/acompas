@@ -27,6 +27,7 @@ const state = {
   startBeats: palosDefaultSettings[2].startBeats,
   selectedStartBeat: palosDefaultSettings[2].startBeats[0],
   tempo: palosDefaultSettings[2].defaultTempo,
+  swing: 0,
   improvise: false,
   humanize: false,
   isPlaying: false,

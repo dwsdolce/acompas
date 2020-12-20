@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+.text-center
   p.caption Humanize
   q-toggle(
     :value="humanize",

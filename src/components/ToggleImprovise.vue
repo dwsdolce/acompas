@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+.text-center
   p.caption Improvise
   q-toggle(
     :value="improvise",

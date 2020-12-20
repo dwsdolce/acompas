@@ -69,6 +69,10 @@ export const selectTempo = ({ commit, state }, payload) => {
   }
 }
 
+export const selectSwing = ({ commit }, payload) => {
+  commit(types.SELECT_SWING, payload)
+}
+
 export const selectCrochets = ({ commit }) => {
   commit(types.SELECT_CROCHETS)
 }
@@ -164,6 +168,7 @@ export const restoreDefault = ({ dispatch, commit, state }, payload) => {
 
   dispatch('selectInstruments', state.defaultSelectedInstruments)
   dispatch('selectTempo', state.selectedPalo.defaultTempo)
+  dispatch('selectSwing', 0)
   forEachValue(state.instruments, instrument => {
     dispatch('disableEighthNotes', instrument)
     dispatch('changeVolume', { instrument: instrument, volume: 0 })

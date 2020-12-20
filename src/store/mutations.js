@@ -35,6 +35,10 @@ const mutations = {
     state.tempo = payload
   },
 
+  [types.SELECT_SWING] (state, payload) {
+    state.swing = payload
+  },
+
   // payload is an array of instrument slugs
   [types.SELECT_INSTRUMENTS] (state, payload) {
     state.selectedInstruments = payload
