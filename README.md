@@ -28,7 +28,7 @@ You can [talk with the team on Slack](https://acompas-org.slack.com)
 
 ## Cloning and building the source code
 
-Before anything, you need Node.js 13.x installed on your machine. See the nodejs.org
+Before anything, you need Node.js 12.x installed on your machine. See the nodejs.org
 [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
