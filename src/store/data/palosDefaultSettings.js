@@ -204,6 +204,124 @@ export default [
   },
   {
     id: 2,
+    label: 'Abandolaos',
+    value: 'abandolaos',
+    minTempo: 15,
+    maxTempo: 300,
+    defaultTempo: 190,
+    slowTempo: 135,
+    fastTempo: 230,
+    nbBeatsInPattern: 12,
+    accents: [ 0, 2, 4 ],
+    clara: {
+      0: 3, // 6 >
+      2: 1, // 1
+      3: 2,
+      4: 3, // 2
+      6: 1, // 3 >
+      7: 3,
+      8: 3, // 4
+      10: 3 // 5
+    },
+    sorda: {
+      0: 1, // 6 >
+      1: 3,
+      2: 2, // 1
+      3: 1,
+      4: 3, // 2
+      7: 1,
+      8: 2, // 4
+      9: 3,
+      10: 2,
+      11: 3
+    },
+    cajon: {
+      0: 1, // 6 >
+      1: 2,
+      2: 2, // 1
+      3: 3,
+      4: 3, // 2
+      5: 2,
+      6: 2, // 3 >
+      7: 3,
+      8: 3, // 4
+      9: 2,
+      10: 2, // 5
+      11: 2
+    },
+    nudillo: {
+      0: 1,
+      2: 2,
+      4: 1,
+      6: 2,
+      8: 1,
+      10: 2
+    },
+    udu: {
+      0: 1, // 6 >
+      2: 2, // 1
+      3: 3,
+      4: 2, // 2
+      6: 2, // 3 >
+      8: 3, // 4
+      10: 2 // 5
+    },
+    click: {
+      0: 1,
+      2: 2,
+      4: 1,
+      6: 2,
+      8: 1,
+      10: 2
+    },
+    beats: {
+      0: 'strong',
+      1: 'down',
+      2: 'up',
+      3: 'down',
+      4: 'strong',
+      5: 'down',
+      6: 'up',
+      7: 'down',
+      8: 'strong',
+      9: 'down',
+      10: 'up',
+      11: 'down'
+    },
+    beatLabels: {
+      0: 6,
+      2: 1,
+      4: 2,
+      6: 3,
+      8: 4,
+      10: 5
+    },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3 (half a compás)' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (one compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '6 (default)' },
+      { value: 2, label: '1' },
+      { value: 4, label: '2' },
+      { value: 6, label: '3 (half a compás)' },
+      { value: 8, label: '4' },
+      { value: 10, label: '5' }
+    ],
+    slowMessage: 'Your tempo is very slow',
+    fastMessage: 'Your tempo is very fast',
+    longLabel: '6 beats Abandolaos',
+    doc: 'A kind oh 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.',
+    places: 'Málaga, Huelva',
+    videoExample: null
+  },
+  {
+    id: 3,
     label: 'Bulería (6)',
     value: 'buleria-6',
     minTempo: 15,
@@ -322,7 +440,7 @@ export default [
     videoExample: null
   },
   {
-    id: 3,
+    id: 4,
     label: 'Bulería (12)',
     value: 'buleria-12',
     minTempo: 15,
@@ -520,7 +638,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
   },
   {
-    id: 4,
+    id: 5,
     label: 'Bulería (12) variation',
     value: 'buleria-12-variation',
     minTempo: 15,
@@ -721,7 +839,7 @@ export default [
     videoExample: null
   },
   {
-    id: 5,
+    id: 6,
     label: 'Fandangos',
     value: 'fandangos',
     minTempo: 15,
@@ -923,7 +1041,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=RS8sy3gdb_Y'
   },
   {
-    id: 6,
+    id: 7,
     label: 'Rumba',
     value: 'rumba',
     minTempo: 15,
@@ -1060,7 +1178,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=2oyhlad64-s'
   },
   {
-    id: 7,
+    id: 8,
     label: 'Sevillanas',
     value: 'sevillana',
     minTempo: 15,
@@ -1179,7 +1297,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
   },
   {
-    id: 8,
+    id: 9,
     label: 'Siguiriya',
     value: 'siguiriya',
     minTempo: 15,
@@ -1383,7 +1501,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=3u66TxY1S88'
   },
   {
-    id: 9,
+    id: 10,
     label: 'Soleá',
     value: 'solea',
     minTempo: 15,
@@ -1569,7 +1687,130 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=U9iw1gMVoO0'
   },
   {
-    id: 10,
+    id: 11,
+    label: 'Tanguillos',
+    value: 'tanguillos',
+    minTempo: 30,
+    maxTempo: 230,
+    defaultTempo: 150,
+    slowTempo: 90,
+    fastTempo: 200,
+    nbBeatsInPattern: 12,
+    accents: [ 0, 3 ],
+    clara: {
+      0: 3, // 1
+      1: 1,
+      2: 1, // 2 >
+      3: 2,
+      4: 1, // 3
+      5: 2,
+      6: 3, // 1 >
+      7: 1,
+      8: 1, // 2
+      9: 2,
+      10: 1
+    },
+    sorda: {
+      0: 3,
+      1: 2,
+      2: 1,
+      3: 2,
+      4: 1,
+      5: 2,
+      6: 3,
+      7: 2,
+      8: 1,
+      9: 2,
+      10: 1,
+      11: 2
+    },
+    cajon: {
+      0: 1, // 1
+      1: 3,
+      2: 3, // 2 >
+      3: 1,
+      4: 3, // 3
+      5: 2,
+      6: 1, // 4 >
+      7: 3,
+      8: 3, // 5
+      9: 1,
+      10: 3
+    },
+    nudillo: {
+      0: 1,
+      2: 2,
+      4: 2,
+      6: 1,
+      8: 2,
+      10: 2
+    },
+    udu: {
+      0: 1,
+      1: 3,
+      2: 3,
+      3: 3,
+      4: 3,
+      6: 1,
+      7: 3,
+      8: 3,
+      10: 3
+    },
+    click: {
+      0: 1,
+      2: 2,
+      4: 2,
+      6: 1,
+      8: 2,
+      10: 2
+    },
+    beats: {
+      0: 'strong',
+      1: 'down',
+      2: 'up',
+      3: 'down',
+      4: 'up',
+      5: 'down',
+      6: 'strong',
+      7: 'down',
+      8: 'up',
+      9: 'down',
+      10: 'up',
+      11: 'down'
+    },
+    beatLabels: {
+      0: 1,
+      2: 2,
+      4: 3,
+      6: 1,
+      8: 2,
+      10: 3
+    },
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '2' },
+      { value: 2, label: '3' },
+      { value: 3, label: '4 (one compás)' },
+      { value: 4, label: '5' },
+      { value: 5, label: '6' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 2, label: '2' },
+      { value: 4, label: '3' },
+      { value: 6, label: '4 (half a compás)' },
+      { value: 8, label: '5' },
+      { value: 10, label: '6' }
+    ],
+    slowMessage: 'Your tempo is very slow',
+    fastMessage: 'Your tempo is very fast',
+    longLabel: 'Tanguillos de Cádiz',
+    doc: 'Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3. There is an accent on the first beat and sometimes… on the 2 and a half. Remark : our example pattern is made of 2 bars.',
+    places: 'Cádiz and others',
+    videoExample: 'https://www.youtube.com/watch?v=AzvKavPKrXw'
+  },
+  {
+    id: 12,
     label: 'Tangos',
     value: 'tangos',
     minTempo: 15,
@@ -1710,130 +1951,7 @@ export default [
     videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'
   },
   {
-    id: 11,
-    label: 'Tanguillos',
-    value: 'tanguillos',
-    minTempo: 30,
-    maxTempo: 230,
-    defaultTempo: 150,
-    slowTempo: 90,
-    fastTempo: 200,
-    nbBeatsInPattern: 12,
-    accents: [ 0, 3 ],
-    clara: {
-      0: 3, // 1
-      1: 1,
-      2: 1, // 2 >
-      3: 2,
-      4: 1, // 3
-      5: 2,
-      6: 3, // 1 >
-      7: 1,
-      8: 1, // 2
-      9: 2,
-      10: 1
-    },
-    sorda: {
-      0: 3,
-      1: 2,
-      2: 1,
-      3: 2,
-      4: 1,
-      5: 2,
-      6: 3,
-      7: 2,
-      8: 1,
-      9: 2,
-      10: 1,
-      11: 2
-    },
-    cajon: {
-      0: 1, // 1
-      1: 3,
-      2: 3, // 2 >
-      3: 1,
-      4: 3, // 3
-      5: 2,
-      6: 1, // 4 >
-      7: 3,
-      8: 3, // 5
-      9: 1,
-      10: 3
-    },
-    nudillo: {
-      0: 1,
-      2: 2,
-      4: 2,
-      6: 1,
-      8: 2,
-      10: 2
-    },
-    udu: {
-      0: 1,
-      1: 3,
-      2: 3,
-      3: 3,
-      4: 3,
-      6: 1,
-      7: 3,
-      8: 3,
-      10: 3
-    },
-    click: {
-      0: 1,
-      2: 2,
-      4: 2,
-      6: 1,
-      8: 2,
-      10: 2
-    },
-    beats: {
-      0: 'strong',
-      1: 'down',
-      2: 'up',
-      3: 'down',
-      4: 'up',
-      5: 'down',
-      6: 'strong',
-      7: 'down',
-      8: 'up',
-      9: 'down',
-      10: 'up',
-      11: 'down'
-    },
-    beatLabels: {
-      0: 1,
-      2: 2,
-      4: 3,
-      6: 1,
-      8: 2,
-      10: 3
-    },
-    preCounts: [
-      { value: 0, label: 'Off' },
-      { value: 1, label: '2' },
-      { value: 2, label: '3' },
-      { value: 3, label: '4 (one compás)' },
-      { value: 4, label: '5' },
-      { value: 5, label: '6' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 2, label: '2' },
-      { value: 4, label: '3' },
-      { value: 6, label: '4 (half a compás)' },
-      { value: 8, label: '5' },
-      { value: 10, label: '6' }
-    ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
-    longLabel: 'Tanguillos de Cádiz',
-    doc: 'Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3. There is an accent on the first beat and sometimes… on the 2 and a half. Remark : our example pattern is made of 2 bars.',
-    places: 'Cádiz and others',
-    videoExample: 'https://www.youtube.com/watch?v=AzvKavPKrXw'
-  },
-  {
-    id: 12,
+    id: 13,
     label: 'Simple click',
     value: 'no-compas',
     minTempo: 15,
