@@ -1,7 +1,7 @@
 export default [
   {
     id: 1,
-    label: 'Alegría',
+    label: 'Alegría / Soleá por bulería',
     value: 'alegria',
     minTempo: 15,
     maxTempo: 200,
@@ -197,7 +197,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is por buleria',
     longLabel: 'Alegría',
-    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary". Alegría means "joy" in Spanish.',
+    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary". This rythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá). The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E). It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
     places: 'Cádiz',
     videoExample: 'https://www.youtube.com/watch?v=M4x02TRlaqw'
