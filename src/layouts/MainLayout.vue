@@ -23,15 +23,21 @@
       side-menu#sideMenu
 
     q-page-container
-      router-view
+      q-page.flex.bg-grey-10.full-width.full-height
+        app-main#appMain
 </template>
 
 <script>
 import { openURL } from 'quasar'
 import SideMenu from 'components/SideMenu'
+import AppMain from '../components/AppMain'
 
 export default {
-  name: 'MyLayout',
+  name: 'MainLayout',
+  components: {
+    SideMenu,
+    AppMain
+  },
   data () {
     return {
       leftDrawerOpen: this.$q.screen.gt.md
@@ -39,9 +45,6 @@ export default {
   },
   methods: {
     openURL
-  },
-  components: {
-    SideMenu
   }
 }
 </script>

@@ -1,16 +1,20 @@
 <template lang="pug">
-  .text-grey-1.full-width.q-pa-sm
-    .full-width
+  .text-grey-1.full-width.q-pa-sm.column.content-center
+    .col-2.col-md-3.full-width.flex.content-center
       q-resize-observer(@resize="onResize")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
-    div
+    .col-10.col-md-9.container
       .row.text-center.justify-center.no-wrap
         .col-6.col-md-5
-          select-palo.q-mb-md
-          select-start-beat.q-mb-md
-          select-pre-count.q-mb-md
-          rythm-options
+          .row.justify-center.q-mb-md
+            select-palo
+          .row.justify-center.q-mb-md
+            select-start-beat
+          .row.justify-center.q-mb-md
+            select-pre-count
+          .row.justify-center
+            rythm-options
         .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
           play
         .col-6.col-md-5

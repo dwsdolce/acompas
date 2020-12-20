@@ -4,7 +4,7 @@ div
   q-btn(
     round,
     outline,
-    icon="restore",
+    icon="settings_backup_restore",
     @click="resetDialog = true"
   )
   q-dialog(v-model="resetDialog")

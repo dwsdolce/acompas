@@ -62,7 +62,7 @@ export default {
         width: this.dotSize + 'px',
         height: this.dotSize + 'px',
         borderRadius: this.borderRadius + '%',
-        marginTop: this.dotSize + 'px',
+        marginTop: this.dotSize / 2 + 'px',
         backgroundColor: this.accents.includes(i / 2) ? 'firebrick' : 'tomato'
       }
     },

@@ -4,7 +4,7 @@ div
   q-btn#optBtn(
     outline,
     color="white",
-    icon="build",
+    icon="speed",
     @click="optDialog = true"
   )
   q-dialog#optDialog(v-model="optDialog")
