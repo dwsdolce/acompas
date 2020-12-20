@@ -1,34 +1,34 @@
 <template lang="pug">
-  .text-grey-1.full-width.q-pa-sm
-    .full-width
+  .text-grey-1.full-width.q-pa-sm.column.content-center
+    .col-2.col-md-3.full-width.flex.content-center
       q-resize-observer(@resize="onResize")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
-    div
-      .row.text-center.no-wrap
-        .col-6
-          .column
-            select-palo.q-mb-md
-            select-start-beat.q-mb-md
-            select-pre-count.q-mb-md
-            toggle-improvise.q-mb-md
-            toggle-humanize.q-mb-md
-        .col-6
-          .column
-            select-tempo.q-mb-md
-            .row
-              .col.col-md-12
-                .item-center
-                  select-visualization.q-mb-md
-              .col.col-md-12
-                .item-center
-                  select-instruments.q-mb-md
-            .item-center
-              play(v-if="visualizationSize.width <= breakpoint.sm")
-      .row.text-center.no-wrap
-        .col-12(v-if="visualizationSize.width > breakpoint.sm").column.justify-end
-          .item-center
-            play
+    .col-10.col-md-9.container
+      .row.text-center.justify-center.no-wrap
+        .col-6.col-md-5
+          .row.justify-center.q-mb-md
+            select-palo
+          .row.justify-center.q-mb-md
+            select-start-beat
+          .row.justify-center.q-mb-md
+            select-pre-count
+          .row.justify-center
+            rythm-options
+        .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
+          play
+        .col-6.col-md-5
+          select-tempo.q-mb-md
+          .row.justify-center.q-mb-md
+            .col.col-lg-4.col-xl-2
+              select-instruments
+            .col.col-lg-4.col-xl-2
+              select-visualization
+          .row.justify-center
+            .col.col-lg-4.col-xl-2(v-if="$q.screen.lt.lg || $q.screen.lg").flex.justify-center.content-end
+              play
+            .col.col-lg-4.col-xl-2
+              reset
 </template>
 
 <script>
@@ -36,37 +36,36 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
+import RythmOptions from './RythmOptions'
 import SelectPalo from './SelectPalo'
 import SelectPreCount from './SelectPreCount'
 import SelectStartBeat from './SelectStartBeat'
 import SelectInstruments from './SelectInstruments'
-import ToggleImprovise from './ToggleImprovise'
-import ToggleHumanize from './ToggleHumanize'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
 import SelectVisualization from './SelectVisualization'
+import Reset from './Reset'
 import { isSupported, initMetronome } from '../plugins/metronome'
 
 export default {
   components: {
     Play,
     SelectTempo,
+    RythmOptions,
     SelectPalo,
     SelectPreCount,
     SelectStartBeat,
     SelectInstruments,
-    ToggleImprovise,
-    ToggleHumanize,
     DrawDots,
     DrawCounter,
-    SelectVisualization
+    SelectVisualization,
+    Reset
   },
   computed: {
     ...mapState({
       isPlaying: state => state.isPlaying,
       visualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize,
-      breakpoint: state => state.breakpoint
+      visualizationSize: state => state.visualizationSize
     })
   },
   mounted () {

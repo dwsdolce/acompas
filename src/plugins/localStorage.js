@@ -1,306 +1,296 @@
 import * as types from '../store/mutation-types'
 import { forEachValue, deepCopy } from '../assets/utils'
+import palosDefaultSettings from '../store/data/palosDefaultSettings'
 
 const storage = window.localStorage
 
 const restoreVisualization = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('visualization-mode') !== null) {
-      store.dispatch('selectVisualizationMode', storage.getItem('visualization-mode'))
-    }
-    return resolve()
-  })
+  if (storage.getItem(`visualization-mode`) !== null) {
+    store.dispatch(`selectVisualizationMode`, storage.getItem(`visualization-mode`))
+  }
 }
 
 const restoreSelectedPalo = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('palo') !== null) {
-      store.dispatch('selectPalo', storage.getItem('palo'))
-    }
-    return resolve()
-  })
+  if (storage.getItem(`palo`) !== null) {
+    store.dispatch(`selectPalo`, storage.getItem(`palo`))
+  }
 }
 
 const restoreSelectedPreCount = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('pre-count-' + store.state.selectedPalo.value) !== null) {
-      forEachValue(store.state.preCounts, (preCount, key) => {
-        if (preCount.value === parseInt(storage.getItem('pre-count-' + store.state.selectedPalo.value))) {
-          store.dispatch('selectPreCount', preCount)
-        }
-      })
-    }
-    return resolve()
-  })
+  if (storage.getItem(`pre-count-${store.state.selectedPalo.value}`) !== null) {
+    forEachValue(store.state.preCounts, (preCount, key) => {
+      if (preCount.value === parseInt(storage.getItem(`pre-count-${store.state.selectedPalo.value}`))) {
+        store.dispatch(`selectPreCount`, preCount)
+      }
+    })
+  }
 }
 
 const restoreSelectedStartBeat = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('start-beat-' + store.state.selectedPalo.value) !== null) {
-      forEachValue(store.state.startBeats, (startBeat, key) => {
-        if (startBeat.value === parseInt(storage.getItem('start-beat-' + store.state.selectedPalo.value))) {
-          store.dispatch('selectStartBeat', startBeat)
-        }
-      })
-    }
-    return resolve()
-  })
+  if (storage.getItem(`start-beat-${store.state.selectedPalo.value}`) !== null) {
+    forEachValue(store.state.startBeats, (startBeat, key) => {
+      if (startBeat.value === parseInt(storage.getItem(`start-beat-${store.state.selectedPalo.value}`))) {
+        store.dispatch(`selectStartBeat`, startBeat)
+      }
+    })
+  }
 }
 
 const restoreTempo = store => {
-  return new Promise(resolve => {
-    let selectedPaloSlug = store.state.selectedPalo.value
-    if (storage.getItem('tempo-' + selectedPaloSlug) !== null) {
-      if (parseInt(storage.getItem('tempo-' + selectedPaloSlug))) {
-        store.dispatch('selectTempo', parseInt(storage.getItem('tempo-' + selectedPaloSlug)))
-      }
+  const selectedPaloSlug = store.state.selectedPalo.value
+  if (storage.getItem(`tempo-${selectedPaloSlug}`) !== null) {
+    if (parseInt(storage.getItem(`tempo-${selectedPaloSlug}`))) {
+      store.dispatch(`selectTempo`, parseInt(storage.getItem(`tempo-${selectedPaloSlug}`)))
     }
-    return resolve()
-  })
+  }
 }
 
 const restoreSelectedInstruments = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('selected-instruments') !== null) {
-      let selectedInstrumentsParsed = JSON.parse(storage.getItem('selected-instruments'))
-      if (selectedInstrumentsParsed) {
-        store.dispatch('selectInstruments', selectedInstrumentsParsed)
-      }
+  if (storage.getItem(`selected-instruments`) !== null) {
+    const selectedInstrumentsParsed = JSON.parse(storage.getItem(`selected-instruments`))
+    if (selectedInstrumentsParsed) {
+      store.dispatch(`selectInstruments`, selectedInstrumentsParsed)
     }
-    return resolve()
-  })
+  }
 }
 
 const restoreEighthNotes = store => {
-  return new Promise(resolve => {
-    forEachValue(store.state.instruments, (v, k) => {
-      if (storage.getItem(v.value + '-eighthNotes') !== null) {
-        if (storage.getItem(v.value + '-eighthNotes') === 'true') {
-          store.dispatch('enableEighthNotes', v)
-        }
-        if (storage.getItem(v.value + '-eighthNotes') === 'false') {
-          store.dispatch('disableEighthNotes', v)
-        }
+  forEachValue(store.state.instruments, (v, k) => {
+    if (storage.getItem(v.value + `-eighthNotes`) !== null) {
+      if (storage.getItem(v.value + `-eighthNotes`) === `true`) {
+        store.dispatch(`enableEighthNotes`, v)
       }
-    })
-    return resolve()
+      if (storage.getItem(v.value + `-eighthNotes`) === `false`) {
+        store.dispatch(`disableEighthNotes`, v)
+      }
+    }
   })
 }
 
 const restoreInstrumentsVolumes = store => {
-  return new Promise(resolve => {
-    forEachValue(store.state.instruments, (v, k) => {
-      if (storage.getItem(v.value + '-volume') !== null) {
-        if (parseInt(storage.getItem(v.value + '-volume'))) {
-          let payload = {}
-          payload.instrument = v
-          payload.volume = parseInt(storage.getItem(v.value + '-volume'))
-          store.dispatch('changeVolume', payload)
-        }
+  forEachValue(store.state.instruments, (v, k) => {
+    if (storage.getItem(v.value + `-volume`) !== null) {
+      if (parseInt(storage.getItem(v.value + `-volume`))) {
+        const payload = {}
+        payload.instrument = v
+        payload.volume = parseInt(storage.getItem(v.value + `-volume`))
+        store.dispatch(`changeVolume`, payload)
       }
-    })
-    return resolve()
+    }
   })
 }
 
 const restoreHumanize = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('humanize') !== null) {
-      if (storage.getItem('humanize') === 'true') {
-        store.dispatch('enableHumanize')
-      }
-      if (storage.getItem('humanize') === 'false') {
-        store.dispatch('disableHumanize')
-      }
+  if (storage.getItem(`humanize`) !== null) {
+    if (storage.getItem(`humanize`) === `true`) {
+      store.dispatch(`enableHumanize`)
     }
-    return resolve()
-  })
+    if (storage.getItem(`humanize`) === `false`) {
+      store.dispatch(`disableHumanize`)
+    }
+  }
 }
 
 const restoreImprovise = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('improvise') !== null) {
-      if (storage.getItem('improvise') === 'true') {
-        store.dispatch('enableImprovise')
-      }
-      if (storage.getItem('improvise') === 'false') {
-        store.dispatch('disableImprovise')
-      }
+  if (storage.getItem(`improvise`) !== null) {
+    if (storage.getItem(`improvise`) === `true`) {
+      store.dispatch(`enableImprovise`)
     }
-    return resolve()
-  })
+    if (storage.getItem(`improvise`) === `false`) {
+      store.dispatch(`disableImprovise`)
+    }
+  }
 }
 
 const restoreTrackVisits = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('track_visits') !== null) {
-      if (storage.getItem('track_visits') === 'true') {
-        store.dispatch('initializeTracking')
-        store.dispatch('enableTrackVisits')
-      }
-      if (storage.getItem('track_visits') === 'false') {
-        store.dispatch('disableTrackVisits')
-      }
-    } else {
-      store.dispatch('disableTrackVisits')
+  if (storage.getItem(`track_visits`) !== null) {
+    if (storage.getItem(`track_visits`) === `true`) {
+      store.dispatch(`initializeTracking`)
+      store.dispatch(`enableTrackVisits`)
     }
-    return resolve()
-  })
+    if (storage.getItem(`track_visits`) === `false`) {
+      store.dispatch(`disableTrackVisits`)
+    }
+  } else {
+    store.dispatch(`disableTrackVisits`)
+  }
 }
 
 const restoreTrackingChosen = store => {
-  return new Promise(resolve => {
-    if (storage.getItem('tracking_chosen') !== null) {
-      if (storage.getItem('tracking_chosen') === 'true') {
-        store.dispatch('enableTrackingChosen')
-      }
-    } else {
-      store.dispatch('openPrivacyDialog')
+  if (storage.getItem(`tracking_chosen`) !== null) {
+    if (storage.getItem(`tracking_chosen`) === `true`) {
+      store.dispatch(`enableTrackingChosen`)
     }
-    return resolve()
-  })
+  } else {
+    store.dispatch(`openPrivacyDialog`)
+  }
 }
 
-export const restoreLocalStorage = store => {
-  return new Promise(resolve => {
-    restoreTrackingChosen(store)
-    restoreTrackVisits(store)
-    if (!storage.length) return resolve()
-    return Promise.all([
-      restoreVisualization(store),
-      restoreSelectedPalo(store),
-      restoreSelectedPreCount(store),
-      restoreSelectedStartBeat(store),
-      restoreTempo(store),
-      restoreSelectedInstruments(store),
-      restoreEighthNotes(store),
-      restoreInstrumentsVolumes(store),
-      restoreHumanize(store),
-      restoreImprovise(store)
-    ]).then(() => resolve())
-  })
+export const restoreTrackingLocalStorage = store => {
+  restoreTrackingChosen(store)
+  restoreTrackVisits(store)
+}
+
+export const restorePaloLocalStorage = store => {
+  restoreVisualization(store)
+  restoreSelectedPalo(store)
+  restoreSelectedPreCount(store)
+  restoreSelectedStartBeat(store)
+  restoreTempo(store)
+  restoreSelectedInstruments(store)
+  restoreEighthNotes(store)
+  restoreInstrumentsVolumes(store)
+  restoreHumanize(store)
+  restoreImprovise(store)
+}
+
+export const restoreLocalStorage = async store => {
+  restoreTrackingLocalStorage(store)
+  restorePaloLocalStorage(store)
 }
 
 const localStorage = store => {
   store.subscribe((mutation, state) => {
-    let nextState = deepCopy(state)
+    const nextState = deepCopy(state)
     switch (mutation.type) {
       case types.SELECT_VISUALIZATION_MODE:
-        storage.setItem('visualization-mode', mutation.payload)
+        storage.setItem(`visualization-mode`, mutation.payload)
         break
 
       case types.SELECT_PALO:
-        storage.setItem('palo', mutation.payload.value)
+        storage.setItem(`palo`, mutation.payload.value)
         // Select a new tempo
-        if (storage.getItem('tempo-' + mutation.payload.value) !== null) {
-          if (parseInt(storage.getItem('tempo-' + mutation.payload.value))) {
-            store.dispatch('selectTempo', parseInt(storage.getItem('tempo-' + mutation.payload.value)))
+        if (storage.getItem(`tempo-${mutation.payload.value}`) !== null) {
+          if (parseInt(storage.getItem(`tempo-${mutation.payload.value}`))) {
+            store.dispatch(`selectTempo`, parseInt(storage.getItem(`tempo-${mutation.payload.value}`)))
           } else {
-            store.dispatch('selectTempo', mutation.payload.defaultTempo)
+            store.dispatch(`selectTempo`, mutation.payload.defaultTempo)
           }
         } else {
-          store.dispatch('selectTempo', mutation.payload.defaultTempo)
+          store.dispatch(`selectTempo`, mutation.payload.defaultTempo)
         }
+
+        // Select a new tempo
+        if (storage.getItem(`swing-${mutation.payload.value}`) !== null) {
+          store.dispatch(`selectSwing`, parseFloat(storage.getItem(`swing-${mutation.payload.value}`)))
+        } else {
+          store.dispatch(`selectSwing`, 0)
+        }
+
         // Select a new pre-count
-        if (storage.getItem('pre-count-' + mutation.payload.value) !== null) {
-          if (parseInt(storage.getItem('pre-count-' + mutation.payload.value))) {
+        if (storage.getItem(`pre-count-${mutation.payload.value}`) !== null) {
+          if (parseInt(storage.getItem(`pre-count-${mutation.payload.value}`))) {
             forEachValue(store.state.preCounts, (preCount) => {
-              if (preCount.value === parseInt(storage.getItem('pre-count-' + mutation.payload.value))) {
-                store.dispatch('selectPreCount', preCount)
+              if (preCount.value === parseInt(storage.getItem(`pre-count-${mutation.payload.value}`))) {
+                store.dispatch(`selectPreCount`, preCount)
               }
             })
           } else {
-            store.dispatch('selectPreCount', mutation.payload.preCounts[0])
+            store.dispatch(`selectPreCount`, mutation.payload.preCounts[0])
           }
         } else {
-          store.dispatch('selectPreCount', mutation.payload.preCounts[0])
+          store.dispatch(`selectPreCount`, mutation.payload.preCounts[0])
         }
+
         // Select a new start beat
-        if (storage.getItem('start-beat-' + mutation.payload.value) !== null) {
-          if (parseInt(storage.getItem('start-beat-' + mutation.payload.value))) {
+        if (storage.getItem(`start-beat-${mutation.payload.value}`) !== null) {
+          if (parseInt(storage.getItem(`start-beat-${mutation.payload.value}`))) {
             forEachValue(store.state.startBeats, (startBeat) => {
-              if (startBeat.value === parseInt(storage.getItem('start-beat-' + mutation.payload.value))) {
-                store.dispatch('selectStartBeat', startBeat)
+              if (startBeat.value === parseInt(storage.getItem(`start-beat-${mutation.payload.value}`))) {
+                store.dispatch(`selectStartBeat`, startBeat)
               }
             })
           } else {
-            store.dispatch('selectStartBeat', mutation.payload.startBeats[0])
+            store.dispatch(`selectStartBeat`, mutation.payload.startBeats[0])
           }
         } else {
-          store.dispatch('selectStartBeat', mutation.payload.startBeats[0])
+          store.dispatch(`selectStartBeat`, mutation.payload.startBeats[0])
         }
         break
 
       case types.SELECT_TEMPO:
-        storage.setItem('tempo-' + nextState.selectedPalo.value, mutation.payload)
+        storage.setItem(`tempo-${nextState.selectedPalo.value}`, mutation.payload)
+        break
+
+      case types.SELECT_SWING:
+        storage.setItem(`swing-${nextState.selectedPalo.value}`, mutation.payload)
         break
 
       case types.SELECT_PRECOUNT:
-        storage.setItem('pre-count-' + nextState.selectedPalo.value, mutation.payload.value)
+        storage.setItem(`pre-count-${nextState.selectedPalo.value}`, mutation.payload.value)
         break
 
       case types.SELECT_STARTBEAT:
-        storage.setItem('start-beat-' + nextState.selectedPalo.value, mutation.payload.value)
+        storage.setItem(`start-beat-${nextState.selectedPalo.value}`, mutation.payload.value)
         break
 
       case types.SELECT_INSTRUMENTS:
-        storage.setItem('selected-instruments', JSON.stringify(nextState.selectedInstruments))
+        storage.setItem(`selected-instruments`, JSON.stringify(nextState.selectedInstruments))
         break
 
       case types.CHANGE_VOLUME:
-        storage.setItem(mutation.payload.instrument.value + '-volume', mutation.payload.volume)
+        storage.setItem(mutation.payload.instrument.value + `-volume`, mutation.payload.volume)
         break
 
       case types.TOGGLE_EIGHTHNOTES:
-        storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
+        storage.setItem(mutation.payload.value + `-eighthNotes`, mutation.payload.eighthNotes)
         break
 
       case types.ENABLE_EIGHTHNOTES:
-        storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
+        storage.setItem(mutation.payload.value + `-eighthNotes`, mutation.payload.eighthNotes)
         break
 
       case types.DISABLE_EIGHTHNOTES:
-        storage.setItem(mutation.payload.value + '-eighthNotes', mutation.payload.eighthNotes)
+        storage.setItem(mutation.payload.value + `-eighthNotes`, mutation.payload.eighthNotes)
         break
 
       case types.TOGGLE_IMPROVISE:
-        storage.setItem('improvise', nextState.improvise)
+        storage.setItem(`improvise`, nextState.improvise)
         break
 
       case types.ENABLE_IMPROVISE:
-        storage.setItem('improvise', nextState.improvise)
+        storage.setItem(`improvise`, nextState.improvise)
         break
 
       case types.DISABLE_IMPROVISE:
-        storage.setItem('improvise', nextState.improvise)
+        storage.setItem(`improvise`, nextState.improvise)
         break
 
       case types.TOGGLE_HUMANIZE:
-        storage.setItem('humanize', nextState.humanize)
+        storage.setItem(`humanize`, nextState.humanize)
         break
 
       case types.ENABLE_HUMANIZE:
-        storage.setItem('humanize', nextState.humanize)
+        storage.setItem(`humanize`, nextState.humanize)
         break
 
       case types.DISABLE_HUMANIZE:
-        storage.setItem('humanize', nextState.humanize)
+        storage.setItem(`humanize`, nextState.humanize)
         break
 
       case types.TOGGLE_TRACKVISITS:
-        storage.setItem('track_visits', nextState.trackVisits)
+        storage.setItem(`track_visits`, nextState.trackVisits)
         break
 
       case types.ENABLE_TRACKVISITS:
-        storage.setItem('track_visits', nextState.trackVisits)
+        storage.setItem(`track_visits`, nextState.trackVisits)
         break
 
       case types.DISABLE_TRACKVISITS:
-        storage.setItem('track_visits', nextState.trackVisits)
+        storage.setItem(`track_visits`, nextState.trackVisits)
         break
 
       case types.ENABLE_TRACKINGCHOSEN:
-        storage.setItem('tracking_chosen', nextState.trackingChosen)
+        storage.setItem(`tracking_chosen`, nextState.trackingChosen)
+        break
+
+      case types.RESET_STORAGE:
+        forEachValue(palosDefaultSettings, palo => {
+          storage.setItem(`tempo-${palo.value}`, palo.defaultTempo)
+          storage.setItem(`swing-${palo.value}`, 0)
+          storage.setItem(`pre-count-${palo.value}`, 0)
+          storage.setItem(`start-beat-${palo.value}`, 0)
+        })
         break
     }
   })

@@ -13,7 +13,7 @@ tr
       icon="audiotrack",
       :value="instrument.eighthNotes",
       @input="handleToggleEighthNotes($event)",
-      v-if="instrument.value !== 'jaleo' && instrument.value !== 'click'",
+      v-if="!noEighthNotes.includes(instrument.value)",
       :disable="!isChecked"
       color="primary",
       keep-color
@@ -38,7 +38,8 @@ export default {
   props: [ 'slug' ],
   computed: {
     ...mapState({
-      selectedInstruments: state => state.selectedInstruments
+      selectedInstruments: state => state.selectedInstruments,
+      noEighthNotes: state => state.noEighthNotes
     }),
     instrument () {
       return this.$store.getters.getInstrument(this.$props.slug)

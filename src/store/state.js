@@ -7,24 +7,27 @@ const state = {
     { label: 'Counter', value: 'counter' }
   ],
   visualizationSize: {},
-  breakpoint: { xs: 599, sm: 1023, md: 1439, lg: 1919 },
   selectedVisualizationMode: 'dots',
   palos: palosDefaultSettings,
   selectedPalo: palosDefaultSettings[2],
   instruments: [
     { label: 'Claras', value: 'clara', eighthNotes: false, volume: 0 },
     { label: 'Sordas', value: 'sorda', eighthNotes: false, volume: 0 },
+    { label: 'Nudillos', value: 'nudillo', eighthNotes: false, volume: 0 },
     { label: 'Cajon', value: 'cajon', eighthNotes: false, volume: 0 },
     { label: 'Udu', value: 'udu', eighthNotes: false, volume: 0 },
     { label: 'Jaleo', value: 'jaleo', eighthNotes: false, volume: 0 },
     { label: 'Click', value: 'click', eighthNotes: false, volume: 0 }
   ],
-  selectedInstruments: [ 'clara', 'sorda' ],
+  selectedInstruments: [ 'clara', 'nudillo' ],
+  defaultSelectedInstruments: [ 'clara', 'nudillo' ],
+  noEighthNotes: [ 'jaleo', 'click', 'nudillo' ],
   preCounts: palosDefaultSettings[2].preCounts,
   selectedPreCount: palosDefaultSettings[2].preCounts[0],
   startBeats: palosDefaultSettings[2].startBeats,
   selectedStartBeat: palosDefaultSettings[2].startBeats[0],
   tempo: palosDefaultSettings[2].defaultTempo,
+  swing: 0,
   improvise: false,
   humanize: false,
   isPlaying: false,
@@ -34,7 +37,12 @@ const state = {
   trackVisits: false,
   trackingInitialized: false,
   trackingChosen: false,
-  privacyDialogOpen: false
+  privacyDialogOpen: false,
+  tuningFork: {
+    isPlaying: false,
+    notes: [ 'E2', 'A2', 'D3', 'G3', 'B3', 'E4' ],
+    activeNote: null
+  }
 }
 
 export default state

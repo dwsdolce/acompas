@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
+import palosDefaultSettings from './data/palosDefaultSettings'
 
 const mutations = {
-
   [types.TOGGLE_SIDE_MENU] (state) {
     state.shownSideMenu = !state.shownSideMenu
   },
@@ -35,6 +35,10 @@ const mutations = {
     state.tempo = payload
   },
 
+  [types.SELECT_SWING] (state, payload) {
+    state.swing = payload
+  },
+
   // payload is an array of instrument slugs
   [types.SELECT_INSTRUMENTS] (state, payload) {
     state.selectedInstruments = payload
@@ -52,20 +56,24 @@ const mutations = {
 
   // payload = { instrument: item from state.instruments, volume: [value] }
   [types.CHANGE_VOLUME] (state, payload) {
-    payload.instrument.volume = payload.volume
+    const instrument = state.instruments.find(i => i.value === payload.instrument.value)
+    instrument.volume = payload.volume
   },
 
   // payload = item from state.instruments
   [types.TOGGLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = !payload.eighthNotes
+    const instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = !instrument.eighthNotes
   },
 
   [types.ENABLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = true
+    const instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = true
   },
 
   [types.DISABLE_EIGHTHNOTES] (state, payload) {
-    payload.eighthNotes = false
+    const instrument = state.instruments.find(i => i.value === payload.value)
+    instrument.eighthNotes = false
   },
 
   [types.TOGGLE_IMPROVISE] (state) {
@@ -139,6 +147,22 @@ const mutations = {
   // payload = Tonejs time event
   [types.TRIGGER_EVENT] (state, payload) {
     state.metronomeEvent = payload
+  },
+
+  [types.RESET_STORAGE] (state) {
+    state.selectedPalo = palosDefaultSettings[2]
+  },
+
+  [types.TUNING_FORK_PLAY] (state) {
+    state.tuningFork.isPlaying = true
+  },
+
+  [types.TUNING_FORK_STOP] (state) {
+    state.tuningFork.isPlaying = false
+  },
+
+  [types.TUNING_CHANGE_NOTE] (state, payload) {
+    state.tuningFork.activeNote = payload
   }
 }
 

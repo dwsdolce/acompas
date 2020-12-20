@@ -15,11 +15,11 @@ export const playStop = ({ commit, state }) => {
   }
 }
 
-export const selectVisualizationMode = ({ commit, state }, payload) => {
+export const selectVisualizationMode = ({ commit }, payload) => {
   commit(types.SELECT_VISUALIZATION_MODE, payload)
 }
 
-export const selectPalo = ({ dispatch, commit, state }, payload) => { // payload is a palo slug
+export const selectPalo = ({ commit, state }, payload) => { // payload is a palo slug
   if (state.isPlaying) commit(types.STOP)
   forEachValue(state.palos, palo => {
     if (palo.value === payload) {
@@ -34,7 +34,7 @@ export const selectTempo = ({ commit, state }, payload) => {
   if (payload === '') {
     return
   }
-  let tempo = parseInt(payload)
+  const tempo = parseInt(payload)
   // On mobile devices, the payload variable can contain number < minTempo or
   // a number > maxTempo.
   if (tempo < state.selectedPalo.minTempo || tempo > state.selectedPalo.maxTempo) {
@@ -67,6 +67,10 @@ export const selectTempo = ({ commit, state }, payload) => {
   } else if (tempo > state.selectedPalo.slowTempo && state.isTooSlow) {
     commit(types.HIDE_SLOW_MESSAGE)
   }
+}
+
+export const selectSwing = ({ commit }, payload) => {
+  commit(types.SELECT_SWING, payload)
 }
 
 export const selectCrochets = ({ commit }) => {
@@ -157,4 +161,21 @@ export const openPrivacyDialog = ({ commit }) => {
 
 export const closePrivacyDialog = ({ commit }) => {
   commit(types.CLOSE_PRIVACYDIALOG)
+}
+
+export const restoreDefault = ({ dispatch, commit, state }, payload) => {
+  if (payload === 'all') commit(types.RESET_STORAGE)
+
+  dispatch('selectInstruments', state.defaultSelectedInstruments)
+  dispatch('selectTempo', state.selectedPalo.defaultTempo)
+  dispatch('selectSwing', 0)
+  forEachValue(state.instruments, instrument => {
+    dispatch('disableEighthNotes', instrument)
+    dispatch('changeVolume', { instrument: instrument, volume: 0 })
+  })
+  dispatch('disableHumanize')
+  dispatch('disableImprovise')
+  dispatch('selectVisualizationMode', 'dots')
+  dispatch('selectPreCount', state.selectedPalo.preCounts[0])
+  dispatch('selectStartBeat', state.selectedPalo.startBeats[0])
 }

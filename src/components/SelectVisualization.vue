@@ -1,12 +1,18 @@
 <template lang="pug">
 div
-  p.caption View mode
+  p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
   q-btn(
-    round,
     outline,
     icon="remove_red_eye",
+    :disable="selectedPalo.value === 'no-compas'",
     @click="visualizationDialog = true"
   )
+    q-tooltip(
+      v-if="selectedPalo.value === 'no-compas'",
+      anchor="top middle",
+      self="bottom middle",
+      :offset="[10, 10]"
+    ) This option is disabled for this palo.
   q-dialog(v-model="visualizationDialog")
     q-card(style="width: 100%;")
       q-card-section
@@ -36,7 +42,7 @@ export default {
       visualizationModes: state => state.visualizationModes,
       selectedVisualizationMode: state => state.selectedVisualizationMode,
       visualizationSize: state => state.visualizationSize,
-      breakpoint: state => state.breakpoint
+      selectedPalo: state => state.selectedPalo
     })
   },
   methods: {

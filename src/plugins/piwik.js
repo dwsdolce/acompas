@@ -11,14 +11,14 @@ else platformName = 'Website'
 let playStartTime = null
 
 const initPiwik = () => {
-  window._paq.push(['setCustomVariable', 1, 'AppVersion', platformName, 'visit'])
-  window._paq.push(['trackPageView'])
-  window._paq.push(['enableLinkTracking'])
+  window._paq.push([ 'setCustomVariable', 1, 'AppVersion', platformName, 'visit' ])
+  window._paq.push([ 'trackPageView' ])
+  window._paq.push([ 'enableLinkTracking' ])
 
-  var u = 'https://piwik.acompas.org/'
-  window._paq.push(['setTrackerUrl', u + 'piwik.php'])
-  window._paq.push(['setSiteId', 1])
-  var d = document,
+  const u = 'https://piwik.acompas.org/'
+  window._paq.push([ 'setTrackerUrl', u + 'piwik.php' ])
+  window._paq.push([ 'setSiteId', 1 ])
+  const d = document,
     g = d.createElement('script'),
     s = d.getElementsByTagName('script')[0]
   g.type = 'text/javascript'
@@ -30,27 +30,35 @@ const initPiwik = () => {
 
 const piwik = store => {
   store.subscribe((mutation, state) => {
-    // Do nothing if visits tracking is disabled
-    if (!state.trackVisits) {
-      return
-    }
     switch (mutation.type) {
       case types.INITIALIZE_TRACKING:
         initPiwik()
         break
 
       case types.PLAY:
-        window._paq.push(['trackEvent', 'Playing', 'Start', state.selectedPalo.label])
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
+        window._paq.push([ 'trackEvent', 'Playing', 'Start', state.selectedPalo.label ])
         playStartTime = getContext.currentTime
         break
 
       case types.STOP:
-        window._paq.push(['trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
-          Math.round(getContext.currentTime - playStartTime)])
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
+        window._paq.push([ 'trackEvent', 'Playing', 'Stop', state.selectedPalo.label,
+          Math.round(getContext.currentTime - playStartTime) ])
         break
 
       case types.SELECT_PALO:
-        window._paq.push(['trackEvent', 'PaloSwitch', 'Set', state.selectedPalo.label])
+        // Do nothing if visits tracking is disabled
+        if (!state.trackVisits) {
+          return
+        }
+        window._paq.push([ 'trackEvent', 'PaloSwitch', 'Set', state.selectedPalo.label ])
         break
     }
   })

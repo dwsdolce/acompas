@@ -31,3 +31,5 @@ yarn-error.log*
 /src-cordova/res
 /test/cypress/screenshots
 /test/cypress/videos
+/public/favicon.ico
+/public/icons/*.png

@@ -50,24 +50,24 @@ yarn install
 ./icongenie.sh
 
 # serve with hot reload at localhost:8080
-npx quasar dev
+quasar dev
 
 # build for production with minification
-npx quasar build
+quasar build
 ```
 
 ## Automated testing
 
 ``` bash
 # run the test suite in headless mode
-npx quasar test --e2e cypress
+quasar test --e2e cypress
 ```
 It's also possible to serve the app and run Cypress with different
 commands. This is helpful while writing test scenarios.
 
 ``` bash
 # first terminal :
-npx quasar dev
+quasar dev
 # second terminal (run Cypress) :
 npx cypress run --config baseUrl=http://localhost:8080/
 # second terminal (open Cypress with hot reload) :
@@ -79,15 +79,26 @@ npx cypress open --config baseUrl=http://localhost:8080/
 You must first install Oracle's Java JDK 8 and set the JAVA_HOME environment
 variable in your shell.
 
-Furthermore, you need to install Google's Android SDK (pick it from the "Command
-line tools only" section [here](https://developer.android.com/studio)). You
-must set the ANDROID_HOME and ANDROID_SDK_HOME environment variables in your shell.
+Furthermore, you need to install Google's Android Studio (get it
+[here](https://developer.android.com/studio)). Install the SDK from Android
+Studio. You must set the ANDROID_SDK_ROOT and ANDROID_SDK_HOME environment
+variables in your shell and extend the your PATH environment variable.
+
+- Remark : if you open the app as a an Android Studio project by selecting
+"src-cordova/platforms/android" as a project folder, the IDE will propose
+you to update the Android Gradle plugin. The
+[Quasar documentation](https://quasar.dev/quasar-cli/developing-cordova-apps/preparation#4.-Start-Developing)
+says : don't do this proposed upgrade !
+
+- Remark 2 : you don't need to create an Android Studio project, but you can use
+Android Studio as a tool to install the SDK (From the menu : Tools > SDK
+Manager) and manage your AVDs (Tools > AVD Manager).
 
 Here is an example ~/.bashrc configuration :
 
 ``` bash
-export ANDROID_HOME=/path/to/android
-export ANDROID_SDK_HOME=/home/olivier
+export ANDROID_SDK_ROOT=/path/to/android-sdk
+export ANDROID_SDK_HOME=/home/username
 export JAVA_HOME=/path/to/jdk
 export PATH=$ANDROID_HOME/tools/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$JAVA_HOME/bin:$PATH
 ```
@@ -98,48 +109,60 @@ Here are the commands for building / running the Android app :
 # Global cordova install
 sudo npm i -g cordova
 
-# Check cordova requirements (run this in the src-cordova/ folder)
-cd ./src-cordova
-npx cordova requirements
-
 # Build and run android apk in debug mode
 cd /path/to/acompas
-npx quasar dev -m cordova -T android
+quasar dev -m cordova -T android
 
 # Build android apk in production mode
 cd /path/to/acompas
-npx quasar build -m cordova -T android
+quasar build -m cordova -T android
+```
+
+### Troubleshooting
+
+Here are a few commands that might help :
+
+```bash
+# Go to the Cordova project folder
+cd ./src-cordova
+# Install npm dependencies
+npm install
+# Check cordova requirements
+cordova requirements
+# Prepare project
+cordova prepare
 ```
 
 ## iOS app
-
-This section needs an update
-
+### Setup
 ``` bash
-# Build app
-npx quasar build
+# This is one of cordova's commonly missing requirements
+npm install -g ios-deploy
+
+# Build and run iOS archive in debug mode
+quasar dev -m ios
+
+# Build iOS archive for production
+quasar build -m ios
+```
+
+### Troubleshooting
+```
+# In case you have any build issue, go to src-cordova
+cd ./src-cordova
+
+# Let's make as if this directory is a valid cordova workspace
+mkdir www
 
 # Install dependencies
-cd ./cordova
 npm install
 
-npx cordova platform add ios
+# Cordova may not be aware of the iOS platform if you don't execute this
+cordova platform add ios
 
-# Check cordova requirements (run this in the cordova/ folder)
-npx cordova requirements
+# Check cordova requirements: this command should give you leads to complete your setup
+cordova requirements
 
-# Fullfill the requirements
-npm install -g ios-deploy
-# Install ruby with either:
-# $ sudo apt-get install ruby-full
-# $ sudo yum install ruby
-# $ sudo emerge dev-lang/ruby
-# $ sudo pacman -S ruby
-# $ brew install ruby
-# $ pkg install runtime/ruby-18
-# $ ./configure $ make $ sudo make install
-# Then (use sudo if encounter permission issues):
-gem update --system
-gem install cocoapods
-pod setup
+# In case cocoapods is missing in your environment, install it
+# https://guides.cocoapods.org/using/getting-started.html
 ```
