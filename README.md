@@ -28,7 +28,7 @@ You can [talk with the team on Slack](https://acompas-org.slack.com)
 
 ## Cloning and building the source code
 
-Before anything, you need Node.js 13.x installed on your machine. See the nodejs.org
+Before anything, you need Node.js 12.x installed on your machine. See the nodejs.org
 [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
@@ -100,7 +100,7 @@ Here is an example ~/.bashrc configuration :
 export ANDROID_SDK_ROOT=/path/to/android-sdk
 export ANDROID_SDK_HOME=/home/username
 export JAVA_HOME=/path/to/jdk
-export PATH=$ANDROID_HOME/tools/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$JAVA_HOME/bin:$PATH
+export PATH=$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$JAVA_HOME/bin:$PATH
 ```
 
 Here are the commands for building / running the Android app :
