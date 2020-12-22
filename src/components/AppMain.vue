@@ -1,9 +1,10 @@
 <template lang="pug">
-  .text-grey-1.full-width.q-pa-sm.column.content-center
-    .col-2.col-md-3.full-width.flex.content-center
+  .text-grey-1.full-width.full-height.q-pa-sm.column
+    .col-2.col-md-3
       q-resize-observer(@resize="onResize")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
+      draw-clock(v-if="visualizationMode === 'clock'")
     .col-10.col-md-9.container
       .row.text-center.justify-center.no-wrap
         .col-6.col-md-5
@@ -43,6 +44,7 @@ import SelectStartBeat from './SelectStartBeat'
 import SelectInstruments from './SelectInstruments'
 import DrawDots from './DrawDots'
 import DrawCounter from './DrawCounter'
+import DrawClock from './DrawClock'
 import SelectVisualization from './SelectVisualization'
 import Reset from './Reset'
 import { isSupported, initMetronome } from '../plugins/metronome'
@@ -58,6 +60,7 @@ export default {
     SelectInstruments,
     DrawDots,
     DrawCounter,
+    DrawClock,
     SelectVisualization,
     Reset
   },

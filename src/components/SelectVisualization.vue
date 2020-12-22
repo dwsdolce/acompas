@@ -23,8 +23,7 @@ div
           color="primary",
           :value="selectedVisualizationMode",
           :options="visualizationModes",
-          @input="selectVisualizationMode",
-          @change="visualizationDialog = false"
+          @input="onSelectVisualizationMode"
         )
       q-card-section(align="center")
         q-btn(
@@ -37,6 +36,11 @@ div
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  data () {
+    return {
+      visualizationDialog: false
+    }
+  },
   computed: {
     ...mapState({
       visualizationModes: state => state.visualizationModes,
@@ -48,11 +52,10 @@ export default {
   methods: {
     ...mapActions([
       'selectVisualizationMode'
-    ])
-  },
-  data () {
-    return {
-      visualizationDialog: false
+    ]),
+    onSelectVisualizationMode (v) {
+      this.selectVisualizationMode(v)
+      this.visualizationDialog = false
     }
   }
 }

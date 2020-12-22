@@ -171,11 +171,12 @@ const triggerPreCountClick = (store, time, note) => {
     forEachValue(store.state.selectedPalo.beats, (value, key) => {
       const index = noteIndexInPattern(store, key)
       if (note === index % store.state.selectedPalo.nbBeatsInPattern) {
-        if (value === 'strong') {
-          metronomeData.sounds.click[0].start(time)
-        } else {
-          metronomeData.sounds.click[1].start(time)
-        }
+        metronomeData.sounds.click[1].start(time)
+        // if (value === 'strong') {
+        //   metronomeData.sounds.click[0].start(time)
+        // } else {
+        //   metronomeData.sounds.click[1].start(time)
+        // }
       }
     })
   }

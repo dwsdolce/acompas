@@ -4,7 +4,8 @@ const state = {
   shownSideMenu: true,
   visualizationModes: [
     { label: 'Dots', value: 'dots' },
-    { label: 'Counter', value: 'counter' }
+    { label: 'Counter', value: 'counter' },
+    { label: 'Clock', value: 'clock' }
   ],
   visualizationSize: {},
   selectedVisualizationMode: 'dots',
