@@ -168,17 +168,11 @@ const improviseJaleo = (store, note, time, palo, eighthNotes) => {
 
 const triggerPreCountClick = (store, time, note) => {
   if (metronomeData.preCount > 0 && note < metronomeData.preCount * 2 && note % 2 === 0) {
-    forEachValue(store.state.selectedPalo.beats, (value, key) => {
-      const index = noteIndexInPattern(store, key)
-      if (note === index % store.state.selectedPalo.nbBeatsInPattern) {
-        metronomeData.sounds.click[1].start(time)
-        // if (value === 'strong') {
-        //   metronomeData.sounds.click[0].start(time)
-        // } else {
-        //   metronomeData.sounds.click[1].start(time)
-        // }
-      }
-    })
+    if (store.state.selectedPalo.accents.includes(note / 2)) {
+      metronomeData.sounds.click[0].start(time)
+    } else {
+      metronomeData.sounds.click[1].start(time)
+    }
   }
 }
 
