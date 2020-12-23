@@ -151,11 +151,11 @@ const improviseJaleo = (store, note, time, palo, eighthNotes) => {
   if (!eighthNotes && (note % 2 !== 0)) {
     return
   }
-  let playThreshold = 0.95 // 95% chances that the the sound is not played
+  let playThreshold = 0.98 // 98% chances that the the sound is not played
   // Check if time is a strong beat
   if (palo.accents.includes(noteIndexInPattern(store, note))) {
     // if the event is a strong beat, sound occurence will be more probable
-    playThreshold = 0.80 // 80% chances that the sound is not played
+    playThreshold = 0.94 // 94% chances that the sound is not played
   }
   const playProbability = Math.random()
   if (playProbability > playThreshold) {
