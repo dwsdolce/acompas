@@ -80,7 +80,7 @@ describe('Home page', () => {
     cy.get('#tuningDialog')
       .should('be.visible')
       .should('contain', 'Tuning fork')
-    cy.get('#tuningDialog .q-btn')
+    cy.get('#tuningDialog .q-btn.tuning-btn')
       .each(($elt, index, $btns) => {
         cy.wrap($elt)
           .click()
