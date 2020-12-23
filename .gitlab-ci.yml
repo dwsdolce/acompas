@@ -1,5 +1,5 @@
 stages:
-  - build
+  - test
 
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
@@ -7,7 +7,7 @@ variables:
 
 # Jobs
 
-build_web_job:
+text_web_job:
   script:
     - ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
     - apt-get -y -qq update
@@ -24,11 +24,9 @@ build_web_job:
     - npm install -g --unsafe-perm @quasar/icongenie
     - ./icongenie.sh
     - $YARN install
-    # Temporary workaround due to https://github.com/quasarframework/quasar-testing/issues/105
-    # - npx quasar dev & sleep 45 && npx cypress run --config baseUrl=http://localhost:8080/
-    # - npx quasar test --e2e cypress
     - npx quasar build
-  stage: build
+    - $YARN run test:e2e:CI
+  stage: test
   tags:
     - development
   image: ubuntu:focal

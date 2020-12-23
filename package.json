@@ -10,7 +10,7 @@
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "test:e2e": "cypress open",
-    "test:e2e:CI": "cypress run"
+    "test:e2e:CI": "npx cross-env E2E_TEST=true start-test \"quasar dev\" http-get://localhost:8080 \"cypress run\""
   },
   "dependencies": {
     "@quasar/extras": "^1.9.12",
@@ -24,6 +24,7 @@
     "@quasar/quasar-app-extension-testing-e2e-cypress": "^2.0.4",
     "@vue/eslint-config-standard": "6.0.0",
     "babel-eslint": "10.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "7.15.0",
     "eslint-loader": "^2.2.1",
     "eslint-plugin-import": "2.22.1",
