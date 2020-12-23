@@ -47,7 +47,6 @@ cd acompas
 yarn install
 
 # build the icons
-yarn global add @quasar/icongenie
 ./icongenie.sh
 
 # serve with hot reload at localhost:8080
