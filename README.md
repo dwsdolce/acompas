@@ -20,7 +20,7 @@ You can [talk with the team on Slack](https://acompas-org.slack.com)
 
 ## Thanks
 
- - The palmas sordas and jaleo sounds are recordings of Aziz Andry.
+ - The jaleo sounds are recordings of Aziz Andry.
 
 ## Automated builds status
 
