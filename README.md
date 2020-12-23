@@ -60,7 +60,7 @@ quasar build
 
 ``` bash
 # run the test suite in headless mode
-quasar test --e2e cypress
+yarn run test:e2e:CI
 ```
 It's also possible to serve the app and run Cypress with different
 commands. This is helpful while writing test scenarios.

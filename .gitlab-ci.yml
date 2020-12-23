@@ -30,3 +30,8 @@ test_web_job:
   tags:
     - development
   image: ubuntu:focal
+  artifacts:
+    paths:
+      - test/cypress/screenshots
+      - test/cypress/videos
+    expire_in: 6 mos
