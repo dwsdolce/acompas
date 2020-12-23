@@ -7,7 +7,7 @@ variables:
 
 # Jobs
 
-text_web_job:
+test_web_job:
   script:
     - ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
     - apt-get -y -qq update
