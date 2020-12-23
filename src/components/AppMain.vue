@@ -72,7 +72,10 @@ export default {
     })
   },
   mounted () {
-    if (!isSupported) this.showDialog()
+    isSupported().then(() => {
+    }).catch(() => {
+      this.showDialog()
+    })
     document.addEventListener('keypress', event => {
       if (event.which === 32) {
         this.playStop()

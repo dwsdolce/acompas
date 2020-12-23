@@ -1,9 +1,18 @@
 import * as Tone from 'tone'
-import { Loading } from 'quasar'
+import { Loading, Notify, Platform } from 'quasar'
 import { deepCopy, forEachValue } from '../assets/utils'
 import * as types from '../store/mutation-types'
 import audioSettings from '../store/data/audioDefaultSettings'
 import { restoreLocalStorage } from './localStorage'
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+
+// On Android, a polyfill must be used to avoid the following error while
+// loading the audio files :
+//  'URL scheme "file" is not supported.'
+// See https://github.com/ionic-team/ionicons/issues/572#issuecomment-497901752
+if (Platform.is.cordova) {
+  window.fetch = fetchPolyfill
+}
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -438,7 +447,16 @@ export const initMetronome = async (store) => {
   })
   await initSounds()
   await restoreLocalStorage(store)
-  if (Tone.loaded()) Loading.hide()
+  Tone.loaded().then(() => {
+    Loading.hide()
+  }).catch(() => {
+    Loading.hide()
+    Notify.create({
+      message: 'Failed to load the audio samples !',
+      color: 'secondary',
+      icon: 'error'
+    })
+  })
 }
 
 // ================================

@@ -16,7 +16,8 @@
     "@quasar/extras": "^1.9.12",
     "animejs": "^3.2.1",
     "axios": "^0.21.0",
-    "quasar": "^1.14.7"
+    "quasar": "^1.14.7",
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@quasar/app": "2.1.13",
