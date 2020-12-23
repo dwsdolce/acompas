@@ -5,11 +5,12 @@
     .hand(ref="hand").shadow-2
     ul
       li(v-for="(n, i) in beatLabels", :style="getLiStyle(n, i)")
-        .num(:style="getNumStyle(n, i)") {{ n }}
+        .num(:ref="`num-${n}`", :style="getNumStyle(n, i)") {{ n }}
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import anime from 'animejs'
 
 export default {
   data () {
@@ -28,7 +29,7 @@ export default {
       metronomeEvent: state => state.metronomeEvent,
       isPlaying: state => state.isPlaying,
       alpha: state => 360 / (state.selectedPalo.nbBeatsInPattern / 2),
-      velocity: state => Math.round(60 / state.tempo * 100) / 100,
+      velocity: state => Math.floor(60000 / state.tempo),
       startingPoint: state => state.selectedStartBeat.value / 2 - state.selectedPreCount.value
     })
   },
@@ -60,17 +61,32 @@ export default {
       }
     },
     idleClockPosition () {
-      this.clockDeg = this.startingPoint === 0 ? 90 : this.startingPoint * this.alpha + 90
-      this.$refs.hand.style.transition = 'none'
-      this.$refs.hand.style.transform = `rotate(${this.clockDeg}deg)`
+      const newDeg = this.startingPoint === 0 ? 90 : this.startingPoint * this.alpha + 90
+      anime({
+        targets: this.$refs.hand,
+        rotate: [ this.clockDeg, newDeg ],
+        duration: 0,
+        complete: anim => {
+          this.clockDeg = newDeg
+        }
+      })
     },
     animateClock (v) {
-      if (v === null || !this.isPlaying) {
-        this.idleClockPosition()
-      } else {
-        this.clockDeg += this.alpha
-        this.$refs.hand.style.transition = `transform ${this.velocity}s linear`
-        this.$refs.hand.style.transform = `rotate(${this.clockDeg}deg)`
+      if (v !== null && this.isPlaying) {
+        anime({
+          targets: this.$refs.hand,
+          rotate: [ this.clockDeg, this.clockDeg + this.alpha ],
+          duration: this.velocity,
+          easing: 'linear',
+          begin: anim => {
+            this.clockDeg += this.alpha
+          },
+          complete: anim => {
+            if (v === null || !this.isPlaying) {
+              this.idleClockPosition()
+            }
+          }
+        })
       }
     }
   }
@@ -125,5 +141,4 @@ export default {
     border-radius 100% 0% 0% 100%
     transform-origin right 3px
     width: 100px
-    transform rotate(90deg)
 </style>

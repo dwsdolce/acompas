@@ -310,7 +310,7 @@ const startSequences = async () => {
   const loopStart = '0:' + offset / 2
 
   await Tone.start()
-  await Tone.Transport.start('+0.1')
+  await Tone.Transport.start('+0.2')
 
   if (metronomeData.sequences.quarterNotes.introduction.event.length !== 0) {
     forEachValue(metronomeData.sequences.quarterNotes.introduction, seq => {
