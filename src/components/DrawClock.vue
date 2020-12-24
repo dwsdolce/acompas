@@ -1,5 +1,5 @@
 <template lang="pug">
-.full-width.row.inline.no-wrap.justify-around.q-mb-md
+.full-width.flex.justify-center.items-center.q-mb-md
   #clock.shadow-20
     .axis.shadow-4
     .hand(ref="hand").shadow-2
@@ -15,7 +15,7 @@ import anime from 'animejs'
 export default {
   data () {
     return {
-      clockDeg: 90
+      clockDeg: 0
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
       }
     },
     idleClockPosition () {
-      const newDeg = this.startingPoint === 0 ? 90 : this.startingPoint * this.alpha + 90
+      const newDeg = this.startingPoint === 0 ? 0 : this.startingPoint * this.alpha + 0
       anime({
         targets: this.$refs.hand,
         rotate: [ this.clockDeg, newDeg ],
@@ -94,24 +94,35 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+$size = 33vmin
+$axis = .7vmin
+
 #clock
-  width 260px
-  height 260px
+  width $size
+  height $size
   border-radius 50%
   background-color $blue-grey-1
   position relative
-  &:before
-    border-width: 2px
   .axis
-    width 12px
-    height 12px
-    border-radius 50%
+    width ($axis * 2)
+    height ($axis * 2)
+    border-radius $axis
     background-color black
     position absolute
-    top 130px - 6
-    left 130px - 6
+    top 'calc(%s / 2 - %s)' % ($size $axis)
+    left 'calc(%s / 2 - %s)' % ($size $axis)
+  .hand
+    width: $axis
+    height ($size / 3)
+    position absolute
+    top 'calc(%s / 6 - %s / 2)' % ($size $axis)
+    left 'calc(%s / 2 - %s / 2)' % ($size $axis)
+    background-color black
+    border-radius  100% 100% 0% 0%
+    transform rotate(0deg)
+    transform-origin center 'calc(%s / 3 + %s / 2)' % ($size $axis)
   ul
-    height 124px
+    height 'calc(%s / 2.2)' % ($size)
     position absolute
     list-style none
     width 0
@@ -119,26 +130,17 @@ export default {
     bottom 50%
     margin 0
     li
-      position absolute
-      top 0
+      // position absolute
+      // top 0
       left 0
       height 100%
-      transform-origin 60% 100%
+      transform-origin 0% 100%
       .num
         color tomato
-        font-size 20px
-        position absolute
-        top 0
-        left 50%
+        font-size 3vmin
+        // position absolute
+        // top 0
+        // left 50%
         transform translateX(-50%)
         font-weight bold
-  .hand
-    height 6px
-    position absolute
-    top 130px - 3
-    left 33px - 3
-    background-color black
-    border-radius 100% 0% 0% 100%
-    transform-origin right 3px
-    width: 100px
 </style>

@@ -1,11 +1,11 @@
 <template lang="pug">
-  .text-grey-1.full-width.full-height.q-pa-sm.column
+  .full-width.column.text-grey-1.q-pa-sm
     .col-2.col-md-3
       q-resize-observer(@resize="onResize")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
       draw-clock(v-if="visualizationMode === 'clock'")
-    .col-10.col-md-9.container
+    .col-10.col-md-9
       .row.text-center.justify-center.no-wrap
         .col-6.col-md-5
           .row.justify-center.q-mb-md

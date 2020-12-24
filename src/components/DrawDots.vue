@@ -1,6 +1,5 @@
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around.q-mb-md
-  q-resize-observer(@resize="onResize")
   .column(v-for="(n, i) in beatLabels")
     .dot(:style="getDotStyle(i)", :ref="`dot-${i}`").item-center.q-mb-md
     span(v-if="selectedPalo.value !== 'no-compas'", :style="getNbStyle(i)", :ref="`nb-${i}`").text-center {{ n }}
@@ -31,16 +30,15 @@ export default {
       selectedStartBeat: state => state.selectedStartBeat,
       beatLabels: state => state.selectedPalo.beatLabels,
       accents: state => state.selectedPalo.accents,
-      metronomeEvent: state => state.metronomeEvent
+      metronomeEvent: state => state.metronomeEvent,
+      visualizationSize: state => state.visualizationSize
     })
   },
   watch: {
     metronomeEvent (v) {
       if (v !== null) this.animateDot(v)
-    }
-  },
-  methods: {
-    onResize (size) {
+    },
+    visualizationSize (size) {
       const computedDotSize = size.width / this.nbBeatsInPattern / 2
       if (computedDotSize < this.minDotSize) {
         this.dotSize = this.minDotSize
@@ -56,7 +54,9 @@ export default {
       } else {
         this.fontSize = computedDotSize
       }
-    },
+    }
+  },
+  methods: {
     getDotStyle (i) {
       return {
         width: this.dotSize + 'px',
