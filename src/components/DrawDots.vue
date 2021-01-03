@@ -1,5 +1,5 @@
 <template lang="pug">
-.full-width.row.inline.no-wrap.justify-around.q-mb-md
+.full-width.row.inline.no-wrap.justify-around
   .column(v-for="(n, i) in beatLabels")
     .dot(:style="getDotStyle(i)", :ref="`dot-${i}`").item-center.q-mb-md
     span(v-if="selectedPalo.value !== 'no-compas'", :style="getNbStyle(i)", :ref="`nb-${i}`").text-center {{ n }}
@@ -39,22 +39,12 @@ export default {
       if (v !== null) this.animateDot(v)
     },
     visualizationSize (size) {
-      const computedDotSize = size.width / this.nbBeatsInPattern / 2
-      if (computedDotSize < this.minDotSize) {
-        this.dotSize = this.minDotSize
-      } else if (computedDotSize > this.maxDotSize) {
-        this.dotSize = this.maxDotSize
-      } else {
-        this.dotSize = computedDotSize
-      }
-      if (computedDotSize < this.minFontSize) {
-        this.fontSize = this.minFontSize
-      } else if (computedDotSize > this.maxFontSize) {
-        this.fontSize = this.maxFontSize
-      } else {
-        this.fontSize = computedDotSize
-      }
+      this.resizeDots(size)
     }
+  },
+  mounted () {
+    const size = this.visualizationSize
+    this.resizeDots(size)
   },
   methods: {
     getDotStyle (i) {
@@ -70,6 +60,23 @@ export default {
       return {
         fontSize: this.fontSize + 'px',
         opacity: 0.6
+      }
+    },
+    resizeDots (size) {
+      const computedDotSize = size.width / this.nbBeatsInPattern / 2
+      if (computedDotSize < this.minDotSize) {
+        this.dotSize = this.minDotSize
+      } else if (computedDotSize > this.maxDotSize) {
+        this.dotSize = this.maxDotSize
+      } else {
+        this.dotSize = computedDotSize
+      }
+      if (computedDotSize < this.minFontSize) {
+        this.fontSize = this.minFontSize
+      } else if (computedDotSize > this.maxFontSize) {
+        this.fontSize = this.maxFontSize
+      } else {
+        this.fontSize = computedDotSize
       }
     },
     animateDot (v) {

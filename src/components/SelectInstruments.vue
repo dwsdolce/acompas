@@ -1,9 +1,10 @@
 <template lang="pug">
 div
-  p.caption Instruments
+  p.caption Mixer
   q-btn#mixerBtn(
     outline,
     icon="tune",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="instrumentsDialog = true"
   )
   q-dialog#mixerDialog(v-model="instrumentsDialog")

@@ -5,6 +5,7 @@ div
     round,
     outline,
     icon="settings_backup_restore",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="resetDialog = true"
   )
   q-dialog(v-model="resetDialog")

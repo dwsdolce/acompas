@@ -1,5 +1,5 @@
 <template lang="pug">
-.full-width.flex.justify-center.items-center.q-mb-md
+.full-width.flex.justify-center.items-center
   #clock.shadow-20
     .axis.shadow-4
     .hand(ref="hand").shadow-2
@@ -56,7 +56,7 @@ export default {
     },
     getNumStyle (n, i) {
       return {
-        transform: `translateX(-50%) rotate(-${(360 / this.nbBeatsInPattern) * i}deg)`,
+        transform: `translateX(-50%) translateY(-30%) rotate(-${(360 / this.nbBeatsInPattern) * i}deg)`,
         color: this.accents.includes(i / 2) ? 'firebrick' : 'tomato'
       }
     },
@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-$size = 33vmin
+$size = 31vmin
 $axis = .7vmin
 
 #clock
@@ -141,6 +141,6 @@ $axis = .7vmin
         // position absolute
         // top 0
         // left 50%
-        transform translateX(-50%)
+        // transform translateX(-50%)
         font-weight bold
 </style>

@@ -4,6 +4,7 @@ div
   q-btn#preCountBtn(
     outline,
     color="white",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="preCountDialog = true"
   ) {{ selectedPreCountLabel }}
   q-dialog#preCountDialog(v-model="preCountDialog")

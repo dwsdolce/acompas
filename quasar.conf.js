@@ -41,7 +41,9 @@ module.exports = function (ctx) {
         screen: {
           bodyClasses: true
         }
-      }
+      },
+
+      cssAddon: true
 
       // lang: 'de' // Quasar language
 

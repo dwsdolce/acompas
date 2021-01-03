@@ -1,8 +1,9 @@
 <template lang="pug">
 .item-center.full-width
-  h2(:class="className").text-center
-    q-icon(v-if="metronomeEvent === null", name="more_horiz")
-    div(v-else) {{ counter }}
+  h2(:class="className").text-center.q-ma-none
+    div(v-if="metronomeEvent === null")
+      q-icon(name="more_horiz")
+    div(v-else).counter {{ counter }}
 </template>
 
 <script>
@@ -40,6 +41,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.counter
+  margin-bottom 9.5px
 .accent
   color: firebrick
 </style>

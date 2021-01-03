@@ -23,8 +23,7 @@
       side-menu#sideMenu
 
     q-page-container
-      q-page.flex.bg-grey-10.full-width.full-height.items-center
-        app-main#appMain
+      app-main#appMain
 </template>
 
 <script>

@@ -5,6 +5,7 @@ div
   q-btn#paloBtn(
     outline,
     color="white",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="palosDialog = true"
   ) {{ selectedPaloLabel }}
   q-dialog#palosDialog(v-model="palosDialog")

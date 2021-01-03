@@ -4,7 +4,7 @@ span.q-ml-sm
     dense,
     round,
     flat,
-    size="14px",
+    size="10px",
     icon="help",
     @click="paloHelpDialog = true"
   )
@@ -12,7 +12,7 @@ span.q-ml-sm
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center {{ selectedPaloLongLabel }}
-        p {{ selectedPaloDoc }}
+        div(v-html="selectedPaloDoc")
         p {{ selectedPaloPlaces }}
         p(v-if="selectedPaloWikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPaloWikipediaUrl)")]
         p(v-if="selectedPaloVideoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPaloVideoExample)")]

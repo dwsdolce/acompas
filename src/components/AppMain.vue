@@ -1,30 +1,31 @@
 <template lang="pug">
-  .full-width.column.text-grey-1.q-pa-sm
-    .col-2.col-md-3
-      q-resize-observer(@resize="onResize")
+q-page.bg-grey-10.column.justify-around.text-grey-1.q-pa-sm
+  q-resize-observer(@resize="onResize")
+  .column.justify-between
+    .col-2(ref="visualization").q-mb-xs-sm.q-mb-md-lg.q-mb-lg-xl.q-pb-xs-sm.q-pb-md-lg.q-pb-lg-xl
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
       draw-clock(v-if="visualizationMode === 'clock'")
-    .col-10.col-md-9
+    .col-10
       .row.text-center.justify-center.no-wrap
-        .col-6.col-md-5
-          .row.justify-center.q-mb-md
-            select-palo
-          .row.justify-center.q-mb-md
-            select-start-beat
-          .row.justify-center.q-mb-md
-            select-pre-count
+        .col-6.col-md-5.column.justify-between
+          .row.justify-center
+            select-palo.q-mb-xs
+          .row.justify-center
+            select-start-beat.q-mb-xs
+          .row.justify-center
+            select-pre-count.q-mb-xs
           .row.justify-center
             rythm-options
         .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
           play
-        .col-6.col-md-5
-          select-tempo.q-mb-md
-          .row.justify-center.q-mb-md
+        .col-6.col-md-5.column.justify-between
+          select-tempo.q-mb-xs
+          .row.justify-center
             .col.col-lg-4.col-xl-2
-              select-instruments
+              select-instruments.q-mb-xs
             .col.col-lg-4.col-xl-2
-              select-visualization
+              select-visualization.q-mb-xs
           .row.justify-center
             .col.col-lg-4.col-xl-2(v-if="$q.screen.lt.lg || $q.screen.lg").flex.justify-center.content-end
               play
@@ -81,7 +82,14 @@ export default {
         this.playStop()
       }
     })
+    this.resize(this.visualizationSize)
     initMetronome(this.$store)
+  },
+  watch: {
+    visualizationSize (size) {
+      console.log(size.height)
+      this.resize(size)
+    }
   },
   methods: {
     ...mapActions([
@@ -92,6 +100,9 @@ export default {
     }),
     onResize (size) {
       this.getVisualizationSize(size)
+    },
+    resize (size) {
+      this.$refs.visualization.style.marginBottom = size.height / 12
     },
     showDialog () {
       Dialog.create({

@@ -171,7 +171,11 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is por buleria',
     longLabel: 'Alegría',
-    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary", and "the second half is binary". This rythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá). The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E). It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira',
+    doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
+         '<p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p>' +
+         '<p>This rythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p>' +
+         '<p>The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E).</p>' +
+         '<p>It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
     places: 'Cádiz',
     videoExample: 'https://www.youtube.com/watch?v=M4x02TRlaqw'
@@ -276,7 +280,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '6 beats Abandolaos',
-    doc: 'A kind oh 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.',
+    doc: '<p>A kind oh 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.</p>',
     places: 'Málaga, Huelva',
     videoExample: null
   },
@@ -380,7 +384,8 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '6 beats Bulería',
-    doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary. It can be seen as the first half of a 12 beats bulería.',
+    doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary.</p>' +
+         '<p>It can be seen as the first half of a 12 beats bulería.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     places: 'Jerez de la Frontera',
     videoExample: null
@@ -552,7 +557,8 @@ export default [
     slowMessage: 'Your rhythm is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '12 beats Bulería',
-    doc: 'One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10. It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".',
+    doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
+         '<p>It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     places: 'Jerez de la Frontera and others',
     videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
@@ -727,7 +733,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '12 beats Bulería (variation)',
-    doc: 'In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.',
+    doc: '<p>In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     places: 'Jerez de la Frontera and others',
     videoExample: null
@@ -903,7 +909,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Fandangos',
-    doc: 'This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.',
+    doc: '<p>This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Fandango',
     places: 'Huelva, Málaga, and others',
     videoExample: 'https://www.youtube.com/watch?v=RS8sy3gdb_Y'
@@ -1022,7 +1028,8 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Rumba',
-    doc: 'Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
+    doc: '<p>Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4.</p>' +
+         '<p>There is an accent on the first beat. Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Rumba_flamenca',
     places: 'Barcelona and others',
     videoExample: 'https://www.youtube.com/watch?v=2oyhlad64-s'
@@ -1127,7 +1134,8 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Sevillanas',
-    doc: 'Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz. Remark : our example pattern is made of 2 bars.',
+    doc: '<p>Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz.</p>' +
+         '<p>Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
     places: 'Sevilla',
     videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
@@ -1305,7 +1313,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Siguiriya',
-    doc: 'Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.',
+    doc: '<p>Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Siguiriyas',
     places: 'Sevilla, Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=3u66TxY1S88'
@@ -1465,7 +1473,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is solea por bulería or alegría',
     longLabel: 'Soleá',
-    doc: 'Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.',
+    doc: '<p>Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sole%C3%A1',
     places: 'Sevilla, Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=U9iw1gMVoO0'
@@ -1575,7 +1583,9 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Tanguillos de Cádiz',
-    doc: 'Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3. There is an accent on the first beat and sometimes… on the 2 and a half. Remark : our example pattern is made of 2 bars.',
+    doc: '<p>Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p>' +
+         '<p>There is an accent on the first beat and sometimes… on the 2 and a half.</p>' +
+         '<p>Remark : our example pattern is made of 2 bars.</p>',
     places: 'Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=AzvKavPKrXw'
   },
@@ -1697,7 +1707,8 @@ export default [
     slowMessage: 'Your tempo is por tientos',
     fastMessage: 'Your tempo is por rumba',
     longLabel: 'Tangos',
-    doc: 'Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat. Remark : our example pattern is made of 2 bars.',
+    doc: '<p>Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
+         '<p>Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Tango_(flamenco)',
     places: 'Granada, Málaga, Extremadura',
     videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'

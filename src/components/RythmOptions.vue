@@ -5,6 +5,7 @@ div
     outline,
     color="white",
     icon="speed",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="optDialog = true"
   )
   q-dialog#optDialog(v-model="optDialog")

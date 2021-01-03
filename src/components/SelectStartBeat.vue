@@ -4,6 +4,7 @@ div
   q-btn#startBeatBtn(
     outline,
     color="white",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="startBeatDialog = true"
   ) {{ selectedStartBeatLabel }}
   q-dialog#startBeatDialog(v-model="startBeatDialog")

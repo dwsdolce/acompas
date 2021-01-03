@@ -1,7 +1,16 @@
 <template lang="pug">
 div
-  div
-    p.caption Tempo
+  p.caption.text-center Tempo
+  .row.justify-center.items-end.content-end
+    q-btn(
+      outline,
+      round,
+      color="white",
+      :size="$q.screen.lt.md ? 'sm' : 'md'",
+      :padding="$q.screen.lt.md ? 'xs' : 'md'",
+      @click="decrement"
+    ).self-end
+      q-icon(name="remove")
     q-knob(
       color="primary",
       track-color="grey-1",
@@ -9,39 +18,19 @@ div
       :min="minTempo",
       :max="maxTempo",
       show-value,
-      size="130px",
+      :size="knobSize",
       :thickness="0.12",
       @input="selectTempo"
-    ).text-weight-light.q-mb-md
-  .row.justify-center.items-center
-    .col-2.q-mr-md-md
-      q-btn(
-        outline,
-        round,
-        color="white",
-        :size="$q.screen.lt.md ? 'sm' : 'md'",
-        @click="decrement"
-      )
-        q-icon(name="remove")
-    .col-6.col-md-4.col-lg-3.col-xl-2
-      q-input(
-        dark,
-        type="number",
-        :value="tempo",
-        :min="0",
-        :max="300",
-        @input="selectTempo"
-        class="q-mx-md"
-      )
-    .col-2.q-ml-md-md
-      q-btn(
-        outline,
-        round,
-        color="white",
-        :size="$q.screen.lt.md ? 'sm' : 'md'",
-        @click="increment"
-      )
-        q-icon(name="add")
+    ).text-weight-light
+    q-btn(
+      outline,
+      round,
+      color="white",
+      :size="$q.screen.lt.md ? 'sm' : 'md'",
+      :padding="$q.screen.lt.md ? 'xs' : 'md'",
+      @click="increment"
+    ).self-end
+      q-icon(name="add")
 </template>
 
 <script>
@@ -53,7 +42,14 @@ export default {
       tempo: state => state.tempo,
       palo: state => state.selectedPalo,
       maxTempo: state => state.selectedPalo.maxTempo,
-      minTempo: state => state.selectedPalo.minTempo
+      minTempo: state => state.selectedPalo.minTempo,
+      knobSize: state => {
+        if (state.visualizationSize.width < 860) {
+          return (state.visualizationSize.width * 25 / 100) + 'px'
+        } else {
+          return '148px'
+        }
+      }
     })
   },
   methods: {
