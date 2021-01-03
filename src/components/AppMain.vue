@@ -87,7 +87,6 @@ export default {
   },
   watch: {
     visualizationSize (size) {
-      console.log(size.height)
       this.resize(size)
     }
   },
