@@ -291,6 +291,7 @@ const localStorage = store => {
           storage.setItem(`pre-count-${palo.value}`, 0)
           storage.setItem(`start-beat-${palo.value}`, 0)
         })
+        storage.setItem(`palo`, palosDefaultSettings[0].value)
         break
     }
   })

@@ -21,11 +21,8 @@ export const selectVisualizationMode = ({ commit }, payload) => {
 
 export const selectPalo = ({ commit, state }, payload) => { // payload is a palo slug
   if (state.isPlaying) commit(types.STOP)
-  forEachValue(state.palos, palo => {
-    if (palo.value === payload) {
-      commit(types.SELECT_PALO, palo)
-    }
-  })
+  const palo = state.palos.find(p => p.value === payload)
+  commit(types.SELECT_PALO, palo)
 }
 
 export const selectTempo = ({ commit, state }, payload) => {
@@ -164,6 +161,7 @@ export const closePrivacyDialog = ({ commit }) => {
 }
 
 export const restoreDefault = ({ dispatch, commit, state }, payload) => {
+  if (state.isPlaying) commit(types.STOP)
   if (payload === 'all') commit(types.RESET_STORAGE)
 
   dispatch('selectInstruments', state.defaultSelectedInstruments)

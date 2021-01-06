@@ -7,7 +7,7 @@ div
       round,
       color="white",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
-      :padding="$q.screen.lt.md ? 'xs' : 'md'",
+      :padding="$q.screen.lt.md ? 'xs' : 'sm'",
       @click="decrement"
     ).self-end
       q-icon(name="remove")
@@ -27,7 +27,7 @@ div
       round,
       color="white",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
-      :padding="$q.screen.lt.md ? 'xs' : 'md'",
+      :padding="$q.screen.lt.md ? 'xs' : 'sm'",
       @click="increment"
     ).self-end
       q-icon(name="add")

@@ -150,7 +150,7 @@ const mutations = {
   },
 
   [types.RESET_STORAGE] (state) {
-    state.selectedPalo = palosDefaultSettings[2]
+    state.selectedPalo = palosDefaultSettings[0]
   },
 
   [types.TUNING_FORK_PLAY] (state) {
