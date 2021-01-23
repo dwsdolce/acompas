@@ -13,16 +13,14 @@
     "test:e2e:CI": "npx cross-env E2E_TEST=true start-test \"quasar dev\" http-get://localhost:8080 \"cypress run\""
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.12",
+    "@quasar/extras": "^1.9.14",
     "animejs": "^3.2.1",
     "axios": "^0.21.0",
-    "cordova-plugin-insomnia": "^4.3.0",
-    "cypress": "^6.2.1",
-    "quasar": "^1.14.7",
+    "quasar": "^1.15.1",
     "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
-    "@quasar/app": "2.1.13",
+    "@quasar/app": "2.1.14",
     "@quasar/quasar-app-extension-testing": "^1.0.3",
     "@quasar/quasar-app-extension-testing-e2e-cypress": "^2.0.4",
     "@vue/eslint-config-standard": "6.0.0",
