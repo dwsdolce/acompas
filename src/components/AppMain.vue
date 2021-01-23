@@ -1,7 +1,7 @@
 <template lang="pug">
 q-page.bg-grey-10.column.justify-around.text-grey-1.q-pa-sm
   q-resize-observer(@resize="onResize")
-  .column.justify-between
+  .column.justify-between.no-wrap
     .col-2(ref="visualization").q-mb-xs-sm.q-mb-md-lg.q-mb-lg-xl.q-pb-xs-sm.q-pb-md-lg.q-pb-lg-xl
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")

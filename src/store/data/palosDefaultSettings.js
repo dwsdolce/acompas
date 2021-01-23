@@ -1044,7 +1044,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 12,
-    accents: [ 0, 3 ],
+    accents: [ 0, 3, 4 ],
     clara: {
       0: 1, // 1 >
       1: 2,

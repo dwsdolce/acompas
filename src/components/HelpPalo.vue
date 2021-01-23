@@ -5,6 +5,7 @@ span.q-ml-sm
     round,
     flat,
     size="10px",
+    padding="none",
     icon="help",
     @click="paloHelpDialog = true"
   )
