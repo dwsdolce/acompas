@@ -64,7 +64,7 @@ div
           p If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
         div
           p: b Swing
-          p If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rythm flavour.
+          p If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rhythm flavour.
         div
           p: b Humanize
           p If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.

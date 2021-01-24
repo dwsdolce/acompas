@@ -173,7 +173,7 @@ export default [
     longLabel: 'Alegría',
     doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
          '<p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p>' +
-         '<p>This rythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p>' +
+         '<p>This rhythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p>' +
          '<p>The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E).</p>' +
          '<p>It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
@@ -1583,7 +1583,7 @@ export default [
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Tanguillos de Cádiz',
-    doc: '<p>Tanguillos are a kind of hybrid rythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p>' +
+    doc: '<p>Tanguillos are a kind of hybrid rhythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p>' +
          '<p>There is an accent on the first beat and sometimes… on the 2 and a half.</p>' +
          '<p>Remark : our example pattern is made of 2 bars.</p>',
     places: 'Cádiz and others',

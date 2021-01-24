@@ -11,7 +11,7 @@ div
   q-dialog#optDialog(v-model="optDialog")
     q-card(style="width: 100%;")
       q-card-section
-        .text-h6.text-center Rythm options
+        .text-h6.text-center Rhythm options
       q-card-section
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md
