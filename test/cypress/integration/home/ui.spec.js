@@ -35,6 +35,11 @@ describe('Home page', () => {
           if ($elt.html() === palo.label) {
             cy.wrap($elt)
               .click()
+            cy.get('#playBtn').then($button => {
+              if (!$button.is(':visible')) {
+                cy.get('#closePalosDialogBtn').click()
+              }
+            })
             cy.get('#playBtn')
               .should('contain', 'play_arrow')
               .click()

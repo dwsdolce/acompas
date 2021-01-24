@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p.caption Rythm options
+  p.caption Rhythm options
   q-btn#optBtn(
     outline,
     color="white",

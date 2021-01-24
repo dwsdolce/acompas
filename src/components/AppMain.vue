@@ -16,7 +16,7 @@ q-page.bg-grey-10.column.justify-around.text-grey-1.q-pa-sm
           .row.justify-center
             select-pre-count.q-mb-xs
           .row.justify-center
-            rythm-options
+            rhythm-options
         .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
           play
         .col-6.col-md-5.column.justify-between
@@ -38,7 +38,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
 import Play from './Play'
 import SelectTempo from './SelectTempo'
-import RythmOptions from './RythmOptions'
+import RhythmOptions from './RhythmOptions'
 import SelectPalo from './SelectPalo'
 import SelectPreCount from './SelectPreCount'
 import SelectStartBeat from './SelectStartBeat'
@@ -54,7 +54,7 @@ export default {
   components: {
     Play,
     SelectTempo,
-    RythmOptions,
+    RhythmOptions,
     SelectPalo,
     SelectPreCount,
     SelectStartBeat,
