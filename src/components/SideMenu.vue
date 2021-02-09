@@ -70,13 +70,13 @@ div
           p If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
         div
           p: b Tempo
-          p There are 3 ways to define the tempo: the knob circle, the number input underneath for a more precise setting, and you can decrement/increment the bpm with the + and - buttons.
+          p There are 2 ways to define the tempo: the knob circle, and you can decrement/increment the bpm with the + and - buttons.
         div
           p: b Instruments mixer
           p Access the mixer. Select playing instruments, set its own relative volume, and wether playing quarter notes or eighth notes.
         div
           p: b View mode
-          p Choose between dots and counter visualisation.
+          p Choose between dots, counter and clock visualisations.
         div
           p: b Reset
           p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
