@@ -39,6 +39,7 @@ const state = {
   trackingInitialized: false,
   trackingChosen: false,
   privacyDialogOpen: false,
+  dialogOpen: false,
   tuningFork: {
     isPlaying: false,
     notes: [ 'E2', 'A2', 'D3', 'G3', 'B3', 'E4' ],

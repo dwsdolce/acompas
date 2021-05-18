@@ -8,7 +8,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="optDialog = true"
   )
-  q-dialog#optDialog(v-model="optDialog")
+  q-dialog#optDialog(v-model="optDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Rhythm options
@@ -24,6 +24,7 @@ div
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import ToggleImprovise from './ToggleImprovise'
 import ToggleHumanize from './ToggleHumanize'
 import SelectSwing from './SelectSwing'
@@ -34,6 +35,11 @@ export default {
     return {
       optDialog: false
     }
+  },
+  methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    })
   }
 }
 </script>

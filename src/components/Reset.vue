@@ -8,7 +8,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="resetDialog = true"
   )
-  q-dialog(v-model="resetDialog")
+  q-dialog(v-model="resetDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Restore default parameters
@@ -34,7 +34,7 @@ div
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -53,6 +53,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    }),
     ...mapActions([ 'restoreDefault' ]),
     onSelectedOption (v) {
       this.selectedResetOption = v

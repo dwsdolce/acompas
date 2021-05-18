@@ -9,6 +9,10 @@ div
       q-item-section(avatar)
         q-icon(name="hearing")
       q-item-section Tuning fork
+    q-item(clickable, v-ripple, @click="shortcutsDialog = true")
+      q-item-section(avatar)
+        q-icon(name="keyboard")
+      q-item-section Shortcuts
     q-item#privacyQItem(clickable, v-ripple, @click="openPrivacyDialog()")
       q-item-section(avatar)
         q-icon(name="person")
@@ -45,7 +49,7 @@ div
       q-item-section(avatar)
         q-icon(name="bug_report")
       q-item-section Issues
-  q-dialog#helpDialog(v-model="helpDialog")
+  q-dialog#helpDialog(v-model="helpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Help
@@ -85,7 +89,7 @@ div
           color="primary",
           v-close-popup
         ) Close
-  q-dialog#privacyDialog(:value="privacyDialogOpen")
+  q-dialog#privacyDialog(:value="privacyDialogOpen", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Privacy
@@ -109,7 +113,7 @@ div
           v-close-popup,
           @click="enableTrackingChosen(); closePrivacyDialog()"
         ) Close
-  q-dialog#tuningDialog(v-model="tuningDialog")
+  q-dialog#tuningDialog(v-model="tuningDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Tuning fork
@@ -117,6 +121,71 @@ div
         tuning-fork
       q-card-section(align="center")
         q-btn#closeTuningDialogBtn(
+          color="primary",
+          v-close-popup
+        ) Close
+  q-dialog#shortcutsDialog(v-model="shortcutsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+    q-card(style="width: 100%;")
+      q-card-section
+        .text-h6.text-center Shortcuts
+      q-card-section
+        q-markup-table(flat)
+          tbody
+            tr
+              td.text-right
+                kbd Space
+              td.text-left
+                | Start / Stop metronome
+            tr
+              td.text-right
+                kbd Up
+              td.text-left
+                | Tempo + 1
+            tr
+              td.text-right
+                kbd Down
+              td.text-left
+                | Tempo - 1
+            tr
+              td.text-right
+                kbd Alt
+                | +
+                kbd Up
+              td.text-left
+                | Tempo + 5
+            tr
+              td.text-right
+                kbd Alt
+                | +
+                kbd Down
+              td.text-left
+                | Tempo - 5
+            tr
+              td.text-right
+                kbd Shift
+                | +
+                kbd Up
+              td.text-left
+                | Tempo + 10
+            tr
+              td.text-right
+                kbd Shift
+                | +
+                kbd Down
+              td.text-left
+                | Tempo - 10
+            tr
+              td.text-right
+                kbd Esc
+              td.text-left
+                | Close dialog
+            tr
+              td.text-right
+                kbd Tab
+              td.text-left
+                | Change focus button
+      q-card-section(align="center")
+        q-btn#closeShortcutsDialogBtn(
           color="primary",
           v-close-popup
         ) Close
@@ -132,7 +201,8 @@ export default {
   data () {
     return {
       helpDialog: false,
-      tuningDialog: false
+      tuningDialog: false,
+      shortcutsDialog: false
     }
   },
   computed: {
@@ -148,7 +218,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      stopTuningFork: 'TUNING_FORK_STOP'
+      stopTuningFork: 'TUNING_FORK_STOP',
+      toggleDialog: 'TOGGLE_DIALOG'
     }),
     ...mapActions([
       'toggleTrackVisits',

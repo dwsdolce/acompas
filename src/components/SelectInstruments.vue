@@ -7,7 +7,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="instrumentsDialog = true"
   )
-  q-dialog#mixerDialog(v-model="instrumentsDialog")
+  q-dialog#mixerDialog(v-model="instrumentsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Instruments mixer
@@ -32,11 +32,16 @@ div
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import InstrumentMixer from './InstrumentMixer'
 
 export default {
   components: { InstrumentMixer },
+  data () {
+    return {
+      instrumentsDialog: false
+    }
+  },
   computed: {
     ...mapState({
       instruments: state => state.instruments,
@@ -54,10 +59,10 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      instrumentsDialog: false
-    }
+  methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    })
   }
 }
 </script>

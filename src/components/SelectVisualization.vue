@@ -7,7 +7,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="visualizationDialog = true"
   )
-  q-dialog(v-model="visualizationDialog")
+  q-dialog(v-model="visualizationDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Select view mode
@@ -27,7 +27,7 @@ div
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -44,6 +44,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    }),
     ...mapActions([
       'selectVisualizationMode'
     ]),

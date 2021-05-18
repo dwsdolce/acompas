@@ -9,7 +9,7 @@ span.q-ml-sm
     icon="help",
     @click="paloHelpDialog = true"
   )
-  q-dialog#paloHelpDialog(v-model="paloHelpDialog")
+  q-dialog#paloHelpDialog(v-model="paloHelpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center {{ selectedPaloLongLabel }}
@@ -26,7 +26,7 @@ span.q-ml-sm
 
 <script>
 import { openURL, Platform } from 'quasar'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   props: [ 'palo' ],
@@ -48,6 +48,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    }),
     launch (url) {
       if (Platform.is.cordova) {
         cordova.InAppBrowser.open(url, '_system')

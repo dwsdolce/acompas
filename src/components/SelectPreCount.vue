@@ -7,7 +7,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="preCountDialog = true"
   ) {{ selectedPreCountLabel }}
-  q-dialog#preCountDialog(v-model="preCountDialog")
+  q-dialog#preCountDialog(v-model="preCountDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Number of pre-count beats
@@ -27,7 +27,7 @@ div
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { forEachValue } from '../assets/utils'
 
 export default {
@@ -44,6 +44,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    }),
     ...mapActions([
       'selectPreCount'
     ]),

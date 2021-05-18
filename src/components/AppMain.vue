@@ -68,19 +68,18 @@ export default {
   computed: {
     ...mapState({
       isPlaying: state => state.isPlaying,
+      tempo: state => state.tempo,
       visualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize
+      visualizationSize: state => state.visualizationSize,
+      dialogOpen: state => state.dialogOpen
     })
   },
   mounted () {
-    isSupported().then(() => {
-    }).catch(() => {
+    isSupported().then(() => {}).catch(() => {
       this.showDialog()
     })
-    document.addEventListener('keypress', event => {
-      if (event.which === 32) {
-        this.playStop()
-      }
+    document.addEventListener('keyup', event => {
+      this.onKeyup(event)
     })
     this.resize(this.visualizationSize)
     initMetronome(this.$store)
@@ -92,10 +91,12 @@ export default {
   },
   methods: {
     ...mapActions([
-      'playStop'
+      'playStop',
+      'selectTempo'
     ]),
     ...mapMutations({
-      getVisualizationSize: 'GET_VISUALIZATION_SIZE'
+      getVisualizationSize: 'GET_VISUALIZATION_SIZE',
+      toggleDialog: 'TOGGLE_DIALOG'
     }),
     onResize (size) {
       this.getVisualizationSize(size)
@@ -104,6 +105,7 @@ export default {
       this.$refs.visualization.style.marginBottom = size.height / 12
     },
     showDialog () {
+      this.toggleDialog(false)
       Dialog.create({
         title: 'Update your browser!',
         message: 'Your browser doesn\'t support one or more technologies used by this app. Please come back with another one or another version of this one.',
@@ -117,6 +119,38 @@ export default {
         noBackdropDismiss: true,
         noEscDismiss: true
       })
+    },
+    onKeyup (e) {
+      e.preventDefault()
+      if (this.dialogOpen) return
+      switch (e.keyCode) {
+        case 32: // Space
+          this.playStop()
+          break
+        case 38: // Arrow up
+          if (e.shiftKey) {
+            this.selectTempo(this.tempo + 10)
+          } else if (e.altKey) {
+            this.selectTempo(this.tempo + 5)
+          } else {
+            this.selectTempo(this.tempo + 1)
+          }
+          break
+        case 40: // Arrow down
+          if (e.shiftKey) {
+            this.selectTempo(this.tempo - 10)
+          } else if (e.altKey) {
+            this.selectTempo(this.tempo - 5)
+          } else {
+            this.selectTempo(this.tempo - 1)
+          }
+          break
+        case 80: // Arrow down
+
+          break
+        default:
+          break
+      }
     }
   }
 }

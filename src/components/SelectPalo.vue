@@ -8,7 +8,7 @@ div
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="palosDialog = true"
   ) {{ selectedPaloLabel }}
-  q-dialog#palosDialog(v-model="palosDialog")
+  q-dialog#palosDialog(v-model="palosDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Please select a palo
@@ -28,7 +28,7 @@ div
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import HelpPalo from './HelpPalo'
 
 export default {
@@ -46,6 +46,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      toggleDialog: 'TOGGLE_DIALOG'
+    }),
     ...mapActions([
       'selectPalo'
     ]),

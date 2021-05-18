@@ -140,6 +140,10 @@ const mutations = {
     state.privacyDialogOpen = false
   },
 
+  [types.TOGGLE_DIALOG] (state, payload) {
+    state.dialogOpen = payload
+  },
+
   [types.ENABLE_TRACKINGCHOSEN] (state) {
     state.trackingChosen = true
   },
