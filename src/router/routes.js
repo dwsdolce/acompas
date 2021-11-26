@@ -6,7 +6,7 @@ const routes = [
   },
   // Redirect 404s to the app
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     redirect: '/'
   }
 ]

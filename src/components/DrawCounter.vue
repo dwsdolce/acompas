@@ -40,9 +40,9 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 .counter
-  margin-bottom 9.5px
+  margin-bottom: 9.5px
 .accent
   color: firebrick
 </style>

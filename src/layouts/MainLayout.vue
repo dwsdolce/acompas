@@ -1,29 +1,29 @@
 <template lang="pug">
-  q-layout(view="hHh Lpr lFf")
-    q-header
-      q-toolbar
-        q-btn#menuBtn(
-          flat,
-          dense,
-          round,
-          @click="leftDrawerOpen = !leftDrawerOpen",
-          aria-label="Menu"
-        )
-          q-icon(name="menu")
+q-layout(view="hHh Lpr lFf")
+  q-header
+    q-toolbar
+      q-btn#menuBtn(
+        flat,
+        dense,
+        round,
+        @click="leftDrawerOpen = !leftDrawerOpen",
+        aria-label="Menu"
+      )
+        q-icon(name="menu")
 
-        q-toolbar-title
-          img(:src="'AClogo.png'" alt="A Compás" style="margin-top: 6px;")
+      q-toolbar-title
+        img(:src="'AClogo.png'" alt="A Compás" style="margin-top: 6px;")
 
-    q-drawer(
-      bordered,
-      v-model="leftDrawerOpen",
-      content-class="bg-grey-2",
-      :breakpoint="1439"
-    )
-      side-menu#sideMenu
+  q-drawer(
+    bordered,
+    v-model="leftDrawerOpen",
+    content-class="bg-grey-2",
+    :breakpoint="1439"
+  )
+    side-menu#sideMenu
 
-    q-page-container
-      app-main#appMain
+  q-page-container
+    app-main#appMain
 </template>
 
 <script>

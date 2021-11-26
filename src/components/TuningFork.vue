@@ -43,10 +43,10 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 .tuning-btn
-  border 1px solid black
-  background transparent
+  border: 1px solid black
+  background: transparent
   &.active
-    background rgba(0, 0, 0, 0.15)
+    background: rgba(0, 0, 0, 0.15)
 </style>

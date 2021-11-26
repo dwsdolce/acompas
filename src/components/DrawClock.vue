@@ -93,54 +93,54 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-$size = 31vmin
-$axis = .7vmin
+<style lang="sass" scoped>
+$size : 31vmin
+$axis : .7vmin
 
 #clock
-  width $size
-  height $size
-  border-radius 50%
-  background-color $blue-grey-1
-  position relative
+  width: $size
+  height: $size
+  border-radius: 50%
+  background-color: $blue-grey-1
+  position: relative
   .axis
-    width ($axis * 2)
-    height ($axis * 2)
-    border-radius $axis
-    background-color black
-    position absolute
-    top 'calc(%s / 2 - %s)' % ($size $axis)
-    left 'calc(%s / 2 - %s)' % ($size $axis)
+    width: ($axis * 2)
+    height: ($axis * 2)
+    border-radius: $axis
+    background-color: black
+    position: absolute
+    top: calc($size / 2 - $axis)
+    left: calc($size / 2 - $axis)
   .hand
     width: $axis
-    height ($size / 3)
-    position absolute
-    top 'calc(%s / 6 - %s / 2)' % ($size $axis)
-    left 'calc(%s / 2 - %s / 2)' % ($size $axis)
-    background-color black
-    border-radius  100% 100% 0% 0%
-    transform rotate(0deg)
-    transform-origin center 'calc(%s / 3 + %s / 2)' % ($size $axis)
+    height: ($size / 3)
+    position: absolute
+    top: calc($size / 6 - $axis / 2)
+    left: calc($size / 2 - $axis / 2)
+    background-color: black
+    border-radius: 100% 100% 0% 0%
+    transform: rotate(0deg)
+    transform-origin: center calc($size / 3 - $axis / 2)
   ul
-    height 'calc(%s / 2.2)' % ($size)
-    position absolute
-    list-style none
-    width 0
-    left 50%
-    bottom 50%
-    margin 0
+    height: calc($size / 2.2)
+    position: absolute
+    list-style :none
+    width: 0
+    left: 50%
+    bottom: 50%
+    margin: 0
     li
       // position absolute
       // top 0
-      left 0
-      height 100%
-      transform-origin 0% 100%
+      left: 0
+      height: 100%
+      transform-origin: 0% 100%
       .num
-        color tomato
-        font-size 3vmin
+        color: tomato
+        font-size: 3vmin
         // position absolute
         // top 0
         // left 50%
         // transform translateX(-50%)
-        font-weight bold
+        font-weight: bold
 </style>

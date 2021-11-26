@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import Vuex from 'vuex'
 
 import state from './state'
@@ -11,7 +11,7 @@ import metronome from '../plugins/metronome'
 import localStorage from '../plugins/localStorage'
 import piwik from '../plugins/piwik'
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 
 /*
  * If not building with SSR mode, you can

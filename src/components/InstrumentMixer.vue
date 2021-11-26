@@ -75,7 +75,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 tr > td
-  padding 0.5rem 0
+  padding: 0.5rem 0
 </style>

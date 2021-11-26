@@ -1,7 +1,7 @@
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around
   .column(v-for="(n, i) in beatLabels")
-    .dot(:style="getDotStyle(i)", :ref="`dot-${i}`").item-center.q-mb-md
+    .dot(:style="getDotStyle(i)", :ref="`dot-${i}`", :class="[`dot-${i}`]").item-center.q-mb-md
     span(v-if="selectedPalo.value !== 'no-compas'", :style="getNbStyle(i)", :ref="`nb-${i}`").text-center {{ n }}
 </template>
 
@@ -109,7 +109,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 .dot
-  background-color $primary
+  background-color: $primary
 </style>

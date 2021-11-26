@@ -14,13 +14,13 @@ div
     q-knob(
       color="primary",
       track-color="grey-1",
-      :value="tempo",
+      :modelValue="tempo",
       :min="minTempo",
       :max="maxTempo",
       show-value,
       :size="knobSize",
       :thickness="0.12",
-      @input="selectTempo"
+      @update:modelValue="selectTempo"
     ).text-weight-light
     q-btn(
       outline,
@@ -66,7 +66,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 .custom-input
-  max-width 300px
+  max-width: 300px
 </style>
