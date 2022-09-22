@@ -49,7 +49,7 @@ export const useMetronome = () => {
         wet: 1,
       })
 
-      for (let i = 0 i < value.length i++) {
+      for (let i = 0; i < value.length; i++) {
         const url = path + value[i].src + '.' + audioFormat
         sounds[key][i] = new Tone.Player({
           url: url,
@@ -272,7 +272,7 @@ export const useMetronome = () => {
         paloStore.palo.selectedStartBeat?.value
       ) {
         // Add pre-count to introduction sequence
-        for (let i = 0 i < paloStore.palo.selectedPreCount?.value i++) {
+        for (let i = 0; i < paloStore.palo.selectedPreCount?.value; i++) {
           introSeq.push(i * 2)
           introSeq.push(i * 2 + 1)
         }
@@ -297,7 +297,7 @@ export const useMetronome = () => {
         }
       }
       // Add pattern beats to loopable sequence
-      for (let i = 0 i < paloData?.nbBeatsInPattern i++) {
+      for (let i = 0; i < paloData?.nbBeatsInPattern; i++) {
         loopSeq.push(i)
       }
     }
