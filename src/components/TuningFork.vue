@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
+import { useTuningForkStore } from 'src/stores/tuning-fork'
+
+const tuningForkStore = useTuningForkStore()
+
+const {
+  notes,
+  isPlaying,
+  activeNote
+} = storeToRefs(tuningForkStore)
+
+const {
+  init: initTuningFork,
+  play,
+  stop
+} = tuningForkStore
+
+onMounted(() => {
+  initTuningFork()
+})
+</script>
+
 <template lang="pug">
 .column.wrap.content-center
   .flex.justify-center.q-gutter-md
@@ -6,42 +30,18 @@
       :ref="note",
       :key="note"
       :class="[ 'tuning-btn', `${note}`, activeNote === note ? 'active' : '' ]"
-      @click="playSynth(note)"
+      @click="play(note)"
     ) {{ note }}
   .flex.justify-center.q-gutter-md.q-mt-md
     div
-      p.caption Play all
+      p.caption {{ isPlaying ? 'Stop' : 'Play' }} all
       q-btn(
         flat,
         round,
         :icon="isPlaying ? 'stop' : 'play_arrow'",
-        @click="isPlaying ? stopLoop() : playLoop()"
+        @click="isPlaying ? stop() : play()"
       )
 </template>
-
-<script>
-import { mapState, mapMutations } from 'vuex'
-import { TuningForkPlayNote } from '../plugins/metronome'
-
-export default {
-  computed: {
-    ...mapState({
-      notes: state => state.tuningFork.notes,
-      isPlaying: state => state.tuningFork.isPlaying,
-      activeNote: state => state.tuningFork.activeNote
-    })
-  },
-  methods: {
-    ...mapMutations({
-      playLoop: 'TUNING_FORK_PLAY',
-      stopLoop: 'TUNING_FORK_STOP'
-    }),
-    playSynth (note) {
-      TuningForkPlayNote(note)
-    }
-  }
-}
-</script>
 
 <style lang="sass" scoped>
 .tuning-btn

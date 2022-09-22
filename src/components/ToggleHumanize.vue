@@ -1,27 +1,27 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { usePaloStore } from 'src/stores/palo'
+
+const route = useRoute()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const paloStore = usePaloStore(route.name as string)()
+const { palo } = storeToRefs(paloStore)
+
+const {
+  toggleHumanize
+} = paloStore
+</script>
+
 <template lang="pug">
 .text-center
   p.caption Humanize
   q-toggle(
-    :value="humanize",
-    @input="toggleHumanize",
+    :model-value="palo.humanization",
+    @update:model-value="toggleHumanize()",
     color="primary",
     keep-color
   )
 </template>
-
-<script>
-import { mapState, mapActions } from 'vuex'
-
-export default {
-  computed: {
-    ...mapState({
-      humanize: state => state.humanize
-    })
-  },
-  methods: {
-    ...mapActions([
-      'toggleHumanize'
-    ])
-  }
-}
-</script>

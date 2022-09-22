@@ -1,97 +1,128 @@
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
+import type { CSSProperties } from 'vue'
+import { storeToRefs } from 'pinia'
+import anime from 'animejs'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { useSessionStore } from 'src/stores/session'
+import { usePaloStore } from 'src/stores/palo'
+import { useCoreStore } from 'src/stores/core'
+
+const sessionStore = useSessionStore()
+const coreStore = useCoreStore()
+
+const route = useRoute()
+const paloStore = usePaloStore(route.name as string)()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const { palo } = storeToRefs(paloStore)
+
+const {
+  isPlaying,
+  metronomeEvent
+} = storeToRefs(coreStore)
+
+const {
+  startingPoint,
+  alpha,
+  velocity
+} = paloStore
+
+const clockDeg = ref<number>(0)
+const hand = ref(null)
+
+const getLiStyle = (i: number): CSSProperties => {
+  if (paloData) {
+    return {
+      position: 'absolute',
+      transform: `rotate(${(360 / paloData?.nbBeatsInPattern) * i}deg)`
+    }
+  } else {
+    return {}
+  }
+}
+
+const getNumStyle = (i: number): CSSProperties => {
+  if (paloData && i) {
+    return {
+      transform: `translateX(-50%) translateY(-30%) rotate(-${(360 / paloData?.nbBeatsInPattern) * i}deg)`,
+      color: paloData?.accents.includes((i / 2) as never) ? 'firebrick' : 'tomato'
+    }
+  } else {
+    return {}
+  }
+}
+
+const idleClockPosition = () => {
+  const newDeg: number = startingPoint === 0 ? 0 : startingPoint * alpha + 0
+  anime({
+    targets: hand,
+    rotate: [ clockDeg, newDeg ],
+    duration: 0,
+    complete: (anim: any) => {
+      clockDeg.value = newDeg
+    }
+  })
+}
+
+const animateClock = (v: number | null) => {
+  if (v !== null && isPlaying) {
+    anime({
+      targets: hand,
+      rotate: [ clockDeg, clockDeg.value + alpha ],
+      duration: velocity,
+      easing: 'linear',
+      begin: (anim: any) => {
+        clockDeg.value += alpha
+      },
+      complete: (anim: any) => {
+        if (v === null || !isPlaying) {
+          idleClockPosition()
+        }
+      }
+    })
+  }
+}
+
+watch(
+  [metronomeEvent, palo.value.selectedStartBeat, palo.value.selectedPreCount],
+  (
+    [newMetronomeEvent, newSelectedStartBeat, newSelectedPreCount],
+    [prevMetronomeEvent, prevSelectedStartBeat, prevSelectedPreCount]
+  ) => {
+  if (newMetronomeEvent !== prevMetronomeEvent) {
+    if (newMetronomeEvent) animateClock(newMetronomeEvent.value)
+  }
+  if (newSelectedStartBeat !== prevSelectedStartBeat) {
+    idleClockPosition()
+  }
+  if (newSelectedPreCount !== prevSelectedPreCount) {
+    idleClockPosition()
+  }
+})
+
+onMounted(() => {
+  idleClockPosition()
+})
+</script>
+
 <template lang="pug">
 .full-width.flex.justify-center.items-center
   #clock.shadow-20
     .axis.shadow-4
     .hand(ref="hand").shadow-2
     ul
-      li(v-for="(n, i) in beatLabels", :style="getLiStyle(n, i)")
-        .num(:ref="`num-${n}`", :style="getNumStyle(n, i)") {{ n }}
+      li(
+        v-for="(n, i) in paloData?.beatLabels",
+        :style="getLiStyle(i)"
+      )
+        .num(
+          :ref="`num-${n}`",
+          :style="getNumStyle(i)"
+        ) {{ n }}
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import anime from 'animejs'
-
-export default {
-  data () {
-    return {
-      clockDeg: 0
-    }
-  },
-  computed: {
-    ...mapState({
-      selectedPalo: state => state.selectedPalo,
-      nbBeatsInPattern: state => state.selectedPalo.nbBeatsInPattern,
-      selectedPreCount: state => state.selectedPreCount,
-      selectedStartBeat: state => state.selectedStartBeat,
-      beatLabels: state => state.selectedPalo.beatLabels,
-      accents: state => state.selectedPalo.accents,
-      metronomeEvent: state => state.metronomeEvent,
-      isPlaying: state => state.isPlaying,
-      alpha: state => 360 / (state.selectedPalo.nbBeatsInPattern / 2),
-      velocity: state => Math.floor(60000 / state.tempo),
-      startingPoint: state => state.selectedStartBeat.value / 2 - state.selectedPreCount.value
-    })
-  },
-  watch: {
-    metronomeEvent (v) {
-      this.animateClock(v)
-    },
-    selectedStartBeat (v) {
-      this.idleClockPosition()
-    },
-    selectedPreCount (v) {
-      this.idleClockPosition()
-    }
-  },
-  mounted () {
-    this.idleClockPosition()
-  },
-  methods: {
-    getLiStyle (n, i) {
-      return {
-        position: 'absolute',
-        transform: `rotate(${(360 / this.nbBeatsInPattern) * i}deg)`
-      }
-    },
-    getNumStyle (n, i) {
-      return {
-        transform: `translateX(-50%) translateY(-30%) rotate(-${(360 / this.nbBeatsInPattern) * i}deg)`,
-        color: this.accents.includes(i / 2) ? 'firebrick' : 'tomato'
-      }
-    },
-    idleClockPosition () {
-      const newDeg = this.startingPoint === 0 ? 0 : this.startingPoint * this.alpha + 0
-      anime({
-        targets: this.$refs.hand,
-        rotate: [ this.clockDeg, newDeg ],
-        duration: 0,
-        complete: anim => {
-          this.clockDeg = newDeg
-        }
-      })
-    },
-    animateClock (v) {
-      if (v !== null && this.isPlaying) {
-        anime({
-          targets: this.$refs.hand,
-          rotate: [ this.clockDeg, this.clockDeg + this.alpha ],
-          duration: this.velocity,
-          easing: 'linear',
-          begin: anim => {
-            this.clockDeg += this.alpha
-          },
-          complete: anim => {
-            if (v === null || !this.isPlaying) {
-              this.idleClockPosition()
-            }
-          }
-        })
-      }
-    }
-  }
-}
-</script>
 
 <style lang="sass" scoped>
 $size : 31vmin
@@ -124,7 +155,7 @@ $axis : .7vmin
   ul
     height: calc($size / 2.2)
     position: absolute
-    list-style :none
+    list-style: none
     width: 0
     left: 50%
     bottom: 50%

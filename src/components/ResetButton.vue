@@ -1,0 +1,69 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useQuasar } from 'quasar'
+import { useSessionStore } from 'src/stores/session'
+import { useCoreStore } from 'src/stores/core'
+
+const $q = useQuasar()
+
+const sessionStore = useSessionStore()
+const coreStore = useCoreStore()
+
+const resetDialog = ref(false)
+const selectedResetOption = ref<string>('palo')
+const resetOptions = [
+  { value: 'palo', label: 'Only for current palo' },
+  { value: 'all', label: 'All settings' }
+]
+
+watch(resetDialog, () => {
+  selectedResetOption.value = 'palo'
+})
+
+const {
+  toggleDialog
+} = sessionStore
+
+const {
+  restoreDefault
+} = coreStore
+
+const onSelectedOption = (v: any) => {
+  selectedResetOption.value = v
+}
+</script>
+
+<template lang="pug">
+div
+  p.caption Reset
+  q-btn(
+    round,
+    outline,
+    icon="settings_backup_restore",
+    :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    @click="resetDialog = true"
+  )
+  q-dialog(v-model="resetDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+    q-card(style="width: 100%;")
+      q-card-section
+        .text-h6.text-center Restore default parameters
+        p.text-center Warning! This will delete your metronome settings.
+      q-card-section
+        q-option-group(
+          type="radio",
+          color="primary",
+          :model-value="selectedResetOption",
+          :options="resetOptions",
+          @update:model-value="onSelectedOption"
+        )
+      q-card-section(align="center")
+        q-btn(
+          color="primary",
+          v-close-popup
+        ).q-mr-md Close
+        q-btn(
+          color="red-10",
+          v-close-popup,
+          @click="restoreDefault(selectedResetOption)"
+        ) Proceed
+</template>

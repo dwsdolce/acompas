@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { useSessionStore } from 'src/stores/session'
+import { usePaloStore } from 'src/stores/palo'
+import { useCoreStore } from 'src/stores/core'
+
+const sessionStore = useSessionStore()
+const coreStore = useCoreStore()
+
+const route = useRoute()
+const paloStore = usePaloStore(route.name as string)()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const { palo } = storeToRefs(paloStore)
+
+const counter = ref<number | null>(null)
+const className = ref<string>('')
+
+const {
+  metronomeEvent
+} = storeToRefs(coreStore)
+
+watch(metronomeEvent, (v: number | null) => {
+  if (palo.value.selectedPreCount && palo.value.selectedStartBeat && paloData) {
+    let index = (v as number) - (palo.value.selectedPreCount.value * 2) + palo.value.selectedStartBeat.value
+    // index needs to be strictly positive as it will be used with a % operator
+    if (index < 0) {
+      index += paloData?.nbBeatsInPattern
+    }
+    counter.value = paloData?.beatLabels[index % paloData?.nbBeatsInPattern]
+    if (paloData?.accents.includes(((index % paloData?.nbBeatsInPattern) / 2) as never)) {
+      className.value = 'accent'
+    } else {
+      className.value = ''
+    }
+  }
+})
+</script>
+
 <template lang="pug">
 .item-center.full-width
   h2(:class="className").text-center.q-ma-none
@@ -5,40 +47,6 @@
       q-icon(name="more_horiz")
     div(v-else).counter {{ counter }}
 </template>
-
-<script>
-import { mapState } from 'vuex'
-
-export default {
-  data () {
-    return {
-      counter: null,
-      className: ''
-    }
-  },
-  computed: {
-    ...mapState({
-      metronomeEvent: state => state.metronomeEvent,
-      selectedPalo: state => state.selectedPalo
-    })
-  },
-  watch: {
-    metronomeEvent (v) {
-      let index = v - (this.$store.state.selectedPreCount.value * 2) + this.$store.state.selectedStartBeat.value
-      // index needs to be strictly positive as it will be used with a % operator
-      if (index < 0) {
-        index += this.$store.state.selectedPalo.nbBeatsInPattern
-      }
-      this.counter = this.selectedPalo.beatLabels[index % this.$store.state.selectedPalo.nbBeatsInPattern]
-      if (this.selectedPalo.accents.includes((index % this.$store.state.selectedPalo.nbBeatsInPattern) / 2)) {
-        this.className = 'accent'
-      } else {
-        this.className = ''
-      }
-    }
-  }
-}
-</script>
 
 <style lang="sass" scoped>
 .counter

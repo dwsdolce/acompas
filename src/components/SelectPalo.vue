@@ -1,14 +1,61 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useQuasar } from 'quasar'
+import { useRoute } from 'vue-router'
+import { usePaloStore } from 'src/stores/palo'
+import { useCoreStore } from 'src/stores/core'
+import { useSessionStore } from 'src/stores/session'
+import palosData from 'src/data/palosData'
+import HelpPalo from 'src/components/HelpPalo.vue'
+
+const route = useRoute()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+
+const coreStore = useCoreStore()
+const paloStore = usePaloStore(route.name as string)()
+const sessionStore = useSessionStore()
+
+const $q = useQuasar()
+
+const palosDialog = ref(false)
+
+const {
+  palo
+} = storeToRefs(paloStore)
+
+const {
+  selectPalo
+} = coreStore
+
+const {
+  toggleDialog
+} = sessionStore
+
+const onSelectedPalo = (v: any) => {
+  palosDialog.value = false
+  selectPalo(v)
+}
+</script>
+
 <template lang="pug">
 div
   p.caption Palo
-    help-palo(v-show="selectedPalo !== 'no-compas'", :palo="selectedPalo")
-  q-btn#paloBtn(
+    help-palo(v-show="palo.name !== 'no-compas'", :palo="palo")
+  q-btn(
+    id="paloBtn",
     outline,
     color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     @click="palosDialog = true"
-  ) {{ selectedPaloLabel }}
-  q-dialog#palosDialog(v-model="palosDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+  ) {{ paloData?.label }}
+  q-dialog(
+    id="palosDialog",
+    v-model="palosDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Please select a palo
@@ -16,46 +63,14 @@ div
         q-option-group(
           type="radio",
           color="primary",
-          :value="selectedPalo",
-          :options="palos",
-          @input="onSelectedPalo"
+          :options="palosData",
+          :model-value="paloData?.value",
+          @update:model-value="onSelectedPalo($event)"
         )
       q-card-section(align="center")
-        q-btn#closePalosDialogBtn(
+        q-btn(
+          id="closePalosDialogBtn",
           color="primary",
           v-close-popup
         ) Close
 </template>
-
-<script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import HelpPalo from './HelpPalo'
-
-export default {
-  components: { HelpPalo },
-  data () {
-    return {
-      palosDialog: false
-    }
-  },
-  computed: {
-    ...mapState({
-      palos: state => state.palos,
-      selectedPalo: state => state.selectedPalo.value,
-      selectedPaloLabel: state => state.selectedPalo.label
-    })
-  },
-  methods: {
-    ...mapMutations({
-      toggleDialog: 'TOGGLE_DIALOG'
-    }),
-    ...mapActions([
-      'selectPalo'
-    ]),
-    onSelectedPalo (v) {
-      this.selectPalo(v)
-      this.palosDialog = false
-    }
-  }
-}
-</script>

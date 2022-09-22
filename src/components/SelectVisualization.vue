@@ -1,3 +1,41 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { useCoreStore } from 'src/stores/core'
+import { usePaloStore } from 'src/stores/palo'
+import { useSessionStore } from 'src/stores/session'
+
+const route = useRoute()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const paloStore = usePaloStore(route.name as string)()
+const { palo } = storeToRefs(paloStore)
+
+const coreStore = useCoreStore()
+const sessionStore = useSessionStore()
+
+const visualizationDialog = ref(false)
+
+const {
+  visualizationSize
+} = storeToRefs(coreStore)
+
+const {
+  selectVisualizationMode
+} = paloStore
+
+const {
+  toggleDialog
+} = sessionStore
+
+const onSelectVisualizationMode = (v: any) => {
+  selectVisualizationMode(v)
+  visualizationDialog.value = false
+}
+</script>
+
 <template lang="pug">
 div
   p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
@@ -15,9 +53,9 @@ div
         q-option-group(
           type="radio",
           color="primary",
-          :value="selectedVisualizationMode",
-          :options="visualizationModes",
-          @input="onSelectVisualizationMode"
+          :model-value="palo.visualizationModes.find(el => el.isActive)",
+          :options="palo.visualizationModes",
+          @update:model-value="onSelectVisualizationMode"
         )
       q-card-section(align="center")
         q-btn(
@@ -25,35 +63,3 @@ div
           v-close-popup
         ) Close
 </template>
-
-<script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-
-export default {
-  data () {
-    return {
-      visualizationDialog: false
-    }
-  },
-  computed: {
-    ...mapState({
-      visualizationModes: state => state.visualizationModes,
-      selectedVisualizationMode: state => state.selectedVisualizationMode,
-      visualizationSize: state => state.visualizationSize,
-      selectedPalo: state => state.selectedPalo
-    })
-  },
-  methods: {
-    ...mapMutations({
-      toggleDialog: 'TOGGLE_DIALOG'
-    }),
-    ...mapActions([
-      'selectVisualizationMode'
-    ]),
-    onSelectVisualizationMode (v) {
-      this.selectVisualizationMode(v)
-      this.visualizationDialog = false
-    }
-  }
-}
-</script>

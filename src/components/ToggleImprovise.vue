@@ -1,35 +1,34 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { usePaloStore } from 'src/stores/palo'
+
+const route = useRoute()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const paloStore = usePaloStore(route.name as string)()
+const { palo } = storeToRefs(paloStore)
+
+const {
+  toggleImprovise
+} = paloStore
+</script>
+
 <template lang="pug">
 .text-center
   p.caption Improvise
   q-toggle(
-    :value="improvise",
-    @input="toggleImprovise",
-    :disable="selectedPalo.value === 'no-compas'",
+    :model-value="palo.improvisation",
+    @update:model-value="toggleImprovise",
+    :disable="palo.name === 'no-compas'",
     color="primary",
     keep-color
   )
     q-tooltip(
-      v-if="selectedPalo.value === 'no-compas'",
+      v-if="palo.name === 'no-compas'",
       anchor="top middle",
       self="bottom middle",
       :offset="[10, 10]"
     ) This option is disabled for this palo.
 </template>
-
-<script>
-import { mapState, mapActions } from 'vuex'
-
-export default {
-  computed: {
-    ...mapState({
-      improvise: state => state.improvise,
-      selectedPalo: state => state.selectedPalo
-    })
-  },
-  methods: {
-    ...mapActions([
-      'toggleImprovise'
-    ])
-  }
-}
-</script>

@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useQuasar } from 'quasar'
+import { useRoute } from 'vue-router'
+import palosData from 'src/data/palosData'
+import { useCoreStore } from 'src/stores/core'
+import { usePaloStore } from 'src/stores/palo'
+import { useSessionStore } from 'src/stores/session'
+
+const $q = useQuasar()
+const route = useRoute()
+
+const paloData = palosData.find(palo => palo.value === route.name)
+const paloStore = usePaloStore(route.name as string)()
+const { palo } = storeToRefs(paloStore)
+
+const coreStore = useCoreStore()
+
+const {
+  visualizationSize
+} = storeToRefs(coreStore)
+
+const {
+  selectTempo
+} = paloStore
+
+const decrement = () => {
+  if (palo.value.tempo) selectTempo(palo.value.tempo - 1)
+}
+
+const increment = () => {
+  if (palo.value.tempo) selectTempo(palo.value.tempo + 1)
+}
+
+const knobSize = computed(() => {
+  if (visualizationSize.value.width && visualizationSize.value.width < 860) {
+    return (visualizationSize.value.width * 25 / 100) + 'px'
+  } else {
+    return '148px'
+  }
+})
+</script>
+
 <template lang="pug">
 div
   p.caption.text-center Tempo
@@ -8,19 +52,20 @@ div
       color="white",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       :padding="$q.screen.lt.md ? 'xs' : 'sm'",
-      @click="decrement"
+      @click="decrement()"
     ).self-end
       q-icon(name="remove")
     q-knob(
+      v-if="palo.tempo",
       color="primary",
       track-color="grey-1",
-      :modelValue="tempo",
-      :min="minTempo",
-      :max="maxTempo",
+      :model-value="palo.tempo",
+      @update:model-value="selectTempo($event)",
+      :min="paloData?.minTempo",
+      :max="paloData?.maxTempo",
       show-value,
       :size="knobSize",
-      :thickness="0.12",
-      @update:modelValue="selectTempo"
+      :thickness="0.12"
     ).text-weight-light
     q-btn(
       outline,
@@ -28,43 +73,10 @@ div
       color="white",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       :padding="$q.screen.lt.md ? 'xs' : 'sm'",
-      @click="increment"
+      @click="increment()"
     ).self-end
       q-icon(name="add")
 </template>
-
-<script>
-import { mapState, mapActions } from 'vuex'
-
-export default {
-  computed: {
-    ...mapState({
-      tempo: state => state.tempo,
-      palo: state => state.selectedPalo,
-      maxTempo: state => state.selectedPalo.maxTempo,
-      minTempo: state => state.selectedPalo.minTempo,
-      knobSize: state => {
-        if (state.visualizationSize.width < 860) {
-          return (state.visualizationSize.width * 25 / 100) + 'px'
-        } else {
-          return '148px'
-        }
-      }
-    })
-  },
-  methods: {
-    ...mapActions([
-      'selectTempo'
-    ]),
-    increment () {
-      this.selectTempo(this.tempo + 1)
-    },
-    decrement () {
-      this.selectTempo(this.tempo - 1)
-    }
-  }
-}
-</script>
 
 <style lang="sass" scoped>
 .custom-input
