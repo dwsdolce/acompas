@@ -4,7 +4,6 @@ import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useCoreStore } from 'src/stores/core'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/composables/utils'
@@ -14,7 +13,6 @@ const route = useRoute()
 
 const paloData = palosData.find(palo => palo.value === route.name)
 
-const coreStore = useCoreStore()
 const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()
 
@@ -32,14 +30,14 @@ const {
   toggleDialog
 } = sessionStore
 
-const onSelectedPreCount = (v: number) => {
-  forEachValue(paloData?.preCounts, (preCount: numOpts, key: number) => {
-    if (preCount.value === v) {
-      selectPreCount(preCount)
-    }
-  })
-  preCountDialog.value = false
-}
+// const onSelectedPreCount = (v: number) => {
+//   forEachValue(paloData?.preCounts, (preCount: numOpts, key: number) => {
+//     if (preCount.value === v) {
+//       selectPreCount(preCount)
+//     }
+//   })
+//   preCountDialog.value = false
+// }
 </script>
 
 <template lang="pug">
@@ -65,7 +63,7 @@ div
         q-option-group(
           type="radio",
           color="primary",
-          :model-value="palo.selectedPreCount",
+          :model-value="palo.selectedPreCount.value",
           @update:model-value="selectPreCount($event)"
           :options="paloData?.preCounts"
         )

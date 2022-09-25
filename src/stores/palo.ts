@@ -133,26 +133,6 @@ export const usePaloStore = (name: string) =>
       if (tempo.value !== undefined) initMetronome(palo.value)
     }
 
-    // const play = async () => {
-    //   isPlaying.value = true
-    //   await initSequences()
-    //   startSequences()
-    // }
-
-    // const stop = () => {
-    //   isPlaying.value = false
-    //   stopAllSequences()
-    // }
-
-    // const playStop = () => {
-    //   if (isPlaying.value) {
-    //     stop()
-    //     // triggerEvent(null)
-    //   } else {
-    //     play()
-    //   }
-    // }
-
     const selectVisualizationMode = (payload: string) => {
       const oldMode = palo.value.visualizationModes.find((el) => el.isActive)
       const newMode = palo.value.visualizationModes.find(
@@ -250,8 +230,9 @@ export const usePaloStore = (name: string) =>
       }
     }
 
-    const selectPreCount = (payload: numOpts) => {
-      palo.value.selectedPreCount = payload
+    const selectPreCount = (payload: number) => {
+      if (!payload && !paloData) return
+      palo.value.selectedPreCount = paloData?.preCounts.find(el => el.value === payload)
     }
 
     const selectStartBeat = (payload: numOpts) => {

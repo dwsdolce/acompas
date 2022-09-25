@@ -24,12 +24,14 @@ export const useCoreStore = defineStore('core', () => {
 
   const play = async () => {
     isPlaying.value = true
+    await initSequences()
     startSequences()
   }
 
   const stop = () => {
     isPlaying.value = false
     stopAllSequences()
+    triggerEvent(null)
   }
 
   const triggerEvent = (payload: number | null) => {
@@ -39,7 +41,6 @@ export const useCoreStore = defineStore('core', () => {
   const playStop = () => {
     if (isPlaying.value) {
       stop()
-      triggerEvent(null)
     } else {
       play()
     }

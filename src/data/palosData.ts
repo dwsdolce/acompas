@@ -681,53 +681,39 @@ export default [
     //  1                       2                       3                                   4                                   5
 
     nudillo: //<[number, ...(number | null)[]]>
-     [ 1,     null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null ],
+      [ 1,    null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1                       2                       3                                   4                                   5
 
     udu: //<[number, ...(number | null)[]]>
-     [ 1,     null, null, 2,    1,    null, null, null, 1,    null, null, 2,    null, 2,    1,    null, null, null, null, 2,    1,    null, 2,    null ],
+      [ 1,    null, null, 2,    1,    null, null, null, 1,    null, null, 2,    null, 2,    1,    null, null, null, null, 2,    1,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1                       2                       3                                   4                                   5
 
     click: //<[number, ...(number | null)[]]>
-     [ 1,     null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null ],
+      [ 1,    null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1                       2                       3                                   4                                   5
 
     beatLabels: //<[number, ...(number | null)[]]>
-     [ 1,     null, null, null, 2,    null, null, null, 3,    null, null, null, null, null, 4,    null, null, null, null, null, 5,    null, null, null ],
+      [ 1,    null, null, null, 2,    null, null, null, 3,    null, null, null, null, null, 4,    null, null, null, null, null, 5,    null, null, null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1                       2                       3                                   4                                   5
 
     preCounts: [
       { value: 0, label: 'Off' },
       { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
+      { value: 4, label: '2' },
+      { value: 8, label: '3 (half a compás)' },
+      { value: 14, label: '4' },
+      { value: 20, label: '5' }
     ],
     startBeats: [
-      { value: 0, label: '12 (default)' },
-      { value: 2, label: '1' },
+      { value: 0, label: '1 (default)' },
       { value: 4, label: '2' },
-      { value: 6, label: '3' },
-      { value: 8, label: '4' },
-      { value: 10, label: '5' },
-      { value: 12, label: '6 (half a compás)' },
-      { value: 14, label: '7' },
-      { value: 16, label: '8' },
-      { value: 18, label: '9' },
-      { value: 20, label: '10' },
-      { value: 22, label: '11' }
+      { value: 8, label: '3 (half a compás)' },
+      { value: 14, label: '4' },
+      { value: 20, label: '5' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',

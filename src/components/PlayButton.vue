@@ -18,7 +18,8 @@ const {
 } = storeToRefs(coreStore)
 
 const {
-  playStop
+  play,
+  stop
 } = coreStore
 
 const paloStore = usePaloStore(route.name as string)()
@@ -49,6 +50,6 @@ q-btn(
   size="lg",
   color="primary",
   :icon="isPlaying ? 'stop' : 'play_arrow'",
-  @click="playStop"
+  @click="isPlaying ? stop() : play()"
 )
 </template>

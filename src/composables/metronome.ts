@@ -53,7 +53,6 @@ export const useMetronome = () => {
 
     const path = 'audio/'
 
-
     forEachValue(audioData, (value: AudioDataKey, key: SoundKey) => {
       sounds[key] = {} as Sound
       const sound = sounds[key]
@@ -189,7 +188,9 @@ export const useMetronome = () => {
     note: number
   ) => {
     // Prepend pre-count beats if required
-    if (type === ('preCount' as PaloDataKey)) {
+    if (type == ('preCount' as PaloDataKey)) {
+      console.log('hello')
+
       triggerPreCountClick(time, note)
     } else {
       // Don't play non-preCount sequences if note is during pre-count
@@ -201,7 +202,7 @@ export const useMetronome = () => {
         return
       }
 
-      if (type === ('jaleo' as PaloDataKey)) {
+      if (type == ('jaleo' as PaloDataKey)) {
         const jaleo = paloStore.instrument('jaleo')
         if (jaleo?.enabled) improviseJaleo(note, time, eighthNotes)
         return
@@ -403,57 +404,54 @@ export const useMetronome = () => {
   // =====================
 
   const startSequences = async () => {
+    console.log('hello')
+
     await Tone.start()
 
     const offset = sequences.quarterNotes?.introduction.event?.length || 0
     const loopStart = '0:' + offset / 2
 
-    Tone.Transport.start()
+    await Tone.Transport.start()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
       if (sequences.quarterNotes.introduction.event?.length !== 0) {
-        forEachValue(
-          sequences.quarterNotes.introduction,
-          (seq: Tone.Sequence) => {
-            seq.start()
-            seq.stop(loopStart)
-          }
-        )
-        forEachValue(
-          sequences.eighthNotes.introduction,
-          (seq: Tone.Sequence) => {
-            seq.start(0)
-            seq.stop(loopStart)
-          }
-        )
-        forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
+        await forEachValue(sequences.quarterNotes.introduction, (seq: Tone.Sequence) => {
+          seq.start()
+          seq.stop(loopStart)
+        })
+        await forEachValue(sequences.eighthNotes.introduction, (seq: Tone.Sequence) => {
+          seq.start(0)
+          seq.stop(loopStart)
+        })
+        await forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
           seq.start(loopStart, offset)
         })
-        forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
+        await forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
           seq.start(loopStart, offset)
         })
       } else {
-        forEachValue(
-          sequences.quarterNotes.loop,
-          (seq: Tone.Sequence, key: string) => {
-            seq.start(0)
-          }
-        )
-        forEachValue(
-          sequences.eighthNotes.loop,
-          (seq: Tone.Sequence, key: string) => {
-            seq.start(0)
-          }
-        )
+        await forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
+          seq.start(0)
+          console.log(seq.state)
+
+        })
+        await forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
+          seq.start(0)
+        })
       }
     }
+
   }
 
   const stopAllSequences = () => {
+    console.log('bye')
     forEachValue(sequences, (seq: SeqSubdiv) => {
-      forEachValue(seq, (notes: Seq) => {
-        forEachValue(notes, (s: Tone.Sequence) => {
-          if (s !== null && s.state === 'started') s.stop()
+      // console.log(seq)
+      forEachValue(seq, (instrus: Seq) => {
+        // console.log(instrus)
+        forEachValue(instrus, (s: Tone.Sequence) => {
+          // console.log(s.state)
+          if (s !== null && s.state == 'started') s.stop()
           if (s !== null) s.dispose()
         })
       })
