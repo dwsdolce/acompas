@@ -22,11 +22,6 @@ const {
   metronomeEvent
 } = storeToRefs(coreStore)
 
-const {
-  init: initMetronome,
-  getVisualizationSize
-} = coreStore
-
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
 const maxDotSize = ref<number>(50)

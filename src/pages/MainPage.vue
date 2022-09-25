@@ -27,9 +27,9 @@ const paloStore = usePaloStore(route.name as string)()
 
 const { palo } = storeToRefs(paloStore)
 
-const { visualizationMode, selectTempo } = paloStore
+const { visualizationMode, init, selectTempo } = paloStore
 
-const { init: initMetronome, playStop } = coreStore
+const { playStop } = coreStore
 
 const { dialogOpen } = storeToRefs(sessionStore)
 
@@ -102,7 +102,7 @@ const onKeyup = (e: any) => {
 }
 
 onMounted(() => {
-  initMetronome()
+  init()
 
   // isSupported().catch(() => {
   //   showDialog()

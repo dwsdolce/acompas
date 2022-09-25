@@ -14,11 +14,6 @@ const paloData = palosData.find(palo => palo.value === route.name)
 
 const coreStore = useCoreStore()
 
-const {
-  init: initMetronome,
-  playStop
-} = coreStore
-
 const paloStore = usePaloStore(route.name as string)()
 
 const { palo } = storeToRefs(paloStore)

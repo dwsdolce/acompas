@@ -6,22 +6,29 @@ import palosData from 'src/data/palosData'
 import { forEachValue } from 'src/composables/utils'
 import { useMetronome } from 'src/composables/metronome'
 import { useCoreStore } from 'src/stores/core'
-import type { numOpts, instruOpts, Volume } from 'src/composables/models'
+import type { numOpts, instruOpts, Volume, PaloState } from 'src/composables/models'
 
 export const usePaloStore = (name: string) =>
   defineStore(name, () => {
-    const { humanize, changeSwing, changeTempo, changeVolume } = useMetronome()
+    const {
+      initMetronome,
+      initSequences,
+      humanize,
+      changeSwing,
+      changeTempo,
+      changeVolume
+    } = useMetronome()
 
     const paloData = palosData.find((el) => el.value == name)
 
     // STATE
     const palo = useStorage(
       name,
-      ref({
+      ref<PaloState>({
         name: name,
-        tempo: paloData?.defaultTempo,
-        selectedPreCount: paloData?.preCounts[0],
-        selectedStartBeat: paloData?.startBeats[0],
+        tempo: (paloData?.defaultTempo as number),
+        selectedPreCount: (paloData?.preCounts[0] as numOpts),
+        selectedStartBeat: (paloData?.startBeats[0] as numOpts),
         swing: 0,
         improvisation: false,
         humanization: false,
@@ -122,9 +129,9 @@ export const usePaloStore = (name: string) =>
     const tempo = computed(() => palo.value.tempo)
 
     // ACTIONS
-    // const init = () => {
-    //   initMetronome()
-    // }
+    const init = () => {
+      if (tempo.value !== undefined) initMetronome(palo.value)
+    }
 
     // const play = async () => {
     //   isPlaying.value = true
@@ -338,7 +345,7 @@ export const usePaloStore = (name: string) =>
       tempo,
 
       // ACTIONS
-      // init,
+      init,
       // play,
       // stop,
       // playStop,
@@ -353,7 +360,6 @@ export const usePaloStore = (name: string) =>
       selectStartBeat,
       toggleEighthNotes,
       enableEighthNotes,
-      changeTempo,
       disableEighthNotes,
       toggleImprovise,
       enableImprovise,

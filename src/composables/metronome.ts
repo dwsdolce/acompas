@@ -1,15 +1,19 @@
 import * as Tone from 'tone'
+import { ref } from 'vue'
 import { Loading, Notify } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import audioSettings from 'src/data/audioData'
-import { useCoreStore } from 'src/stores/core'
+import { useSessionStore } from 'src/stores/session'
 import { usePaloStore } from 'src/stores/palo'
+import { useCoreStore } from 'src/stores/core'
 import { forEachValue } from 'src/composables/utils'
 import type {
   Volume,
-  Palo
+  PaloData,
+  PaloState
 } from 'src/composables/models'
+import { storeToRefs } from 'pinia'
 
 const sounds: any = {}
 const sequences: any = {}
@@ -18,9 +22,14 @@ let audioFormat: string | null = null
 export const useMetronome = () => {
   const route = useRoute()
 
-  const paloData = palosData.find((palo) => palo.value === route.name)
   const coreStore = useCoreStore()
   const paloStore = usePaloStore(route.name as string)()
+
+  // const {
+  //   palo
+  // } = storeToRefs(paloStore)
+  const paloData = ref(palosData.find((palo) => palo.value === route.name))
+  const palo = ref(paloStore.palo)
 
   const initSounds = async () => {
     const audio = new Audio()
@@ -71,18 +80,18 @@ export const useMetronome = () => {
 
   const noteIndexInPattern = (i: number) => {
     if (
-      paloStore.palo.selectedPreCount &&
-      paloStore.palo.selectedStartBeat &&
-      paloData?.nbBeatsInPattern
+      palo.value.selectedPreCount &&
+      palo.value.selectedStartBeat &&
+      paloData.value?.nbBeatsInPattern
     ) {
       let index =
         i -
-        paloStore.palo.selectedPreCount.value * 2 +
-        paloStore.palo.selectedStartBeat.value
+        palo.value.selectedPreCount.value * 2 +
+        palo.value.selectedStartBeat.value
       while (index < 0) {
-        index += paloData?.nbBeatsInPattern
+        index += paloData.value?.nbBeatsInPattern
       }
-      return index % paloData?.nbBeatsInPattern
+      return index % paloData.value?.nbBeatsInPattern
     }
   }
 
@@ -101,7 +110,7 @@ export const useMetronome = () => {
     }
 
     // Don't mess with accents
-    if (paloData?.accents.includes((key / 2) as never)) {
+    if (paloData.value?.accents.includes((key / 2) as never)) {
       sound?.start(time)
       return
     }
@@ -135,7 +144,7 @@ export const useMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (paloData?.accents.includes(noteIndexInPattern(note) as never)) {
+    if (paloData.value?.accents.includes(noteIndexInPattern(note) as never)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -149,15 +158,15 @@ export const useMetronome = () => {
   }
 
   const triggerPreCountClick = (time: number, note: any) => {
-    if (paloStore.palo.selectedPreCount?.value && paloData?.accents) {
+    if (palo.value.selectedPreCount?.value && paloData.value?.accents) {
       if (
-        paloStore.palo.selectedPreCount?.value > 0 &&
-        note < paloStore.palo.selectedPreCount?.value * 2 &&
+        palo.value.selectedPreCount?.value > 0 &&
+        note < palo.value.selectedPreCount?.value * 2 &&
         note % 2 === 0
       ) {
         const index = noteIndexInPattern(note)
         if (!index) return
-        if (paloData?.accents.includes((index / 2) as never)) {
+        if (paloData.value?.accents.includes((index / 2) as never)) {
           sounds.click[0].start(time)
         } else {
           sounds.click[1].start(time)
@@ -179,8 +188,8 @@ export const useMetronome = () => {
     } else {
       // Don't play non-preCount sequences if note is during pre-count
       if (
-        paloStore.palo.selectedPreCount?.value &&
-        note < paloStore.palo.selectedPreCount?.value * 2 &&
+        palo.value.selectedPreCount?.value &&
+        note < palo.value.selectedPreCount?.value * 2 &&
         !isLoop
       ) {
         return
@@ -195,8 +204,8 @@ export const useMetronome = () => {
       const instru = paloStore.instrument(type)
 
       // index is a pulsation number, value is the sound number
-      if (instru?.enabled && paloData && type)
-        paloData[type as keyof Palo].forEach(
+      if (instru?.enabled && paloData.value && type)
+        paloData.value[type].forEach(
           (value: number | null, index: number) => {
             if (!value) return
             const sound = sounds[type][value - 1]
@@ -208,12 +217,12 @@ export const useMetronome = () => {
               (index as number) % 2 != 0 &&
               key == index
             ) {
-              paloStore.palo.improvisation
+              palo.value.improvisation
                 ? improvise(type, time, sound, note, index, eighthNotes)
                 : sound.start(time)
             }
             if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
-              paloStore.palo.improvisation
+              palo.value.improvisation
                 ? improvise(type, time, sound, note, index, eighthNotes)
                 : sound.start(time)
             }
@@ -245,7 +254,7 @@ export const useMetronome = () => {
       if (type === 'event' && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
-          if (paloStore.palo.name === 'no-compas') {
+          if (palo.value.name === 'no-compas') {
             coreStore.triggerEvent(coreStore.metronomeEvent === 0 ? 2 : 0)
           } else {
             coreStore.triggerEvent(note)
@@ -266,29 +275,29 @@ export const useMetronome = () => {
     const introSeq = []
     const loopSeq = []
 
-    if (paloData?.nbBeatsInPattern) {
+    if (paloData.value?.nbBeatsInPattern) {
       if (
-        paloStore.palo.selectedPreCount?.value &&
-        paloStore.palo.selectedStartBeat?.value
+        palo.value.selectedPreCount?.value &&
+        palo.value.selectedStartBeat?.value
       ) {
         // Add pre-count to introduction sequence
-        for (let i = 0; i < paloStore.palo.selectedPreCount?.value; i++) {
+        for (let i = 0; i < palo.value.selectedPreCount?.value; i++) {
           introSeq.push(i * 2)
           introSeq.push(i * 2 + 1)
         }
 
         // Add beats to introduction sequence until loop begins
         if (
-          paloStore.palo.selectedPreCount?.value !== 0 ||
-          paloStore.palo.selectedStartBeat?.value !== 0
+          palo.value.selectedPreCount?.value !== 0 ||
+          palo.value.selectedStartBeat?.value !== 0
         ) {
           let i = introSeq.length
           // Add items to introSeq until we find a beat with index 0 in the pattern
           while (
-            (paloStore.palo.selectedStartBeat?.value -
-              paloStore.palo.selectedPreCount?.value * 2 +
+            (palo.value.selectedStartBeat?.value -
+              palo.value.selectedPreCount?.value * 2 +
               i) %
-              paloData?.nbBeatsInPattern !==
+              paloData.value?.nbBeatsInPattern !==
             0
           ) {
             introSeq.push(i)
@@ -297,7 +306,7 @@ export const useMetronome = () => {
         }
       }
       // Add pattern beats to loopable sequence
-      for (let i = 0; i < paloData?.nbBeatsInPattern; i++) {
+      for (let i = 0; i < paloData.value?.nbBeatsInPattern; i++) {
         loopSeq.push(i)
       }
     }
@@ -353,16 +362,21 @@ export const useMetronome = () => {
 
   const isSupported = Tone.supported
 
-  const initMetronome = async () => {
+  const initMetronome = (paloState: PaloState) => {
     Loading.show({
       delay: 100,
       message: 'Loading audio samples',
     })
-    // await restoreLocalStorage(store)
+    if (!paloState) return
+
+    palo.value = paloState
+    paloData.value = palosData.find((p) => p.value === palo.value.name)
+
     Tone.loaded()
-      .then(async () => {
-        await initSounds()
-        await initSequences()
+      .then(() => {
+        initSounds()
+        initSequences()
+        changeTempo()
         Loading.hide()
       })
       .catch(() => {
@@ -438,8 +452,14 @@ export const useMetronome = () => {
     Tone.Transport.stop()
   }
 
-  const changeTempo = (tempo: number) => {
-    Tone.Transport.bpm.value = tempo
+  const changeTempo = (tempo?: number) => {
+    if (tempo) {
+      Tone.Transport.bpm.value = tempo
+    } else if (palo.value.tempo) {
+      Tone.Transport.bpm.value = palo.value.tempo
+    } else if (paloData.value) {
+      Tone.Transport.bpm.value = paloData.value?.defaultTempo
+    }
   }
 
   const changeSwing = (swing: number) => {
@@ -456,7 +476,7 @@ export const useMetronome = () => {
         if (type === 'event' || type === 'preCount' || type === 'click') {
           seq.humanize = false
         } else {
-          seq.humanize = paloStore.palo.humanization
+          seq.humanize = palo.value.humanization
         }
       }
     )
@@ -464,12 +484,12 @@ export const useMetronome = () => {
       if (type === 'event' || type === 'preCount' || type === 'click') {
         seq.humanize = false
       } else {
-        seq.humanize = paloStore.palo.humanization
+        seq.humanize = palo.value.humanization
       }
     })
     forEachValue(sequences.eighthNotes, (seq: any) => {
       forEachValue(seq, (s: any) => {
-        s.humanize = paloStore.palo.humanization
+        s.humanize = palo.value.humanization
       })
     })
   }
@@ -479,9 +499,6 @@ export const useMetronome = () => {
   }
 
   return {
-    sounds,
-    sequences,
-    getContext,
     initMetronome,
     isSupported,
     initSequences,

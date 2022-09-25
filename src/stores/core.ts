@@ -4,15 +4,16 @@ import { useRouter } from 'vue-router'
 import type { Size } from 'src/composables/models'
 import { useMetronome } from 'src/composables/metronome'
 
-const router = useRouter()
-
 export const useCoreStore = defineStore('core', () => {
+  const router = useRouter()
+
   const {
     initMetronome,
     isSupported,
     initSequences,
     startSequences,
     stopAllSequences,
+    changeTempo
   } = useMetronome()
 
   const visualizationSize = ref<Size>({ width: null, height: null })
@@ -21,14 +22,8 @@ export const useCoreStore = defineStore('core', () => {
   const isTooSlow = ref<boolean>(false)
   const isTooFast = ref<boolean>(false)
 
-  // ACTIONS
-  const init = () => {
-    initMetronome()
-  }
-
   const play = async () => {
     isPlaying.value = true
-    await initSequences()
     startSequences()
   }
 
@@ -86,7 +81,6 @@ export const useCoreStore = defineStore('core', () => {
     isTooFast,
     isTooSlow,
 
-    init,
     play,
     stop,
     playStop,

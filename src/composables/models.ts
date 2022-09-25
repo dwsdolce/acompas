@@ -20,6 +20,10 @@ export interface instruOpts extends stringOpts {
   volume:                     number
 }
 
+export interface visuOpts extends stringOpts {
+  isActive:                   boolean
+}
+
 export interface Size {
   width:                      number | null
   height:                     number | null
@@ -30,7 +34,7 @@ export interface Volume {
   volume:                     number
 }
 
-export interface Palo {
+export interface PaloData {
   id:                         number
   label:                      string
   value:                      string
@@ -59,24 +63,38 @@ export interface Palo {
   videoExample?:              string
 }
 
-export interface State {
-  visualizationModes:         stringOpts[]
-  visualizationSize:          Size
-  selectedVisualizationMode:  string
-  palos:                      Palo[]
-  selectedPalo:               Palo
-  instruments:                instruOpts[]
-  selectedInstruments:        string[]
-  defaultSelectedInstruments: string[]
-  preCounts:                  numOpts[]
+export interface PaloState {
+  name:                       string
+  tempo:                      number
   selectedPreCount:           numOpts
-  startBeats:                 numOpts[]
   selectedStartBeat:          numOpts
-  swing:                      number | null
-  improvise:                  boolean
-  humanize:                   boolean
-  isPlaying:                  boolean
-  metronomeEvent:             number | null
+  swing:                      number
+  improvisation:              boolean
+  humanization:               boolean
   isTooSlow:                  boolean
   isTooFast:                  boolean
+  visualizationModes:         visuOpts[]
+  instruments:                instruOpts[]
 }
+
+// export interface State {
+//   visualizationModes:         stringOpts[]
+//   visualizationSize:          Size
+//   selectedVisualizationMode:  string
+//   palos:                      Palo[]
+//   selectedPalo:               Palo
+//   instruments:                instruOpts[]
+//   selectedInstruments:        string[]
+//   defaultSelectedInstruments: string[]
+//   preCounts:                  numOpts[]
+//   selectedPreCount:           numOpts
+//   startBeats:                 numOpts[]
+//   selectedStartBeat:          numOpts
+//   swing:                      number | null
+//   improvise:                  boolean
+//   humanize:                   boolean
+//   isPlaying:                  boolean
+//   metronomeEvent:             number | null
+//   isTooSlow:                  boolean
+//   isTooFast:                  boolean
+// }

@@ -5,6 +5,7 @@ import {
   // createWebHashHistory,
   createWebHistory,
 } from 'vue-router'
+import { usePaloStore } from 'src/stores/palo'
 
 import routes from 'src/router/routes'
 
@@ -30,6 +31,13 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  })
+
+  Router.beforeEach((to, from) => {
+    // ...
+    // explicitly return false to cancel the navigation
+    // const paloStore = usePaloStore(to.name as string)()
+
   })
 
   return Router
