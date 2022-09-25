@@ -189,8 +189,6 @@ export const useMetronome = () => {
   ) => {
     // Prepend pre-count beats if required
     if (type == ('preCount' as PaloDataKey)) {
-      console.log('hello')
-
       triggerPreCountClick(time, note)
     } else {
       // Don't play non-preCount sequences if note is during pre-count
@@ -384,9 +382,6 @@ export const useMetronome = () => {
         initSounds()
         initSequences()
         changeTempo()
-        console.log(sounds)
-        console.log(sequences)
-
         Loading.hide()
       })
       .catch(() => {
@@ -404,8 +399,6 @@ export const useMetronome = () => {
   // =====================
 
   const startSequences = async () => {
-    console.log('hello')
-
     await Tone.start()
 
     const offset = sequences.quarterNotes?.introduction.event?.length || 0
@@ -432,25 +425,18 @@ export const useMetronome = () => {
       } else {
         await forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
           seq.start(0)
-          console.log(seq.state)
-
         })
         await forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
           seq.start(0)
         })
       }
     }
-
   }
 
   const stopAllSequences = () => {
-    console.log('bye')
     forEachValue(sequences, (seq: SeqSubdiv) => {
-      // console.log(seq)
       forEachValue(seq, (instrus: Seq) => {
-        // console.log(instrus)
         forEachValue(instrus, (s: Tone.Sequence) => {
-          // console.log(s.state)
           if (s !== null && s.state == 'started') s.stop()
           if (s !== null) s.dispose()
         })
