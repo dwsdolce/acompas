@@ -67,7 +67,7 @@ const showDialog = () => {
   })
 }
 
-const onKeyup = (e: any) => {
+const onKeyup = (e: KeyboardEvent) => {
   e.preventDefault()
   if (dialogOpen.value) return
   if (palo.value.tempo) {
@@ -107,7 +107,7 @@ onMounted(() => {
   // isSupported().catch(() => {
   //   showDialog()
   // })
-  document.addEventListener('keyup', (event) => {
+  document.addEventListener('keyup', (event: KeyboardEvent) => {
     onKeyup(event)
   })
   // resize(visualizationSize)

@@ -3,21 +3,24 @@ import { ref } from 'vue'
 import { Loading, Notify } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import audioSettings from 'src/data/audioData'
-import { useSessionStore } from 'src/stores/session'
+import audioData from 'src/data/audioData'
 import { usePaloStore } from 'src/stores/palo'
 import { useCoreStore } from 'src/stores/core'
 import { forEachValue } from 'src/composables/utils'
 import type {
-  Volume,
+  VolumeOpts,
+  Sounds,
+  Sound,
+  Seqs,
+  Seq,
+  SeqSubdiv,
   PaloData,
   PaloState
 } from 'src/composables/models'
-import { storeToRefs } from 'pinia'
 
-const sounds: any = {}
-const sequences: any = {}
-let audioFormat: string | null = null
+const sounds: Sounds = {} as Sounds
+const sequences: Seqs = {} as Seqs
+let audioFormat = ''
 
 export const useMetronome = () => {
   const route = useRoute()
@@ -25,11 +28,12 @@ export const useMetronome = () => {
   const coreStore = useCoreStore()
   const paloStore = usePaloStore(route.name as string)()
 
-  // const {
-  //   palo
-  // } = storeToRefs(paloStore)
   const paloData = ref(palosData.find((palo) => palo.value === route.name))
   const palo = ref(paloStore.palo)
+
+  type SoundKey = keyof typeof sounds
+  type PaloDataKey = keyof typeof paloData
+  type AudioDataKey = keyof typeof audioData
 
   const initSounds = async () => {
     const audio = new Audio()
@@ -49,10 +53,12 @@ export const useMetronome = () => {
 
     const path = 'audio/'
 
-    forEachValue(audioSettings, (value: any, key: string | number) => {
-      sounds[key] = {}
-      sounds[key].volume = new Tone.Volume(0)
-      sounds[key].reverb = new Tone.Reverb({
+
+    forEachValue(audioData, (value: AudioDataKey, key: SoundKey) => {
+      sounds[key] = {} as Sound
+      const sound = sounds[key]
+      sound.volume = new Tone.Volume(0)
+      sound.reverb = new Tone.Reverb({
         decay: 0.5,
         preDelay: 0,
         wet: 1,
@@ -60,14 +66,14 @@ export const useMetronome = () => {
 
       for (let i = 0; i < value.length; i++) {
         const url = path + value[i].src + '.' + audioFormat
-        sounds[key][i] = new Tone.Player({
+        sound[i] = new Tone.Player({
           url: url,
           volume: value[i].volume,
           fadeOut: 1,
         })
-        sounds[key][i].chain(
-          sounds[key].reverb,
-          sounds[key].volume,
+        sound[i].chain(
+          sound.reverb,
+          sound.volume,
           Tone.Destination
         )
       }
@@ -96,10 +102,10 @@ export const useMetronome = () => {
   }
 
   const improvise = (
-    type: string,
+    type: PaloDataKey | SoundKey,
     time: number,
-    sound: any,
-    note: any,
+    sound: Tone.Player,
+    note: number,
     key: number,
     eighthNotes: boolean
   ) => {
@@ -138,7 +144,7 @@ export const useMetronome = () => {
     }
   }
 
-  const improviseJaleo = (note: any, time: number, eighthNotes: boolean) => {
+  const improviseJaleo = (note: number, time: number, eighthNotes: boolean) => {
     if (!eighthNotes && note % 2 !== 0) {
       return
     }
@@ -157,7 +163,7 @@ export const useMetronome = () => {
     }
   }
 
-  const triggerPreCountClick = (time: number, note: any) => {
+  const triggerPreCountClick = (time: number, note: number) => {
     if (palo.value.selectedPreCount?.value && paloData.value?.accents) {
       if (
         palo.value.selectedPreCount?.value > 0 &&
@@ -177,13 +183,13 @@ export const useMetronome = () => {
 
   const triggerAudioOnEvent = (
     eighthNotes: boolean,
-    type: string,
+    type: PaloDataKey | SoundKey,
     isLoop: boolean,
     time: number,
-    note: any
+    note: number
   ) => {
     // Prepend pre-count beats if required
-    if (type === 'preCount') {
+    if (type === ('preCount' as PaloDataKey)) {
       triggerPreCountClick(time, note)
     } else {
       // Don't play non-preCount sequences if note is during pre-count
@@ -195,20 +201,20 @@ export const useMetronome = () => {
         return
       }
 
-      if (type === 'jaleo') {
+      if (type === ('jaleo' as PaloDataKey)) {
         const jaleo = paloStore.instrument('jaleo')
         if (jaleo?.enabled) improviseJaleo(note, time, eighthNotes)
         return
       }
 
-      const instru = paloStore.instrument(type)
+      const instru = paloStore.instrument((type as string))
 
       // index is a pulsation number, value is the sound number
       if (instru?.enabled && paloData.value && type)
-        paloData.value[type].forEach(
+        paloData.value[type as PaloDataKey].forEach(
           (value: number | null, index: number) => {
             if (!value) return
-            const sound = sounds[type][value - 1]
+            const sound = sounds[type as SoundKey][value - 1]
             const key = noteIndexInPattern(note)
 
             if (
@@ -236,22 +242,22 @@ export const useMetronome = () => {
    */
   const buildSequence = (
     eighthNotes: boolean,
-    type: string,
-    sequence: any,
+    type: PaloDataKey,
+    sequence: number[],
     isLoop: boolean
   ) => {
     // 'note' is an occurence of an element inside the sequence variable (integer)
     const seq = new Tone.Sequence((time, note) => {
-      note = parseInt(note)
+      // note = parseInt(note)
 
       // Type is not an event, it is a preCount or a selected instrument
-      if (type !== 'event') {
+      if (type !== ('event' as PaloDataKey)) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
 
       // Call animation on event time.
       // The 'event' sequence is used to trigger events which will trigger UI modifications
-      if (type === 'event' && !eighthNotes && note % 2 === 0) {
+      if (type === ('event' as PaloDataKey) && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (palo.value.name === 'no-compas') {
@@ -314,46 +320,46 @@ export const useMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        event: buildSequence(false, 'event', introSeq, false),
-        preCount: buildSequence(false, 'preCount', introSeq, false),
-        clara: buildSequence(false, 'clara', introSeq, false),
-        sorda: buildSequence(false, 'sorda', introSeq, false),
-        cajon: buildSequence(false, 'cajon', introSeq, false),
-        nudillo: buildSequence(false, 'nudillo', introSeq, false),
-        udu: buildSequence(false, 'udu', introSeq, false),
-        jaleo: buildSequence(false, 'jaleo', introSeq, false),
-        click: buildSequence(false, 'click', introSeq, false),
+        event: buildSequence(false, ('event' as PaloDataKey), introSeq, false),
+        preCount: buildSequence(false, ('preCount' as PaloDataKey), introSeq, false),
+        clara: buildSequence(false, ('clara' as PaloDataKey), introSeq, false),
+        sorda: buildSequence(false, ('sorda' as PaloDataKey), introSeq, false),
+        cajon: buildSequence(false, ('cajon' as PaloDataKey), introSeq, false),
+        nudillo: buildSequence(false, ('nudillo' as PaloDataKey), introSeq, false),
+        udu: buildSequence(false, ('udu' as PaloDataKey), introSeq, false),
+        jaleo: buildSequence(false, ('jaleo' as PaloDataKey), introSeq, false),
+        click: buildSequence(false, ('click' as PaloDataKey), introSeq, false),
       },
       loop: {
-        event: buildSequence(false, 'event', loopSeq, true),
-        clara: buildSequence(false, 'clara', loopSeq, true),
-        sorda: buildSequence(false, 'sorda', loopSeq, true),
-        cajon: buildSequence(false, 'cajon', loopSeq, true),
-        nudillo: buildSequence(false, 'nudillo', loopSeq, true),
-        udu: buildSequence(false, 'udu', loopSeq, true),
-        jaleo: buildSequence(false, 'jaleo', loopSeq, true),
-        click: buildSequence(false, 'click', loopSeq, true),
+        event: buildSequence(false, ('event' as PaloDataKey), loopSeq, true),
+        clara: buildSequence(false, ('clara' as PaloDataKey), loopSeq, true),
+        sorda: buildSequence(false, ('sorda' as PaloDataKey), loopSeq, true),
+        cajon: buildSequence(false, ('cajon' as PaloDataKey), loopSeq, true),
+        nudillo: buildSequence(false, ('nudillo' as PaloDataKey), loopSeq, true),
+        udu: buildSequence(false, ('udu' as PaloDataKey), loopSeq, true),
+        jaleo: buildSequence(false, ('jaleo' as PaloDataKey), loopSeq, true),
+        click: buildSequence(false, ('click' as PaloDataKey), loopSeq, true),
       },
     }
 
     sequences.eighthNotes = {
       introduction: {
-        clara: buildSequence(true, 'clara', introSeq, false),
-        sorda: buildSequence(true, 'sorda', introSeq, false),
-        cajon: buildSequence(true, 'cajon', introSeq, false),
-        nudillo: buildSequence(true, 'nudillo', introSeq, false),
-        udu: buildSequence(true, 'udu', introSeq, false),
-        jaleo: buildSequence(true, 'jaleo', introSeq, false),
-        click: buildSequence(true, 'click', introSeq, false),
+        clara: buildSequence(true, ('clara' as PaloDataKey), introSeq, false),
+        sorda: buildSequence(true, ('sorda' as PaloDataKey), introSeq, false),
+        cajon: buildSequence(true, ('cajon' as PaloDataKey), introSeq, false),
+        nudillo: buildSequence(true, ('nudillo' as PaloDataKey), introSeq, false),
+        udu: buildSequence(true, ('udu' as PaloDataKey), introSeq, false),
+        jaleo: buildSequence(true, ('jaleo' as PaloDataKey), introSeq, false),
+        click: buildSequence(true, ('click' as PaloDataKey), introSeq, false),
       },
       loop: {
-        clara: buildSequence(true, 'clara', loopSeq, true),
-        sorda: buildSequence(true, 'sorda', loopSeq, true),
-        cajon: buildSequence(true, 'cajon', loopSeq, true),
-        nudillo: buildSequence(true, 'nudillo', loopSeq, true),
-        udu: buildSequence(true, 'udu', loopSeq, true),
-        jaleo: buildSequence(true, 'jaleo', loopSeq, true),
-        click: buildSequence(true, 'click', loopSeq, true),
+        clara: buildSequence(true, ('clara' as PaloDataKey), loopSeq, true),
+        sorda: buildSequence(true, ('sorda' as PaloDataKey), loopSeq, true),
+        cajon: buildSequence(true, ('cajon' as PaloDataKey), loopSeq, true),
+        nudillo: buildSequence(true, ('nudillo' as PaloDataKey), loopSeq, true),
+        udu: buildSequence(true, ('udu' as PaloDataKey), loopSeq, true),
+        jaleo: buildSequence(true, ('jaleo' as PaloDataKey), loopSeq, true),
+        click: buildSequence(true, ('click' as PaloDataKey), loopSeq, true),
       },
     }
   }
@@ -377,6 +383,9 @@ export const useMetronome = () => {
         initSounds()
         initSequences()
         changeTempo()
+        console.log(sounds)
+        console.log(sequences)
+
         Loading.hide()
       })
       .catch(() => {
@@ -396,13 +405,13 @@ export const useMetronome = () => {
   const startSequences = async () => {
     await Tone.start()
 
-    const offset = sequences.quarterNotes?.introduction.event.length
+    const offset = sequences.quarterNotes?.introduction.event?.length || 0
     const loopStart = '0:' + offset / 2
 
     Tone.Transport.start()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
-      if (sequences.quarterNotes.introduction.event.length !== 0) {
+      if (sequences.quarterNotes.introduction.event?.length !== 0) {
         forEachValue(
           sequences.quarterNotes.introduction,
           (seq: Tone.Sequence) => {
@@ -441,9 +450,9 @@ export const useMetronome = () => {
   }
 
   const stopAllSequences = () => {
-    forEachValue(sequences, (seq: any) => {
-      forEachValue(seq, (notes: any) => {
-        forEachValue(notes, (s: any) => {
+    forEachValue(sequences, (seq: SeqSubdiv) => {
+      forEachValue(seq, (notes: Seq) => {
+        forEachValue(notes, (s: Tone.Sequence) => {
           if (s !== null && s.state === 'started') s.stop()
           if (s !== null) s.dispose()
         })
@@ -472,7 +481,7 @@ export const useMetronome = () => {
 
     forEachValue(
       sequences.quarterNotes.introduction,
-      (seq: any, type: string) => {
+      (seq: Tone.Sequence, type: string) => {
         if (type === 'event' || type === 'preCount' || type === 'click') {
           seq.humanize = false
         } else {
@@ -480,22 +489,22 @@ export const useMetronome = () => {
         }
       }
     )
-    forEachValue(sequences.quarterNotes.loop, (seq: any, type: string) => {
+    forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence, type: string) => {
       if (type === 'event' || type === 'preCount' || type === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = palo.value.humanization
       }
     })
-    forEachValue(sequences.eighthNotes, (seq: any) => {
-      forEachValue(seq, (s: any) => {
+    forEachValue(sequences.eighthNotes, (seq: SeqSubdiv) => {
+      forEachValue(seq, (s: Tone.Sequence) => {
         s.humanize = palo.value.humanization
       })
     })
   }
 
-  const changeVolume = async (payload: Volume) => {
-    sounds[payload.instrument].volume.volume.value = payload.volume
+  const changeVolume = async (payload: VolumeOpts) => {
+    sounds[payload.instrument as SoundKey].volume.volume.value = payload.volume
   }
 
   return {

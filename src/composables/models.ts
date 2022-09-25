@@ -1,3 +1,43 @@
+import type { Player, Reverb, Volume, Sequence } from 'tone'
+
+export interface Sound {
+  [x: number]:              Player
+  reverb:                   Reverb
+  volume:                   Volume
+}
+
+export interface Sounds {
+  clara:                    Sound
+  sorda:                    Sound
+  nudillo:                  Sound
+  cajon:                    Sound
+  udu:                      Sound
+  jaleo:                    Sound
+  click:                    Sound
+}
+
+export interface Seq {
+  clara:                    Sequence
+  sorda:                    Sequence
+  nudillo:                  Sequence
+  cajon:                    Sequence
+  udu:                      Sequence
+  jaleo:                    Sequence
+  click:                    Sequence
+  event?:                   Sequence
+  preCount?:                Sequence
+}
+
+export interface SeqSubdiv {
+  introduction:            Seq
+  loop:                    Seq
+}
+
+export interface Seqs {
+  quarterNotes:             SeqSubdiv
+  eighthNotes:              SeqSubdiv
+}
+
 export interface TuningFork {
   isPlaying:                boolean
   notes:                    string[]
@@ -29,7 +69,7 @@ export interface Size {
   height:                     number | null
 }
 
-export interface Volume {
+export interface VolumeOpts {
   instrument:                 string
   volume:                     number
 }

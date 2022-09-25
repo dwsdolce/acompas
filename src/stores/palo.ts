@@ -6,7 +6,7 @@ import palosData from 'src/data/palosData'
 import { forEachValue } from 'src/composables/utils'
 import { useMetronome } from 'src/composables/metronome'
 import { useCoreStore } from 'src/stores/core'
-import type { numOpts, instruOpts, Volume, PaloState } from 'src/composables/models'
+import type { numOpts, instruOpts, VolumeOpts, PaloState } from 'src/composables/models'
 
 export const usePaloStore = (name: string) =>
   defineStore(name, () => {
@@ -227,7 +227,7 @@ export const usePaloStore = (name: string) =>
       }
     }
 
-    const selectVolume = (payload: Volume) => {
+    const selectVolume = (payload: VolumeOpts) => {
       if (payload !== null) {
         const volume = payload?.volume
         const instru = instrument.value(payload?.instrument)
