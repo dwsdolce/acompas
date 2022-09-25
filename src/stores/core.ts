@@ -24,7 +24,6 @@ export const useCoreStore = defineStore('core', () => {
 
   const play = async () => {
     isPlaying.value = true
-    await initSequences()
     startSequences()
   }
 

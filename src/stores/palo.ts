@@ -232,7 +232,7 @@ export const usePaloStore = (name: string) =>
 
     const selectPreCount = (payload: number) => {
       if (!payload && !paloData) return
-      palo.value.selectedPreCount = paloData?.preCounts.find(el => el.value === payload)
+      palo.value.selectedPreCount = paloData?.preCounts.find(el => el?.value === payload)
     }
 
     const selectStartBeat = (payload: numOpts) => {
