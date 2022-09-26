@@ -2,23 +2,27 @@ import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
 import { useStorage } from '@vueuse/core'
+import { useRouter } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { forEachValue } from 'src/composables/utils'
 import { useMetronome } from 'src/composables/metronome'
-import { useCoreStore } from 'src/stores/core'
-import type { numOpts, instruOpts, VolumeOpts, PaloState } from 'src/composables/models'
+import type { numOpts, instruOpts, VolumeOpts, PaloState, Size } from 'src/composables/models'
 
 export const usePaloStore = (name: string) =>
   defineStore(name, () => {
     const {
+      reinitialize,
       initMetronome,
       initSequences,
+      startSequences,
+      stopAllSequences,
       humanize,
       changeSwing,
       changeTempo,
       changeVolume,
       changeDecay
     } = useMetronome()
+
+    const router = useRouter()
 
     const paloData = palosData.find((el) => el.value == name)
 
@@ -102,6 +106,12 @@ export const usePaloStore = (name: string) =>
       })
     )
 
+    const visualizationSize = ref<Size>({ width: null, height: null })
+    const isPlaying = ref<boolean>(false)
+    const metronomeEvent = ref<number | null>(null)
+    const isTooSlow = ref<boolean>(false)
+    const isTooFast = ref<boolean>(false)
+
     // GETTERS
     const visualizationMode = computed(() =>
       palo.value.visualizationModes.find((el) => el.isActive)
@@ -142,6 +152,40 @@ export const usePaloStore = (name: string) =>
       if (tempo.value !== undefined) initMetronome(palo.value)
     }
 
+    const play = async () => {
+      isPlaying.value = true
+      startSequences()
+    }
+
+    const stop = () => {
+      isPlaying.value = false
+      stopAllSequences()
+      triggerEvent(null)
+      reinitialize(palo.value)
+    }
+
+    const triggerEvent = (payload: number | null) => {
+      metronomeEvent.value = payload
+    }
+
+    const playStop = () => {
+      if (isPlaying.value) {
+        stop()
+      } else {
+        play()
+      }
+    }
+
+    const selectPalo = (payload: string) => {
+      if (isPlaying.value) stop()
+      router.push(`/${payload}`)
+    }
+
+    const getVisualizationSize = (payload: Size) => {
+      visualizationSize.value = payload
+    }
+
+
     const selectVisualizationMode = (payload: string) => {
       const oldMode = palo.value.visualizationModes.find((el) => el.isActive)
       const newMode = palo.value.visualizationModes.find(
@@ -155,13 +199,6 @@ export const usePaloStore = (name: string) =>
 
     // const getVisualizationSize = (payload: Size) => {
     //   visualizationSize.value = payload
-    // }
-
-    // const selectPalo = (payload: string) => {
-    //   if (isPlaying.value) stop()
-    //   selectedPalo.value = palos.value.find(p => p.value === payload)
-    //   initSequences()
-    //   changeTempo(palo.value.tempo)
     // }
 
     const selectTempo = (payload: number) => {
@@ -251,11 +288,18 @@ export const usePaloStore = (name: string) =>
 
     const selectPreCount = (payload: number) => {
       if (!payload && !paloData) return
-      palo.value.selectedPreCount = paloData?.preCounts.find(el => el?.value === payload)
+      palo.value.selectedPreCount
+        = paloData?.preCounts.find(el => el?.value === payload)
+        || (paloData?.preCounts[0] as numOpts)
+      reinitialize(palo.value)
     }
 
-    const selectStartBeat = (payload: numOpts) => {
-      palo.value.selectedStartBeat = payload
+    const selectStartBeat = (payload: number) => {
+      if (!payload && !paloData) return
+      palo.value.selectedStartBeat
+        = paloData?.startBeats.find(el => el?.value === payload)
+        || (paloData?.startBeats[0] as numOpts)
+      reinitialize(palo.value)
     }
 
     const toggleEighthNotes = (payload: instruOpts) => {
@@ -310,26 +354,31 @@ export const usePaloStore = (name: string) =>
     //   metronomeEvent.value = payload
     // }
 
-    // const restoreDefault = (payload: string) => {
-    //   if (isPlaying.value) stop()
-    //   // if (payload === 'all') commit(types.RESET_STORAGE)
+    const restoreDefault = (payload: string) => {
+      if (isPlaying.value) stop()
+      // if (payload === 'all') commit(types.RESET_STORAGE)
 
-    //   if (paloData) selectTempo(paloData.defaultTempo)
-    //   selectSwing(0)
-    //   forEachValue(palo.value.instruments, (instrument: instruOpts) => {
-    //     disableEighthNotes(instrument)
-    //     selectVolume({ instrument: instrument.value, volume: 0 })
-    //   })
-    //   disableHumanize()
-    //   disableImprovise()
-    //   // selectVisualizationMode('dots')
-    //   if (paloData) selectPreCount(paloData.preCounts[0])
-    //   if (paloData) selectStartBeat(paloData.startBeats[0])
-    // }
+      // selectTempo(selectedPalo.value.defaultTempo)
+      // selectSwing(0)
+      // forEachValue(instruments.value, (instrument: instruOpts) => {
+      //   disableEighthNotes(instrument)
+      //   selectVolume({ instrument: instrument.value, volume: 0 })
+      // })
+      // disableHumanize()
+      // disableImprovise()
+      // selectVisualizationMode('dots')
+      // selectPreCount(selectedPalo.value.preCounts[0])
+      // selectStartBeat(selectedPalo.value.startBeats[0])
+    }
 
     return {
       // STATE
       palo,
+      visualizationSize,
+      isPlaying,
+      metronomeEvent,
+      isTooFast,
+      isTooSlow,
 
       // GETTERS
       nbBeatsInPattern,
@@ -346,12 +395,12 @@ export const usePaloStore = (name: string) =>
 
       // ACTIONS
       init,
-      // play,
-      // stop,
-      // playStop,
+      play,
+      stop,
+      playStop,
       selectVisualizationMode,
-      // getVisualizationSize,
-      // selectPalo,
+      getVisualizationSize,
+      selectPalo,
       selectTempo,
       selectVolume,
       selectDecay,
@@ -368,7 +417,7 @@ export const usePaloStore = (name: string) =>
       toggleHumanize,
       enableHumanize,
       disableHumanize,
-      // triggerEvent,
-      // restoreDefault
+      triggerEvent,
+      restoreDefault
     }
   })

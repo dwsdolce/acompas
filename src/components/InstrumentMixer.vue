@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
 import type { instruOpts } from 'src/composables/models'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
-import { useSessionStore } from 'src/stores/session'
-import palosData from 'src/data/palosData'
 
 const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
-
-const coreStore = useCoreStore()
-
 const paloStore = usePaloStore(route.name as string)()
-
-const { palo } = storeToRefs(paloStore)
 
 const {
   toggleEighthNotes,
@@ -24,12 +12,6 @@ const {
   selectInstruments,
   instrument
 } = paloStore
-
-const sessionStore = useSessionStore()
-
-const {
-  toggleDialog
-} = sessionStore
 
 const props = defineProps(['slug'])
 const instru: instruOpts | undefined = instrument(props.slug)

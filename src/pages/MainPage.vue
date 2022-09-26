@@ -17,25 +17,19 @@ import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 import { useSessionStore } from 'src/stores/session'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
 
-const sessionStore = useSessionStore()
-const coreStore = useCoreStore()
-
+const $q = useQuasar()
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
+const sessionStore = useSessionStore()
 
 const { palo } = storeToRefs(paloStore)
 
-const { visualizationMode, init, selectTempo } = paloStore
-
-const { playStop } = coreStore
+const { visualizationMode, init, playStop, selectTempo } = paloStore
 
 const { dialogOpen } = storeToRefs(sessionStore)
 
 const { toggleDialog } = sessionStore
-
-const $q = useQuasar()
 
 const visualization = ref(null)
 

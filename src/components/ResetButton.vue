@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
-import { useCoreStore } from 'src/stores/core'
 
 const $q = useQuasar()
 
+const route = useRoute()
+const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()
-const coreStore = useCoreStore()
 
 const resetDialog = ref(false)
 const selectedResetOption = ref<string>('palo')
@@ -26,7 +29,7 @@ const {
 
 const {
   restoreDefault
-} = coreStore
+} = paloStore
 
 const onSelectedOption = (v: any) => {
   selectedResetOption.value = v

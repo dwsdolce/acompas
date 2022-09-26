@@ -4,24 +4,16 @@ import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useCoreStore } from 'src/stores/core'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
-import { forEachValue } from 'src/composables/utils'
-import type { numOpts } from 'src/composables/models'
-
-const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
-const paloStore = usePaloStore(route.name as string)()
-const { palo } = storeToRefs(paloStore)
-
-const coreStore = useCoreStore()
-const sessionStore = useSessionStore()
 
 const $q = useQuasar()
+const route = useRoute()
+const paloData = palosData.find(palo => palo.value === route.name)
+const paloStore = usePaloStore(route.name as string)()
+const sessionStore = useSessionStore()
 
-const startBeatDialog = ref(false)
+const { palo } = storeToRefs(paloStore)
 
 const {
   selectStartBeat
@@ -31,12 +23,17 @@ const {
   toggleDialog
 } = sessionStore
 
+const startBeatDialog = ref(false)
+
 const onSelectedStartBeat = (v: number) => {
-  forEachValue(paloData?.startBeats, (startBeat: numOpts, key: number) => {
-    if (startBeat.value === v) {
-      selectStartBeat(startBeat)
-    }
-  })
+  // const startBeat = paloData?.startBeats.find(el => el.value === v) || paloData?.startBeats[0]
+  if (v) selectStartBeat(v)
+  // forEachValue(paloData?.startBeats, (startBeat: numOpts, key: number) => {
+  //   if (startBeat.value === v) {
+  //     selectStartBeat(startBeat)
+  //   }
+  // })
+  paloStore.stop()
   startBeatDialog.value = false
 }
 </script>
@@ -64,7 +61,7 @@ div
         q-option-group(
           type="radio",
           color="primary",
-          :model-value="palo.selectedStartBeat",
+          :model-value="palo.selectedStartBeat.value",
           :options="paloData?.startBeats",
           @update:model-value="onSelectedStartBeat"
         )

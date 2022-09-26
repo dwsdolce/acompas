@@ -5,23 +5,18 @@ import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useSessionStore } from 'src/stores/session'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
-
-const sessionStore = useSessionStore()
-const coreStore = useCoreStore()
 
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
 
 const paloData = palosData.find(palo => palo.value === route.name)
-const { palo } = storeToRefs(paloStore)
 
 const {
+  palo,
   isPlaying,
   metronomeEvent
-} = storeToRefs(coreStore)
+} = storeToRefs(paloStore)
 
 const {
   startingPoint,

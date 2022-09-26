@@ -3,25 +3,19 @@ import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useSessionStore } from 'src/stores/session'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
-
-const sessionStore = useSessionStore()
-const coreStore = useCoreStore()
 
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
-
 const paloData = palosData.find(palo => palo.value === route.name)
-const { palo } = storeToRefs(paloStore)
+
+const {
+  palo,
+  metronomeEvent
+} = storeToRefs(paloStore)
 
 const counter = ref<number | null>(null)
 const className = ref<string>('')
-
-const {
-  metronomeEvent
-} = storeToRefs(coreStore)
 
 watch(metronomeEvent, (v: number | null) => {
   if (palo.value.selectedPreCount && palo.value.selectedStartBeat && paloData) {

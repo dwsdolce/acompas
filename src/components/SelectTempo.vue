@@ -4,22 +4,17 @@ import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useCoreStore } from 'src/stores/core'
 import { usePaloStore } from 'src/stores/palo'
-import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
 const route = useRoute()
-
 const paloData = palosData.find(palo => palo.value === route.name)
 const paloStore = usePaloStore(route.name as string)()
 const { palo } = storeToRefs(paloStore)
 
-const coreStore = useCoreStore()
-
 const {
   visualizationSize
-} = storeToRefs(coreStore)
+} = storeToRefs(paloStore)
 
 const {
   selectTempo

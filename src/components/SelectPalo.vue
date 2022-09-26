@@ -4,22 +4,15 @@ import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
 import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
 import HelpPalo from 'src/components/HelpPalo.vue'
 
+const $q = useQuasar()
 const route = useRoute()
-
 const paloData = palosData.find(palo => palo.value === route.name)
-
-const coreStore = useCoreStore()
 const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()
-
-const $q = useQuasar()
-
-const palosDialog = ref(false)
 
 const {
   palo
@@ -27,11 +20,13 @@ const {
 
 const {
   selectPalo
-} = coreStore
+} = paloStore
 
 const {
   toggleDialog
 } = sessionStore
+
+const palosDialog = ref(false)
 
 const onSelectedPalo = (v: any) => {
   palosDialog.value = false

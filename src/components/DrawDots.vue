@@ -5,22 +5,17 @@ import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
 import palosData from 'src/data/palosData'
 
 const route = useRoute()
-
 const paloData = palosData.find(palo => palo.value === route.name)
-
-const coreStore = useCoreStore()
 const paloStore = usePaloStore(route.name as string)()
 
-const { palo } = storeToRefs(paloStore)
-
 const {
+  palo,
   visualizationSize,
   metronomeEvent
-} = storeToRefs(coreStore)
+} = storeToRefs(paloStore)
 
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)

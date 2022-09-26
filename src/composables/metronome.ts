@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import audioData from 'src/data/audioData'
 import { usePaloStore } from 'src/stores/palo'
-import { useCoreStore } from 'src/stores/core'
 import { forEachValue } from 'src/composables/utils'
 import type {
   VolumeOpts,
@@ -24,10 +23,7 @@ let audioFormat = ''
 
 export const useMetronome = () => {
   const route = useRoute()
-
-  const coreStore = useCoreStore()
   const paloStore = usePaloStore(route.name as string)()
-
   const paloData = ref(palosData.find((palo) => palo.value === route.name))
   const palo = ref(paloStore.palo)
 
@@ -260,9 +256,9 @@ export const useMetronome = () => {
         Tone.Draw.schedule(() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (palo.value.name === 'no-compas') {
-            coreStore.triggerEvent(coreStore.metronomeEvent === 0 ? 2 : 0)
+            paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
           } else {
-            coreStore.triggerEvent(note)
+            paloStore.triggerEvent(note)
           }
         }, time) // Use AudioContext time of the event
       }
@@ -367,21 +363,23 @@ export const useMetronome = () => {
 
   const isSupported = Tone.supported
 
+  const reinitialize = (paloState: PaloState) => {
+    if (!paloState) return
+    palo.value = paloState
+    paloData.value = palosData.find((p) => p.value === palo.value.name)
+    initSequences()
+    changeTempo()
+  }
+
   const initMetronome = (paloState: PaloState) => {
     Loading.show({
       delay: 100,
       message: 'Loading audio samples',
     })
-    if (!paloState) return
-
-    palo.value = paloState
-    paloData.value = palosData.find((p) => p.value === palo.value.name)
-
     Tone.loaded()
       .then(() => {
         initSounds()
-        initSequences()
-        changeTempo()
+        reinitialize(paloState)
         Loading.hide()
       })
       .catch(() => {
@@ -496,6 +494,7 @@ export const useMetronome = () => {
   }
 
   return {
+    reinitialize,
     initMetronome,
     isSupported,
     initSequences,

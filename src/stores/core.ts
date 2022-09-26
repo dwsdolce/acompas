@@ -8,6 +8,7 @@ export const useCoreStore = defineStore('core', () => {
   const router = useRouter()
 
   const {
+    reinitialize,
     initMetronome,
     isSupported,
     initSequences,
@@ -31,6 +32,7 @@ export const useCoreStore = defineStore('core', () => {
     isPlaying.value = false
     stopAllSequences()
     triggerEvent(null)
+    reinitialize()
   }
 
   const triggerEvent = (payload: number | null) => {

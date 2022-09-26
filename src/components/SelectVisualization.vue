@@ -2,25 +2,19 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { useCoreStore } from 'src/stores/core'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 
 const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
 const paloStore = usePaloStore(route.name as string)()
-const { palo } = storeToRefs(paloStore)
-
-const coreStore = useCoreStore()
 const sessionStore = useSessionStore()
 
 const visualizationDialog = ref(false)
 
 const {
+  palo,
   visualizationSize
-} = storeToRefs(coreStore)
+} = storeToRefs(paloStore)
 
 const {
   selectVisualizationMode
