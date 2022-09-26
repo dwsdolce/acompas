@@ -26,7 +26,10 @@ export const usePaloStore = (name: string) =>
 
     const paloData = palosData.find((el) => el.value == name)
 
+    // ###################
     // STATE
+    // ###################
+
     const palo = useStorage(
       name,
       ref<PaloState>({
@@ -112,7 +115,10 @@ export const usePaloStore = (name: string) =>
     const isTooSlow = ref<boolean>(false)
     const isTooFast = ref<boolean>(false)
 
+    // ###################
     // GETTERS
+    // ###################
+
     const visualizationMode = computed(() =>
       palo.value.visualizationModes.find((el) => el.isActive)
     )
@@ -147,9 +153,17 @@ export const usePaloStore = (name: string) =>
     )
     const tempo = computed(() => palo.value.tempo)
 
+    // ###################
     // ACTIONS
+    // ###################
+
     const init = () => {
       if (tempo.value !== undefined) initMetronome(palo.value)
+    }
+
+    const selectPalo = (payload: string) => {
+      if (isPlaying.value) stop()
+      router.push(`/${payload}`)
     }
 
     const play = async () => {
@@ -164,10 +178,6 @@ export const usePaloStore = (name: string) =>
       reinitialize(palo.value)
     }
 
-    const triggerEvent = (payload: number | null) => {
-      metronomeEvent.value = payload
-    }
-
     const playStop = () => {
       if (isPlaying.value) {
         stop()
@@ -176,15 +186,13 @@ export const usePaloStore = (name: string) =>
       }
     }
 
-    const selectPalo = (payload: string) => {
-      if (isPlaying.value) stop()
-      router.push(`/${payload}`)
+    const triggerEvent = (payload: number | null) => {
+      metronomeEvent.value = payload
     }
 
     const getVisualizationSize = (payload: Size) => {
       visualizationSize.value = payload
     }
-
 
     const selectVisualizationMode = (payload: string) => {
       const oldMode = palo.value.visualizationModes.find((el) => el.isActive)
@@ -201,55 +209,10 @@ export const usePaloStore = (name: string) =>
     //   visualizationSize.value = payload
     // }
 
-    const selectTempo = (payload: number) => {
-      palo.value.tempo = payload
-      changeTempo(palo.value.tempo)
-
-      if (paloData && palo.value.tempo) {
-        if (
-          palo.value.tempo < paloData.minTempo ||
-          palo.value.tempo > paloData.maxTempo
-        ) {
-          Notify.create({
-            message:
-              'Tempo must be between ' +
-              paloData.minTempo +
-              ' and ' +
-              paloData.maxTempo +
-              ' bpm !',
-            color: 'warning',
-            icon: 'warning',
-          })
-          return
-        }
-
-        if (palo.value.tempo > paloData.fastTempo && !palo.value.isTooFast) {
-          palo.value.isTooFast = true
-          Notify.create({
-            message: paloData.fastMessage,
-            color: 'secondary',
-            icon: 'warning',
-          })
-        } else if (
-          palo.value.tempo < paloData.fastTempo &&
-          palo.value.isTooFast
-        ) {
-          palo.value.isTooFast = false
-        }
-
-        if (palo.value.tempo < paloData.slowTempo && !palo.value.isTooSlow) {
-          palo.value.isTooSlow = true
-          Notify.create({
-            message: paloData?.slowMessage,
-            color: 'secondary',
-            icon: 'warning',
-          })
-        } else if (
-          palo.value.tempo > paloData.slowTempo &&
-          palo.value.isTooSlow
-        ) {
-          palo.value.isTooSlow = false
-        }
+    const selectInstruments = async (key: string, payload: boolean) => {
+      const instru = instrument.value(key)
+      if (instru) {
+        instru.enabled = payload
       }
     }
 
@@ -276,13 +239,6 @@ export const usePaloStore = (name: string) =>
       if (payload !== null) {
         palo.value.swing = payload
         changeSwing(palo.value.swing)
-      }
-    }
-
-    const selectInstruments = async (key: string, payload: boolean) => {
-      const instru = instrument.value(key)
-      if (instru) {
-        instru.enabled = payload
       }
     }
 
@@ -350,9 +306,57 @@ export const usePaloStore = (name: string) =>
       humanize()
     }
 
-    // const triggerEvent = (payload: number | null) => {
-    //   metronomeEvent.value = payload
-    // }
+    const selectTempo = (payload: number) => {
+      palo.value.tempo = payload
+      changeTempo(palo.value.tempo)
+
+      if (paloData && palo.value.tempo) {
+        if (
+          palo.value.tempo < paloData.minTempo ||
+          palo.value.tempo > paloData.maxTempo
+        ) {
+          Notify.create({
+            message:
+              'Tempo must be between ' +
+              paloData.minTempo +
+              ' and ' +
+              paloData.maxTempo +
+              ' bpm !',
+            color: 'warning',
+            icon: 'warning',
+          })
+          return
+        }
+
+        if (palo.value.tempo > paloData.fastTempo && !palo.value.isTooFast) {
+          palo.value.isTooFast = true
+          Notify.create({
+            message: paloData.fastMessage,
+            color: 'secondary',
+            icon: 'warning',
+          })
+        } else if (
+          palo.value.tempo < paloData.fastTempo &&
+          palo.value.isTooFast
+        ) {
+          palo.value.isTooFast = false
+        }
+
+        if (palo.value.tempo < paloData.slowTempo && !palo.value.isTooSlow) {
+          palo.value.isTooSlow = true
+          Notify.create({
+            message: paloData?.slowMessage,
+            color: 'secondary',
+            icon: 'warning',
+          })
+        } else if (
+          palo.value.tempo > paloData.slowTempo &&
+          palo.value.isTooSlow
+        ) {
+          palo.value.isTooSlow = false
+        }
+      }
+    }
 
     const restoreDefault = (payload: string) => {
       if (isPlaying.value) stop()

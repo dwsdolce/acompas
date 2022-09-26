@@ -258,7 +258,8 @@ export const useMetronome = () => {
           if (palo.value.name === 'no-compas') {
             paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
           } else {
-            paloStore.triggerEvent(note)
+            const key = noteIndexInPattern(note)
+            paloStore.triggerEvent(key)
           }
         }, time) // Use AudioContext time of the event
       }
@@ -365,6 +366,8 @@ export const useMetronome = () => {
 
   const reinitialize = (paloState: PaloState) => {
     if (!paloState) return
+    console.log('hello');
+
     palo.value = paloState
     paloData.value = palosData.find((p) => p.value === palo.value.name)
     initSequences()

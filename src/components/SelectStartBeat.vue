@@ -26,13 +26,7 @@ const {
 const startBeatDialog = ref(false)
 
 const onSelectedStartBeat = (v: number) => {
-  // const startBeat = paloData?.startBeats.find(el => el.value === v) || paloData?.startBeats[0]
-  if (v) selectStartBeat(v)
-  // forEachValue(paloData?.startBeats, (startBeat: numOpts, key: number) => {
-  //   if (startBeat.value === v) {
-  //     selectStartBeat(startBeat)
-  //   }
-  // })
+  selectStartBeat(v)
   paloStore.stop()
   startBeatDialog.value = false
 }
