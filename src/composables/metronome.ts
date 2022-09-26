@@ -279,8 +279,8 @@ export const useMetronome = () => {
 
     if (paloData.value?.nbBeatsInPattern) {
       if (
-        palo.value.selectedPreCount?.value &&
-        palo.value.selectedStartBeat?.value
+        palo.value.selectedPreCount &&
+        palo.value.selectedStartBeat
       ) {
         // Add pre-count to introduction sequence
         for (let i = 0; i < palo.value.selectedPreCount?.value; i++) {
@@ -366,8 +366,6 @@ export const useMetronome = () => {
 
   const reinitialize = (paloState: PaloState) => {
     if (!paloState) return
-    console.log('hello');
-
     palo.value = paloState
     paloData.value = palosData.find((p) => p.value === palo.value.name)
     initSequences()
