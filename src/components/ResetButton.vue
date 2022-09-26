@@ -7,7 +7,6 @@ import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
-
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()

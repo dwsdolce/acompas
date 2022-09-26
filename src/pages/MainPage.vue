@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { Dialog, useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import PlayButton from 'src/components/PlayButton.vue'
 import SelectTempo from 'src/components/SelectTempo.vue'
@@ -15,6 +15,7 @@ import DrawCounter from 'src/components/DrawCounter.vue'
 import DrawClock from 'src/components/DrawClock.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
+import { useMetronome } from 'src/composables/metronome'
 import { useSessionStore } from 'src/stores/session'
 import { usePaloStore } from 'src/stores/palo'
 
@@ -31,6 +32,8 @@ const { dialogOpen } = storeToRefs(sessionStore)
 
 const { toggleDialog } = sessionStore
 
+const { isSupported } = useMetronome()
+
 const visualization = ref(null)
 
 // const getVisualizationSize = (size) => metronomeStore.commit('GET_VISUALIZATION_SIZE', size)
@@ -46,18 +49,11 @@ const visualization = ref(null)
 
 const showDialog = () => {
   toggleDialog(false)
-  Dialog.create({
+  $q.dialog({
     title: 'Update your browser!',
     message:
       "Your browser doesn't support one or more technologies used by this app. Please come back with another one or another version of this one.",
-    // buttons: [
-    //   {
-    //     label: 'Unable to close',
-    //     preventClose: true
-    //   }
-    // ],
-    noBackdropDismiss: true,
-    noEscDismiss: true,
+    persistent: true
   })
 }
 
@@ -65,7 +61,8 @@ const onKeyup = (e: KeyboardEvent) => {
   e.preventDefault()
   if (dialogOpen.value) return
   if (palo.value.tempo) {
-    switch (e.keyCode) {
+    const key = e.key || e.keyCode
+    switch (key) {
       case 32: // Space
         playStop()
         break
@@ -98,9 +95,9 @@ const onKeyup = (e: KeyboardEvent) => {
 onMounted(() => {
   init()
 
-  // isSupported().catch(() => {
-  //   showDialog()
-  // })
+  isSupported().catch(() => {
+    showDialog()
+  })
   document.addEventListener('keyup', (event: KeyboardEvent) => {
     onKeyup(event)
   })
@@ -112,36 +109,34 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-q-page.bg-grey-10.column.justify-around.text-grey-1.q-pa-sm
+q-page.bg-grey-10.text-grey-1.q-pa-sm.column.no-wrap.justify-around.content-stretch
   //- q-resize-observer(@resize="onResize")
-  .column.justify-between.no-wrap
-    .col-2(ref="visualization").q-mb-xs-sm.q-mb-md-lg.q-mb-lg-xl.q-pb-xs-sm.q-pb-md-lg.q-pb-lg-xl
-      draw-dots(v-if="visualizationMode?.value === 'dots'")
-      draw-counter(v-if="visualizationMode?.value === 'counter'")
-      draw-clock(v-if="visualizationMode?.value === 'clock'")
-    .col-10
-      .row.text-center.justify-center.no-wrap
-        .col-6.col-md-5.column.justify-between
-          .row.justify-center
-            select-palo.q-mb-xs
-          .row.justify-center
-            select-start-beat.q-mb-xs
-          .row.justify-center
-            select-pre-count.q-mb-xs
-          .row.justify-center
-            rhythm-options
-        .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
+  div(ref="visualization")
+    draw-dots(v-if="visualizationMode?.value === 'dots'")
+    draw-counter(v-if="visualizationMode?.value === 'counter'")
+    draw-clock(v-if="visualizationMode?.value === 'clock'")
+  .row.text-center.justify-center.no-wrap
+    .col-6.col-md-5.column.justify-between
+      .row.justify-center
+        select-palo.q-mb-xs
+      .row.justify-center
+        select-start-beat.q-mb-xs
+      .row.justify-center
+        select-pre-count.q-mb-xs
+      .row.justify-center
+        rhythm-options
+    .col-2(v-if="$q.screen.gt.lg").flex.justify-center.content-end
+      play-button
+    .col-6.col-md-5.column.justify-between
+      select-tempo.q-mb-xs
+      .row.justify-center
+        .col.col-lg-4.col-xl-2
+          select-instruments.q-mb-xs
+        .col.col-lg-4.col-xl-2
+          select-visualization.q-mb-xs
+      .row.justify-center
+        .col.col-lg-4.col-xl-2(v-if="$q.screen.lt.lg || $q.screen.lg").flex.justify-center.content-end
           play-button
-        .col-6.col-md-5.column.justify-between
-          select-tempo.q-mb-xs
-          .row.justify-center
-            .col.col-lg-4.col-xl-2
-              select-instruments.q-mb-xs
-            .col.col-lg-4.col-xl-2
-              select-visualization.q-mb-xs
-          .row.justify-center
-            .col.col-lg-4.col-xl-2(v-if="$q.screen.lt.lg || $q.screen.lg").flex.justify-center.content-end
-              play-button
-            .col.col-lg-4.col-xl-2
-              reset-button
+        .col.col-lg-4.col-xl-2
+          reset-button
 </template>

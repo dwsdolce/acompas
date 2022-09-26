@@ -17,6 +17,11 @@ const {
   metronomeEvent
 } = storeToRefs(paloStore)
 
+const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
+  if (el !== null) acc.push(el)
+  return acc
+}, [])
+
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
 const maxDotSize = ref<number>(50)
@@ -41,7 +46,7 @@ const getDotStyle = (i: number): CSSProperties => {
       height: dotSize.value + 'px',
       borderRadius: borderRadius.value + '%',
       marginTop: dotSize.value / 2 + 'px',
-      backgroundColor: paloData?.accents.includes((i / 2) as never) ? 'firebrick' : 'tomato'
+      backgroundColor: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -136,19 +141,18 @@ onBeforeUpdate(() => {
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around
   .column(
-    v-for="(n, i) in paloData?.beatLabels",
+    v-for="(n, i) in beatLabels",
     :key="i"
   )
     .dot(
-      v-if="n !== null",
       :style="getDotStyle(i)",
-      :ref="el => { dots[i / 2] = el }",
+      :ref="el => { dots[i] = el }",
       :class="[`dot-${i}`]"
     ).item-center.q-mb-md
     span(
-      v-if="n !== null && palo && palo.name !== 'no-compas'",
+      v-if="palo && palo.name !== 'no-compas'",
       :style="getNbStyle",
-      :ref="el => { nbs[i / 2] = el }"
+      :ref="el => { nbs[i] = el }"
     ).text-center {{ n }}
 </template>
 
