@@ -16,7 +16,8 @@ export const usePaloStore = (name: string) =>
       humanize,
       changeSwing,
       changeTempo,
-      changeVolume
+      changeVolume,
+      changeDecay
     } = useMetronome()
 
     const paloData = palosData.find((el) => el.value == name)
@@ -46,6 +47,7 @@ export const usePaloStore = (name: string) =>
             enabled: true,
             eighthNotes: false,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Sordas',
@@ -53,6 +55,7 @@ export const usePaloStore = (name: string) =>
             enabled: false,
             eighthNotes: false,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Nudillos',
@@ -60,6 +63,7 @@ export const usePaloStore = (name: string) =>
             enabled: true,
             eighthNotes: null,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Cajon',
@@ -67,6 +71,7 @@ export const usePaloStore = (name: string) =>
             enabled: false,
             eighthNotes: false,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Udu',
@@ -74,6 +79,7 @@ export const usePaloStore = (name: string) =>
             enabled: false,
             eighthNotes: false,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Jaleo',
@@ -81,6 +87,7 @@ export const usePaloStore = (name: string) =>
             enabled: false,
             eighthNotes: null,
             volume: 0,
+            decay: 0.5
           },
           {
             label: 'Click',
@@ -88,8 +95,10 @@ export const usePaloStore = (name: string) =>
             enabled: false,
             eighthNotes: null,
             volume: 0,
-          },
+            decay: 0.5
+          }
         ],
+        globalDecay: 0.5
       })
     )
 
@@ -216,6 +225,16 @@ export const usePaloStore = (name: string) =>
       }
     }
 
+    const selectDecay = (decay: number) => {
+      if (decay) {
+        palo.value.globalDecay = decay
+        palo.value.instruments.forEach(instrument => {
+          instrument.decay = decay
+          changeDecay(instrument.value, decay)
+        })
+      }
+    }
+
     const selectSwing = (payload: number | null) => {
       if (payload !== null) {
         palo.value.swing = payload
@@ -335,6 +354,7 @@ export const usePaloStore = (name: string) =>
       // selectPalo,
       selectTempo,
       selectVolume,
+      selectDecay,
       selectSwing,
       selectInstruments,
       selectPreCount,

@@ -494,6 +494,12 @@ export const useMetronome = () => {
     sounds[payload.instrument as SoundKey].volume.volume.value = payload.volume
   }
 
+  const changeDecay = async (instru: string, decay: number) => {
+    console.log(sounds[instru as SoundKey]);
+
+    sounds[instru as SoundKey].reverb.decay = decay
+  }
+
   return {
     initMetronome,
     isSupported,
@@ -501,6 +507,7 @@ export const useMetronome = () => {
     startSequences,
     stopAllSequences,
     changeVolume,
+    changeDecay,
     humanize,
     changeSwing,
     changeTempo,

@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
+import SelectDecay from 'src/components/SelectDecay.vue'
 
 const route = useRoute()
 
@@ -54,6 +55,8 @@ div
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Instruments mixer
+      q-card-section
+        select-decay
       q-card-section
         table(style="width: 100%;").q-table
           thead
