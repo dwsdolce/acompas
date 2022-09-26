@@ -383,7 +383,6 @@ export const useMetronome = () => {
         initSequences()
         changeTempo()
         Loading.hide()
-        console.log(sequences.quarterNotes.loop.clara)
       })
       .catch(() => {
         Loading.hide()
@@ -400,8 +399,6 @@ export const useMetronome = () => {
   // =====================
 
   const startSequences = async () => {
-    console.log(sequences.quarterNotes.loop.clara)
-
     await Tone.start()
 
     const offset = sequences.quarterNotes?.introduction.event?.length || 0
@@ -495,8 +492,6 @@ export const useMetronome = () => {
   }
 
   const changeDecay = async (instru: string, decay: number) => {
-    console.log(sounds[instru as SoundKey]);
-
     sounds[instru as SoundKey].reverb.decay = decay
   }
 

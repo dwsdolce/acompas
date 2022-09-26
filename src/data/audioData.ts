@@ -37,24 +37,24 @@ export default {
     {
       src: 'cajon/cajon_1',
       decay: 1,
-      volume: -4,
+      volume: 0,
     },
     {
       src: 'cajon/cajon_2',
       decay: 1,
-      volume: -4,
+      volume: 0,
     },
     {
       src: 'cajon/cajon_3',
       decay: 1,
-      volume: -4,
+      volume: 0,
     },
   ],
   nudillo: [
     {
       src: 'nudillo/nudillo_1',
       decay: 1,
-      volume: 8,
+      volume: 6,
     },
     {
       src: 'nudillo/nudillo_2',
@@ -66,17 +66,17 @@ export default {
     {
       src: 'udu/udu_1',
       decay: 0.5,
-      volume: -4,
+      volume: 0,
     },
     {
       src: 'udu/udu_2',
       decay: 0.5,
-      volume: -4,
+      volume: 0,
     },
     {
       src: 'udu/udu_3',
       decay: 0.5,
-      volume: -4,
+      volume: 4,
     },
   ],
   jaleo: [
