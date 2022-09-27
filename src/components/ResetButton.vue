@@ -30,8 +30,16 @@ const {
   restoreDefault
 } = paloStore
 
-const onSelectedOption = (v: any) => {
+const onSelectedOption = (v: string) => {
   selectedResetOption.value = v
+}
+
+const handleRestore = () => {
+  if (selectedResetOption.value === 'palo') {
+    restoreDefault(route.name as string)
+  } else if (selectedResetOption.value === 'all') {
+    restoreDefault(selectedResetOption.value)
+  }
 }
 </script>
 
@@ -66,6 +74,6 @@ div
         q-btn(
           color="red-10",
           v-close-popup,
-          @click="restoreDefault(selectedResetOption)"
+          @click="handleRestore"
         ) Proceed
 </template>

@@ -109,7 +109,7 @@ export const usePaloStore = (name: string) =>
       { label: 'Counter', value: 'counter' },
       { label: 'Clock', value: 'clock' }
     ])
-    const visualizationMode = useStorage('visualizationMode', ref('dots'))
+    const visualizationMode = useStorage('visualization-mode', ref('dots'))
     const visualizationSize = ref<Size>({ width: null, height: null })
     const isPlaying = ref<boolean>(false)
     const metronomeEvent = ref<number | null>(null)
@@ -120,9 +120,6 @@ export const usePaloStore = (name: string) =>
     // GETTERS
     // ###################
 
-    // const visualizationMode = computed(() =>
-    //   visualizationModes.find((el) => el.isActive)
-    // )
     const nbBeatsInPattern = computed(
       () => paloData?.nbBeatsInPattern as number
     )
@@ -197,12 +194,6 @@ export const usePaloStore = (name: string) =>
 
     const selectVisualizationMode = (payload: string) => {
       visualizationMode.value = payload
-      // const oldMode = visualizationModes.find((el) => el.isActive)
-      // const newMode = visualizationModes.find((el) => el.value === payload)
-      // if (oldMode && newMode) {
-      //   oldMode.isActive = false
-      //   newMode.isActive = true
-      // }
     }
 
     // const getVisualizationSize = (payload: Size) => {
@@ -360,19 +351,12 @@ export const usePaloStore = (name: string) =>
 
     const restoreDefault = (payload: string) => {
       if (isPlaying.value) stop()
-      // if (payload === 'all') commit(types.RESET_STORAGE)
-
-      // selectTempo(selectedPalo.value.defaultTempo)
-      // selectSwing(0)
-      // forEachValue(instruments.value, (instrument: instruOpts) => {
-      //   disableEighthNotes(instrument)
-      //   selectVolume({ instrument: instrument.value, volume: 0 })
-      // })
-      // disableHumanize()
-      // disableImprovise()
-      // selectVisualizationMode('dots')
-      // selectPreCount(selectedPalo.value.preCounts[0])
-      // selectStartBeat(selectedPalo.value.startBeats[0])
+      if (payload === 'all') {
+        window.localStorage.clear()
+      } else {
+        window.localStorage.removeItem(payload)
+      }
+      router.go(`/${payload}`)
     }
 
     return {
