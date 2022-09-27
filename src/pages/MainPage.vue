@@ -24,9 +24,9 @@ const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()
 
-const { palo } = storeToRefs(paloStore)
+const { palo, visualizationMode } = storeToRefs(paloStore)
 
-const { visualizationMode, init, playStop, selectTempo } = paloStore
+const { init, playStop, selectTempo } = paloStore
 
 const { dialogOpen } = storeToRefs(sessionStore)
 
@@ -112,9 +112,9 @@ onMounted(() => {
 q-page.bg-grey-10.text-grey-1.q-pa-sm.column.no-wrap.justify-around.content-stretch
   //- q-resize-observer(@resize="onResize")
   div(ref="visualization")
-    draw-dots(v-if="visualizationMode?.value === 'dots'")
-    draw-counter(v-if="visualizationMode?.value === 'counter'")
-    draw-clock(v-if="visualizationMode?.value === 'clock'")
+    draw-dots(v-if="visualizationMode === 'dots'")
+    draw-counter(v-if="visualizationMode === 'counter'")
+    draw-clock(v-if="visualizationMode === 'clock'")
   .row.text-center.justify-center.no-wrap
     .col-6.col-md-5.column.justify-between
       .row.justify-center

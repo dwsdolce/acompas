@@ -13,7 +13,8 @@ const visualizationDialog = ref(false)
 
 const {
   palo,
-  visualizationSize
+  visualizationModes,
+  visualizationMode
 } = storeToRefs(paloStore)
 
 const {
@@ -47,9 +48,8 @@ div
         q-option-group(
           type="radio",
           color="primary",
-          :model-value="palo.visualizationModes.find(el => el.isActive)",
-          :options="palo.visualizationModes",
-          @update:model-value="onSelectVisualizationMode"
+          v-model="visualizationMode",
+          :options="visualizationModes"
         )
       q-card-section(align="center")
         q-btn(

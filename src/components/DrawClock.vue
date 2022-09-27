@@ -9,7 +9,6 @@ import { usePaloStore } from 'src/stores/palo'
 
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
-
 const paloData = palosData.find(palo => palo.value === route.name)
 
 const {
@@ -20,18 +19,22 @@ const {
 
 const {
   startingPoint,
-  alpha,
-  velocity
+  clockStep,
+  clockVelocity
 } = paloStore
 
 const clockDeg = ref<number>(0)
 const hand = ref(null)
+const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
+  if (el !== null) acc.push(el)
+  return acc
+}, [])
 
 const getLiStyle = (i: number): CSSProperties => {
-  if (paloData) {
+  if (paloData && beatLabels) {
     return {
       position: 'absolute',
-      transform: `rotate(${(360 / paloData?.nbBeatsInPattern) * i}deg)`
+      transform: `rotate(${(360 / beatLabels.length) * i}deg)`
     }
   } else {
     return {}
@@ -39,10 +42,10 @@ const getLiStyle = (i: number): CSSProperties => {
 }
 
 const getNumStyle = (i: number): CSSProperties => {
-  if (paloData && i) {
+  if (paloData && beatLabels) {
     return {
-      transform: `translateX(-50%) translateY(-30%) rotate(-${(360 / paloData?.nbBeatsInPattern) * i}deg)`,
-      color: paloData?.accents.includes((i / 2) as never) ? 'firebrick' : 'tomato'
+      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.length) * i}deg)`,
+      color: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -50,28 +53,33 @@ const getNumStyle = (i: number): CSSProperties => {
 }
 
 const idleClockPosition = () => {
-  const newDeg: number = startingPoint === 0 ? 0 : startingPoint * alpha + 0
+  const newDeg: number = startingPoint === 0 ? 0 : startingPoint * clockStep + 0
   anime({
-    targets: hand,
-    rotate: [ clockDeg, newDeg ],
+    targets: '.hand',
+    rotate: [ clockDeg.value, newDeg ],
     duration: 0,
-    complete: (anim: any) => {
+    complete: () => {
       clockDeg.value = newDeg
     }
   })
 }
 
 const animateClock = (v: number | null) => {
-  if (v !== null && isPlaying) {
+  console.log(v)
+  console.log('clockDeg', clockDeg.value)
+  console.log('clockStep', clockStep)
+  console.log('clockVelocity', clockVelocity)
+
+  if (isPlaying) {
     anime({
-      targets: hand,
-      rotate: [ clockDeg, clockDeg.value + alpha ],
-      duration: velocity,
+      targets: '.hand',
+      rotate: [ clockDeg.value, clockDeg.value + clockStep ],
+      duration: clockVelocity,
       easing: 'linear',
-      begin: (anim: any) => {
-        clockDeg.value += alpha
+      begin: () => {
+        clockDeg.value += clockStep
       },
-      complete: (anim: any) => {
+      complete: () => {
         if (v === null || !isPlaying) {
           idleClockPosition()
         }
@@ -86,16 +94,15 @@ watch(
     [newMetronomeEvent, newSelectedStartBeat, newSelectedPreCount],
     [prevMetronomeEvent, prevSelectedStartBeat, prevSelectedPreCount]
   ) => {
-  if (newMetronomeEvent !== prevMetronomeEvent) {
-    if (newMetronomeEvent) animateClock(newMetronomeEvent.value)
+    animateClock(newMetronomeEvent)
+    if (newSelectedStartBeat !== prevSelectedStartBeat) {
+      idleClockPosition()
+    }
+    if (newSelectedPreCount !== prevSelectedPreCount) {
+      idleClockPosition()
+    }
   }
-  if (newSelectedStartBeat !== prevSelectedStartBeat) {
-    idleClockPosition()
-  }
-  if (newSelectedPreCount !== prevSelectedPreCount) {
-    idleClockPosition()
-  }
-})
+)
 
 onMounted(() => {
   idleClockPosition()
@@ -109,7 +116,7 @@ onMounted(() => {
     .hand(ref="hand").shadow-2
     ul
       li(
-        v-for="(n, i) in paloData?.beatLabels",
+        v-for="(n, i) in beatLabels",
         :style="getLiStyle(i)"
       )
         .num(
@@ -121,7 +128,7 @@ onMounted(() => {
 
 <style lang="sass" scoped>
 $size : 31vmin
-$axis : .7vmin
+$axis : 1.4vmin
 
 #clock
   width: $size
@@ -130,25 +137,25 @@ $axis : .7vmin
   background-color: $blue-grey-1
   position: relative
   .axis
-    width: ($axis * 2)
-    height: ($axis * 2)
-    border-radius: $axis
+    width: $axis
+    height: $axis
+    border-radius: $axis / 2
     background-color: black
     position: absolute
-    top: calc($size / 2 - $axis)
-    left: calc($size / 2 - $axis)
+    top: 14.8vmin
+    left: 14.53vmin
   .hand
-    width: $axis
+    width: $axis / 2
     height: ($size / 3)
     position: absolute
-    top: calc($size / 6 - $axis / 2)
-    left: calc($size / 2 - $axis / 2)
+    top: 4.5vmin
+    left: 14.8vmin
     background-color: black
     border-radius: 100% 100% 0% 0%
     transform: rotate(0deg)
-    transform-origin: center calc($size / 3 - $axis / 2)
+    transform-origin: center ($size / 3 + $axis / 2)
   ul
-    height: calc($size / 2.2)
+    height: $size / 2.2
     position: absolute
     list-style: none
     width: 0

@@ -5,7 +5,7 @@ import { useStorage } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import palosData from 'src/data/palosData'
 import { useMetronome } from 'src/composables/metronome'
-import type { numOpts, instruOpts, VolumeOpts, PaloState, Size } from 'src/composables/models'
+import type { numOpts, instruOpts, VolumeOpts, PaloState, visuOpts, Size } from 'src/composables/models'
 
 export const usePaloStore = (name: string) =>
   defineStore(name, () => {
@@ -42,11 +42,6 @@ export const usePaloStore = (name: string) =>
         humanization: false,
         isTooSlow: false,
         isTooFast: false,
-        visualizationModes: [
-          { label: 'Dots', value: 'dots', isActive: true },
-          { label: 'Counter', value: 'counter', isActive: false },
-          { label: 'Clock', value: 'clock', isActive: false },
-        ],
         instruments: [
           {
             label: 'Claras',
@@ -109,6 +104,12 @@ export const usePaloStore = (name: string) =>
       })
     )
 
+    const visualizationModes = ref([
+      { label: 'Dots', value: 'dots' },
+      { label: 'Counter', value: 'counter' },
+      { label: 'Clock', value: 'clock' }
+    ])
+    const visualizationMode = useStorage('visualizationMode', ref('dots'))
     const visualizationSize = ref<Size>({ width: null, height: null })
     const isPlaying = ref<boolean>(false)
     const metronomeEvent = ref<number | null>(null)
@@ -119,18 +120,18 @@ export const usePaloStore = (name: string) =>
     // GETTERS
     // ###################
 
-    const visualizationMode = computed(() =>
-      palo.value.visualizationModes.find((el) => el.isActive)
-    )
+    // const visualizationMode = computed(() =>
+    //   visualizationModes.find((el) => el.isActive)
+    // )
     const nbBeatsInPattern = computed(
       () => paloData?.nbBeatsInPattern as number
     )
     const beatLabels = computed(() => paloData?.beatLabels)
     const accents = computed(() => paloData?.accents)
-    const alpha = computed(
+    const clockStep = computed(
       () => 360 / ((paloData?.nbBeatsInPattern as number) / 2)
     )
-    const velocity = computed(() =>
+    const clockVelocity = computed(() =>
       palo.value.tempo
         ? Math.floor(60000 / palo.value.tempo)
         : paloData?.defaultTempo
@@ -195,14 +196,13 @@ export const usePaloStore = (name: string) =>
     }
 
     const selectVisualizationMode = (payload: string) => {
-      const oldMode = palo.value.visualizationModes.find((el) => el.isActive)
-      const newMode = palo.value.visualizationModes.find(
-        (el) => el.value === payload
-      )
-      if (oldMode && newMode) {
-        oldMode.isActive = false
-        newMode.isActive = true
-      }
+      visualizationMode.value = payload
+      // const oldMode = visualizationModes.find((el) => el.isActive)
+      // const newMode = visualizationModes.find((el) => el.value === payload)
+      // if (oldMode && newMode) {
+      //   oldMode.isActive = false
+      //   newMode.isActive = true
+      // }
     }
 
     // const getVisualizationSize = (payload: Size) => {
@@ -378,6 +378,7 @@ export const usePaloStore = (name: string) =>
     return {
       // STATE
       palo,
+      visualizationModes,
       visualizationSize,
       isPlaying,
       metronomeEvent,
@@ -389,8 +390,8 @@ export const usePaloStore = (name: string) =>
       visualizationMode,
       beatLabels,
       accents,
-      alpha,
-      velocity,
+      clockStep,
+      clockVelocity,
       startingPoint,
       instrument,
       selectedInstruments,

@@ -60,7 +60,7 @@ div
       :max="paloData?.maxTempo",
       show-value,
       :size="knobSize",
-      :thickness="0.12"
+      :thickness="0.2"
     ).text-weight-light
     q-btn(
       outline,

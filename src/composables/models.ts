@@ -114,7 +114,7 @@ export interface PaloState {
   humanization:               boolean
   isTooSlow:                  boolean
   isTooFast:                  boolean
-  visualizationModes:         visuOpts[]
+  // visualizationModes:         visuOpts[]
   instruments:                instruOpts[]
   globalDecay:                number
 }
