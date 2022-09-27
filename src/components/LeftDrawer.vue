@@ -2,6 +2,7 @@
   import { watch, ref } from 'vue'
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
+  import { useRouter } from 'vue-router'
   import TuningFork from 'src/components/TuningFork.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
@@ -9,7 +10,7 @@
   const helpDialog = ref(false)
   const tuningDialog = ref(false)
   const shortcutsDialog = ref(false)
-
+  const router = useRouter()
   const sessionStore = useSessionStore()
 
   const {
@@ -96,6 +97,10 @@ div
       q-item-section(avatar)
         q-icon(name="bug_report")
       q-item-section Issues
+    q-item(clickable, v-ripple, @click="router.push('/privacy')")
+      q-item-section(avatar)
+        q-icon(name="security")
+      q-item-section Privacy policy
   q-dialog(id="helpDialog", v-model="helpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section

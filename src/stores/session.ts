@@ -47,7 +47,7 @@ export const useSessionStore = defineStore('session', {
     closePrivacyDialog() {
       this.privacyDialogOpen = false
     },
-    toggleDialog(payload: any) {
+    toggleDialog(payload: boolean) {
       this.dialogOpen = payload
     },
     toggleLeftDrawer() {

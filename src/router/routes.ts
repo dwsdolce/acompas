@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import palosData from 'src/data/palosData'
+import type { PaloData } from 'src/composables/models'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,6 +11,10 @@ const routes: RouteRecordRaw[] = [
         path: '',
         redirect: `/${palosData[0].value}`,
       },
+      {
+        path: 'privacy',
+        component: () => import('pages/PrivacyPolicy.vue')
+      },
     ],
   },
   {
@@ -18,7 +23,7 @@ const routes: RouteRecordRaw[] = [
   },
 ]
 
-palosData.forEach((palo: any) => {
+palosData.forEach((palo: PaloData) => {
   if (routes[0].children)
     routes[0].children.push({
       path: palo.value,

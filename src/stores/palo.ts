@@ -356,7 +356,7 @@ export const usePaloStore = (name: string) =>
       } else {
         window.localStorage.removeItem(payload)
       }
-      router.go(`/${payload}`)
+      router.go(0)
     }
 
     return {
