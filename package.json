@@ -12,13 +12,13 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.15.3",
     "@types/animejs": "^3.1.5",
     "@types/ramda": "^0.28.15",
     "@vueuse/core": "^9.2.0",
     "animejs": "^3.2.1",
     "pinia": "^2.0.11",
-    "quasar": "^2.6.0",
+    "quasar": "^2.8.4",
     "ramda": "^0.28.0",
     "tone": "^14.7.77",
     "vue": "^3.0.0",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
-    "@quasar/app-vite": "^1.0.0",
+    "@quasar/app-vite": "^1.1.2",
     "@types/node": "^12.20.21",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",

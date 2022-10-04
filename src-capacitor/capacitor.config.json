@@ -1,0 +1,7 @@
+{
+  "appId": "audio.acompas.app",
+  "appName": "A Compás",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www"
+}
