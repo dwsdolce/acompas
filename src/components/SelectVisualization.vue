@@ -32,14 +32,15 @@ const onSelectVisualizationMode = (v: any) => {
 </script>
 
 <template lang="pug">
-div
-  p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
+.text-center.q-mx-md
+  //- p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
   q-btn(
     outline,
     icon="remove_red_eye",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    :label="`View mode : ${visualizationModes.find(el => el.value === visualizationMode)?.label}`",
     @click="visualizationDialog = true"
-  )
+  ).lonely-btn
   q-dialog(v-model="visualizationDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section

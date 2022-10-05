@@ -17,10 +17,12 @@ const {
 
 <template lang="pug">
 .text-center
-  p.caption Humanize
+  //- p.caption Humanize
   q-toggle(
     :model-value="palo.humanization",
     @update:model-value="toggleHumanize()",
+    label="Humanize",
+    left-label,
     color="primary",
     keep-color
   )

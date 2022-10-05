@@ -36,15 +36,16 @@ const onSelectedPalo = (v: any) => {
 
 <template lang="pug">
 div
-  p.caption Palo
+  p Palo
     help-palo(v-show="palo.name !== 'no-compas'", :palo="palo")
   q-btn(
     id="paloBtn",
     outline,
     color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    :label="paloData?.label",
     @click="palosDialog = true"
-  ) {{ paloData?.label }}
+  )
   q-dialog(
     id="palosDialog",
     v-model="palosDialog",

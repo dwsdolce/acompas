@@ -17,11 +17,13 @@ const {
 
 <template lang="pug">
 .text-center
-  p.caption Improvise
+  //- p.caption Improvise
   q-toggle(
     :model-value="palo.improvisation",
     @update:model-value="toggleImprovise",
     :disable="palo.name === 'no-compas'",
+    label="Improvise",
+    left-label,
     color="primary",
     keep-color
   )

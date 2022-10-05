@@ -44,13 +44,13 @@ const handleRestore = () => {
 </script>
 
 <template lang="pug">
-div
-  p.caption Reset
+.text-center.q-mx-md
+  //- p.caption Reset
   q-btn(
-    round,
     outline,
     icon="settings_backup_restore",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    label="Reset",
     @click="resetDialog = true"
   )
   q-dialog(v-model="resetDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")

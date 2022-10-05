@@ -39,17 +39,8 @@ const knobSize = computed(() => {
 
 <template lang="pug">
 div
-  p.caption.text-center Tempo
+  p Tempo
   .row.justify-center.items-end.content-end
-    q-btn(
-      outline,
-      round,
-      color="white",
-      :size="$q.screen.lt.md ? 'sm' : 'md'",
-      :padding="$q.screen.lt.md ? 'xs' : 'sm'",
-      @click="decrement()"
-    ).self-end
-      q-icon(name="remove")
     q-knob(
       v-if="palo.tempo",
       color="primary",
@@ -62,14 +53,22 @@ div
       :size="knobSize",
       :thickness="0.2"
     ).text-weight-light
+  .row.justify-between
     q-btn(
       outline,
       round,
       color="white",
-      :size="$q.screen.lt.md ? 'sm' : 'md'",
-      :padding="$q.screen.lt.md ? 'xs' : 'sm'",
-      @click="increment()"
-    ).self-end
+      :size="$q.screen.xs ? 'sm' : 'md'",
+      @click="decrement"
+    )
+      q-icon(name="remove")
+    q-btn(
+      outline,
+      round,
+      color="white",
+      :size="$q.screen.xs ? 'sm' : 'md'",
+      @click="increment"
+    )
       q-icon(name="add")
 </template>
 

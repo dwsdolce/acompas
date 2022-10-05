@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeUpdate } from 'vue'
 import type { CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
@@ -14,27 +14,22 @@ const paloData = palosData.find(palo => palo.value === route.name)
 const {
   palo,
   isPlaying,
-  metronomeEvent
-} = storeToRefs(paloStore)
-
-const {
+  metronomeEvent,
+  clockVelocity,
+  numLabels,
   startingPoint,
-  clockStep,
-  clockVelocity
-} = paloStore
+  clockStep
+} = storeToRefs(paloStore)
 
 const clockDeg = ref<number>(0)
 const hand = ref(null)
-const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
-  if (el !== null) acc.push(el)
-  return acc
-}, [])
+const nums = ref<HTMLDivElement[] | null[]>([])
 
 const getLiStyle = (i: number): CSSProperties => {
-  if (paloData && beatLabels) {
+  if (paloData && numLabels.value) {
     return {
       position: 'absolute',
-      transform: `rotate(${(360 / beatLabels.length) * i}deg)`
+      transform: `rotate(${(360 / numLabels.value.length) * i}deg)`
     }
   } else {
     return {}
@@ -42,9 +37,9 @@ const getLiStyle = (i: number): CSSProperties => {
 }
 
 const getNumStyle = (i: number): CSSProperties => {
-  if (paloData && beatLabels) {
+  if (paloData && numLabels.value) {
     return {
-      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.length) * i}deg)`,
+      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / numLabels.value.length) * i}deg)`,
       color: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
     }
   } else {
@@ -53,11 +48,11 @@ const getNumStyle = (i: number): CSSProperties => {
 }
 
 const idleClockPosition = () => {
-  const newDeg: number = startingPoint === 0 ? 0 : startingPoint * clockStep + 0
+  const newDeg: number = startingPoint.value * clockStep.value + 0
   anime({
     targets: '.hand',
     rotate: [ clockDeg.value, newDeg ],
-    duration: 0,
+    duration: 50,
     complete: () => {
       clockDeg.value = newDeg
     }
@@ -65,37 +60,53 @@ const idleClockPosition = () => {
 }
 
 const animateClock = (v: number | null) => {
-  console.log(v)
-  console.log('clockDeg', clockDeg.value)
-  console.log('clockStep', clockStep)
-  console.log('clockVelocity', clockVelocity)
+  const animation = anime({
+    targets: '.hand',
+    rotate: [ clockDeg.value, clockDeg.value + clockStep.value ],
+    duration: clockVelocity.value,
+    easing: 'linear',
+    begin: () => {
+      if (v !== null) clockDeg.value += clockStep.value
+    },
+    change: () => {
+      if (v == null) {
+        idleClockPosition()
+      }
+    }
+  })
 
   if (isPlaying) {
+    animation.play()
+  } else {
+    animation.pause()
+    idleClockPosition()
+  }
+}
+
+const animateNum = (v: number | null) => {
+  if (v !== null) {
+    const index = v / 2
     anime({
-      targets: '.hand',
-      rotate: [ clockDeg.value, clockDeg.value + clockStep ],
-      duration: clockVelocity,
-      easing: 'linear',
-      begin: () => {
-        clockDeg.value += clockStep
-      },
-      complete: () => {
-        if (v === null || !isPlaying) {
-          idleClockPosition()
-        }
-      }
+      targets: nums.value[index],
+      scale: [
+        { value: 1, duration: 0 },
+        { value: 2, duration: 1000 }
+      ],
+      direction: 'reverse',
+      easing: 'easeInSine'
     })
   }
 }
 
 watch(
-  [metronomeEvent, palo.value.selectedStartBeat, palo.value.selectedPreCount],
+  [metronomeEvent, startingPoint, palo.value.selectedPreCount],
   (
-    [newMetronomeEvent, newSelectedStartBeat, newSelectedPreCount],
-    [prevMetronomeEvent, prevSelectedStartBeat, prevSelectedPreCount]
+    [newMetronomeEvent, newStartingPoint, newSelectedPreCount],
+    [prevMetronomeEvent, prevStartingPoint, prevSelectedPreCount]
   ) => {
     animateClock(newMetronomeEvent)
-    if (newSelectedStartBeat !== prevSelectedStartBeat) {
+    animateNum(newMetronomeEvent)
+    if (newStartingPoint !== prevStartingPoint) {
       idleClockPosition()
     }
     if (newSelectedPreCount !== prevSelectedPreCount) {
@@ -107,28 +118,32 @@ watch(
 onMounted(() => {
   idleClockPosition()
 })
+
+// make sure to reset the refs before each update
+onBeforeUpdate(() => {
+  nums.value = []
+})
 </script>
 
 <template lang="pug">
-.full-width.flex.justify-center.items-center
-  #clock.shadow-20
-    .axis.shadow-4
-    .hand(ref="hand").shadow-2
-    ul
-      li(
-        v-for="(n, i) in beatLabels",
-        :style="getLiStyle(i)"
-      )
-        .num(
-          :ref="`num-${n}`",
-          :style="getNumStyle(i)"
-        ) {{ n }}
+#clock.shadow-20
+  .axis.shadow-4
+  .hand(ref="hand").shadow-2
+  ul
+    li(
+      v-for="(n, i) in numLabels",
+      :style="getLiStyle(i)"
+    )
+      .num(
+        :ref="el => { nums[i] = el }"
+        :style="getNumStyle(i)"
+      ) {{ n }}
 </template>
 
 
 <style lang="sass" scoped>
-$size : 31vmin
-$axis : 1.4vmin
+$size : 30vh
+$axis : 2vh
 
 #clock
   width: $size
@@ -142,18 +157,18 @@ $axis : 1.4vmin
     border-radius: $axis / 2
     background-color: black
     position: absolute
-    top: 14.8vmin
-    left: 14.53vmin
+    top: $size / 2 - $axis / 2
+    left: $size / 2 - $axis / 2
   .hand
     width: $axis / 2
     height: ($size / 3)
     position: absolute
-    top: 4.5vmin
-    left: 14.8vmin
+    top: $size / 6 - $axis / 4
+    left: $size / 2 - $axis / 4
     background-color: black
     border-radius: 100% 100% 0% 0%
     transform: rotate(0deg)
-    transform-origin: center ($size / 3 + $axis / 2)
+    transform-origin: center ($size / 3 + $axis / 4)
   ul
     height: $size / 2.2
     position: absolute
@@ -170,7 +185,7 @@ $axis : 1.4vmin
       transform-origin: 0% 100%
       .num
         color: tomato
-        font-size: 3vmin
+        font-size: 1.5em
         // position absolute
         // top 0
         // left 50%

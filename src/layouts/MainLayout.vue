@@ -5,6 +5,7 @@ import { Screen } from 'quasar'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
+Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
 </script>
 
 <template lang="pug">

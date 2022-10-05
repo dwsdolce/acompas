@@ -38,12 +38,13 @@ const {
 
 <template lang="pug">
 div
-  p.caption Mixer
+  //- p.caption Mixer
   q-btn(
     id="mixerBtn",
     outline,
     icon="tune",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    label="Mixer",
     @click="instrumentsDialog = true"
   )
   q-dialog(

@@ -41,15 +41,15 @@ const {
 </script>
 
 <template lang="pug">
-div
-  p.caption Pre-count
+.text-center.q-mx-md
+  //- p.caption Pre-count
   q-btn(
     id="preCountBtn",
     outline,
-    color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    :label="`Precount : ${palo.selectedPreCount?.label}`",
     @click="preCountDialog = true"
-  ) {{ palo.selectedPreCount?.label }}
+  ).lonely-btn
   q-dialog(
     id="preCountDialog",
     v-model="preCountDialog",
@@ -59,7 +59,8 @@ div
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Number of pre-count beats
-      q-card-section
+        p.q-my-sm Plays a click for the defined number of beats before the metronome starts.
+        p.q-my-sm How many beats of {{ paloData?.label }} do you want to be played ?
         q-option-group(
           type="radio",
           color="primary",
@@ -72,5 +73,5 @@ div
           id="closePreCountDialogBtn",
           color="primary",
           v-close-popup
-        ) Close
+        ) OK
 </template>

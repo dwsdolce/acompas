@@ -44,11 +44,11 @@ export default {
   nudillo: [
     {
       src: 'nudillo/nudillo_1',
-      volume: 6,
+      volume: 3,
     },
     {
       src: 'nudillo/nudillo_2',
-      volume: 0,
+      volume: -3,
     },
   ],
   udu: [

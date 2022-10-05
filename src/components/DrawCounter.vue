@@ -37,7 +37,7 @@ watch(metronomeEvent, (v: number | null) => {
 <template lang="pug">
 .item-center.full-width
   h1(:class="className").text-center.q-ma-none
-    div(v-if="metronomeEvent === null")
+    div(v-if="metronomeEvent == null")
       q-icon(name="more_horiz")
     div(v-else).counter {{ counter }}
 </template>

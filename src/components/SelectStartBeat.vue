@@ -33,15 +33,15 @@ const onSelectedStartBeat = (v: number) => {
 </script>
 
 <template lang="pug">
-div
-  p.caption Start beat
+.text-center.q-mx-md
+  //- p.caption Start beat
   q-btn(
     id="startBeatBtn",
     outline,
-    color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
+    :label="`Start Beat : ${palo.selectedStartBeat?.label}`"
     @click="startBeatDialog = true"
-  ) {{ palo.selectedStartBeat?.label }}
+  ).lonely-btn
   q-dialog(
     id="startBeatDialog",
     v-model="startBeatDialog",
@@ -51,7 +51,8 @@ div
     q-card(style="width: 100%;")
       q-card-section
         .text-h6.text-center Start beat
-      q-card-section
+        p.q-my-sm Starts the count on the defined beat.
+        p.q-my-sm On which beat of {{ paloData?.label }} do you wish to start the metronome ?
         q-option-group(
           type="radio",
           color="primary",
@@ -64,5 +65,5 @@ div
           id="closeStartBeatDialogBtn",
           color="primary",
           v-close-popup
-        ) Close
+        ) Ok
 </template>

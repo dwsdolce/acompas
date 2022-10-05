@@ -124,6 +124,7 @@ export const usePaloStore = (name: string) =>
       () => paloData?.nbBeatsInPattern as number
     )
     const beatLabels = computed(() => paloData?.beatLabels)
+    const numLabels = computed(() => paloData?.beatLabels.filter((el) => el != null))
     const accents = computed(() => paloData?.accents)
     const clockStep = computed(
       () => 360 / ((paloData?.nbBeatsInPattern as number) / 2)
@@ -373,6 +374,7 @@ export const usePaloStore = (name: string) =>
       nbBeatsInPattern,
       visualizationMode,
       beatLabels,
+      numLabels,
       accents,
       clockStep,
       clockVelocity,
