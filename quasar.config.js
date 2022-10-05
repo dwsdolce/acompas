@@ -131,6 +131,14 @@ module.exports = configure(function (/* ctx */) {
     //   electronPreload: 'src-electron/electron-preload'
     // },
 
+    bin: {
+      // Tell Quasar where the Android studio executable is located.
+      // Hint : you can create a /usr/local/android-studio symlink which
+      // points to your local install by running this :
+      // sudo ln -s /path/to/my/local/android-studio /usr/local/android-studio
+      linuxAndroidStudio: '/usr/local/android-studio/bin/studio.sh'
+    },
+
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {
       // ssrPwaHtmlFilename: 'offline.html', // do NOT use index.html as name!
