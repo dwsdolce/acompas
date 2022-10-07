@@ -49,7 +49,8 @@ const onSelectVisualizationMode = (v: any) => {
         q-option-group(
           type="radio",
           color="primary",
-          v-model="visualizationMode",
+          :model-value="visualizationMode",
+          @update:model-value="onSelectVisualizationMode"
           :options="visualizationModes"
         )
       q-card-section(align="center")

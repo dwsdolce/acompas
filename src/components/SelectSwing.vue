@@ -25,6 +25,7 @@ const {
     :max="1",
     :step="0.1",
     label,
+    label-always,
     snap
   )
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUpdate } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
 import type { CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
@@ -22,8 +22,10 @@ const {
 } = storeToRefs(paloStore)
 
 const clockDeg = ref<number>(0)
-const hand = ref(null)
+const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
+
+// const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
 
 const getLiStyle = (i: number): CSSProperties => {
   if (paloData && numLabels.value) {
@@ -49,10 +51,14 @@ const getNumStyle = (i: number): CSSProperties => {
 
 const idleClockPosition = () => {
   const newDeg: number = startingPoint.value * clockStep.value + 0
+  clockDeg.value = newDeg
+  // if (hand.value) hand.value.style.transform = `rotate(${clockDeg.value}deg)`
+  // console.log(hand.value?.style.transform)
+
   anime({
     targets: '.hand',
     rotate: [ clockDeg.value, newDeg ],
-    duration: 50,
+    duration: 0,
     complete: () => {
       clockDeg.value = newDeg
     }
@@ -67,20 +73,19 @@ const animateClock = (v: number | null) => {
     easing: 'linear',
     begin: () => {
       if (v !== null) clockDeg.value += clockStep.value
-    },
-    change: () => {
-      if (v == null) {
-        idleClockPosition()
-      }
     }
   })
-
-  if (isPlaying) {
+  if (isPlaying.value && v !== null) {
     animation.play()
   } else {
     animation.pause()
-    idleClockPosition()
   }
+
+  animation.finished.then(() => {
+    if (!isPlaying.value) {
+      idleClockPosition()
+    }
+  })
 }
 
 const animateNum = (v: number | null) => {
@@ -104,6 +109,8 @@ watch(
     [newMetronomeEvent, newStartingPoint, newSelectedPreCount],
     [prevMetronomeEvent, prevStartingPoint, prevSelectedPreCount]
   ) => {
+    console.log(newMetronomeEvent)
+
     animateClock(newMetronomeEvent)
     animateNum(newMetronomeEvent)
     if (newStartingPoint !== prevStartingPoint) {
@@ -116,7 +123,13 @@ watch(
 )
 
 onMounted(() => {
-  idleClockPosition()
+  if (isPlaying.value && metronomeEvent.value !== null) {
+    console.log('hello')
+
+    clockDeg.value = metronomeEvent.value * clockStep.value
+  } else {
+    idleClockPosition()
+  }
 })
 
 // make sure to reset the refs before each update
@@ -135,7 +148,7 @@ onBeforeUpdate(() => {
       :style="getLiStyle(i)"
     )
       .num(
-        :ref="el => { nums[i] = el }"
+        :ref="el => { nums[i] = el }",
         :style="getNumStyle(i)"
       ) {{ n }}
 </template>
@@ -167,7 +180,7 @@ $axis : 2vh
     left: $size / 2 - $axis / 4
     background-color: black
     border-radius: 100% 100% 0% 0%
-    transform: rotate(0deg)
+    // transform: v-bind('rotationValue')
     transform-origin: center ($size / 3 + $axis / 4)
   ul
     height: $size / 2.2
@@ -191,4 +204,6 @@ $axis : 2vh
         // left 50%
         // transform translateX(-50%)
         font-weight: bold
+        @media screen and (max-height: 600px)
+          font-size: 1em
 </style>

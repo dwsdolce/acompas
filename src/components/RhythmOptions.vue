@@ -28,7 +28,7 @@ div
     id="optBtn",
     outline,
     color="white",
-    icon="speed",
+    icon="build",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Rhythm options"
     @click="optDialog = true"

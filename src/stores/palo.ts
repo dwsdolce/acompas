@@ -195,6 +195,9 @@ export const usePaloStore = (name: string) =>
 
     const selectVisualizationMode = (payload: string) => {
       visualizationMode.value = payload
+      if (isPlaying.value) {
+        stop()
+      }
     }
 
     // const getVisualizationSize = (payload: Size) => {
