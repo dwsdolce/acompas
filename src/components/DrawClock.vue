@@ -124,8 +124,6 @@ watch(
 
 onMounted(() => {
   if (isPlaying.value && metronomeEvent.value !== null) {
-    console.log('hello')
-
     clockDeg.value = metronomeEvent.value * clockStep.value
   } else {
     idleClockPosition()
