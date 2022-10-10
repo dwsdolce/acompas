@@ -9,10 +9,7 @@ const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
 const sessionStore = useSessionStore()
 
-const visualizationDialog = ref(false)
-
 const {
-  palo,
   visualizationModes,
   visualizationMode
 } = storeToRefs(paloStore)
@@ -25,37 +22,21 @@ const {
   toggleDialog
 } = sessionStore
 
-const onSelectVisualizationMode = (v: any) => {
+const onSelectVisualizationMode = (v: string) => {
   selectVisualizationMode(v)
-  visualizationDialog.value = false
 }
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  //- p.caption View {{ $q.screen.gt.sm ? 'mode' : '' }}
-  q-btn(
-    outline,
-    icon="remove_red_eye",
-    :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    :label="`View mode : ${visualizationModes.find(el => el.value === visualizationMode)?.label}`",
-    @click="visualizationDialog = true"
-  ).lonely-btn
-  q-dialog(v-model="visualizationDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
-      q-card-section
-        .text-h6.text-center Select view mode
-      q-card-section
-        q-option-group(
-          type="radio",
-          color="primary",
-          :model-value="visualizationMode",
-          @update:model-value="onSelectVisualizationMode"
-          :options="visualizationModes"
-        )
-      q-card-section(align="center")
-        q-btn(
-          color="primary",
-          v-close-popup
-        ) Close
+  .caption View mode
+  q-option-group(
+    inline,
+    left-label,
+    type="radio",
+    color="primary",
+    :model-value="visualizationMode",
+    @update:model-value="onSelectVisualizationMode"
+    :options="visualizationModes"
+  )
 </template>

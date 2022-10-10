@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
+import type { numOpts } from 'src/composables/models'
 
 const $q = useQuasar()
 const route = useRoute()
@@ -23,47 +24,46 @@ const {
   toggleDialog
 } = sessionStore
 
-const startBeatDialog = ref(false)
+const arrayOfIndexes = computed(
+  () => {
+  const array = []
+  if (paloData?.startBeats.length) {
+    for (let index = 0; index < paloData?.startBeats.length; index++) {
+      array.push(index)
+    }
+  }
+  return array
+})
+
+const dataSelectedStartBeat = paloData?.startBeats.find((el) => el !== undefined && el.value === palo.value.selectedStartBeat.value)
+
+const index = computed(
+  (): number | null =>
+    palo.value.selectedStartBeat && paloData?.startBeats.length && dataSelectedStartBeat
+      ? paloData?.startBeats.indexOf(dataSelectedStartBeat) as number
+      : null
+)
 
 const onSelectedStartBeat = (v: number) => {
-  selectStartBeat(v)
+  const obj = paloData?.startBeats.find((el) => el !== undefined && paloData?.startBeats.indexOf(el) === v)
+  if (obj) selectStartBeat(obj.value)
   paloStore.stop()
-  startBeatDialog.value = false
 }
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  //- p.caption Start beat
-  q-btn(
-    id="startBeatBtn",
-    outline,
-    :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    :label="`Start Beat : ${palo.selectedStartBeat?.label}`"
-    @click="startBeatDialog = true"
-  ).lonely-btn
-  q-dialog(
-    id="startBeatDialog",
-    v-model="startBeatDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+  .caption Start beat
+  q-slider(
+    :model-value="index",
+    @update:model-value="onSelectedStartBeat($event)",
+    :min="0",
+    :max="arrayOfIndexes.length",
+    :step="1",
+    label,
+    label-always,
+    switch-label-side,
+    :label-value="palo.selectedStartBeat.label",
+    snap
   )
-    q-card(style="width: 100%;")
-      q-card-section
-        .text-h6.text-center Start beat
-        p.q-my-sm Starts the count on the defined beat.
-        p.q-my-sm On which beat of {{ paloData?.label }} do you wish to start the metronome ?
-        q-option-group(
-          type="radio",
-          color="primary",
-          :model-value="palo.selectedStartBeat.value",
-          :options="paloData?.startBeats",
-          @update:model-value="onSelectedStartBeat"
-        )
-      q-card-section(align="center")
-        q-btn(
-          id="closeStartBeatDialogBtn",
-          color="primary",
-          v-close-popup
-        ) Ok
 </template>

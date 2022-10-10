@@ -109,8 +109,6 @@ watch(
     [newMetronomeEvent, newStartingPoint, newSelectedPreCount],
     [prevMetronomeEvent, prevStartingPoint, prevSelectedPreCount]
   ) => {
-    console.log(newMetronomeEvent)
-
     animateClock(newMetronomeEvent)
     animateNum(newMetronomeEvent)
     if (newStartingPoint !== prevStartingPoint) {

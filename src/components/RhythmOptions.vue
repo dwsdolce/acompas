@@ -9,6 +9,7 @@ import SelectPreCount from 'src/components/SelectPreCount.vue'
 import SelectStartBeat from 'src/components/SelectStartBeat.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
+import OptionsDialog from 'src/components/OptionsDialog.vue'
 
 const sessionStore = useSessionStore()
 
@@ -30,14 +31,12 @@ div
     color="white",
     icon="build",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Rhythm options"
+    label="Rhythm options",
     @click="optDialog = true"
   )
   q-dialog(
     id="optDialog",
-    v-model="optDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="optDialog"
   )
     q-card(style="width: 100%;")
       q-card-section
@@ -54,6 +53,6 @@ div
         q-btn(
           id="closeOptDialogBtn",
           color="primary",
-          v-close-popup
+          @click="optDialog = false"
         ) Close
 </template>

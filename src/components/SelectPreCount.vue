@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
@@ -18,8 +18,6 @@ const sessionStore = useSessionStore()
 
 const $q = useQuasar()
 
-const preCountDialog = ref(false)
-
 const { palo } = storeToRefs(paloStore)
 
 const {
@@ -30,48 +28,46 @@ const {
   toggleDialog
 } = sessionStore
 
-// const onSelectedPreCount = (v: number) => {
-//   forEachValue(paloData?.preCounts, (preCount: numOpts, key: number) => {
-//     if (preCount.value === v) {
-//       selectPreCount(preCount)
-//     }
-//   })
-//   preCountDialog.value = false
-// }
+const arrayOfIndexes = computed(
+  () => {
+  const array = []
+  if (paloData?.preCounts.length) {
+    for (let index = 0; index < paloData?.preCounts.length; index++) {
+      array.push(index)
+    }
+  }
+  return array
+})
+
+const dataSelectedPreCount = paloData?.preCounts.find((el) => el !== undefined && el.value === palo.value.selectedPreCount.value)
+
+const index = computed(
+  (): number | null =>
+    palo.value.selectedPreCount && paloData?.preCounts.length && dataSelectedPreCount
+      ? paloData?.preCounts.indexOf(dataSelectedPreCount) as number
+      : null
+)
+
+const onSelectedPreCount = (v: number) => {
+  const obj = paloData?.preCounts.find((el) => el !== undefined && paloData?.preCounts.indexOf(el) === v)
+  if (obj) selectPreCount(obj.value)
+  paloStore.stop()
+}
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  //- p.caption Pre-count
-  q-btn(
-    id="preCountBtn",
-    outline,
-    :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    :label="`Precount : ${palo.selectedPreCount?.label}`",
-    @click="preCountDialog = true"
-  ).lonely-btn
-  q-dialog(
-    id="preCountDialog",
-    v-model="preCountDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+  .caption Pre-count
+  q-slider(
+    :model-value="index",
+    @update:model-value="onSelectedPreCount($event)",
+    :min="0",
+    :max="arrayOfIndexes.length",
+    :step="1",
+    label,
+    label-always,
+    switch-label-side,
+    :label-value="palo.selectedPreCount.label",
+    snap
   )
-    q-card(style="width: 100%;")
-      q-card-section
-        .text-h6.text-center Number of pre-count beats
-        p.q-my-sm Plays a click for the defined number of beats before the metronome starts.
-        p.q-my-sm How many beats of {{ paloData?.label }} do you want to be played ?
-        q-option-group(
-          type="radio",
-          color="primary",
-          :model-value="palo.selectedPreCount.value",
-          @update:model-value="selectPreCount($event)"
-          :options="paloData?.preCounts"
-        )
-      q-card-section(align="center")
-        q-btn(
-          id="closePreCountDialogBtn",
-          color="primary",
-          v-close-popup
-        ) OK
 </template>

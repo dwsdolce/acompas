@@ -7,6 +7,7 @@ import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
 import HelpPalo from 'src/components/HelpPalo.vue'
+import OptionsDialog from 'src/components/OptionsDialog.vue'
 
 const $q = useQuasar()
 const route = useRoute()
@@ -47,10 +48,8 @@ div
     @click="palosDialog = true"
   )
   q-dialog(
-    id="palosDialog",
-    v-model="palosDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    id="optDialog",
+    v-model="palosDialog"
   )
     q-card(style="width: 100%;")
       q-card-section

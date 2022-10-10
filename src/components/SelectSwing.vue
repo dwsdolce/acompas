@@ -26,6 +26,7 @@ const {
     :step="0.1",
     label,
     label-always,
+    switch-label-side,
     snap
   )
 </template>
