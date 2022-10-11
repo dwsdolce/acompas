@@ -17,10 +17,10 @@ const {
   metronomeEvent
 } = storeToRefs(paloStore)
 
-const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
-  if (el !== null) acc.push(el)
-  return acc
-}, [])
+// const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
+//   if (el !== null) acc.push(el)
+//   return acc
+// }, [])
 
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
@@ -79,7 +79,7 @@ const resizeDots = (size: Size) => {
 }
 
 const animateDot = (v: number) => {
-  const index = v / 2
+  const index = v
 
   anime({
     targets: dots.value[index],
@@ -141,13 +141,14 @@ onBeforeUpdate(() => {
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around
   .column(
-    v-for="(n, i) in beatLabels",
+    v-for="(n, i) in paloData?.beatLabels",
+    v-show="i !== paloData?.beatLabels.length - 1",
     :key="i"
   )
     .dot(
-      :style="getDotStyle(i)",
+      :style="getDotStyle(i / 2)",
       :ref="el => { dots[i] = el }",
-      :class="[`dot-${i}`]"
+      :class="[`dot-${i} ${n === null ? 'invisible' : ''}`]"
     ).item-center.q-mb-md
     span(
       v-if="palo && palo.name !== 'no-compas'",
