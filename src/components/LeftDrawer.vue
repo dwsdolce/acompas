@@ -209,28 +209,28 @@ div
                 | +
                 kbd Up
               td.text-left
-                | Tempo + 5
+                | Tempo + 2
             tr
               td.text-right
                 kbd Alt
                 | +
                 kbd Down
               td.text-left
-                | Tempo - 5
+                | Tempo - 2
             tr
               td.text-right
                 kbd Shift
                 | +
                 kbd Up
               td.text-left
-                | Tempo + 10
+                | Tempo + 5
             tr
               td.text-right
                 kbd Shift
                 | +
                 kbd Down
               td.text-left
-                | Tempo - 10
+                | Tempo - 5
             tr
               td.text-right
                 kbd Esc

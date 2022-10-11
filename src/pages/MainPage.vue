@@ -53,40 +53,42 @@ const showDialog = () => {
   })
 }
 
-const onKeyup = (e: KeyboardEvent) => {
-  e.preventDefault()
-  if (dialogOpen.value) return
-  if (palo.value.tempo) {
-    const key = e.key || e.keyCode
-    switch (key) {
-      case 32: // Space
-        playStop()
-        break
-      case 38: // Arrow up
-        if (e.shiftKey) {
-          selectTempo(palo.value.tempo + 10)
-        } else if (e.altKey) {
-          selectTempo(palo.value.tempo + 5)
-        } else {
-          selectTempo(palo.value.tempo + 1)
-        }
-        break
-      case 40: // Arrow down
-        if (e.shiftKey) {
-          selectTempo(palo.value.tempo - 10)
-        } else if (e.altKey) {
-          selectTempo(palo.value.tempo - 5)
-        } else {
-          selectTempo(palo.value.tempo - 1)
-        }
-        break
-      case 80: // Arrow down
-        break
-      default:
-        break
-    }
-  }
-}
+// const onKeyup = (e: KeyboardEvent) => {
+//   (document.activeElement as HTMLElement)?.blur()
+//   console.log(document.activeElement)
+//   e.preventDefault()
+//   if (dialogOpen.value) return
+//   if (palo.value.tempo) {
+//     const key = e.key || e.keyCode
+//     switch (key) {
+//       case 32: // Space
+//         playStop()
+//         break
+//       case 38: // Arrow up
+//         if (e.shiftKey) {
+//           selectTempo(palo.value.tempo + 10)
+//         } else if (e.altKey) {
+//           selectTempo(palo.value.tempo + 5)
+//         } else {
+//           selectTempo(palo.value.tempo + 1)
+//         }
+//         break
+//       case 40: // Arrow down
+//         if (e.shiftKey) {
+//           selectTempo(palo.value.tempo - 10)
+//         } else if (e.altKey) {
+//           selectTempo(palo.value.tempo - 5)
+//         } else {
+//           selectTempo(palo.value.tempo - 1)
+//         }
+//         break
+//       case 80: // Arrow down
+//         break
+//       default:
+//         break
+//     }
+//   }
+// }
 
 onMounted(() => {
   init()
@@ -94,9 +96,9 @@ onMounted(() => {
   isSupported().catch(() => {
     showDialog()
   })
-  document.addEventListener('keyup', (event: KeyboardEvent) => {
-    onKeyup(event)
-  })
+  // document.addEventListener('keyup', (event: KeyboardEvent) => {
+  //   onKeyup(event)
+  // })
   // resize(visualizationSize)
   // initMetronome()
 })

@@ -36,8 +36,12 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from) => {
     // ...
     // explicitly return false to cancel the navigation
-    // const paloStore = usePaloStore(to.name as string)()
+    if (from.name) {
+      console.log(from.name)
 
+      const paloStore = usePaloStore(from.name as string)()
+      paloStore.stop()
+    }
   })
 
   return Router
