@@ -16,7 +16,7 @@ const {
   isPlaying,
   metronomeEvent,
   clockVelocity,
-  numLabels,
+  beatLabels,
   startingPoint,
   clockStep
 } = storeToRefs(paloStore)
@@ -28,10 +28,10 @@ const nums = ref<HTMLDivElement[] | null[]>([])
 // const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
 
 const getLiStyle = (i: number): CSSProperties => {
-  if (paloData && numLabels.value) {
+  if (paloData && beatLabels.value) {
     return {
       position: 'absolute',
-      transform: `rotate(${(360 / numLabels.value.length) * i}deg)`
+      transform: `rotate(${(360 / beatLabels.value.length) * i}deg)`
     }
   } else {
     return {}
@@ -39,10 +39,10 @@ const getLiStyle = (i: number): CSSProperties => {
 }
 
 const getNumStyle = (i: number): CSSProperties => {
-  if (paloData && numLabels.value) {
+  if (paloData && beatLabels.value) {
     return {
-      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / numLabels.value.length) * i}deg)`,
-      color: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
+      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
+      color: paloData?.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -90,7 +90,7 @@ const animateClock = (v: number | null) => {
 
 const animateNum = (v: number | null) => {
   if (v !== null) {
-    const index = v / 2
+    const index = v
     anime({
       targets: nums.value[index],
       scale: [
@@ -140,7 +140,7 @@ onBeforeUpdate(() => {
   .hand(ref="hand").shadow-2
   ul
     li(
-      v-for="(n, i) in numLabels",
+      v-for="(n, i) in beatLabels",
       :style="getLiStyle(i)"
     )
       .num(
