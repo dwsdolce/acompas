@@ -30,15 +30,15 @@ export default {
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: 0,
+      volume: 5,
     },
     {
       src: 'cajon/cajon_2',
-      volume: 0,
+      volume: 5,
     },
     {
       src: 'cajon/cajon_3',
-      volume: 0,
+      volume: 5,
     },
   ],
   nudillo: [
@@ -58,7 +58,7 @@ export default {
     },
     {
       src: 'udu/udu_2',
-      volume: 0,
+      volume: -15,
     },
     {
       src: 'udu/udu_3',
