@@ -42,8 +42,8 @@ interface Size {
 const getDotStyle = (i: number): CSSProperties => {
   if (paloData?.accents) {
     return {
-      width: dotSize.value + 'px',
-      height: dotSize.value + 'px',
+      width: dotSize.value / 2 + 'px',
+      height: dotSize.value / 2 + 'px',
       borderRadius: borderRadius.value + '%',
       marginTop: dotSize.value / 2 + 'px',
       backgroundColor: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
@@ -85,7 +85,7 @@ const animateDot = (v: number) => {
     targets: dots.value[index],
     scale: [
       { value: 1, duration: 0 },
-      { value: 2, duration: 1000 }
+      { value: 5, duration: 1000 }
     ],
     direction: 'reverse',
     easing: 'easeInSine'
