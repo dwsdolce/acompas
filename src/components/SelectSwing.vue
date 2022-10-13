@@ -18,6 +18,21 @@ const {
 <template lang="pug">
 .text-center.q-mx-md
   p.caption Swing
+    span.q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rythm flavour.
   q-slider(
     :model-value="palo.swing",
     @update:model-value="selectSwing($event)",

@@ -23,8 +23,6 @@ const {
   toggleDialog
 } = sessionStore
 
-
-
 const paloHelpDialog = ref(false)
 
 const launch = (url: string | undefined) => {

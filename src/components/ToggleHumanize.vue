@@ -26,4 +26,19 @@ const {
     color="primary",
     keep-color
   )
+    span.q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
 </template>

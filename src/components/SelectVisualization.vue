@@ -30,6 +30,21 @@ const onSelectVisualizationMode = (v: string) => {
 <template lang="pug">
 .text-center.q-mx-md
   .caption View mode
+    span.q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 Choose between dots, counter and clock visualisation.
   q-option-group(
     inline,
     left-label,

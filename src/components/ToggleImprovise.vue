@@ -33,4 +33,19 @@ const {
       self="bottom middle",
       :offset="[10, 10]"
     ) This option is disabled for this palo.
+    span(v-else).q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
 </template>

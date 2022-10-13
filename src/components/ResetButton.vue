@@ -50,7 +50,7 @@ const handleRestore = () => {
     outline,
     icon="settings_backup_restore",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Reset",
+    label="Reset settings",
     @click="resetDialog = true"
   )
   q-dialog(v-model="resetDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")

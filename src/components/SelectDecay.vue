@@ -18,6 +18,21 @@ const {
 <template lang="pug">
 .row.items-center
   .col-3 Reverb decay
+    span.q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 Set a decay for sounds reverb
   q-slider(
     :model-value="palo.globalDecay",
     @update:model-value="selectDecay($event || palo.globalDecay)",

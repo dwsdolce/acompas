@@ -63,8 +63,26 @@ div
           thead
             tr
               th.text-center Active
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Play this instruments
               th.text-center 8th
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Toggle eighth notes
               th.text-center Volume (db)
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Increase or decrease instrument volume
           tbody
             instrument-mixer(
               v-for="instrument in palo.instruments",

@@ -58,6 +58,21 @@ const onSelectedPreCount = (v: number) => {
 <template lang="pug">
 .text-center.q-mx-md
   .caption Pre-count
+    span.q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 Optionaly define a number of beats to use as pre-count for the selected palo.
   q-slider(
     :model-value="index",
     @update:model-value="onSelectedPreCount($event)",
