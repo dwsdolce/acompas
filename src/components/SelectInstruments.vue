@@ -18,22 +18,23 @@ const $q = useQuasar()
 const instrumentsDialog = ref(false)
 
 const {
-  palo
+  palo,
+  selectedInstruments
 } = storeToRefs(paloStore)
 
 const {
   toggleDialog
 } = sessionStore
 
-// watch(selectedInstruments, (value) => {
-//   if (!value.length) {
-//     $q.notify({
-//       message: 'No instrument is selected. You will have no sound in the metronome ...',
-//       color: 'secondary',
-//       icon: 'warning'
-//     })
-//   }
-// })
+watch(selectedInstruments, (value) => {
+  if (!value.length) {
+    $q.notify({
+      message: 'No instrument is selected. You will have no sound in the metronome ...',
+      color: 'secondary',
+      icon: 'warning'
+    })
+  }
+})
 </script>
 
 <template lang="pug">

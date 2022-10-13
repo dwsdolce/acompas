@@ -61,10 +61,10 @@ div
       q-item-section(avatar)
         q-icon(name="keyboard")
       q-item-section Shortcuts
-    q-item(id="privacyQItem", clickable, v-ripple, @click="openPrivacyDialog()")
+    q-item(clickable, v-ripple, @click="router.push('/privacy')")
       q-item-section(avatar)
-        q-icon(name="person")
-      q-item-section Privacy
+        q-icon(name="security")
+      q-item-section Privacy policy
     q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
       q-item-section(avatar)
         q-icon(name="android")
@@ -97,10 +97,6 @@ div
       q-item-section(avatar)
         q-icon(name="bug_report")
       q-item-section Issues
-    q-item(clickable, v-ripple, @click="router.push('/privacy')")
-      q-item-section(avatar)
-        q-icon(name="security")
-      q-item-section Privacy policy
   q-dialog(id="helpDialog", v-model="helpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
     q-card(style="width: 100%;")
       q-card-section
@@ -205,20 +201,22 @@ div
                 | Tempo - 1
             tr
               td.text-right
-                kbd Alt
+                kbd Shift
                 | +
                 kbd Up
               td.text-left
                 | Tempo + 2
             tr
               td.text-right
-                kbd Alt
+                kbd Shift
                 | +
                 kbd Down
               td.text-left
                 | Tempo - 2
             tr
               td.text-right
+                kbd Alt
+                | +
                 kbd Shift
                 | +
                 kbd Up
@@ -226,6 +224,8 @@ div
                 | Tempo + 5
             tr
               td.text-right
+                kbd Alt
+                | +
                 kbd Shift
                 | +
                 kbd Down

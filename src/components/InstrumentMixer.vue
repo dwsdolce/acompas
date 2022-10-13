@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { instruOpts } from 'src/composables/models'
 import { useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
+import type { instruOpts } from 'src/composables/models'
 import { usePaloStore } from 'src/stores/palo'
 
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
+const $q = useQuasar()
 
 const {
   toggleEighthNotes,
@@ -26,6 +28,8 @@ const handleChangeVolume = (e: number | null) => {
     volume: e
   })
 }
+
+
 </script>
 
 <template lang="pug">
