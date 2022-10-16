@@ -7,7 +7,6 @@ import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
 import HelpPalo from 'src/components/HelpPalo.vue'
-import OptionsDialog from 'src/components/OptionsDialog.vue'
 
 const $q = useQuasar()
 const route = useRoute()

@@ -9,7 +9,6 @@ import SelectPreCount from 'src/components/SelectPreCount.vue'
 import SelectStartBeat from 'src/components/SelectStartBeat.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
-import OptionsDialog from 'src/components/OptionsDialog.vue'
 
 const sessionStore = useSessionStore()
 
