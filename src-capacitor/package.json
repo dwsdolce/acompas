@@ -8,6 +8,7 @@
     "@capacitor/android": "^4.0.0-beta.0",
     "@capacitor/cli": "^4.3.0",
     "@capacitor/core": "^4.3.0",
-    "@capacitor/ios": "^4.0.0-beta.0"
+    "@capacitor/ios": "^4.0.0-beta.0",
+    "@capacitor-community/keep-awake": "^3.0.0"
   }
 }

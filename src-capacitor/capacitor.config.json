@@ -4,5 +4,7 @@
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
-  "server": {}
+  "server": {
+    "url": "http://192.168.1.85:9500"
+  }
 }
