@@ -32,28 +32,37 @@ You also need [yarn](https://classic.yarnpkg.com/en/docs/install/) installed.
 
 ``` bash
 cd /path/to/acompas
-# install requirements
+# Install requirements
 sudo npm install -g @quasar/cli yarn
 sudo npm install -g --unsafe-perm @quasar/icongenie
 
-# cloning the git repository
+# Cloning the git repository
 git clone https://gitlab.com/acompas/acompas.git
 cd acompas
 
-# install dependencies
+# Install dependencies
 yarn install
 
-# build the icons
+# Build the icons
 ./icongenie.sh
 
-# serve with hot reload at localhost:8080
+# Serve with hot reload at localhost:9000
 quasar dev
 
-# build for production with minification
+# Build for production with minification
 quasar build
 ```
 
 ## Mobile app
+
+Here are a few commands that might help :
+
+```bash
+# Go to the Capacitor project folder
+cd ./src-capacitor
+# Install the Capacitor project's dependencies
+yarn install
+```
 
 ### Android
 
@@ -96,17 +105,6 @@ cd /path/to/acompas
 quasar build -m capacitor -T android
 ```
 
-#### Troubleshooting
-
-Here are a few commands that might help :
-
-```bash
-# Go to the Capacitor project folder
-cd ./src-capacitor
-# Install npm dependencies
-yarn install
-```
-
 ### iOS
 #### Setup
 ``` bash
@@ -121,14 +119,3 @@ quasar build -m ios
 #### Troubleshooting
 
 In case cocoapods is missing in your environment, [go here](https://guides.cocoapods.org/using/getting-started.html).
-
-```
-# In case you have any build issue, go to src-cordova
-cd ./src-capacitor
-
-# Let's make as if this directory is a valid cordova workspace
-mkdir www
-
-# Install dependencies
-yarn install
-```
