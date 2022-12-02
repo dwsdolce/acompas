@@ -1,6 +1,10 @@
 <template lang="pug">
 div
   q-list(no-border, link, separator)
+    q-item#donateQItem(clickable, v-ripple, @click="launch('https://paypal.me/acompasorg')")
+      q-item-section(avatar)
+        q-icon(name="attach_money")
+      q-item-section Donate
     q-item#helpQItem(clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
         q-icon(name="help")
