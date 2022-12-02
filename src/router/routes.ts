@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
         redirect: `/${palosData[0].value}`,
       },
       {
-        path: 'privacy',
+        path: 'privacy-policy',
         component: () => import('pages/PrivacyPolicy.vue')
       },
     ],

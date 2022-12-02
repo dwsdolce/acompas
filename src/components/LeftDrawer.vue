@@ -49,6 +49,10 @@
 <template lang="pug">
 div
   q-list(no-border, link, separator)
+    q-item(clickable, v-ripple, @click="launch('https://paypal.me/acompasorg')")
+     q-item-section(avatar)
+      q-icon(name="attach_money")
+     q-item-section Donate
     q-item(id="helpQItem", clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
         q-icon(name="help")
@@ -61,7 +65,7 @@ div
       q-item-section(avatar)
         q-icon(name="keyboard")
       q-item-section Shortcuts
-    q-item(clickable, v-ripple, @click="router.push('/privacy')")
+    q-item(clickable, v-ripple, @click="router.push('/privacy-policy')")
       q-item-section(avatar)
         q-icon(name="security")
       q-item-section Privacy policy
