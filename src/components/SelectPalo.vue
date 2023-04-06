@@ -64,6 +64,7 @@ div
       q-card-section(align="center")
         q-btn(
           id="closePalosDialogBtn",
+          unelevated,
           color="primary",
           v-close-popup
         ) Close

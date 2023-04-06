@@ -1,148 +1,152 @@
+import type {
+  SoundsData
+} from 'src/composables/models'
+
 export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'clara/clara_2',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'clara/clara_3',
-      volume: 7,
+      volume: 20,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 7,
+      volume: 20,
     },
   ],
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'cajon/cajon_2',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'cajon/cajon_3',
-      volume: 7,
+      volume: 20,
     },
   ],
   nudillo: [
     {
       src: 'nudillo/nudillo_1',
-      volume: 5,
+      volume: 22,
     },
     {
       src: 'nudillo/nudillo_2',
-      volume: -1,
+      volume: 13,
     },
   ],
   udu: [
     {
       src: 'udu/udu_1',
-      volume: 2,
+      volume: 15,
     },
     {
       src: 'udu/udu_2',
-      volume: -13,
+      volume: 0,
     },
     {
       src: 'udu/udu_3',
-      volume: 6,
+      volume: 22,
     },
   ],
   jaleo: [
     {
       src: 'jaleo/jaleo_1',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_2',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_3',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_4',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_5',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_6',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_7',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_8',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_9',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_10',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_11',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_12',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_13',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_14',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_15',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_16',
-      volume: -2,
+      volume: 1,
     },
     {
       src: 'jaleo/jaleo_17',
-      volume: -2,
+      volume: 1,
     },
   ],
   click: [
     {
       src: 'click/click_1',
-      volume: 7,
+      volume: 20,
     },
     {
       src: 'click/click_2',
-      volume: 7,
+      volume: 20,
     },
   ],
-}
+} as SoundsData

@@ -32,17 +32,6 @@ const { isSupported } = useMetronome()
 
 const visualization = ref(null)
 
-// const getVisualizationSize = (size) => metronomeStore.commit('GET_VISUALIZATION_SIZE', size)
-// const toggleDialog = () => store.commit('TOGGLE_DIALOG')
-
-// const onResize = (size) => {
-//   getVisualizationSize(size)
-// }
-
-// const resize = (size) => {
-//   visualization.value.style.marginBottom = size.height / 12
-// }
-
 const showDialog = () => {
   toggleDialog(false)
   $q.dialog({
@@ -53,61 +42,18 @@ const showDialog = () => {
   })
 }
 
-// const onKeyup = (e: KeyboardEvent) => {
-//   (document.activeElement as HTMLElement)?.blur()
-//   console.log(document.activeElement)
-//   e.preventDefault()
-//   if (dialogOpen.value) return
-//   if (palo.value.tempo) {
-//     const key = e.key || e.keyCode
-//     switch (key) {
-//       case 32: // Space
-//         playStop()
-//         break
-//       case 38: // Arrow up
-//         if (e.shiftKey) {
-//           selectTempo(palo.value.tempo + 10)
-//         } else if (e.altKey) {
-//           selectTempo(palo.value.tempo + 5)
-//         } else {
-//           selectTempo(palo.value.tempo + 1)
-//         }
-//         break
-//       case 40: // Arrow down
-//         if (e.shiftKey) {
-//           selectTempo(palo.value.tempo - 10)
-//         } else if (e.altKey) {
-//           selectTempo(palo.value.tempo - 5)
-//         } else {
-//           selectTempo(palo.value.tempo - 1)
-//         }
-//         break
-//       case 80: // Arrow down
-//         break
-//       default:
-//         break
-//     }
-//   }
-// }
-
 onMounted(() => {
   init()
 
   isSupported().catch(() => {
     showDialog()
   })
-  // document.addEventListener('keyup', (event: KeyboardEvent) => {
-  //   onKeyup(event)
-  // })
-  // resize(visualizationSize)
-  // initMetronome()
 })
 </script>
 
 <template lang="pug">
 q-page.bg-grey-10.text-grey-1
   .main-panel
-    //- q-resize-observer(@resize="onResize")
     .top-panel(ref="visualization")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")

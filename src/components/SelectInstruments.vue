@@ -93,6 +93,7 @@ div
       q-card-section(align="center")
         q-btn(
           id="closeMixerDialogBtn",
+          unelevated,
           color="primary",
           v-close-popup
         ) Close

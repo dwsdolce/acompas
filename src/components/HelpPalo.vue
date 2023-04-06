@@ -64,6 +64,7 @@ span.q-ml-sm
       q-card-section(align="center")
         q-btn(
           id="closePaloHelpDialogBtn",
+          unelevated,
           color="primary",
           v-close-popup
         ) Close

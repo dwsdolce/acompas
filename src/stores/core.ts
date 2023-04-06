@@ -32,7 +32,7 @@ export const useCoreStore = defineStore('core', () => {
     isPlaying.value = false
     stopAllSequences()
     triggerEvent(null)
-    reinitialize()
+    // reinitialize()
   }
 
   const triggerEvent = (payload: number | null) => {

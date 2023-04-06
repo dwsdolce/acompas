@@ -8,6 +8,8 @@ import { usePaloStore } from 'src/stores/palo'
 import { forEachValue } from 'src/composables/utils'
 import type {
   VolumeOpts,
+  SoundsDataKey,
+  SoundsData,
   Sounds,
   Sound,
   Seqs,
@@ -27,9 +29,7 @@ export const useMetronome = () => {
   const paloData = ref(palosData.find((palo) => palo.value === route.name))
   const palo = ref(paloStore.palo)
 
-  type SoundKey = keyof typeof sounds
   type PaloDataKey = keyof typeof paloData
-  type AudioDataKey = keyof typeof audioData
 
   const initSounds = async () => {
     const audio = new Audio()
@@ -49,9 +49,9 @@ export const useMetronome = () => {
 
     const path = 'audio/'
 
-    forEachValue(audioData, (value: AudioDataKey, key: SoundKey) => {
-      sounds[key] = {} as Sound
-      const sound = sounds[key]
+    forEachValue(audioData, (value: SoundsDataKey[], key: string) => {
+      sounds[key as keyof SoundsData] = {} as Sound
+      const sound = sounds[key as keyof SoundsData]
       sound.volume = new Tone.Volume(0)
       sound.reverb = new Tone.Reverb({
         decay: 0.5,
@@ -92,12 +92,16 @@ export const useMetronome = () => {
       while (index < 0) {
         index += paloData.value?.nbBeatsInPattern
       }
-      return index % paloData.value?.nbBeatsInPattern
+      if (paloData.value) {
+        return index % paloData.value?.nbBeatsInPattern
+      } else {
+        return null
+      }
     }
   }
 
   const improvise = (
-    type: PaloDataKey | SoundKey,
+    type: string,
     time: number,
     sound: Tone.Player,
     note: number,
@@ -178,13 +182,13 @@ export const useMetronome = () => {
 
   const triggerAudioOnEvent = (
     eighthNotes: boolean,
-    type: PaloDataKey | SoundKey,
+    type: string,
     isLoop: boolean,
     time: number,
     note: number
   ) => {
     // Prepend pre-count beats if required
-    if (type == ('preCount' as PaloDataKey)) {
+    if (type == 'preCount') {
       triggerPreCountClick(time, note)
     } else {
       // Don't play non-preCount sequences if note is during pre-count
@@ -196,7 +200,7 @@ export const useMetronome = () => {
         return
       }
 
-      if (type == ('jaleo' as PaloDataKey)) {
+      if (type == 'jaleo') {
         const jaleo = paloStore.instrument('jaleo')
         if (jaleo?.enabled) improviseJaleo(note, time, eighthNotes)
         return
@@ -205,11 +209,11 @@ export const useMetronome = () => {
       const instru = paloStore.instrument((type as string))
 
       // index is a pulsation number, value is the sound number
-      if (instru?.enabled && paloData.value && type)
-        paloData.value[type as PaloDataKey].forEach(
+      if (instru?.enabled && paloData.value && type) {
+        (paloData.value[type as keyof PaloData] as (number | null)[]).forEach(
           (value: number | null, index: number) => {
             if (!value) return
-            const sound = sounds[type as SoundKey][value - 1]
+            const sound = sounds[type as keyof Sounds][value - 1]
             const key = noteIndexInPattern(note)
 
             if (
@@ -229,6 +233,7 @@ export const useMetronome = () => {
             }
           }
         )
+      }
     }
   }
 
@@ -237,7 +242,7 @@ export const useMetronome = () => {
    */
   const buildSequence = (
     eighthNotes: boolean,
-    type: PaloDataKey,
+    type: string,
     sequence: number[],
     isLoop: boolean
   ) => {
@@ -246,20 +251,20 @@ export const useMetronome = () => {
       // note = parseInt(note)
 
       // Type is not an event, it is a preCount or a selected instrument
-      if (type !== ('event' as PaloDataKey)) {
+      if (type !== ('event')) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
 
       // Call animation on event time.
       // The 'event' sequence is used to trigger events which will trigger UI modifications
-      if (type === ('event' as PaloDataKey) && !eighthNotes && note % 2 === 0) {
+      if (type === ('event') && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (palo.value.name === 'no-compas') {
             paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
           } else {
             const key = noteIndexInPattern(note)
-            paloStore.triggerEvent(key)
+            if (!!key) paloStore.triggerEvent(key)
           }
         }, time) // Use AudioContext time of the event
       }
@@ -316,46 +321,46 @@ export const useMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        event: buildSequence(false, ('event' as PaloDataKey), introSeq, false),
-        preCount: buildSequence(false, ('preCount' as PaloDataKey), introSeq, false),
-        clara: buildSequence(false, ('clara' as PaloDataKey), introSeq, false),
-        sorda: buildSequence(false, ('sorda' as PaloDataKey), introSeq, false),
-        cajon: buildSequence(false, ('cajon' as PaloDataKey), introSeq, false),
-        nudillo: buildSequence(false, ('nudillo' as PaloDataKey), introSeq, false),
-        udu: buildSequence(false, ('udu' as PaloDataKey), introSeq, false),
-        jaleo: buildSequence(false, ('jaleo' as PaloDataKey), introSeq, false),
-        click: buildSequence(false, ('click' as PaloDataKey), introSeq, false),
+        event: buildSequence(false, ('event' as keyof PaloData), introSeq, false),
+        preCount: buildSequence(false, ('preCount' as keyof PaloData), introSeq, false),
+        clara: buildSequence(false, ('clara' as keyof PaloData), introSeq, false),
+        sorda: buildSequence(false, ('sorda' as keyof PaloData), introSeq, false),
+        cajon: buildSequence(false, ('cajon' as keyof PaloData), introSeq, false),
+        nudillo: buildSequence(false, ('nudillo' as keyof PaloData), introSeq, false),
+        udu: buildSequence(false, ('udu' as keyof PaloData), introSeq, false),
+        jaleo: buildSequence(false, ('jaleo' as keyof PaloData), introSeq, false),
+        click: buildSequence(false, ('click' as keyof PaloData), introSeq, false),
       },
       loop: {
-        event: buildSequence(false, ('event' as PaloDataKey), loopSeq, true),
-        clara: buildSequence(false, ('clara' as PaloDataKey), loopSeq, true),
-        sorda: buildSequence(false, ('sorda' as PaloDataKey), loopSeq, true),
-        cajon: buildSequence(false, ('cajon' as PaloDataKey), loopSeq, true),
-        nudillo: buildSequence(false, ('nudillo' as PaloDataKey), loopSeq, true),
-        udu: buildSequence(false, ('udu' as PaloDataKey), loopSeq, true),
-        jaleo: buildSequence(false, ('jaleo' as PaloDataKey), loopSeq, true),
-        click: buildSequence(false, ('click' as PaloDataKey), loopSeq, true),
+        event: buildSequence(false, ('event' as keyof PaloData), loopSeq, true),
+        clara: buildSequence(false, ('clara' as keyof PaloData), loopSeq, true),
+        sorda: buildSequence(false, ('sorda' as keyof PaloData), loopSeq, true),
+        cajon: buildSequence(false, ('cajon' as keyof PaloData), loopSeq, true),
+        nudillo: buildSequence(false, ('nudillo' as keyof PaloData), loopSeq, true),
+        udu: buildSequence(false, ('udu' as keyof PaloData), loopSeq, true),
+        jaleo: buildSequence(false, ('jaleo' as keyof PaloData), loopSeq, true),
+        click: buildSequence(false, ('click' as keyof PaloData), loopSeq, true),
       },
     }
 
     sequences.eighthNotes = {
       introduction: {
-        clara: buildSequence(true, ('clara' as PaloDataKey), introSeq, false),
-        sorda: buildSequence(true, ('sorda' as PaloDataKey), introSeq, false),
-        cajon: buildSequence(true, ('cajon' as PaloDataKey), introSeq, false),
-        nudillo: buildSequence(true, ('nudillo' as PaloDataKey), introSeq, false),
-        udu: buildSequence(true, ('udu' as PaloDataKey), introSeq, false),
-        jaleo: buildSequence(true, ('jaleo' as PaloDataKey), introSeq, false),
-        click: buildSequence(true, ('click' as PaloDataKey), introSeq, false),
+        clara: buildSequence(true, ('clara' as keyof PaloData), introSeq, false),
+        sorda: buildSequence(true, ('sorda' as keyof PaloData), introSeq, false),
+        cajon: buildSequence(true, ('cajon' as keyof PaloData), introSeq, false),
+        nudillo: buildSequence(true, ('nudillo' as keyof PaloData), introSeq, false),
+        udu: buildSequence(true, ('udu' as keyof PaloData), introSeq, false),
+        jaleo: buildSequence(true, ('jaleo' as keyof PaloData), introSeq, false),
+        click: buildSequence(true, ('click' as keyof PaloData), introSeq, false),
       },
       loop: {
-        clara: buildSequence(true, ('clara' as PaloDataKey), loopSeq, true),
-        sorda: buildSequence(true, ('sorda' as PaloDataKey), loopSeq, true),
-        cajon: buildSequence(true, ('cajon' as PaloDataKey), loopSeq, true),
-        nudillo: buildSequence(true, ('nudillo' as PaloDataKey), loopSeq, true),
-        udu: buildSequence(true, ('udu' as PaloDataKey), loopSeq, true),
-        jaleo: buildSequence(true, ('jaleo' as PaloDataKey), loopSeq, true),
-        click: buildSequence(true, ('click' as PaloDataKey), loopSeq, true),
+        clara: buildSequence(true, ('clara' as keyof PaloData), loopSeq, true),
+        sorda: buildSequence(true, ('sorda' as keyof PaloData), loopSeq, true),
+        cajon: buildSequence(true, ('cajon' as keyof PaloData), loopSeq, true),
+        nudillo: buildSequence(true, ('nudillo' as keyof PaloData), loopSeq, true),
+        udu: buildSequence(true, ('udu' as keyof PaloData), loopSeq, true),
+        jaleo: buildSequence(true, ('jaleo' as keyof PaloData), loopSeq, true),
+        click: buildSequence(true, ('click' as keyof PaloData), loopSeq, true),
       },
     }
   }
@@ -487,11 +492,11 @@ export const useMetronome = () => {
   }
 
   const changeVolume = async (payload: VolumeOpts) => {
-    sounds[payload.instrument as SoundKey].volume.volume.value = payload.volume
+    sounds[payload.instrument as keyof Sounds].volume.volume.value = payload.volume
   }
 
   const changeDecay = async (instru: string, decay: number) => {
-    sounds[instru as SoundKey].reverb.decay = decay
+    sounds[instru as keyof Sounds].reverb.decay = decay
   }
 
   return {

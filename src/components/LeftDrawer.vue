@@ -138,6 +138,7 @@ div
           p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
       q-card-section(align="center")
         q-btn(
+          unelevated,
           id="closeHelpBtn",
           color="primary",
           v-close-popup
@@ -158,12 +159,14 @@ div
             p We collect that data to have an idea about how many users we have. We don't sell or give access to this data to anyone else. You can enable or disable this feature when you want to.
       q-card-section(align="center")
         q-btn(
+          unelevated,
           id="enableAndClosePrivacyDialogBtn",
           color="primary",
           v-close-popup,
           @click="enableTrackVisits(); enableTrackingChosen(); closePrivacyDialog()"
         ).q-mr-sm Enable &amp; close
         q-btn(
+          unelevated,
           id="closePrivacyDialogBtn",
           color="secondary",
           v-close-popup,
@@ -177,6 +180,7 @@ div
         tuning-fork
       q-card-section(align="center")
         q-btn(
+          unelevated,
           id="closeTuningDialogBtn",
           color="primary",
           v-close-popup
@@ -247,6 +251,7 @@ div
                 | Change focus button
       q-card-section(align="center")
         q-btn(
+          unelevated,
           id="closeShortcutsDialogBtn",
           color="primary",
           v-close-popup

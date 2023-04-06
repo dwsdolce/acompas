@@ -660,7 +660,7 @@ export default [
     slowTempo: 70,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [ 0, 2, 4, 7, 10 ],
+    accents: [ 4, 10 ],
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]

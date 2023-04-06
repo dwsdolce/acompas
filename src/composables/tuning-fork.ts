@@ -1,6 +1,7 @@
 import * as Tone from 'tone'
 import { ref } from 'vue'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
+import type { Synth, Reverb, Volume, Sequence } from 'tone'
 
 // interface Data {
 //   reverb: any
@@ -8,8 +9,8 @@ import { useTuningForkStore } from 'src/stores/tuning-fork'
 //   sequence: any
 // }
 
-let reverb: any = null
-let synth: any = null
+let reverb: Reverb | null = null
+let synth: Synth | null = null
 let sequence: any = null
 
 export const useTuningFork = () => {

@@ -11,16 +11,15 @@ const route = useRoute()
 const paloData = palosData.find(palo => palo.value === route.name)
 const paloStore = usePaloStore(route.name as string)()
 
+// how to get the browser viewport size in a vue environment?
+// https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-vuejs
+
+const { innerWidth: width, innerHeight: height } = window
 const {
   palo,
   visualizationSize,
   metronomeEvent
 } = storeToRefs(paloStore)
-
-// const beatLabels = paloData?.beatLabels.reduce((acc, el) => {
-//   if (el !== null) acc.push(el)
-//   return acc
-// }, [])
 
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
@@ -140,7 +139,7 @@ onBeforeUpdate(() => {
 
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around
-  .column(
+  .column.items-center(
     v-for="(n, i) in paloData?.beatLabels",
     v-show="i !== paloData?.beatLabels.length - 1",
     :key="i"

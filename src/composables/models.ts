@@ -1,5 +1,20 @@
 import type { Player, Reverb, Volume, Sequence } from 'tone'
 
+export interface SoundsDataKey {
+  src:                      string
+  volume:                   number
+}
+
+export interface SoundsData {
+  clara:                    SoundsDataKey[]
+  sorda:                    SoundsDataKey[]
+  nudillo:                  SoundsDataKey[]
+  cajon:                    SoundsDataKey[]
+  udu:                      SoundsDataKey[]
+  jaleo:                    SoundsDataKey[]
+  click:                    SoundsDataKey[]
+}
+
 export interface Sound {
   [x: number]:              Player
   reverb:                   Reverb
@@ -118,25 +133,3 @@ export interface PaloState {
   instruments:                instruOpts[]
   globalDecay:                number
 }
-
-// export interface State {
-//   visualizationModes:         stringOpts[]
-//   visualizationSize:          Size
-//   selectedVisualizationMode:  string
-//   palos:                      Palo[]
-//   selectedPalo:               Palo
-//   instruments:                instruOpts[]
-//   selectedInstruments:        string[]
-//   defaultSelectedInstruments: string[]
-//   preCounts:                  numOpts[]
-//   selectedPreCount:           numOpts
-//   startBeats:                 numOpts[]
-//   selectedStartBeat:          numOpts
-//   swing:                      number | null
-//   improvise:                  boolean
-//   humanize:                   boolean
-//   isPlaying:                  boolean
-//   metronomeEvent:             number | null
-//   isTooSlow:                  boolean
-//   isTooFast:                  boolean
-// }

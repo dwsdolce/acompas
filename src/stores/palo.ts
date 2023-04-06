@@ -200,10 +200,6 @@ export const usePaloStore = (name: string) =>
       }
     }
 
-    // const getVisualizationSize = (payload: Size) => {
-    //   visualizationSize.value = payload
-    // }
-
     const selectInstruments = async (key: string, payload: boolean) => {
       const instru = instrument.value(key)
       if (instru) {

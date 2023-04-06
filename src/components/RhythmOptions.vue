@@ -23,12 +23,11 @@ const {
 
 <template lang="pug">
 div
-  //- p.caption Rhythm options
   q-btn(
     id="optBtn",
     outline,
     color="white",
-    icon="build",
+    icon="settings",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Rhythm options",
     @click="optDialog = true"
@@ -51,6 +50,7 @@ div
       q-card-section(align="center")
         q-btn(
           id="closeOptDialogBtn",
+          unelevated,
           color="primary",
           @click="optDialog = false"
         ) Close

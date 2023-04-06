@@ -8,6 +8,7 @@ q-page.bg-grey-10.text-grey-1.q-pa-sm.flex.justify-center.items-center
       p In long, we only use a tool called "Matomo" to collect anonymised visits analytics data. If you activate the optional tracking in the "Privacy" item of the main menu, Matomo will track your actions in the metronome, anonymise your IP address and the tracking information will be part of our usage statistics. Matomo sets a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app).
     q-card-section.flex.justify-center
       q-btn(
+        unelevated,
         color="primary",
         to="/"
       ) Back to the metronome
