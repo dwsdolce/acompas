@@ -264,7 +264,7 @@ export const useMetronome = () => {
             paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
           } else {
             const key = noteIndexInPattern(note)
-            if (!!key) paloStore.triggerEvent(key)
+            if (key !== null) paloStore.triggerEvent(key as number | null)
           }
         }, time) // Use AudioContext time of the event
       }

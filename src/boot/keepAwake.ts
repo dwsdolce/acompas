@@ -1,4 +1,4 @@
-import {KeepAwake} from '@capacitor-community/keep-awake';
+import {KeepAwake} from '@capacitor-community/keep-awake'
 import { boot } from 'quasar/wrappers'
 
 export default boot(async () => {

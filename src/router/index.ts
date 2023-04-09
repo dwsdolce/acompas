@@ -37,8 +37,6 @@ export default route(function (/* { store, ssrContext } */) {
     // ...
     // explicitly return false to cancel the navigation
     if (from.name) {
-      console.log(from.name)
-
       const paloStore = usePaloStore(from.name as string)()
       paloStore.stop()
     }

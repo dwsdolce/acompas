@@ -52,8 +52,6 @@ const getNumStyle = (i: number): CSSProperties => {
 const idleClockPosition = () => {
   const newDeg: number = startingPoint.value * clockStep.value + 0
   clockDeg.value = newDeg
-  // if (hand.value) hand.value.style.transform = `rotate(${clockDeg.value}deg)`
-  // console.log(hand.value?.style.transform)
 
   anime({
     targets: '.hand',

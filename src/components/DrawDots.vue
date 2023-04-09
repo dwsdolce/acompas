@@ -124,7 +124,6 @@ watch(
     [newMetronomeEvent, newVisualizationSize],
     [prevMetronomeEvent, prevVisualizationSize]
   ) => {
-    console.log('newMetronomeEvent', newMetronomeEvent)
     if (newMetronomeEvent !== null) {
       animateDot(newMetronomeEvent)
     }
