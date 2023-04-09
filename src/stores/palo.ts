@@ -110,7 +110,6 @@ export const usePaloStore = (name: string) =>
       { label: 'Clock', value: 'clock' }
     ])
     const visualizationMode = useStorage('visualization-mode', ref('dots'))
-    const visualizationSize = ref<Size>({ width: null, height: null })
     const isPlaying = ref<boolean>(false)
     const metronomeEvent = ref<number | null>(null)
     const isTooSlow = ref<boolean>(false)
@@ -187,10 +186,6 @@ export const usePaloStore = (name: string) =>
 
     const triggerEvent = (payload: number | null) => {
       metronomeEvent.value = payload
-    }
-
-    const getVisualizationSize = (payload: Size) => {
-      visualizationSize.value = payload
     }
 
     const selectVisualizationMode = (payload: string) => {
@@ -363,7 +358,6 @@ export const usePaloStore = (name: string) =>
       // STATE
       palo,
       visualizationModes,
-      visualizationSize,
       isPlaying,
       metronomeEvent,
       isTooFast,
@@ -389,7 +383,6 @@ export const usePaloStore = (name: string) =>
       stop,
       playStop,
       selectVisualizationMode,
-      getVisualizationSize,
       selectPalo,
       selectTempo,
       selectVolume,

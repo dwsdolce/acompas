@@ -85,7 +85,7 @@ q-page.bg-grey-10.text-grey-1
   align-content: center
 
 .main-panel
-  height: 90vh
+  height: 78vh
   display: flex
   flex-flow: wrap
   .top-panel

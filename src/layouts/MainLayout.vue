@@ -2,11 +2,21 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import { Screen } from 'quasar'
+import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import GlobalEvents from 'src/components/GlobalEvents.vue'
+import { useSessionStore } from 'src/stores/session'
+import type { Size } from 'src/composables/models'
 
+const sessionStore = useSessionStore()
+const { visualizationSize } = storeToRefs(sessionStore)
+const { setVisualizationSize } = sessionStore
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
+
+const onResize = (size: Size) => {
+  setVisualizationSize(size)
+}
 </script>
 
 <template lang="pug">
@@ -37,6 +47,10 @@ q-layout(view="hHh Lpr lFf")
 
   q-page-container.bg-dark.text-info
     #appMain
+      q-resize-observer(
+        debounce="10",
+        @resize="onResize"
+      )
       router-view(v-slot="{ Component, route }")
         Transition(name="fade", mode="out-in")
           component(:is="Component", :key="route.name")

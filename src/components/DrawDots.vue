@@ -5,11 +5,13 @@ import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
+import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
 
 const route = useRoute()
 const paloData = palosData.find(palo => palo.value === route.name)
 const paloStore = usePaloStore(route.name as string)()
+const sessionStore = useSessionStore()
 
 // how to get the browser viewport size in a vue environment?
 // https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-vuejs
@@ -17,13 +19,14 @@ const paloStore = usePaloStore(route.name as string)()
 const { innerWidth: width, innerHeight: height } = window
 const {
   palo,
-  visualizationSize,
   metronomeEvent
 } = storeToRefs(paloStore)
 
+const { visualizationSize } = storeToRefs(sessionStore)
+
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
-const maxDotSize = ref<number>(50)
+const maxDotSize = ref<number>(60)
 const fontSize = ref<number>(16)
 const minFontSize = ref<number>(16)
 const maxFontSize = ref<number>(35)
@@ -59,7 +62,7 @@ const getNbStyle: CSSProperties = {
 
 const resizeDots = (size: Size) => {
   if (paloData?.nbBeatsInPattern) {
-    const computedDotSize = size.width / paloData.nbBeatsInPattern / 2
+    const computedDotSize = size.width / paloData.nbBeatsInPattern / 1.5
     if (computedDotSize < minDotSize.value) {
       dotSize.value = minDotSize.value
     } else if (computedDotSize > maxDotSize.value) {
@@ -84,7 +87,7 @@ const animateDot = (v: number) => {
     targets: dots.value[index],
     scale: [
       { value: 1, duration: 0 },
-      { value: 5, duration: 1000 }
+      { value: 3, duration: 1000 }
     ],
     direction: 'reverse',
     easing: 'easeInSine'
@@ -121,8 +124,13 @@ watch(
     [newMetronomeEvent, newVisualizationSize],
     [prevMetronomeEvent, prevVisualizationSize]
   ) => {
-    if (newMetronomeEvent !== null) animateDot(newMetronomeEvent)
-    resizeDots(newVisualizationSize as Size)
+    console.log('newMetronomeEvent', newMetronomeEvent)
+    if (newMetronomeEvent !== null) {
+      animateDot(newMetronomeEvent)
+    }
+    if (newVisualizationSize !== prevVisualizationSize) {
+      resizeDots(newVisualizationSize as Size)
+    }
   }
 )
 

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Screen } from 'quasar'
+import type { Size } from 'src/composables/models'
 
 interface State {
   trackVisits: boolean
@@ -7,7 +8,8 @@ interface State {
   trackingChosen: boolean
   privacyDialogOpen: boolean
   dialogOpen: boolean
-  leftDrawerOpen: boolean
+  leftDrawerOpen: boolean,
+  visualizationSize: Size,
 }
 
 export const useSessionStore = defineStore('session', {
@@ -18,6 +20,7 @@ export const useSessionStore = defineStore('session', {
     privacyDialogOpen: false,
     dialogOpen: false,
     leftDrawerOpen: Screen.gt.md,
+    visualizationSize: { width: null, height: null }
   }),
   actions: {
     toggleTrackVisits() {
@@ -53,5 +56,8 @@ export const useSessionStore = defineStore('session', {
     toggleLeftDrawer() {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
+    setVisualizationSize(payload: Size) {
+      this.visualizationSize = payload
+    }
   },
 })
