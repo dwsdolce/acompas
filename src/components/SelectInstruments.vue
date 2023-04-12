@@ -58,8 +58,8 @@ div
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Instruments mixer
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
-        select-decay
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;").q-mb-md
+        select-decay.q-mt-md
         table(style="width: 100%;").q-table
           thead
             tr
