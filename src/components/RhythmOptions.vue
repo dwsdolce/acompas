@@ -36,10 +36,11 @@ div
     id="optDialog",
     v-model="optDialog"
   )
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Rhythm options
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md
         select-swing.q-mb-md
@@ -47,11 +48,11 @@ div
         select-pre-count.q-mb-md
         select-visualization.q-mb-md
         reset-button.q-mb-md
-      q-card-section(align="center")
-        q-btn(
-          id="closeOptDialogBtn",
-          unelevated,
-          color="primary",
-          @click="optDialog = false"
-        ) Close
+      //- q-card-section(align="center")
+      //-   q-btn(
+      //-     id="closeOptDialogBtn",
+      //-     unelevated,
+      //-     color="primary",
+      //-     @click="optDialog = false"
+      //-   ) Close
 </template>

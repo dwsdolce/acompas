@@ -101,11 +101,13 @@ div
       q-item-section(avatar)
         q-icon(name="bug_report")
       q-item-section Issues
+
   q-dialog(id="helpDialog", v-model="helpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Help
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         div
           p: b Palo
           p Use this button to select the flamenco rhythm that you want.
@@ -136,18 +138,12 @@ div
         div
           p: b Reset
           p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
-      q-card-section(align="center")
-        q-btn(
-          unelevated,
-          id="closeHelpBtn",
-          color="primary",
-          v-close-popup
-        ) Close
+
   q-dialog(id="privacyDialog", :value="privacyDialogOpen", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         .text-h6.text-center Privacy
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         div
           div
             p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
@@ -172,24 +168,21 @@ div
           v-close-popup,
           @click="enableTrackingChosen(); closePrivacyDialog()"
         ) Close
+
   q-dialog(id="tuningDialog", v-model="tuningDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Tuning fork
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         tuning-fork
-      q-card-section(align="center")
-        q-btn(
-          unelevated,
-          id="closeTuningDialogBtn",
-          color="primary",
-          v-close-popup
-        ) Close
+
   q-dialog(id="shortcutsDialog", v-model="shortcutsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Shortcuts
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         q-markup-table(flat)
           tbody
             tr
@@ -249,13 +242,6 @@ div
                 kbd Tab
               td.text-left
                 | Change focus button
-      q-card-section(align="center")
-        q-btn(
-          unelevated,
-          id="closeShortcutsDialogBtn",
-          color="primary",
-          v-close-popup
-        ) Close
 </template>
 
 <style lang="sass">

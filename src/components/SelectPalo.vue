@@ -50,10 +50,11 @@ div
     id="optDialog",
     v-model="palosDialog"
   )
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Please select a palo
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         q-option-group(
           type="radio",
           color="primary",
@@ -61,11 +62,4 @@ div
           :model-value="paloData?.value",
           @update:model-value="onSelectedPalo($event)"
         )
-      q-card-section(align="center")
-        q-btn(
-          id="closePalosDialogBtn",
-          unelevated,
-          color="primary",
-          v-close-popup
-        ) Close
 </template>

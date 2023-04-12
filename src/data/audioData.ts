@@ -38,10 +38,10 @@ export default {
     },
     {
       src: 'cajon/cajon_2',
-      volume: 20,
+      volume: 0,
     },
     {
-      src: 'cajon/cajon_3',
+      src: 'cajon/cajon_2',
       volume: 20,
     },
   ],
@@ -58,7 +58,7 @@ export default {
   udu: [
     {
       src: 'udu/udu_1',
-      volume: 15,
+      volume: 5,
     },
     {
       src: 'udu/udu_2',
@@ -66,7 +66,7 @@ export default {
     },
     {
       src: 'udu/udu_3',
-      volume: 22,
+      volume: 5,
     },
   ],
   jaleo: [

@@ -104,13 +104,13 @@ export default [
 
     cajon: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    3,    2,    null, 2,    3,    2,    null, 2,    null ],
+      [ 1,    2,    2,    3,    2,    2,    2,    3,    2,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 
     nudillo: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null ],
+      [ 1,    null, 2,    null, 2,    null, null, null, 2,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 

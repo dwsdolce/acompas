@@ -54,12 +54,12 @@ div
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Instruments mixer
-      q-card-section
+      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
         select-decay
-      q-card-section
         table(style="width: 100%;").q-table
           thead
             tr
@@ -90,11 +90,4 @@ div
               :key="instrument.value",
               :slug="instrument.value"
             )
-      q-card-section(align="center")
-        q-btn(
-          id="closeMixerDialogBtn",
-          unelevated,
-          color="primary",
-          v-close-popup
-        ) Close
 </template>
