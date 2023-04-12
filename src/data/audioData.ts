@@ -6,29 +6,29 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 20,
+      volume: 23,
     },
     {
       src: 'clara/clara_2',
-      volume: 20,
+      volume: 23,
     },
     {
       src: 'clara/clara_3',
-      volume: 20,
+      volume: 23,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 20,
+      volume: 23,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 20,
+      volume: 23,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 20,
+      volume: 23,
     },
   ],
   cajon: [
@@ -58,15 +58,15 @@ export default {
   udu: [
     {
       src: 'udu/udu_1',
-      volume: 5,
+      volume: 10,
     },
     {
       src: 'udu/udu_2',
-      volume: 0,
+      volume: 10,
     },
     {
       src: 'udu/udu_3',
-      volume: 5,
+      volume: 10,
     },
   ],
   jaleo: [

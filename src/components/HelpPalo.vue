@@ -54,18 +54,13 @@ span.q-ml-sm
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%;")
+    q-card(style="width: 100%; overflow: hidden;")
       q-card-section
+        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center {{ paloData?.longLabel }}
+      q-card-section.scroll(style="max-height: 80vh;")
         div(v-html="paloData?.doc")
         p {{ paloData?.places }}
         p(v-if="paloData?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(paloData?.wikipediaUrl)")]
         p(v-if="paloData?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(paloData?.videoExample)")]
-      q-card-section(align="center")
-        q-btn(
-          id="closePaloHelpDialogBtn",
-          unelevated,
-          color="primary",
-          v-close-popup
-        ) Close
 </template>

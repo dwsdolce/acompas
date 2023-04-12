@@ -153,7 +153,7 @@ export default [
     fastMessage: 'Your tempo is very fast',
     longLabel: '6 beats Abandolaos',
     doc: '<p>A kind oh 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.</p>',
-    places: 'Málaga, Huelva'
+    places: 'Málaga, Huelva, Extremadura'
   },
   {
     id: 3,
@@ -192,7 +192,7 @@ export default [
 
     udu: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null ],
+      [ 1,    null, 2,    null, 2,    null, 1,    3,    2,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 
