@@ -48,11 +48,4 @@ div
         select-pre-count.q-mb-md
         select-visualization.q-mb-md
         reset-button.q-mb-md
-      //- q-card-section(align="center")
-      //-   q-btn(
-      //-     id="closeOptDialogBtn",
-      //-     unelevated,
-      //-     color="primary",
-      //-     @click="optDialog = false"
-      //-   ) Close
 </template>
