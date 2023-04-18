@@ -6,35 +6,35 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 23,
+      volume: 10,
     },
     {
       src: 'clara/clara_2',
-      volume: 23,
+      volume: 12,
     },
     {
       src: 'clara/clara_3',
-      volume: 23,
+      volume: 12,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 23,
+      volume: 18,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 23,
+      volume: 18,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 23,
+      volume: 18,
     },
   ],
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: 20,
+      volume: 10,
     },
     {
       src: 'cajon/cajon_2',
@@ -42,31 +42,31 @@ export default {
     },
     {
       src: 'cajon/cajon_2',
-      volume: 20,
+      volume: 10,
     },
   ],
   nudillo: [
     {
       src: 'nudillo/nudillo_1',
-      volume: 22,
+      volume: 10,
     },
     {
       src: 'nudillo/nudillo_2',
-      volume: 13,
+      volume: 10,
     },
   ],
   udu: [
     {
       src: 'udu/udu_1',
-      volume: 10,
+      volume: 0,
     },
     {
       src: 'udu/udu_2',
-      volume: 10,
+      volume: 5,
     },
     {
       src: 'udu/udu_3',
-      volume: 10,
+      volume: 8,
     },
   ],
   jaleo: [
@@ -142,11 +142,11 @@ export default {
   click: [
     {
       src: 'click/click_1',
-      volume: 20,
+      volume: 15,
     },
     {
       src: 'click/click_2',
-      volume: 20,
+      volume: 15,
     },
   ],
 } as SoundsData
