@@ -9,9 +9,9 @@ import type { Synth, Reverb, Volume, Sequence } from 'tone'
 //   sequence: any
 // }
 
-let reverb: Reverb | null = null
-let synth: Synth | null = null
-let sequence: any = null
+let reverb: Reverb = {} as Reverb
+let synth: Synth = {} as Synth
+let sequence: Sequence = {} as Sequence
 
 export const useTuningFork = () => {
   const store = useTuningForkStore()

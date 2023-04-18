@@ -1,4 +1,4 @@
-import type { Player, Reverb, Volume, Sequence } from 'tone'
+import type { Player, Reverb, Volume, Sequence, Gain } from 'tone'
 
 export interface SoundsDataKey {
   src:                      string
@@ -15,10 +15,16 @@ export interface SoundsData {
   click:                    SoundsDataKey[]
 }
 
+export interface Players {
+  quarter:                  Player
+  eighth:                   Player
+}
+
 export interface Sound {
-  [x: number]:              Player
+  [x: number]:              Players
   reverb:                   Reverb
   volume:                   Volume
+  gain:                     Gain
 }
 
 export interface Sounds {

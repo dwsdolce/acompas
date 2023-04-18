@@ -28,7 +28,7 @@ const {
 
 const palosDialog = ref(false)
 
-const onSelectedPalo = (v: any) => {
+const onSelectedPalo = (v: string) => {
   palosDialog.value = false
   selectPalo(v)
 }
@@ -54,7 +54,7 @@ div
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Please select a palo
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
+      q-card-section.scroll(style="max-height: 80vh;")
         q-option-group(
           type="radio",
           color="primary",

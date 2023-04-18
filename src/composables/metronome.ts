@@ -21,6 +21,10 @@ import type {
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
+const highGain = new Tone.Gain(1, 'normalRange').toDestination()
+const lowGain = new Tone.Gain(0.5, 'normalRange').toDestination()
+const rightPan = new Tone.Panner(0.2).connect(highGain)
+const leftPan = new Tone.Panner(-0.2).connect(lowGain)
 let audioFormat = ''
 
 export const useMetronome = () => {
@@ -61,16 +65,26 @@ export const useMetronome = () => {
 
       for (let i = 0; i < value.length; i++) {
         const url = path + value[i].src + '.' + audioFormat
-        sound[i] = new Tone.Player({
-          url: url,
-          volume: value[i].volume,
-          fadeOut: 1,
-        })
-        sound[i].chain(
+        sound[i] = {
+          quarter: new Tone.Player({
+            url: url,
+            volume: value[i].volume,
+            fadeOut: 1,
+          }),
+          eighth: new Tone.Player({
+            url: url,
+            volume: value[i].volume,
+            fadeOut: 1,
+          })
+        }
+        sound[i].quarter.chain(
           sound.reverb,
-          sound.volume,
-          Tone.Destination
-        )
+          sound.volume
+        ).connect(rightPan)
+        sound[i].eighth.chain(
+          sound.reverb,
+          sound.volume
+        ).connect(leftPan)
       }
     })
   }
@@ -143,7 +157,11 @@ export const useMetronome = () => {
     }
   }
 
-  const improviseJaleo = (note: number, time: number, eighthNotes: boolean) => {
+  const improviseJaleo = (
+    note: number,
+    time: number,
+    eighthNotes: boolean
+  ) => {
     if (!eighthNotes && note % 2 !== 0) {
       return
     }
@@ -158,11 +176,14 @@ export const useMetronome = () => {
       // Pick a random index in the available jaleo sounds
       const jaleoSoundsCount = Object.keys(sounds.jaleo).length
       const randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
-      sounds.jaleo[randomIndex].start(time)
+      sounds.jaleo[randomIndex][eighthNotes ? 'eighth' : 'quarter'].start(time)
     }
   }
 
-  const triggerPreCountClick = (time: number, note: number) => {
+  const triggerPreCountClick = (
+    time: number,
+    note: number
+  ) => {
     if (palo.value.selectedPreCount?.value && paloData.value?.accents) {
       if (
         palo.value.selectedPreCount?.value > 0 &&
@@ -172,9 +193,9 @@ export const useMetronome = () => {
         const index = noteIndexInPattern(note)
         if (!index) return
         if (paloData.value?.accents.includes((index / 2) as never)) {
-          sounds.click[0].start(time)
+          sounds.click[0].quarter.start(time)
         } else {
-          sounds.click[1].start(time)
+          sounds.click[1].quarter.start(time)
         }
       }
     }
@@ -187,6 +208,8 @@ export const useMetronome = () => {
     time: number,
     note: number
   ) => {
+    // eighthNotes ? gain.gain.value = 0.2 : gain.gain = 1.2
+
     // Prepend pre-count beats if required
     if (type == 'preCount') {
       triggerPreCountClick(time, note)
@@ -223,13 +246,13 @@ export const useMetronome = () => {
               key == index
             ) {
               palo.value.improvisation
-                ? improvise(type, time, sound, note, index, eighthNotes)
-                : sound.start(time)
-            }
+                ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
+                : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
+              }
             if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
               palo.value.improvisation
-                ? improvise(type, time, sound, note, index, eighthNotes)
-                : sound.start(time)
+                ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
+                : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
             }
           }
         )
@@ -269,8 +292,10 @@ export const useMetronome = () => {
         }, time) // Use AudioContext time of the event
       }
     }, sequence)
+
     // Set/unset sequence looping
     seq.loop = isLoop
+
     return seq
   }
 
@@ -321,7 +346,6 @@ export const useMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        event: buildSequence(false, ('event' as keyof PaloData), introSeq, false),
         preCount: buildSequence(false, ('preCount' as keyof PaloData), introSeq, false),
         clara: buildSequence(false, ('clara' as keyof PaloData), introSeq, false),
         sorda: buildSequence(false, ('sorda' as keyof PaloData), introSeq, false),
@@ -330,9 +354,9 @@ export const useMetronome = () => {
         udu: buildSequence(false, ('udu' as keyof PaloData), introSeq, false),
         jaleo: buildSequence(false, ('jaleo' as keyof PaloData), introSeq, false),
         click: buildSequence(false, ('click' as keyof PaloData), introSeq, false),
+        event: buildSequence(false, ('event' as keyof PaloData), introSeq, false),
       },
       loop: {
-        event: buildSequence(false, ('event' as keyof PaloData), loopSeq, true),
         clara: buildSequence(false, ('clara' as keyof PaloData), loopSeq, true),
         sorda: buildSequence(false, ('sorda' as keyof PaloData), loopSeq, true),
         cajon: buildSequence(false, ('cajon' as keyof PaloData), loopSeq, true),
@@ -340,6 +364,7 @@ export const useMetronome = () => {
         udu: buildSequence(false, ('udu' as keyof PaloData), loopSeq, true),
         jaleo: buildSequence(false, ('jaleo' as keyof PaloData), loopSeq, true),
         click: buildSequence(false, ('click' as keyof PaloData), loopSeq, true),
+        event: buildSequence(false, ('event' as keyof PaloData), loopSeq, true),
       },
     }
 

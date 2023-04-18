@@ -6,7 +6,6 @@ import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
-import { forEachValue } from 'src/composables/utils'
 import type { numOpts } from 'src/composables/models'
 
 const route = useRoute()

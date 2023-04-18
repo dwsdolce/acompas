@@ -107,7 +107,7 @@ div
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Help
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
+      q-card-section.scroll(style="max-height: 80vh;")
         div
           p: b Palo
           p Use this button to select the flamenco rhythm that you want.
@@ -143,7 +143,7 @@ div
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         .text-h6.text-center Privacy
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
+      q-card-section.scroll(style="max-height: 80vh;")
         div
           div
             p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
@@ -174,7 +174,7 @@ div
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Tuning fork
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
+      q-card-section.scroll(style="max-height: 80vh;")
         tuning-fork
 
   q-dialog(id="shortcutsDialog", v-model="shortcutsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
@@ -182,7 +182,7 @@ div
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Shortcuts
-      q-card-section.scroll(style="min-height: 50vh; max-height: 80vh;")
+      q-card-section.scroll(style="max-height: 80vh;")
         q-markup-table(flat)
           tbody
             tr
