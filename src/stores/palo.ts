@@ -60,6 +60,14 @@ export const usePaloStore = (name: string) =>
             decay: 0.5
           },
           {
+            label: 'Pitos',
+            value: 'pito',
+            enabled: true,
+            eighthNotes: null,
+            volume: 0,
+            decay: 0.5
+          },
+          {
             label: 'Nudillos',
             value: 'nudillo',
             enabled: true,

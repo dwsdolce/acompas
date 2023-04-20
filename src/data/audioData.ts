@@ -6,35 +6,49 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 10,
+      volume: 0,
     },
     {
       src: 'clara/clara_2',
-      volume: 12,
+      volume: 0,
     },
     {
       src: 'clara/clara_3',
-      volume: 12,
+      volume: -5,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 18,
+      volume: 0,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 18,
+      volume: 0,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 18,
+      volume: 0,
+    },
+  ],
+  pito: [
+    {
+      src: 'pito/pito_1',
+      volume: 12,
+    },
+    {
+      src: 'pito/pito_2',
+      volume: 12,
+    },
+    {
+      src: 'pito/pito_3',
+      volume: 12,
     },
   ],
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: 10,
+      volume: 0,
     },
     {
       src: 'cajon/cajon_2',
@@ -42,17 +56,17 @@ export default {
     },
     {
       src: 'cajon/cajon_2',
-      volume: 10,
+      volume: -20,
     },
   ],
   nudillo: [
     {
       src: 'nudillo/nudillo_1',
-      volume: 10,
+      volume: 0,
     },
     {
       src: 'nudillo/nudillo_2',
-      volume: 10,
+      volume: 0,
     },
   ],
   udu: [

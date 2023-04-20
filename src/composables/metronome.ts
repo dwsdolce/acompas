@@ -21,10 +21,12 @@ import type {
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
-const highGain = new Tone.Gain(1, 'normalRange').toDestination()
-const lowGain = new Tone.Gain(0.5, 'normalRange').toDestination()
-const rightPan = new Tone.Panner(0.2).connect(highGain)
-const leftPan = new Tone.Panner(-0.2).connect(lowGain)
+const highGain = new Tone.Gain(1)
+const lowGain = new Tone.Gain(0.4)
+const rightPan = new Tone.Panner(0.2)
+const leftPan = new Tone.Panner(-0.2)
+// const quarterEffect = new Tone.PanVol(1, 0)
+// const eighthEffect = new Tone.PanVol(-1, 0)
 let audioFormat = ''
 
 export const useMetronome = () => {
@@ -78,13 +80,19 @@ export const useMetronome = () => {
           })
         }
         sound[i].quarter.chain(
+          // rightPan,
+          // highGain,
           sound.reverb,
-          sound.volume
-        ).connect(rightPan)
+          sound.volume,
+          Tone.Destination
+        )
         sound[i].eighth.chain(
+          // leftPan,
+          // lowGain,
           sound.reverb,
-          sound.volume
-        ).connect(leftPan)
+          sound.volume,
+          Tone.Destination
+        )
       }
     })
   }
@@ -248,7 +256,7 @@ export const useMetronome = () => {
               palo.value.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
-              }
+            }
             if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
               palo.value.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
