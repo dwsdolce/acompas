@@ -96,6 +96,11 @@ export interface VolumeOpts {
   volume:                     number
 }
 
+export interface DecayOpts {
+  instrument:                 string
+  decay:                      number
+}
+
 export interface PaloData {
   id:                         number
   label:                      string

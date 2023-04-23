@@ -211,6 +211,7 @@ export const usePaloStore = (name: string) =>
     }
 
     const selectVolume = (payload: VolumeOpts) => {
+      console.log('selectVolume', payload)
       if (payload !== null) {
         const volume = payload?.volume
         const instru = instrument.value(payload?.instrument)
@@ -220,11 +221,13 @@ export const usePaloStore = (name: string) =>
     }
 
     const selectDecay = (decay: number) => {
+      console.log('selectDecay', decay)
       if (decay) {
         palo.value.globalDecay = decay
         palo.value.instruments.forEach(instrument => {
           instrument.decay = decay
-          changeDecay(instrument.value, decay)
+          const payload = { instrument: instrument.value, decay: decay }
+          changeDecay(payload)
         })
       }
     }

@@ -8,6 +8,7 @@ import { usePaloStore } from 'src/stores/palo'
 import { forEachValue } from 'src/composables/utils'
 import type {
   VolumeOpts,
+  DecayOpts,
   SoundsDataKey,
   SoundsData,
   Sounds,
@@ -16,8 +17,10 @@ import type {
   Seq,
   SeqSubdiv,
   PaloData,
-  PaloState
+  PaloState,
+  instruOpts
 } from 'src/composables/models'
+import { Instrument } from 'tone/build/esm/instrument/Instrument'
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
@@ -408,6 +411,11 @@ export const useMetronome = () => {
     paloData.value = palosData.find((p) => p.value === palo.value.name)
     initSequences()
     changeTempo()
+    changeSwing(palo.value.swing)
+    forEachValue(sounds, (sound, key) => {
+      changeVolume({ instrument: key, volume: palo.value.instruments.find((i => i.value == key))?.volume || 0 })
+      changeDecay({ instrument: key, decay: palo.value.globalDecay })
+    })
   }
 
   const initMetronome = (paloState: PaloState) => {
@@ -528,8 +536,8 @@ export const useMetronome = () => {
     sounds[payload.instrument as keyof Sounds].volume.volume.value = payload.volume
   }
 
-  const changeDecay = async (instru: string, decay: number) => {
-    sounds[instru as keyof Sounds].reverb.decay = decay
+  const changeDecay = async (payload: DecayOpts) => {
+    sounds[payload.instrument as keyof Sounds].reverb.decay = payload.decay
   }
 
   return {
