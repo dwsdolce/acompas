@@ -40,7 +40,7 @@ const {
     thumb-size="25px",
     :min="0.2",
     :max="1.2",
-    :step="0.01",
+    :step="0.1",
     label,
     snap
   ).col-9

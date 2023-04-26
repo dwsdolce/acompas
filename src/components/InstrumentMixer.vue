@@ -18,18 +18,6 @@ const {
 const props = defineProps(['slug'])
 const instru: instruOpts | undefined = instrument(props.slug)
 
-const handleToggleEighthNotes = () => {
-  if (instru != undefined) toggleEighthNotes(instru)
-}
-
-const handleChangeVolume = (e: number | null) => {
-  if (instru !== undefined && instru !== null && e !== null) selectVolume({
-    instrument: instru.value,
-    volume: e
-  })
-}
-
-
 </script>
 
 <template lang="pug">
@@ -45,9 +33,9 @@ tr
   td
     q-toggle(
       icon="audiotrack",
-      :model-value="instru?.eighthNotes",
-      @update:model-value="handleToggleEighthNotes()",
       v-if="instru != undefined && instru.eighthNotes != null",
+      :model-value="instru?.eighthNotes",
+      @update:model-value="toggleEighthNotes(instru)",
       :disable="!instru?.enabled"
       color="primary",
       keep-color
@@ -55,13 +43,13 @@ tr
   td(style="width: 100%;")
     q-slider(
       :model-value="instru?.volume",
-      @update:model-value="handleChangeVolume($event)",
-      :min="-30",
-      :max="30",
+      @update:model-value="selectVolume({ instrument: instru?.value, volume: $event })",
+      :disable="!instru?.enabled",
+      :min="-12",
+      :max="12",
       :step="1",
       label,
-      snap,
-      :disable="!instru?.enabled"
+      snap
     )
 </template>
 

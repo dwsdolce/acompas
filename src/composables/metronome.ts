@@ -18,18 +18,21 @@ import type {
   SeqSubdiv,
   PaloData,
   PaloState,
-  instruOpts
+  instruOpts,
+  Players,
+  ExtendedPlayer
 } from 'src/composables/models'
 import { Instrument } from 'tone/build/esm/instrument/Instrument'
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
-const highGain = new Tone.Gain(1)
-const lowGain = new Tone.Gain(0.4)
-const rightPan = new Tone.Panner(0.2)
-const leftPan = new Tone.Panner(-0.2)
-// const quarterEffect = new Tone.PanVol(1, 0)
-// const eighthEffect = new Tone.PanVol(-1, 0)
+const quarterChannel = new Tone.Channel(0, 0).toDestination()
+const eighthChannel = new Tone.Channel(-4, -0.5).toDestination()
+const reverb = new Tone.Reverb({
+  decay: 0.3,
+  preDelay: 0,
+  wet: 1
+}).toDestination()
 let audioFormat = ''
 
 export const useMetronome = () => {
@@ -37,8 +40,6 @@ export const useMetronome = () => {
   const paloStore = usePaloStore(route.name as string)()
   const paloData = ref(palosData.find((palo) => palo.value === route.name))
   const palo = ref(paloStore.palo)
-
-  type PaloDataKey = keyof typeof paloData
 
   const initSounds = async () => {
     const audio = new Audio()
@@ -61,12 +62,6 @@ export const useMetronome = () => {
     forEachValue(audioData, (value: SoundsDataKey[], key: string) => {
       sounds[key as keyof SoundsData] = {} as Sound
       const sound = sounds[key as keyof SoundsData]
-      sound.volume = new Tone.Volume(0)
-      sound.reverb = new Tone.Reverb({
-        decay: 0.5,
-        preDelay: 0,
-        wet: 1,
-      })
 
       for (let i = 0; i < value.length; i++) {
         const url = path + value[i].src + '.' + audioFormat
@@ -74,28 +69,23 @@ export const useMetronome = () => {
           quarter: new Tone.Player({
             url: url,
             volume: value[i].volume,
-            fadeOut: 1,
-          }),
+            fadeOut: 1
+          }) as ExtendedPlayer,
           eighth: new Tone.Player({
             url: url,
             volume: value[i].volume,
-            fadeOut: 1,
-          })
+            fadeOut: 1
+          }) as ExtendedPlayer
         }
-        sound[i].quarter.chain(
-          // rightPan,
-          // highGain,
-          sound.reverb,
-          sound.volume,
-          Tone.Destination
-        )
-        sound[i].eighth.chain(
-          // leftPan,
-          // lowGain,
-          sound.reverb,
-          sound.volume,
-          Tone.Destination
-        )
+
+        sound[i].quarter.defaultVolume = value[i].volume
+        sound[i].eighth.defaultVolume = value[i].volume
+
+        sound[i].quarter.connect(quarterChannel)
+        quarterChannel.connect(reverb)
+
+        sound[i].eighth.connect(eighthChannel)
+        eighthChannel.connect(reverb)
       }
     })
   }
@@ -414,7 +404,7 @@ export const useMetronome = () => {
     changeSwing(palo.value.swing)
     forEachValue(sounds, (sound, key) => {
       changeVolume({ instrument: key, volume: palo.value.instruments.find((i => i.value == key))?.volume || 0 })
-      changeDecay({ instrument: key, decay: palo.value.globalDecay })
+      changeDecay(palo.value.globalDecay)
     })
   }
 
@@ -533,11 +523,16 @@ export const useMetronome = () => {
   }
 
   const changeVolume = async (payload: VolumeOpts) => {
-    sounds[payload.instrument as keyof Sounds].volume.volume.value = payload.volume
+    // increase volume of every player from the sounds instrument by the payload volume
+    const sound = sounds[payload.instrument as keyof Sounds]
+    forEachValue(sound, (player: Players) => {
+      player.quarter.volume.value = player.quarter.defaultVolume + payload.volume
+      player.eighth.volume.value = player.eighth.defaultVolume + payload.volume
+    })
   }
 
-  const changeDecay = async (payload: DecayOpts) => {
-    sounds[payload.instrument as keyof Sounds].reverb.decay = payload.decay
+  const changeDecay = async (decay: number) => {
+    reverb.decay = decay
   }
 
   return {

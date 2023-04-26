@@ -6,29 +6,29 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 0,
+      volume: 10,
     },
     {
       src: 'clara/clara_2',
-      volume: 0,
+      volume: 10,
     },
     {
       src: 'clara/clara_3',
-      volume: -5,
+      volume: 10,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 0,
+      volume: 8,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 0,
+      volume: 8,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 0,
+      volume: 8,
     },
   ],
   pito: [
@@ -56,7 +56,7 @@ export default {
     },
     {
       src: 'cajon/cajon_2',
-      volume: -20,
+      volume: -10,
     },
   ],
   nudillo: [
@@ -66,91 +66,91 @@ export default {
     },
     {
       src: 'nudillo/nudillo_2',
-      volume: 0,
+      volume: 5,
     },
   ],
   udu: [
     {
       src: 'udu/udu_1',
-      volume: 0,
+      volume: -12,
     },
     {
       src: 'udu/udu_2',
-      volume: 5,
+      volume: -5,
     },
     {
       src: 'udu/udu_3',
-      volume: 8,
+      volume: 0,
     },
   ],
   jaleo: [
     {
       src: 'jaleo/jaleo_1',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_2',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_3',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_4',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_5',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_6',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_7',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_8',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_9',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_10',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_11',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_12',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_13',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_14',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_15',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_16',
-      volume: 1,
+      volume: -6,
     },
     {
       src: 'jaleo/jaleo_17',
-      volume: 1,
+      volume: -6,
     },
   ],
   click: [

@@ -15,16 +15,19 @@ export interface SoundsData {
   click:                    SoundsDataKey[]
 }
 
+export interface ExtendedPlayer extends Player {
+  defaultVolume:            number
+}
+
 export interface Players {
-  quarter:                  Player
-  eighth:                   Player
+  quarter:                  ExtendedPlayer
+  eighth:                   ExtendedPlayer
 }
 
 export interface Sound {
   [x: number]:              Players
   reverb:                   Reverb
-  volume:                   Volume
-  gain:                     Gain
+  volume:                   number
 }
 
 export interface Sounds {

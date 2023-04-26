@@ -226,8 +226,7 @@ export const usePaloStore = (name: string) =>
         palo.value.globalDecay = decay
         palo.value.instruments.forEach(instrument => {
           instrument.decay = decay
-          const payload = { instrument: instrument.value, decay: decay }
-          changeDecay(payload)
+          changeDecay(decay)
         })
       }
     }
