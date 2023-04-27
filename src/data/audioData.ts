@@ -6,29 +6,29 @@ export default {
   clara: [
     {
       src: 'clara/clara_1',
-      volume: 10,
+      volume: 8,
     },
     {
       src: 'clara/clara_2',
-      volume: 10,
+      volume: 8,
     },
     {
       src: 'clara/clara_3',
-      volume: 10,
+      volume: 8,
     },
   ],
   sorda: [
     {
       src: 'sorda/sorda_1',
-      volume: 8,
+      volume: 6,
     },
     {
       src: 'sorda/sorda_2',
-      volume: 8,
+      volume: 6,
     },
     {
       src: 'sorda/sorda_3',
-      volume: 8,
+      volume: 6,
     },
   ],
   pito: [
