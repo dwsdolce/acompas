@@ -37,7 +37,7 @@ export const usePaloStore = (name: string) =>
         tempo: (paloData?.defaultTempo as number),
         selectedPreCount: (paloData?.preCounts[0] as numOpts),
         selectedStartBeat: (paloData?.startBeats[0] as numOpts),
-        swing: 0,
+        swing: name === 'tientos' ? 0.6 : 0,
         improvisation: false,
         humanization: false,
         isTooSlow: false,

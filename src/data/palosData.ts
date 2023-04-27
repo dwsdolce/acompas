@@ -1033,6 +1033,93 @@ export default [
   },
   {
     id: 13,
+    label: 'Tientos',
+    value: 'tientos',
+    minTempo: 15,
+    maxTempo: 130,
+    defaultTempo: 60,
+    slowTempo: 40,
+    fastTempo: 90,
+    nbBeatsInPattern: 16,
+    accents: [ 0, 4 ],
+
+    clara: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 3,    2,    1,    1,    3,    null, 1,    null, 3,    2,    1,    1,    3,    null, 1,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    sorda: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2 ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    pito: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    null, 1,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    cajon: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    3,    2,    3,    3,    null, 2,    null, 1,    3,    2,    3,    2,    null, 2,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    nudillo: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    udu: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    click: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    beatLabels: //<[number, ...(number | null)[]]>
+    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    null, 3,    null, 4,    null, 1,    null, 2,    null, 3,    null, 4,    null ],
+    //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
+    //  1           2           3           4           5           6           7           8
+
+    preCounts: [
+      { value: 0, label: 'Off' },
+      { value: 1, label: '1' },
+      { value: 2, label: '2 (half a compás)' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4 (one compás)' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6 (one compás and a half)' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8 (two compás)' }
+    ],
+    startBeats: [
+      { value: 0, label: '1 (default)' },
+      { value: 10, label: '2' },
+      { value: 12, label: '3 (half a compás)' },
+      { value: 14, label: '4' }
+    ],
+    slowMessage: 'Your tempo is very slow, even for tientos',
+    fastMessage: 'Your tempo is more like tangos or rumbas',
+    longLabel: 'Tientos',
+    doc: '<p>Tientos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
+         '<p>It often ends "por tangos".</p>' +
+         '<p>Remark : our example pattern is made of 2 bars.</p>',
+    wikipediaUrl: 'https://en.wikipedia.org/wiki/Tientos_(flamenco)',
+    places: 'Cádix and other places in Andalusia',
+    videoExample: 'https://www.youtube.com/watch?v=zJ4dHGuX0m4'
+  },
+  {
+    id: 14,
     label: 'Simple click',
     value: 'no-compas',
     minTempo: 15,
