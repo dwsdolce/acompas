@@ -63,7 +63,7 @@ export const usePaloStore = (name: string) =>
             label: 'Pitos',
             value: 'pito',
             enabled: true,
-            eighthNotes: null,
+            eighthNotes: false,
             volume: 0,
             decay: 0.5
           },

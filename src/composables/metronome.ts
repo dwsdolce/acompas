@@ -88,6 +88,7 @@ export const useMetronome = () => {
         eighthChannel.connect(reverb)
       }
     })
+    console.log('Sounds loaded', sounds)
   }
 
   // ========================
@@ -350,6 +351,7 @@ export const useMetronome = () => {
         preCount: buildSequence(false, ('preCount' as keyof PaloData), introSeq, false),
         clara: buildSequence(false, ('clara' as keyof PaloData), introSeq, false),
         sorda: buildSequence(false, ('sorda' as keyof PaloData), introSeq, false),
+        pito: buildSequence(false, ('pito' as keyof PaloData), introSeq, false),
         cajon: buildSequence(false, ('cajon' as keyof PaloData), introSeq, false),
         nudillo: buildSequence(false, ('nudillo' as keyof PaloData), introSeq, false),
         udu: buildSequence(false, ('udu' as keyof PaloData), introSeq, false),
@@ -360,6 +362,7 @@ export const useMetronome = () => {
       loop: {
         clara: buildSequence(false, ('clara' as keyof PaloData), loopSeq, true),
         sorda: buildSequence(false, ('sorda' as keyof PaloData), loopSeq, true),
+        pito: buildSequence(false, ('pito' as keyof PaloData), loopSeq, true),
         cajon: buildSequence(false, ('cajon' as keyof PaloData), loopSeq, true),
         nudillo: buildSequence(false, ('nudillo' as keyof PaloData), loopSeq, true),
         udu: buildSequence(false, ('udu' as keyof PaloData), loopSeq, true),
@@ -373,6 +376,7 @@ export const useMetronome = () => {
       introduction: {
         clara: buildSequence(true, ('clara' as keyof PaloData), introSeq, false),
         sorda: buildSequence(true, ('sorda' as keyof PaloData), introSeq, false),
+        pito: buildSequence(true, ('pito' as keyof PaloData), introSeq, false),
         cajon: buildSequence(true, ('cajon' as keyof PaloData), introSeq, false),
         nudillo: buildSequence(true, ('nudillo' as keyof PaloData), introSeq, false),
         udu: buildSequence(true, ('udu' as keyof PaloData), introSeq, false),
@@ -382,6 +386,7 @@ export const useMetronome = () => {
       loop: {
         clara: buildSequence(true, ('clara' as keyof PaloData), loopSeq, true),
         sorda: buildSequence(true, ('sorda' as keyof PaloData), loopSeq, true),
+        pito: buildSequence(true, ('pito' as keyof PaloData), loopSeq, true),
         cajon: buildSequence(true, ('cajon' as keyof PaloData), loopSeq, true),
         nudillo: buildSequence(true, ('nudillo' as keyof PaloData), loopSeq, true),
         udu: buildSequence(true, ('udu' as keyof PaloData), loopSeq, true),

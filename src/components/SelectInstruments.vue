@@ -39,7 +39,6 @@ watch(selectedInstruments, (value) => {
 
 <template lang="pug">
 div
-  //- p.caption Mixer
   q-btn(
     id="mixerBtn",
     outline,

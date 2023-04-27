@@ -8,6 +8,7 @@ export interface SoundsDataKey {
 export interface SoundsData {
   clara:                    SoundsDataKey[]
   sorda:                    SoundsDataKey[]
+  pito:                     SoundsDataKey[]
   nudillo:                  SoundsDataKey[]
   cajon:                    SoundsDataKey[]
   udu:                      SoundsDataKey[]
@@ -33,6 +34,7 @@ export interface Sound {
 export interface Sounds {
   clara:                    Sound
   sorda:                    Sound
+  pito:                     Sound
   nudillo:                  Sound
   cajon:                    Sound
   udu:                      Sound
@@ -43,6 +45,7 @@ export interface Sounds {
 export interface Seq {
   clara:                    Sequence
   sorda:                    Sequence
+  pito:                     Sequence
   nudillo:                  Sequence
   cajon:                    Sequence
   udu:                      Sequence
@@ -117,6 +120,7 @@ export interface PaloData {
   accents:                    number[]
   clara:                      (number | null)[]
   sorda:                      (number | null)[]
+  pito:                       (number | null)[]
   cajon:                      (number | null)[]
   nudillo:                    (number | null)[]
   udu:                        (number | null)[]
