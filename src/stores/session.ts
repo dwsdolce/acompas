@@ -1,63 +1,86 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { Screen } from 'quasar'
-import type { Size } from 'src/composables/models'
+import { useStorage } from '@vueuse/core'
+import { useMatomo } from 'src/composables/matomo'
+import type { Size, SessionState } from 'src/composables/models'
 
-interface State {
-  trackVisits: boolean
-  trackingInitialized: boolean
-  trackingChosen: boolean
-  privacyDialogOpen: boolean
-  dialogOpen: boolean
-  leftDrawerOpen: boolean,
-  visualizationSize: Size,
-}
+export const useSessionStore = defineStore('session', () => {
+  const { initPiwik } = useMatomo()
 
-export const useSessionStore = defineStore('session', {
-  state: (): State => ({
-    trackVisits: false,
-    trackingInitialized: false,
-    trackingChosen: false,
-    privacyDialogOpen: false,
-    dialogOpen: false,
-    leftDrawerOpen: Screen.gt.md,
-    visualizationSize: { width: null, height: null }
-  }),
-  actions: {
-    toggleTrackVisits() {
-      this.trackVisits = !this.trackVisits
-      if (!this.trackingInitialized && this.trackVisits) {
-        this.trackingInitialized = true
-      }
-    },
-    enableTrackVisits() {
-      this.trackVisits = true
-      if (!this.trackingInitialized) {
-        this.trackingInitialized = true
-      }
-    },
-    disableTrackVisits() {
-      this.trackVisits = false
-    },
-    initializeTracking() {
-      this.trackingInitialized = true
-    },
-    enableTrackingChosen() {
-      this.trackingChosen = true
-    },
-    openPrivacyDialog() {
-      this.privacyDialogOpen = true
-    },
-    closePrivacyDialog() {
-      this.privacyDialogOpen = false
-    },
-    toggleDialog(payload: boolean) {
-      this.dialogOpen = payload
-    },
-    toggleLeftDrawer() {
-      this.leftDrawerOpen = !this.leftDrawerOpen
-    },
-    setVisualizationSize(payload: Size) {
-      this.visualizationSize = payload
+  const trackVisits = useStorage('track-visits', ref<boolean>(false))
+  const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
+  const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
+  const privacyDialogOpen = ref<boolean>(false)
+  const dialogOpen = ref<boolean>(false)
+  const leftDrawerOpen = ref<boolean>(Screen.gt.md)
+  const visualizationSize = ref<Size>({ width: null, height: null })
+
+  const toggleTrackVisits = () => {
+    trackVisits.value = !trackVisits.value
+    if (!trackingInitialized.value && trackVisits.value) {
+      initializeTracking()
     }
-  },
+  }
+
+  const enableTrackVisits = () => {
+    trackVisits.value = true
+    if (!trackingInitialized.value) {
+      initializeTracking()
+    }
+  }
+
+  const disableTrackVisits = () => {
+    trackVisits.value = false
+  }
+
+  const initializeTracking = () => {
+    trackingInitialized.value = true
+    initPiwik()
+  }
+
+  const enableTrackingChosen = () => {
+    trackingChosen.value = true
+  }
+
+  const openPrivacyDialog = () => {
+    privacyDialogOpen.value = true
+  }
+
+  const closePrivacyDialog = () => {
+    privacyDialogOpen.value = false
+  }
+
+  const toggleDialog = (payload: boolean) => {
+    dialogOpen.value = payload
+  }
+
+  const toggleLeftDrawer = () => {
+    leftDrawerOpen.value = !leftDrawerOpen.value
+  }
+
+  const setVisualizationSize = (payload: Size) => {
+    visualizationSize.value = payload
+  }
+
+  return {
+    trackVisits,
+    trackingInitialized,
+    trackingChosen,
+    privacyDialogOpen,
+    dialogOpen,
+    leftDrawerOpen,
+    visualizationSize,
+
+    toggleTrackVisits,
+    enableTrackVisits,
+    disableTrackVisits,
+    initializeTracking,
+    enableTrackingChosen,
+    openPrivacyDialog,
+    closePrivacyDialog,
+    toggleDialog,
+    toggleLeftDrawer,
+    setVisualizationSize
+  }
 })

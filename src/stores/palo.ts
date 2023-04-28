@@ -5,6 +5,8 @@ import { useStorage } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import palosData from 'src/data/palosData'
 import { useMetronome } from 'src/composables/metronome'
+import { useSessionStore } from 'src/stores/session'
+import { useMatomo } from 'src/composables/matomo'
 import type { numOpts, instruOpts, VolumeOpts, PaloState, visuOpts, Size } from 'src/composables/models'
 
 export const usePaloStore = (name: string) =>
@@ -21,6 +23,18 @@ export const usePaloStore = (name: string) =>
       changeVolume,
       changeDecay
     } = useMetronome()
+
+    const {
+      trackVisits,
+      trackingInitialized,
+      trackingChosen
+    } = useSessionStore()
+
+    const {
+      initPiwik,
+      trackPlay,
+      trackStop
+    } = useMatomo()
 
     const router = useRouter()
 
@@ -175,11 +189,13 @@ export const usePaloStore = (name: string) =>
     const play = async () => {
       isPlaying.value = true
       startSequences()
+      trackPlay(palo.value.name)
     }
 
     const stop = () => {
       isPlaying.value = false
       stopAllSequences()
+      trackStop(palo.value.name)
       triggerEvent(null)
       reinitialize(palo.value)
     }

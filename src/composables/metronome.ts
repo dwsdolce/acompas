@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import audioData from 'src/data/audioData'
 import { usePaloStore } from 'src/stores/palo'
+import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/composables/utils'
 import type {
   VolumeOpts,
@@ -38,6 +39,7 @@ let audioFormat = ''
 export const useMetronome = () => {
   const route = useRoute()
   const paloStore = usePaloStore(route.name as string)()
+  const { trackVisits } = useSessionStore()
   const paloData = ref(palosData.find((palo) => palo.value === route.name))
   const palo = ref(paloStore.palo)
 
@@ -396,7 +398,7 @@ export const useMetronome = () => {
     }
   }
 
-  const getContext = Tone.context
+  const getContext = () => Tone.context
 
   const isSupported = Tone.supported
 
@@ -543,6 +545,7 @@ export const useMetronome = () => {
   return {
     reinitialize,
     initMetronome,
+    getContext,
     isSupported,
     initSequences,
     startSequences,

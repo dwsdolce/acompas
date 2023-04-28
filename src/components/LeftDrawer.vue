@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { watch, ref } from 'vue'
+  import { watch, ref, onMounted } from 'vue'
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
   import { useRouter } from 'vue-router'
@@ -15,6 +15,8 @@
 
   const {
     trackVisits,
+    trackingChosen,
+    trackingInitialized,
     privacyDialogOpen
   } = storeToRefs(sessionStore)
 
@@ -43,6 +45,13 @@
 
   watch(tuningDialog, (value: boolean) => {
     if (!value) tuningForkStore.stop()
+  })
+
+  onMounted(() => {
+    console.log(trackingChosen.value)
+    if (!trackingChosen.value) {
+      openPrivacyDialog()
+    }
   })
 </script>
 
@@ -102,7 +111,12 @@ div
         q-icon(name="bug_report")
       q-item-section Issues
 
-  q-dialog(id="helpDialog", v-model="helpDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+  q-dialog(
+    id="helpDialog",
+    v-model="helpDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
@@ -139,7 +153,12 @@ div
           p: b Reset
           p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
 
-  q-dialog(id="privacyDialog", :value="privacyDialogOpen", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+  q-dialog(
+    id="privacyDialog",
+    v-model="privacyDialogOpen",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         .text-h6.text-center Privacy
@@ -169,7 +188,12 @@ div
           @click="enableTrackingChosen(); closePrivacyDialog()"
         ) Close
 
-  q-dialog(id="tuningDialog", v-model="tuningDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+  q-dialog(
+    id="tuningDialog",
+    v-model="tuningDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
@@ -177,7 +201,12 @@ div
       q-card-section.scroll(style="max-height: 80vh;")
         tuning-fork
 
-  q-dialog(id="shortcutsDialog", v-model="shortcutsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
+  q-dialog(
+    id="shortcutsDialog",
+    v-model="shortcutsDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
         q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm

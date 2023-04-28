@@ -151,3 +151,13 @@ export interface PaloState {
   instruments:                instruOpts[]
   globalDecay:                number
 }
+
+export interface SessionState {
+  trackVisits:                boolean
+  trackingInitialized:        boolean
+  trackingChosen:             boolean
+  privacyDialogOpen:          boolean
+  dialogOpen:                 boolean
+  leftDrawerOpen:             boolean
+  visualizationSize:          Size
+}

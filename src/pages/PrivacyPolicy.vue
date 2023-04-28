@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useSessionStore } from 'src/stores/session'
+
+const router = useRouter()
+const sessionStore = useSessionStore()
+
+const { enableTrackVisits, enableTrackingChosen, toggleTrackVisits } = sessionStore
+
+const { trackVisits } = storeToRefs(sessionStore)
+</script>
+
 <template lang="pug">
 q-page.bg-grey-10.text-grey-1.q-pa-sm.flex.justify-center.items-center
   q-card(style="max-width: 750px;").text-grey-10
@@ -5,7 +19,14 @@ q-page.bg-grey-10.text-grey-1.q-pa-sm.flex.justify-center.items-center
       .text-h5.q-pa-sm Privacy policy
     q-card-section
       p In short, we don't collect nominative personal data. Our optional visits analytics tool Matomo anonimises IP address and uses a cookie.
-      p In long, we only use a tool called "Matomo" to collect anonymised visits analytics data. If you activate the optional tracking in the "Privacy" item of the main menu, Matomo will track your actions in the metronome, anonymise your IP address and the tracking information will be part of our usage statistics. Matomo sets a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app).
+      p In long, we only use a tool called "Matomo" to collect anonymised visits analytics data. If you activate the optional tracking below, Matomo will track your actions in the metronome (essentially 'Play' and 'Stop' actions to infer time playing), anonymise your IP address and the tracking information will be part of our usage statistics. Matomo sets a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app).
+    q-card-section(align="center")
+      q-toggle(
+        :model-value="trackVisits",
+        @update:model-value="toggleTrackVisits($event)",
+        color="primary",
+        keep-color
+      ).primary Allow analytics
     q-card-section.flex.justify-center
       q-btn(
         unelevated,
