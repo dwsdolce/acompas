@@ -14,7 +14,7 @@
   "dependencies": {
     "@capacitor-community/keep-awake": "^3.0.0",
     "@capacitor/core": "^4.3.0",
-    "@quasar/extras": "^1.15.6",
+    "@quasar/extras": "^1.16.3",
     "@types/animejs": "^3.1.5",
     "@types/ramda": "^0.28.15",
     "@vueuse/core": "^9.2.0",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
-    "@quasar/app-vite": "^1.1.3",
+    "@quasar/app-vite": "^1.2.2",
     "@types/node": "^12.20.21",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
