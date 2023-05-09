@@ -2,7 +2,6 @@ import { route } from 'quasar/wrappers'
 import {
   createMemoryHistory,
   createRouter,
-  // createWebHashHistory,
   createWebHistory,
 } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
@@ -36,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from) => {
     // ...
     // explicitly return false to cancel the navigation
-    if (from.name) {
+    if (from.name && to.path !== '/privacy-policy') {
       const paloStore = usePaloStore(from.name as string)()
       paloStore.stop()
     }

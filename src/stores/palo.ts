@@ -4,13 +4,13 @@ import { Notify } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import palosData from 'src/data/palosData'
-import { useMetronome } from 'src/composables/metronome'
 import { useSessionStore } from 'src/stores/session'
+import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import type { numOpts, instruOpts, VolumeOpts, PaloState, visuOpts, Size } from 'src/composables/models'
 
-export const usePaloStore = (name: string) =>
-  defineStore(name, () => {
+export const usePaloStore = (name: string | undefined) => {
+  return defineStore(name || 'default', () => {
     const {
       reinitialize,
       initMetronome,
@@ -25,13 +25,6 @@ export const usePaloStore = (name: string) =>
     } = useMetronome()
 
     const {
-      trackVisits,
-      trackingInitialized,
-      trackingChosen
-    } = useSessionStore()
-
-    const {
-      initPiwik,
       trackPlay,
       trackStop
     } = useMatomo()
@@ -45,9 +38,9 @@ export const usePaloStore = (name: string) =>
     // ###################
 
     const palo = useStorage(
-      name,
+      name || 'default',
       ref<PaloState>({
-        name: name,
+        name: name || 'default',
         tempo: (paloData?.defaultTempo as number),
         selectedPreCount: (paloData?.preCounts[0] as numOpts),
         selectedStartBeat: (paloData?.startBeats[0] as numOpts),
@@ -227,7 +220,6 @@ export const usePaloStore = (name: string) =>
     }
 
     const selectVolume = (payload: VolumeOpts) => {
-      console.log('selectVolume', payload)
       if (payload !== null) {
         const volume = payload?.volume
         const instru = instrument.value(payload?.instrument)
@@ -237,7 +229,6 @@ export const usePaloStore = (name: string) =>
     }
 
     const selectDecay = (decay: number) => {
-      console.log('selectDecay', decay)
       if (decay) {
         palo.value.globalDecay = decay
         palo.value.instruments.forEach(instrument => {
@@ -430,3 +421,4 @@ export const usePaloStore = (name: string) =>
       restoreDefault
     }
   })
+}

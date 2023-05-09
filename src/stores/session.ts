@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { Screen } from 'quasar'
 import { useStorage } from '@vueuse/core'
@@ -6,9 +6,12 @@ import { useMatomo } from 'src/composables/matomo'
 import type { Size, SessionState } from 'src/composables/models'
 
 export const useSessionStore = defineStore('session', () => {
-  const { initPiwik } = useMatomo()
-
-  const trackVisits = useStorage('track-visits', ref<boolean>(false))
+  const {
+    init: initMatomo,
+    deleteScript : deleteMatomo,
+    scriptExists: matomoExists,
+  } = useMatomo()
+  const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
   const privacyDialogOpen = ref<boolean>(false)
@@ -16,27 +19,23 @@ export const useSessionStore = defineStore('session', () => {
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
 
-  const toggleTrackVisits = () => {
-    trackVisits.value = !trackVisits.value
-    if (!trackingInitialized.value && trackVisits.value) {
-      initializeTracking()
-    }
+  const toggleTrackVisits = (v: boolean) => {
+    v ? enableTrackVisits() : disableTrackVisits()
   }
 
   const enableTrackVisits = () => {
-    trackVisits.value = true
-    if (!trackingInitialized.value) {
-      initializeTracking()
-    }
+    if (!trackingEnabled.value) trackingEnabled.value = true
+    initMatomo()
   }
 
   const disableTrackVisits = () => {
-    trackVisits.value = false
+     if (trackingEnabled.value) trackingEnabled.value = false
+    deleteMatomo()
   }
 
   const initializeTracking = () => {
-    trackingInitialized.value = true
-    initPiwik()
+    if (!trackingInitialized.value) trackingInitialized.value = true
+    initMatomo()
   }
 
   const enableTrackingChosen = () => {
@@ -63,8 +62,14 @@ export const useSessionStore = defineStore('session', () => {
     visualizationSize.value = payload
   }
 
+  // watch(trackingEnabled, (value) => {
+  //   if (value) {
+  //     initializeTracking()
+  //   }
+  // }, { immediate: true })
+
   return {
-    trackVisits,
+    trackingEnabled,
     trackingInitialized,
     trackingChosen,
     privacyDialogOpen,

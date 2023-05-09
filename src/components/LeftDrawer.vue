@@ -2,8 +2,9 @@
   import { watch, ref, onMounted } from 'vue'
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import TuningFork from 'src/components/TuningFork.vue'
+  import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
 
@@ -11,21 +12,17 @@
   const tuningDialog = ref(false)
   const shortcutsDialog = ref(false)
   const router = useRouter()
+  const route = useRoute()
   const sessionStore = useSessionStore()
 
   const {
-    trackVisits,
     trackingChosen,
     trackingInitialized,
     privacyDialogOpen
   } = storeToRefs(sessionStore)
 
   const {
-    toggleTrackVisits,
-    enableTrackVisits,
-    enableTrackingChosen,
     openPrivacyDialog,
-    closePrivacyDialog,
     toggleDialog
   } = sessionStore
 
@@ -48,8 +45,7 @@
   })
 
   onMounted(() => {
-    console.log(trackingChosen.value)
-    if (!trackingChosen.value) {
+    if (!trackingChosen.value && route.path !== '/privacy-policy') {
       openPrivacyDialog()
     }
   })
@@ -58,54 +54,68 @@
 <template lang="pug">
 div
   q-list(no-border, link, separator)
+
     q-item(clickable, v-ripple, @click="launch('https://paypal.me/acompasorg')")
      q-item-section(avatar)
       q-icon(name="attach_money")
      q-item-section Donate
+
     q-item(id="helpQItem", clickable, v-ripple, @click="helpDialog = true")
       q-item-section(avatar)
         q-icon(name="help")
       q-item-section Help
+
     q-item(id="tuningForkQItem", clickable, v-ripple, @click="tuningDialog = true")
       q-item-section(avatar)
         q-icon(name="hearing")
       q-item-section Tuning fork
+
     q-item(clickable, v-ripple, @click="shortcutsDialog = true")
       q-item-section(avatar)
         q-icon(name="keyboard")
       q-item-section Shortcuts
+
     q-item(clickable, v-ripple, @click="router.push('/privacy-policy')")
       q-item-section(avatar)
         q-icon(name="security")
       q-item-section Privacy policy
+
     q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
       q-item-section(avatar)
         q-icon(name="android")
       q-item-section Get the Android app
+
     q-expansion-item(icon="public", label="Follow")
       q-list(no-border, link, inset-separator)
+
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/acompas.org/')")
           q-item-section(avatar)
             q-icon(name="ion-logo-facebook")
           q-item-section Facebook
+
         q-item(clickable, v-ripple, @click="launch('https://twitter.com/acompas_org')")
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Twitter
+
     q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
+
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="ion-logo-facebook")
           q-item-section Share on Facebook
+
         q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="ion-logo-twitter")
           q-item-section Share on Twitter
+
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
       q-item-section(avatar)
         q-icon(name="code")
       q-item-section Source code
+
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
       q-item-section(avatar)
         q-icon(name="bug_report")
@@ -159,34 +169,7 @@ div
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        .text-h6.text-center Privacy
-      q-card-section.scroll(style="max-height: 80vh;")
-        div
-          div
-            p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
-            q-toggle(
-              id="toggleTrackVisits",
-              :model-value="trackVisits",
-              @update:model-value="toggleTrackVisits"
-              ).primary
-            p We collect that data to have an idea about how many users we have. We don't sell or give access to this data to anyone else. You can enable or disable this feature when you want to.
-      q-card-section(align="center")
-        q-btn(
-          unelevated,
-          id="enableAndClosePrivacyDialogBtn",
-          color="primary",
-          v-close-popup,
-          @click="enableTrackVisits(); enableTrackingChosen(); closePrivacyDialog()"
-        ).q-mr-sm Enable &amp; close
-        q-btn(
-          unelevated,
-          id="closePrivacyDialogBtn",
-          color="secondary",
-          v-close-popup,
-          @click="enableTrackingChosen(); closePrivacyDialog()"
-        ) Close
+    select-privacy
 
   q-dialog(
     id="tuningDialog",

@@ -1,8 +1,9 @@
 import { ref } from 'vue'
 import { Platform } from 'quasar'
-import { useMetronome } from './metronome'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useSessionStore } from 'src/stores/session'
-import { usePaloStore } from 'src/stores/palo'
+import { useMetronome } from 'src/composables/metronome'
 
 declare global {
   interface Window {
@@ -10,18 +11,24 @@ declare global {
   }
 }
 
-window._paq = []
+window._paq = window._paq || []
 
 export const useMatomo = () => {
+  const router = useRouter()
+
   const playStartTime = ref<number | null>(null)
+
+  const sessionStore = useSessionStore()
+  const trackingEnabled = ref(sessionStore.trackingEnabled)
 
   const { getContext } = useMetronome()
 
-  const { trackVisits } = useSessionStore()
+  const audioContext = getContext()
 
-  const platformName = Platform.is.cordova ? 'Cordova' : 'Website'
+  const init = () => {
+    if (!trackingEnabled.value) return
+    const platformName = Platform.is.cordova ? 'Cordova' : 'Website'
 
-  const initPiwik = () => {
     window._paq.push([ 'setCustomVariable', 1, 'AppVersion', platformName, 'visit' ])
     window._paq.push([ 'trackPageView' ])
     window._paq.push([ 'enableLinkTracking' ])
@@ -32,61 +39,56 @@ export const useMatomo = () => {
     const d = document,
       g = d.createElement('script'),
       s = d.getElementsByTagName('script')[0]
+    g.id = 'matomo-script'
     g.type = 'text/javascript'
     g.async = true
     g.defer = true
     g.src = u + 'piwik.js'
     if (s.parentNode) s.parentNode.insertBefore(g, s)
+
+    router.afterEach((to) => {
+      if (trackingEnabled.value) window._paq.push([ 'trackPageView' ])
+    })
+  }
+
+  const scriptExists = () => document.getElementById('matomo-script') !== null
+
+  const deleteScript = () => {
+    const script = document.getElementById('matomo-script')
+    if (script) script.remove()
   }
 
   const trackPlay = (label: string) => {
-    if (!trackVisits) {
-      return
+    if (trackingEnabled.value) {
+      playStartTime.value = Math.round(audioContext.currentTime)
+
+      window._paq.push([
+        'trackEvent',
+        'Playing',
+        'Start',
+        label
+      ])
     }
-    window._paq.push([
-      'trackEvent',
-      'Playing',
-      'Start',
-      label
-    ])
-    playStartTime.value = getContext().currentTime
   }
 
   const trackStop = (label: string) => {
-    if (!trackVisits) {
-      return
+    if (trackingEnabled.value) {
+      const playDuration = Math.round(audioContext.currentTime) - (playStartTime.value || 0)
+
+      window._paq.push([
+        'trackEvent',
+        'Playing',
+        'Stop',
+        label,
+        playDuration
+      ])
     }
-    window._paq.push([
-      'trackEvent',
-      'Playing',
-      'Stop',
-      label,
-      Math.round(getContext().currentTime - (playStartTime.value || 0))
-    ])
   }
 
-  // const matomo = Platform.is.cordova ? require('@ionic-native/matomo') : null
-
-  // const init = () => {
-  //   if (matomo) {
-  //     matomo.init('https://piwik.acompas.org/', 1)
-  //   }
-  // }
-
-  // const trackView = (name: string) => {
-  //   if (matomo) {
-  //     matomo.trackView(name)
-  //   }
-  // }
-
-  // const trackEvent = (category: string, action: string, name: string) => {
-  //   if (matomo) {
-  //     matomo.trackEvent(category, action, name)
-  //   }
-  // }
-
   return {
-    initPiwik,
+    init,
+    scriptExists,
+    deleteScript,
     trackPlay,
     trackStop,
   }

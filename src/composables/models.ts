@@ -153,7 +153,7 @@ export interface PaloState {
 }
 
 export interface SessionState {
-  trackVisits:                boolean
+  trackingEnabled:                boolean
   trackingInitialized:        boolean
   trackingChosen:             boolean
   privacyDialogOpen:          boolean
