@@ -34,7 +34,7 @@ export const useMatomo = () => {
     window._paq.push([ 'enableLinkTracking' ])
 
     const u = 'https://piwik.acompas.org/'
-    window._paq.push([ 'setTrackerUrl', u + 'piwik.php' ])
+    window._paq.push([ 'setTrackerUrl', u + 'matomo.php' ])
     window._paq.push([ 'setSiteId', 1 ])
     const d = document,
       g = d.createElement('script'),
@@ -43,7 +43,7 @@ export const useMatomo = () => {
     g.type = 'text/javascript'
     g.async = true
     g.defer = true
-    g.src = u + 'piwik.js'
+    g.src = u + 'matomo.js'
     if (s.parentNode) s.parentNode.insertBefore(g, s)
 
     router.afterEach((to) => {
