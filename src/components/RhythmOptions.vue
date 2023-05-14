@@ -5,8 +5,7 @@ import { useSessionStore } from 'src/stores/session'
 import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
 import SelectSwing from 'src/components/SelectSwing.vue'
-import SelectPreCount from 'src/components/SelectPreCount.vue'
-import SelectStartBeat from 'src/components/SelectStartBeat.vue'
+import SelectPrestartBeat from 'src/components/SelectPrestartBeat.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 
@@ -44,8 +43,7 @@ div
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md
         select-swing.q-mb-md
-        select-start-beat.q-mb-md
-        select-pre-count.q-mb-md
+        select-prestart-beat.q-mb-md
         select-visualization.q-mb-md
         reset-button.q-mb-md
 </template>

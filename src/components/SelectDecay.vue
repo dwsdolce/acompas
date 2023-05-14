@@ -35,13 +35,17 @@ const {
           p.text-body2 Set a decay for sounds reverb
   q-slider(
     :model-value="palo.globalDecay",
-    @update:model-value="selectDecay($event || palo.globalDecay)",
-    track-size="10px",
-    thumb-size="25px",
-    :min="0.2",
+    @change="val => selectDecay(val || palo.globalDecay)",
+    :min="0.1",
     :max="1.2",
     :step="0.1",
+    snap,
     label,
-    snap
-  ).col-9
+    label-always,
+    switch-label-side,
+    markers,
+    :marker-labels="val => Math.round(val * 10) / 10",
+    marker-labels-class="text-grey-5",
+    switch-marker-labels-side
+  ).col-9.q-mb-md
 </template>

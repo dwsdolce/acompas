@@ -18,8 +18,8 @@ const counter = ref<number | null>(null)
 const className = ref<string>('')
 
 watch(metronomeEvent, (v: number | null) => {
-  if (palo.value.selectedPreCount && palo.value.selectedStartBeat && paloData) {
-    let index = (v as number) - (palo.value.selectedPreCount.value * 2) + palo.value.selectedStartBeat.value
+  if (palo.value.selectedPrestartBeat&& paloData) {
+    let index = (v as number) - (palo.value.selectedPrestartBeat.value * 2)
     // index needs to be strictly positive as it will be used with a % operator
     if (index < 0) {
       index += paloData?.nbBeatsInPattern

@@ -96,14 +96,12 @@ export const useMetronome = () => {
 
   const noteIndexInPattern = (i: number) => {
     if (
-      palo.value.selectedPreCount &&
-      palo.value.selectedStartBeat &&
+      palo.value.selectedPrestartBeat &&
       paloData.value?.nbBeatsInPattern
     ) {
       let index =
         i -
-        palo.value.selectedPreCount.value * 2 +
-        palo.value.selectedStartBeat.value
+        palo.value.selectedPrestartBeat.value * 2
       while (index < 0) {
         index += paloData.value?.nbBeatsInPattern
       }
@@ -181,14 +179,14 @@ export const useMetronome = () => {
     }
   }
 
-  const triggerPreCountClick = (
+  const triggerPrestartBeatClick = (
     time: number,
     note: number
   ) => {
-    if (palo.value.selectedPreCount?.value && paloData.value?.accents) {
+    if (palo.value.selectedPrestartBeat?.value && paloData.value?.accents) {
       if (
-        palo.value.selectedPreCount?.value > 0 &&
-        note < palo.value.selectedPreCount?.value * 2 &&
+        palo.value.selectedPrestartBeat?.value > 0 &&
+        note < palo.value.selectedPrestartBeat?.value * 2 &&
         note % 2 === 0
       ) {
         const index = noteIndexInPattern(note)
@@ -211,14 +209,14 @@ export const useMetronome = () => {
   ) => {
     // eighthNotes ? gain.gain.value = 0.2 : gain.gain = 1.2
 
-    // Prepend pre-count beats if required
-    if (type == 'preCount') {
-      triggerPreCountClick(time, note)
+    // Prepend prestart beats if required
+    if (type == 'prestartBeat') {
+      triggerPrestartBeatClick(time, note)
     } else {
-      // Don't play non-preCount sequences if note is during pre-count
+      // Don't play non-prestart sequences if note is during prestart
       if (
-        palo.value.selectedPreCount?.value &&
-        note < palo.value.selectedPreCount?.value * 2 &&
+        palo.value.selectedPrestartBeat?.value &&
+        note < palo.value.selectedPrestartBeat?.value * 2 &&
         !isLoop
       ) {
         return
@@ -274,7 +272,7 @@ export const useMetronome = () => {
     const seq = new Tone.Sequence((time, note) => {
       // note = parseInt(note)
 
-      // Type is not an event, it is a preCount or a selected instrument
+      // Type is not an event, it is a prestartBeat or a selected instrument
       if (type !== ('event')) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
@@ -310,25 +308,22 @@ export const useMetronome = () => {
 
     if (paloData.value?.nbBeatsInPattern) {
       if (
-        palo.value.selectedPreCount &&
-        palo.value.selectedStartBeat
+        palo.value.selectedPrestartBeat
       ) {
-        // Add pre-count to introduction sequence
-        for (let i = 0; i < palo.value.selectedPreCount?.value; i++) {
+        // Add prestart beat to introduction sequence
+        for (let i = 0; i < palo.value.selectedPrestartBeat?.value; i++) {
           introSeq.push(i * 2)
           introSeq.push(i * 2 + 1)
         }
 
         // Add beats to introduction sequence until loop begins
         if (
-          palo.value.selectedPreCount?.value !== 0 ||
-          palo.value.selectedStartBeat?.value !== 0
+          palo.value.selectedPrestartBeat?.value !== 0
         ) {
           let i = introSeq.length
           // Add items to introSeq until we find a beat with index 0 in the pattern
           while (
-            (palo.value.selectedStartBeat?.value -
-              palo.value.selectedPreCount?.value * 2 +
+            (0 - palo.value.selectedPrestartBeat?.value * 2 +
               i) %
               paloData.value?.nbBeatsInPattern !==
             0
@@ -347,15 +342,7 @@ export const useMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        preCount: buildSequence(false, ('preCount' as keyof PaloData), introSeq, false),
-        clara: buildSequence(false, ('clara' as keyof PaloData), introSeq, false),
-        sorda: buildSequence(false, ('sorda' as keyof PaloData), introSeq, false),
-        pito: buildSequence(false, ('pito' as keyof PaloData), introSeq, false),
-        cajon: buildSequence(false, ('cajon' as keyof PaloData), introSeq, false),
-        nudillo: buildSequence(false, ('nudillo' as keyof PaloData), introSeq, false),
-        udu: buildSequence(false, ('udu' as keyof PaloData), introSeq, false),
-        jaleo: buildSequence(false, ('jaleo' as keyof PaloData), introSeq, false),
-        click: buildSequence(false, ('click' as keyof PaloData), introSeq, false),
+        prestartBeat: buildSequence(false, ('prestartBeat' as keyof PaloData), introSeq, false),
         event: buildSequence(false, ('event' as keyof PaloData), introSeq, false),
       },
       loop: {
@@ -372,16 +359,6 @@ export const useMetronome = () => {
     }
 
     sequences.eighthNotes = {
-      introduction: {
-        clara: buildSequence(true, ('clara' as keyof PaloData), introSeq, false),
-        sorda: buildSequence(true, ('sorda' as keyof PaloData), introSeq, false),
-        pito: buildSequence(true, ('pito' as keyof PaloData), introSeq, false),
-        cajon: buildSequence(true, ('cajon' as keyof PaloData), introSeq, false),
-        nudillo: buildSequence(true, ('nudillo' as keyof PaloData), introSeq, false),
-        udu: buildSequence(true, ('udu' as keyof PaloData), introSeq, false),
-        jaleo: buildSequence(true, ('jaleo' as keyof PaloData), introSeq, false),
-        click: buildSequence(true, ('click' as keyof PaloData), introSeq, false),
-      },
       loop: {
         clara: buildSequence(true, ('clara' as keyof PaloData), loopSeq, true),
         sorda: buildSequence(true, ('sorda' as keyof PaloData), loopSeq, true),
@@ -440,32 +417,26 @@ export const useMetronome = () => {
   const startSequences = async () => {
     await Tone.start()
 
-    const offset = sequences.quarterNotes?.introduction.event?.length || 0
+    const offset = sequences.quarterNotes?.introduction?.event?.length || 0
     const loopStart = '0:' + offset / 2
 
     await Tone.Transport.start()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
-      if (sequences.quarterNotes.introduction.event?.length !== 0) {
-        await forEachValue(sequences.quarterNotes.introduction, (seq: Tone.Sequence) => {
-          seq.start()
-          seq.stop(loopStart)
-        })
-        await forEachValue(sequences.eighthNotes.introduction, (seq: Tone.Sequence) => {
-          seq.start(0)
-          seq.stop(loopStart)
-        })
-        await forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
+      if (sequences.quarterNotes.introduction?.event?.length !== 0) {
+        sequences.quarterNotes.introduction?.event?.start(0).stop(loopStart)
+        sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(loopStart)
+        forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
           seq.start(loopStart, offset)
         })
-        await forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
+        forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
           seq.start(loopStart, offset)
         })
       } else {
-        await forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
+        forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
           seq.start(0)
         })
-        await forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
+        forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
           seq.start(0)
         })
       }
@@ -502,18 +473,8 @@ export const useMetronome = () => {
     // Do nothing if sequences have not been initialized
     if (typeof sequences.quarterNotes === 'undefined') return
 
-    forEachValue(
-      sequences.quarterNotes.introduction,
-      (seq: Tone.Sequence, type: string) => {
-        if (type === 'event' || type === 'preCount' || type === 'click') {
-          seq.humanize = false
-        } else {
-          seq.humanize = palo.value.humanization
-        }
-      }
-    )
     forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence, type: string) => {
-      if (type === 'event' || type === 'preCount' || type === 'click') {
+      if (type === 'event' || type === 'prestartBeat' || type === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = palo.value.humanization
@@ -553,7 +514,7 @@ export const useMetronome = () => {
     changeSwing,
     changeTempo,
     triggerAudioOnEvent,
-    triggerPreCountClick,
+    triggerPrestartBeatClick,
     improviseJaleo,
     improvise,
     noteIndexInPattern,

@@ -48,15 +48,15 @@ export default {
   cajon: [
     {
       src: 'cajon/cajon_1',
-      volume: 0,
+      volume: -2,
     },
     {
       src: 'cajon/cajon_2',
-      volume: 0,
+      volume: -2,
     },
     {
       src: 'cajon/cajon_2',
-      volume: -10,
+      volume: -12,
     },
   ],
   nudillo: [
@@ -72,15 +72,15 @@ export default {
   udu: [
     {
       src: 'udu/udu_1',
-      volume: -12,
+      volume: -16,
     },
     {
       src: 'udu/udu_2',
-      volume: -5,
+      volume: -9,
     },
     {
       src: 'udu/udu_3',
-      volume: 0,
+      volume: -4,
     },
   ],
   jaleo: [

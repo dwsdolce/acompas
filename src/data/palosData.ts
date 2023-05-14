@@ -9,7 +9,8 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [ 0, 3, 7, 8, 10 ],
+    accents: [0, 3, 7, 8, 10],
+
     clara: //<[number, ...(number | null)[]]>
       [ 1,    3,    3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    2,    1,    2,    1,    null, 3,    1,    1,    null, 3,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
@@ -50,43 +51,29 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '12 (default)' },
-      { value: 2, label: '1' },
-      { value: 4, label: '2' },
-      { value: 6, label: '3' },
+      { value: 1, label: '11' },
+      { value: 2, label: '10' },
+      { value: 3, label: '9' },
+      { value: 4, label: '8' },
+      { value: 5, label: '7' },
+      { value: 6, label: '6' },
+      { value: 7, label: '5' },
       { value: 8, label: '4' },
-      { value: 10, label: '5' },
-      { value: 12, label: '6 (half a compás)' },
-      { value: 14, label: '7' },
-      { value: 16, label: '8' },
-      { value: 18, label: '9' },
-      { value: 20, label: '10' },
-      { value: 22, label: '11' }
+      { value: 9, label: '3' },
+      { value: 10, label: '2' },
+      { value: 11, label: '1' },
+      { value: 12, label: '12' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is por buleria',
     longLabel: 'Alegría',
     doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
-         '<p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p>' +
-         '<p>This rhythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p>' +
-         '<p>The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E).</p>' +
-         '<p>It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira</p>',
+      '<p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p>' +
+      '<p>This rhythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p>' +
+      '<p>The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E).</p>' +
+      '<p>It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Alegr%C3%ADas',
     places: 'Cádiz',
     videoExample: 'https://www.youtube.com/watch?v=M4x02TRlaqw'
@@ -101,7 +88,8 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [ 0, 2, 4 ],
+    accents: [0, 2, 4],
+
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 3,    null, 1,    2,    3,    null, 1,    3,    3,    null, 3,    null ],
@@ -150,22 +138,14 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3 (half a compás)' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '6 (default)' },
-      { value: 2, label: '1' },
+      { value: 1, label: '5' },
+      { value: 2, label: '4' },
+      { value: 3, label: '3' },
       { value: 4, label: '2' },
-      { value: 6, label: '3 (half a compás)' },
-      { value: 8, label: '4' },
-      { value: 10, label: '5' }
+      { value: 5, label: '1' },
+      { value: 6, label: '6' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
@@ -183,7 +163,8 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [ 0, 3 ],
+    accents: [0, 3],
+
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 3,    2,    1,    2,    3,    null, 1,    3,    3,    null, 3,    null ],
@@ -232,28 +213,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3 (half a compás)' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '6 (default)' },
-      { value: 2, label: '1' },
+      { value: 1, label: '5' },
+      { value: 2, label: '4' },
+      { value: 3, label: '3' },
       { value: 4, label: '2' },
-      { value: 6, label: '3 (half a compás)' },
-      { value: 8, label: '4' },
-      { value: 10, label: '5' }
+      { value: 5, label: '1' },
+      { value: 6, label: '6' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '6 beats Bulería',
     doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary.</p>' +
-         '<p>It can be seen as the first half of a 12 beats bulería.</p>',
+      '<p>It can be seen as the first half of a 12 beats bulería.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     places: 'Jerez de la Frontera'
   },
@@ -267,7 +240,8 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [ 0, 3, 6, 8, 10 ],
+    accents: [0, 3, 6, 8, 10],
+
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 1,    3,    3,    2,    3,    2,    1,    2,    3,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    null, 3,    null ],
@@ -312,40 +286,26 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '12 (default)' },
-      { value: 2, label: '1' },
-      { value: 4, label: '2' },
-      { value: 6, label: '3' },
+      { value: 1, label: '11' },
+      { value: 2, label: '10' },
+      { value: 3, label: '9' },
+      { value: 4, label: '8' },
+      { value: 5, label: '7' },
+      { value: 6, label: '6' },
+      { value: 7, label: '5' },
       { value: 8, label: '4' },
-      { value: 10, label: '5' },
-      { value: 12, label: '6 (half a compás)' },
-      { value: 14, label: '7' },
-      { value: 16, label: '8' },
-      { value: 18, label: '9' },
-      { value: 20, label: '10' },
-      { value: 22, label: '11' }
+      { value: 9, label: '3' },
+      { value: 10, label: '2' },
+      { value: 11, label: '1' },
+      { value: 12, label: '12' }
     ],
     slowMessage: 'Your rhythm is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: '12 beats Bulería',
     doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
-         '<p>It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".</p>',
+      '<p>It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
     places: 'Jerez de la Frontera and others',
     videoExample: 'https://www.youtube.com/watch?v=p5ypbEOZLUU'
@@ -360,7 +320,8 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [ 0, 3, 7, 8, 10 ],
+    accents: [0, 3, 7, 8, 10],
+
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -406,34 +367,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '12 (default)' },
-      { value: 2, label: '1' },
-      { value: 4, label: '2' },
-      { value: 6, label: '3' },
+      { value: 1, label: '11' },
+      { value: 2, label: '10' },
+      { value: 3, label: '9' },
+      { value: 4, label: '8' },
+      { value: 5, label: '7' },
+      { value: 6, label: '6' },
+      { value: 7, label: '5' },
       { value: 8, label: '4' },
-      { value: 10, label: '5' },
-      { value: 12, label: '6 (half a compás)' },
-      { value: 14, label: '7' },
-      { value: 16, label: '8' },
-      { value: 18, label: '9' },
-      { value: 20, label: '10' },
-      { value: 22, label: '11' }
+      { value: 9, label: '3' },
+      { value: 10, label: '2' },
+      { value: 11, label: '1' },
+      { value: 12, label: '12' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
@@ -452,7 +399,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [ 0, 3, 6, 9, 10 ],
+    accents: [0, 3, 6, 9, 10],
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -498,34 +445,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '12 (default)' },
-      { value: 2, label: '1' },
-      { value: 4, label: '2' },
-      { value: 6, label: '3' },
+      { value: 1, label: '11' },
+      { value: 2, label: '10' },
+      { value: 3, label: '9' },
+      { value: 4, label: '8' },
+      { value: 5, label: '7' },
+      { value: 6, label: '6' },
+      { value: 7, label: '5' },
       { value: 8, label: '4' },
-      { value: 10, label: '5' },
-      { value: 12, label: '6 (half a compás)' },
-      { value: 14, label: '7' },
-      { value: 16, label: '8' },
-      { value: 18, label: '9' },
-      { value: 20, label: '10' },
-      { value: 22, label: '11' }
+      { value: 9, label: '3' },
+      { value: 10, label: '2' },
+      { value: 11, label: '1' },
+      { value: 12, label: '12' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
@@ -545,7 +478,7 @@ export default [
     slowTempo: 140,
     fastTempo: 220,
     nbBeatsInPattern: 16,
-    accents: [ 0, 4 ],
+    accents: [0, 4],
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -578,8 +511,8 @@ export default [
     //  1           2           3           4           5           6           7           8
 
     udu: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, null, 1,    null, null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, null, 3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
@@ -595,28 +528,22 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2 (half a compás)' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4 (one compás)' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (one compás and a half)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8 (two compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 10, label: '2' },
-      { value: 12, label: '3 (half a compás)' },
-      { value: 14, label: '4' }
+      { value: 1, label: '8' },
+      { value: 2, label: '7' },
+      { value: 3, label: '6' },
+      { value: 4, label: '5' },
+      { value: 5, label: '4' },
+      { value: 6, label: '3' },
+      { value: 7, label: '2' },
+      { value: 8, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Rumba',
     doc: '<p>Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4.</p>' +
-         '<p>There is an accent on the first beat. Remark : our example pattern is made of 2 bars.</p>',
+      '<p>There is an accent on the first beat. Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Rumba_flamenca',
     places: 'Barcelona and others',
     videoExample: 'https://www.youtube.com/watch?v=2oyhlad64-s'
@@ -631,7 +558,8 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 12,
-    accents: [ 0, 3, 4 ],
+    accents: [0, 3, 4],
+
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -681,25 +609,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3 (one compás)' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (two compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 8, label: '2' },
-      { value: 10, label: '3' }
+      { value: 1, label: '6' },
+      { value: 2, label: '5' },
+      { value: 3, label: '4' },
+      { value: 4, label: '3' },
+      { value: 5, label: '2' },
+      { value: 6, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Sevillanas',
     doc: '<p>Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz.</p>' +
-         '<p>Remark : our example pattern is made of 2 bars.</p>',
+      '<p>Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sevillanas',
     places: 'Sevilla',
     videoExample: 'https://www.youtube.com/watch?v=PL_EOB79dow'
@@ -714,7 +637,7 @@ export default [
     slowTempo: 70,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [ 4, 10 ],
+    accents: [4, 10],
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -760,20 +683,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1                       2                       3                                   4                                   5
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 4, label: '2' },
-      { value: 8, label: '3 (half a compás)' },
-      { value: 14, label: '4' },
-      { value: 20, label: '5' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 4, label: '2' },
-      { value: 8, label: '3 (half a compás)' },
-      { value: 14, label: '4' },
-      { value: 20, label: '5' }
+      { value: 1, label: '·' },
+      { value: 2, label: '5' },
+      { value: 3, label: '·' },
+      { value: 4, label: '·' },
+      { value: 5, label: '4' },
+      { value: 6, label: '·' },
+      { value: 7, label: '·' },
+      { value: 8, label: '3' },
+      { value: 9, label: '·' },
+      { value: 10, label: '2' },
+      { value: 11, label: '·' },
+      { value: 12, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
@@ -793,7 +716,8 @@ export default [
     slowTempo: 60,
     fastTempo: 110,
     nbBeatsInPattern: 24,
-    accents: [ 2, 5, 7, 9, 11 ],
+    accents: [2, 5, 7, 9, 11],
+
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -831,34 +755,20 @@ export default [
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1           2           3           4           5           6           7           8           9           10          11          12
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (half a compás)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8' },
-      { value: 9, label: '9' },
-      { value: 10, label: '10' },
-      { value: 11, label: '11' },
-      { value: 12, label: '12 (one compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 2, label: '2' },
-      { value: 4, label: '3' },
-      { value: 6, label: '4' },
+      { value: 1, label: '12' },
+      { value: 2, label: '11' },
+      { value: 3, label: '10' },
+      { value: 4, label: '9' },
+      { value: 5, label: '8' },
+      { value: 6, label: '7' },
+      { value: 7, label: '6' },
       { value: 8, label: '5' },
-      { value: 10, label: '6' },
-      { value: 12, label: '7 (half a compás)' },
-      { value: 14, label: '8' },
-      { value: 16, label: '9' },
-      { value: 18, label: '10' },
-      { value: 20, label: '11' },
-      { value: 22, label: '12' }
+      { value: 9, label: '4' },
+      { value: 10, label: '3' },
+      { value: 11, label: '2' },
+      { value: 12, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is solea por bulería or alegría',
@@ -878,7 +788,7 @@ export default [
     slowTempo: 90,
     fastTempo: 200,
     nbBeatsInPattern: 12,
-    accents: [ 0, 3 ],
+    accents: [0, 3],
 
     clara: //<[number, ...(number | null)[]]>
     //  0     1     2     3     4     5     6     7     8     9     10    11
@@ -920,28 +830,22 @@ export default [
       [ 1,    null, 2,    null, 3,    null, 1,    null, 2,    null, 3,    null ],
     //  1           2           3           1           2           3
 
-    preCounts: [
+
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '2' },
-      { value: 2, label: '3' },
-      { value: 3, label: '4 (one compás)' },
-      { value: 4, label: '5' },
-      { value: 5, label: '6' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 2, label: '2' },
+      { value: 1, label: '6' },
+      { value: 2, label: '5' },
+      { value: 3, label: '4' },
       { value: 4, label: '3' },
-      { value: 6, label: '4 (half a compás)' },
-      { value: 8, label: '5' },
-      { value: 10, label: '6' }
+      { value: 5, label: '2' },
+      { value: 6, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',
     longLabel: 'Tanguillos de Cádiz',
     doc: '<p>Tanguillos are a kind of hybrid rhythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p>' +
-         '<p>There is an accent on the first beat and sometimes… on the 2 and a half.</p>' +
-         '<p>Remark : our example pattern is made of 2 bars.</p>',
+      '<p>There is an accent on the first beat and sometimes… on the 2 and a half.</p>' +
+      '<p>Remark : our example pattern is made of 2 bars.</p>',
     places: 'Cádiz and others',
     videoExample: 'https://www.youtube.com/watch?v=AzvKavPKrXw'
   },
@@ -955,7 +859,7 @@ export default [
     slowTempo: 90,
     fastTempo: 150,
     nbBeatsInPattern: 16,
-    accents: [ 0, 4 ],
+    accents: [0, 4],
 
     clara: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -976,57 +880,51 @@ export default [
     //  1           2           3           4           5           6           7           8
 
     cajon: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 1,    3,    2,    3,    3,    null, 2,    null, 1,    3,    2,    3,    2,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     nudillo: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2,    null  ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     udu: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     click: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,   null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     beatLabels: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 1,    null, 2,    null, 3,    null, 4,    null, 1,    null, 2,    null, 3,    null, 4,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2 (half a compás)' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4 (one compás)' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (one compás and a half)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8 (two compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 10, label: '2' },
-      { value: 12, label: '3 (half a compás)' },
-      { value: 14, label: '4' }
+      { value: 1, label: '8' },
+      { value: 2, label: '7' },
+      { value: 3, label: '6' },
+      { value: 4, label: '5' },
+      { value: 5, label: '4' },
+      { value: 6, label: '3' },
+      { value: 7, label: '2' },
+      { value: 8, label: '1' }
     ],
     slowMessage: 'Your tempo is por tientos',
     fastMessage: 'Your tempo is por rumba',
     longLabel: 'Tangos',
     doc: '<p>Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
-         '<p>Remark : our example pattern is made of 2 bars.</p>',
+      '<p>Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Tango_(flamenco)',
     places: 'Granada, Málaga, Extremadura',
     videoExample: 'https://www.youtube.com/watch?v=k3y02uQ-yoc'
@@ -1041,79 +939,73 @@ export default [
     slowTempo: 40,
     fastTempo: 90,
     nbBeatsInPattern: 16,
-    accents: [ 0, 4 ],
+    accents: [0, 4],
 
     clara: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 3,    2,    1,    1,    3,    null, 1,    null, 3,    2,    1,    1,    3,    null, 1,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 3,    2,    1,    1,    3, null,    1,    null, 3,    2,    1,    1,    3,    null, 1,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     sorda: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2 ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     pito: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    null, 1,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     cajon: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    3,    2,    3,    3,    null, 2,    null, 1,    3,    2,    3,    2,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    3, 2, 3, 3, null, 2, null, 1, 3, 2, 3, 2, null, 2, null],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     nudillo: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null,  2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2, null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     udu: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
       [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     click: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
     beatLabels: //<[number, ...(number | null)[]]>
-    //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 3,    null, 4,    null, 1,    null, 2,    null, 3,    null, 4,    null ],
+      //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      [ 1,    null, 2,    null, 3,    null, 4,    null, 1,    null, 2,    null, 3,    null, 4,    null],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
     //  1           2           3           4           5           6           7           8
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' },
-      { value: 1, label: '1' },
-      { value: 2, label: '2 (half a compás)' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4 (one compás)' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6 (one compás and a half)' },
-      { value: 7, label: '7' },
-      { value: 8, label: '8 (two compás)' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' },
-      { value: 10, label: '2' },
-      { value: 12, label: '3 (half a compás)' },
-      { value: 14, label: '4' }
+      { value: 1, label: '8' },
+      { value: 2, label: '7' },
+      { value: 3, label: '6' },
+      { value: 4, label: '5' },
+      { value: 5, label: '4' },
+      { value: 6, label: '3' },
+      { value: 7, label: '2' },
+      { value: 8, label: '1' }
     ],
     slowMessage: 'Your tempo is very slow, even for tientos',
     fastMessage: 'Your tempo is more like tangos or rumbas',
     longLabel: 'Tientos',
     doc: '<p>Tientos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
-         '<p>It often ends "por tangos".</p>' +
-         '<p>Remark : our example pattern is made of 2 bars.</p>',
+      '<p>It often ends "por tangos".</p>' +
+      '<p>Remark : our example pattern is made of 2 bars.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Tientos_(flamenco)',
     places: 'Cádix and other places in Andalusia',
     videoExample: 'https://www.youtube.com/watch?v=zJ4dHGuX0m4'
@@ -1130,34 +1022,31 @@ export default [
     nbBeatsInPattern: 2,
     accents: [],
     clara:
-      [ 1, 2 ],
+      [1, 2],
 
     sorda:
-      [ 1, 2 ],
+      [1, 2],
 
     pito:
-      [ 1, 2 ],
+      [1, 2],
 
     cajon:
-      [ 1, 2 ],
+      [1, 2],
 
     nudillo:
-      [ 1, 2 ],
+      [1, 2],
 
     udu:
-      [ 2, 3 ],
+      [2, 3],
 
     click:
-      [ 1, null ],
+      [1, null],
 
     beatLabels:
-      [ 1, null ],
+      [1, null],
 
-    preCounts: [
+    prestartBeats: [
       { value: 0, label: 'Off' }
-    ],
-    startBeats: [
-      { value: 0, label: '1 (default)' }
     ],
     slowMessage: 'Your tempo is very slow',
     fastMessage: 'Your tempo is very fast',

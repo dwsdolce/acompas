@@ -42,8 +42,7 @@ export const usePaloStore = (name: string | undefined) => {
       ref<PaloState>({
         name: name || 'default',
         tempo: (paloData?.defaultTempo as number),
-        selectedPreCount: (paloData?.preCounts[0] as numOpts),
-        selectedStartBeat: (paloData?.startBeats[0] as numOpts),
+        selectedPrestartBeat: (paloData?.prestartBeats[0] as numOpts),
         swing: name === 'tientos' ? 0.6 : 0,
         improvisation: false,
         humanization: false,
@@ -139,6 +138,7 @@ export const usePaloStore = (name: string | undefined) => {
     )
     const beatLabels = computed(() => paloData?.beatLabels)
     const numLabels = computed(() => paloData?.beatLabels.filter((el) => el != null))
+    const prestartBeats = computed(() => paloData?.prestartBeats)
     const accents = computed(() => paloData?.accents)
     const clockStep = computed(
       () => 360 / ((paloData?.nbBeatsInPattern as number) / 2)
@@ -149,9 +149,8 @@ export const usePaloStore = (name: string | undefined) => {
         : paloData?.defaultTempo
     )
     const startingPoint = computed(() =>
-      palo.value.selectedStartBeat && palo.value.selectedPreCount
-        ? palo.value.selectedStartBeat.value / 2 -
-          palo.value.selectedPreCount.value
+      palo.value.selectedPrestartBeat
+        ? nbBeatsInPattern.value - palo.value.selectedPrestartBeat.value
         : 0
     )
     const instrument = computed(
@@ -245,20 +244,13 @@ export const usePaloStore = (name: string | undefined) => {
       }
     }
 
-    const selectPreCount = (payload: number) => {
+    const selectPrestartBeat = (payload: number) => {
+      console.log('selectPrestartBeat', payload)
       if (!payload && !paloData) return
-      palo.value.selectedPreCount
-        = paloData?.preCounts.find(el => el?.value === payload)
-        || (paloData?.preCounts[0] as numOpts)
-      reinitialize(palo.value)
-    }
-
-    const selectStartBeat = (payload: number) => {
-      if (!payload && !paloData) return
-      palo.value.selectedStartBeat
-        = paloData?.startBeats.find(el => el?.value === payload)
-        || (paloData?.startBeats[0] as numOpts)
-      reinitialize(palo.value)
+      palo.value.selectedPrestartBeat
+        = paloData?.prestartBeats.find(el => el?.value === payload)
+        || (paloData?.prestartBeats[0] as numOpts)
+      stop()
     }
 
     const toggleEighthNotes = (payload: instruOpts) => {
@@ -385,6 +377,7 @@ export const usePaloStore = (name: string | undefined) => {
       visualizationMode,
       beatLabels,
       numLabels,
+      prestartBeats,
       accents,
       clockStep,
       clockVelocity,
@@ -406,8 +399,7 @@ export const usePaloStore = (name: string | undefined) => {
       selectDecay,
       selectSwing,
       selectInstruments,
-      selectPreCount,
-      selectStartBeat,
+      selectPrestartBeat,
       toggleEighthNotes,
       enableEighthNotes,
       disableEighthNotes,

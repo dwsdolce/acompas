@@ -53,5 +53,5 @@ const onSelectVisualizationMode = (v: string) => {
     :model-value="visualizationMode",
     @update:model-value="onSelectVisualizationMode"
     :options="visualizationModes"
-  )
+  ).q-mb-lg
 </template>

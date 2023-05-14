@@ -16,16 +16,8 @@ const {
 </script>
 
 <template lang="pug">
-.text-center
-  //- p.caption Humanize
-  q-toggle(
-    :model-value="palo.humanization",
-    @update:model-value="toggleHumanize()",
-    label="Humanize",
-    left-label,
-    color="primary",
-    keep-color
-  )
+.text-center.q-mx-md
+  p.caption Humanize
     span.q-ml-sm
       q-btn(
         dense,
@@ -41,4 +33,12 @@ const {
           :offset="[10, 10]"
         )
           p.text-body2 If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
+
+  q-toggle(
+    :model-value="palo.humanization",
+    @update:model-value="toggleHumanize()",
+    left-label,
+    color="primary",
+    keep-color
+  )
 </template>

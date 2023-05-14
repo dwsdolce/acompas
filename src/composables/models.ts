@@ -43,21 +43,21 @@ export interface Sounds {
 }
 
 export interface Seq {
-  clara:                    Sequence
-  sorda:                    Sequence
-  pito:                     Sequence
-  nudillo:                  Sequence
-  cajon:                    Sequence
-  udu:                      Sequence
-  jaleo:                    Sequence
-  click:                    Sequence
+  clara?:                   Sequence
+  sorda?:                   Sequence
+  pito?:                    Sequence
+  nudillo?:                 Sequence
+  cajon?:                   Sequence
+  udu?:                     Sequence
+  jaleo?:                   Sequence
+  click?:                   Sequence
   event?:                   Sequence
-  preCount?:                Sequence
+  prestartBeat?:            Sequence
 }
 
 export interface SeqSubdiv {
-  introduction:            Seq
-  loop:                    Seq
+  introduction?:            Seq
+  loop:                     Seq
 }
 
 export interface Seqs {
@@ -72,92 +72,90 @@ export interface TuningFork {
 }
 
 export interface stringOpts {
-  label:                      string
-  value:                      string
+  label:                    string
+  value:                    string
 }
 
 export interface numOpts {
-  label:                      string
-  value:                      number
+  label:                    string
+  value:                    number
 }
 
 export interface instruOpts extends stringOpts {
-  enabled:                    boolean
-  eighthNotes:                boolean | null
-  volume:                     number
-  decay:                      number
+  enabled:                  boolean
+  eighthNotes:              boolean | null
+  volume:                   number
+  decay:                    number
 }
 
 export interface visuOpts extends stringOpts {
-  isActive:                   boolean
+  isActive:                 boolean
 }
 
 export interface Size {
-  width:                      number | null
-  height:                     number | null
+  width:                    number | null
+  height:                   number | null
 }
 
 export interface VolumeOpts {
-  instrument:                 string
-  volume:                     number
+  instrument:               string
+  volume:                   number
 }
 
 export interface DecayOpts {
-  instrument:                 string
-  decay:                      number
+  instrument:               string
+  decay:                    number
 }
 
 export interface PaloData {
-  id:                         number
-  label:                      string
-  value:                      string
-  minTempo:                   number
-  maxTempo:                   number
-  defaultTempo:               number
-  slowTempo:                  number
-  fastTempo:                  number
-  nbBeatsInPattern:           number
-  accents:                    number[]
-  clara:                      (number | null)[]
-  sorda:                      (number | null)[]
-  pito:                       (number | null)[]
-  cajon:                      (number | null)[]
-  nudillo:                    (number | null)[]
-  udu:                        (number | null)[]
-  click:                      (number | null)[]
-  beatLabels:                 (number | null)[]
-  preCounts:                  numOpts[]
-  startBeats:                 numOpts[]
-  slowMessage?:               string
-  fastMessage?:               string
-  longLabel?:                 string
-  doc?:                       string
-  wikipediaUrl?:              string
-  places?:                    string
-  videoExample?:              string
+  id:                       number
+  label:                    string
+  value:                    string
+  minTempo:                 number
+  maxTempo:                 number
+  defaultTempo:             number
+  slowTempo:                number
+  fastTempo:                number
+  nbBeatsInPattern:         number
+  accents:                  number[]
+  clara:                    (number | null)[]
+  sorda:                    (number | null)[]
+  pito:                     (number | null)[]
+  cajon:                    (number | null)[]
+  nudillo:                  (number | null)[]
+  udu:                      (number | null)[]
+  click:                    (number | null)[]
+  beatLabels:               (number | null)[]
+  prestartBeats:            numOpts[]
+  slowMessage?:             string
+  fastMessage?:             string
+  longLabel?:               string
+  doc?:                     string
+  wikipediaUrl?:            string
+  places?:                  string
+  videoExample?:            string
 }
 
 export interface PaloState {
-  name:                       string
-  tempo:                      number
-  selectedPreCount:           numOpts
-  selectedStartBeat:          numOpts
-  swing:                      number
-  improvisation:              boolean
-  humanization:               boolean
-  isTooSlow:                  boolean
-  isTooFast:                  boolean
-  // visualizationModes:         visuOpts[]
-  instruments:                instruOpts[]
-  globalDecay:                number
+  name:                     string
+  tempo:                    number
+  selectedPrestartBeat:     numOpts
+  swing:                    number
+  improvisation:            boolean
+  humanization:             boolean
+  isTooSlow:                boolean
+  isTooFast:                boolean
+  // visualizationModes:    visuOpts[]
+  instruments:              instruOpts[]
+  globalDecay:              number
 }
 
 export interface SessionState {
-  trackingEnabled:                boolean
-  trackingInitialized:        boolean
-  trackingChosen:             boolean
-  privacyDialogOpen:          boolean
-  dialogOpen:                 boolean
-  leftDrawerOpen:             boolean
-  visualizationSize:          Size
+  trackingEnabled:          boolean
+  trackingInitialized:      boolean
+  trackingChosen:           boolean
+  privacyDialogOpen:        boolean
+  dialogOpen:               boolean
+  leftDrawerOpen:           boolean
+  visualizationSize:        Size
 }

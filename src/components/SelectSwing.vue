@@ -35,13 +35,17 @@ const {
           p.text-body2 If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rythm flavour.
   q-slider(
     :model-value="palo.swing",
-    @update:model-value="selectSwing($event)",
+    @change="val => { selectSwing(val) }",
     :min="0",
     :max="1",
     :step="0.1",
+    snap,
     label,
     label-always,
     switch-label-side,
-    snap
-  )
+    markers,
+    :marker-labels="val => Math.round(val * 10) / 10",
+    marker-labels-class="text-grey-5",
+    switch-marker-labels-side
+  ).q-mb-md
 </template>

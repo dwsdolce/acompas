@@ -17,10 +17,10 @@ const sessionStore = useSessionStore()
 
 const $q = useQuasar()
 
-const { palo } = storeToRefs(paloStore)
+const { palo, prestartBeats } = storeToRefs(paloStore)
 
 const {
-  selectPreCount
+  selectPrestartBeat
 } = paloStore
 
 const {
@@ -30,33 +30,27 @@ const {
 const arrayOfIndexes = computed(
   () => {
   const array = []
-  if (paloData?.preCounts.length) {
-    for (let index = 0; index < paloData?.preCounts.length; index++) {
+  if (paloData?.prestartBeats.length) {
+    for (let index = 0; index < paloData?.prestartBeats.length; index++) {
       array.push(index)
     }
   }
   return array
 })
 
-const dataSelectedPreCount = paloData?.preCounts.find((el) => el !== undefined && el.value === palo.value.selectedPreCount.value)
+const dataSelectedPrestartBeat = paloData?.prestartBeats.find((el) => el !== undefined && el.value === palo.value.selectedPrestartBeat.value)
 
 const index = computed(
   (): number | null =>
-    palo.value.selectedPreCount && paloData?.preCounts.length && dataSelectedPreCount
-      ? paloData?.preCounts.indexOf(dataSelectedPreCount) as number
+    palo.value.selectedPrestartBeat && paloData?.prestartBeats.length && dataSelectedPrestartBeat
+      ? paloData?.prestartBeats.indexOf(dataSelectedPrestartBeat) as number
       : null
 )
-
-const onSelectedPreCount = (v: number) => {
-  const obj = paloData?.preCounts.find((el) => el !== undefined && paloData?.preCounts.indexOf(el) === v)
-  if (obj) selectPreCount(obj.value)
-  paloStore.stop()
-}
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  .caption Pre-count
+  .caption Prestart from beat
     span.q-ml-sm
       q-btn(
         dense,
@@ -71,17 +65,17 @@ const onSelectedPreCount = (v: number) => {
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 Optionaly define a number of beats to use as pre-count for the selected palo.
+          p.text-body2 Optionaly define a beat from which a precount click will start before the actual loop starts.
   q-slider(
     :model-value="index",
-    @update:model-value="onSelectedPreCount($event)",
-    :min="0",
-    :max="arrayOfIndexes.length",
+    @change="val => { selectPrestartBeat(val) }",
+    :min="arrayOfIndexes[0]",
+    :max="arrayOfIndexes[arrayOfIndexes.length - 1]",
     :step="1",
-    label,
-    label-always,
-    switch-label-side,
-    :label-value="palo.selectedPreCount.label",
-    snap
-  )
+    snap,
+    markers,
+    :marker-labels="val => paloData?.prestartBeats[val].label",
+    marker-labels-class="text-grey-5",
+    switch-marker-labels-side
+  ).q-mb-md
 </template>

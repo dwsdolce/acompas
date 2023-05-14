@@ -102,17 +102,17 @@ const animateNum = (v: number | null) => {
 }
 
 watch(
-  [metronomeEvent, startingPoint, palo.value.selectedPreCount],
+  [metronomeEvent, startingPoint, palo.value.selectedPrestartBeat],
   (
-    [newMetronomeEvent, newStartingPoint, newSelectedPreCount],
-    [prevMetronomeEvent, prevStartingPoint, prevSelectedPreCount]
+    [newMetronomeEvent, newStartingPoint, newSelectedPrestartBeat],
+    [prevMetronomeEvent, prevStartingPoint, prevSelectedPrestartBeat]
   ) => {
     animateClock(newMetronomeEvent)
     animateNum(newMetronomeEvent)
     if (newStartingPoint !== prevStartingPoint) {
       idleClockPosition()
     }
-    if (newSelectedPreCount !== prevSelectedPreCount) {
+    if (newSelectedPrestartBeat !== prevSelectedPrestartBeat) {
       idleClockPosition()
     }
   }
