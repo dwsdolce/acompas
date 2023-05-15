@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUpdated } from 'vue'
 import { openURL, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
+import type { QBtn } from 'quasar'
 
 const route = useRoute()
 const paloData = palosData.find(palo => palo.value === route.name)
@@ -25,6 +26,14 @@ const {
 
 const paloHelpDialog = ref(false)
 
+const paloHelpBtn = ref<QBtn | null>(null)
+
+onUpdated(() => {
+  if (!paloHelpDialog.value && paloHelpBtn.value !== null) {
+    paloHelpBtn?.value?.$el?.querySelector('.q-focus-helper')?.blur()
+  }
+})
+
 const launch = (url: string | undefined) => {
   if (url) {
     // if (Platform.is.cordova) {
@@ -34,12 +43,19 @@ const launch = (url: string | undefined) => {
     openURL(url)
   }
 }
+
+onUpdated(() => {
+  if (!paloHelpDialog.value && paloHelpBtn.value !== null) {
+    paloHelpBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+})
 </script>
 
 <template lang="pug">
 span.q-ml-sm
   q-btn(
     id="paloHelpBtn",
+    ref="paloHelpBtn",
     dense,
     round,
     flat,

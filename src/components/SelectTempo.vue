@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import palosData from 'src/data/palosData'
 import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
+import type { QBtn } from 'quasar'
+
+const decreaseTempoBtn = ref<QBtn | null>(null)
+const increaseTempoBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
 const route = useRoute()
@@ -37,6 +41,15 @@ const knobSize = computed(() => {
     return '148px'
   }
 })
+
+onUpdated(() => {
+  if (decreaseTempoBtn.value !== null) {
+    decreaseTempoBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+  if (increaseTempoBtn.value !== null) {
+    increaseTempoBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+})
 </script>
 
 <template lang="pug">
@@ -57,6 +70,8 @@ div
     ).text-weight-light
   .row.justify-between
     q-btn(
+      id="decreaseTempoBtn",
+      ref="decreaseTempoBtn",
       outline,
       round,
       color="white",
@@ -65,6 +80,8 @@ div
     )
       q-icon(name="remove")
     q-btn(
+      id="increaseTempoBtn",
+      ref="increaseTempoBtn",
       outline,
       round,
       color="white",

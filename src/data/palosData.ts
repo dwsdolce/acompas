@@ -436,7 +436,7 @@ export default [
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
     click:
-      [ 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 2,    null, 1,    null, 1,    null, 2,    null, 1,    null, 2,    null ],
+      [ 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 1,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -599,7 +599,7 @@ export default [
 
     click: //<[number, ...(number | null)[]]>
     //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-      [ 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null ],
+      [ 1,    null, 2,    null, 2,    null, 1,    null, 1,    null, 2,    null ],
     //  0     1     2     3     4     5     6     7     8     9     10    11
     //  6           1           2           3           4           5
 

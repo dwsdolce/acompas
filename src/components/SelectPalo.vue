@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
@@ -7,6 +7,9 @@ import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import palosData from 'src/data/palosData'
 import HelpPalo from 'src/components/HelpPalo.vue'
+import type { QBtn } from 'quasar'
+
+const paloBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
 const route = useRoute()
@@ -32,6 +35,12 @@ const onSelectedPalo = (v: string) => {
   palosDialog.value = false
   selectPalo(v)
 }
+
+onUpdated(() => {
+  if (!palosDialog.value && paloBtn.value !== null) {
+    paloBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+})
 </script>
 
 <template lang="pug">
@@ -40,6 +49,7 @@ div
     help-palo(v-show="palo.name !== 'no-compas'", :palo="palo")
   q-btn(
     id="paloBtn",
+    ref="paloBtn",
     outline,
     color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",

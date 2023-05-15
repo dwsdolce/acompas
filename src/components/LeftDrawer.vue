@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { watch, ref, onMounted } from 'vue'
+  import { watch, ref, onMounted, onUpdated } from 'vue'
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
   import { useRouter, useRoute } from 'vue-router'
@@ -7,10 +7,16 @@
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
+  import type { QItem } from 'quasar'
 
   const helpDialog = ref(false)
   const tuningDialog = ref(false)
   const shortcutsDialog = ref(false)
+
+  const helpQItem = ref<QItem | null>(null)
+  const tuningForkQItem = ref<QItem | null>(null)
+  const shortcutsQItem = ref<QItem | null>(null)
+
   const router = useRouter()
   const route = useRoute()
   const sessionStore = useSessionStore()
@@ -49,6 +55,18 @@
       openPrivacyDialog()
     }
   })
+
+  onUpdated(() => {
+    if (!helpDialog.value && helpQItem.value !== null) {
+      helpQItem.value.$el.querySelector('.q-focus-helper').blur()
+    }
+    if (!tuningDialog.value && tuningForkQItem.value !== null) {
+      tuningForkQItem.value.$el.querySelector('.q-focus-helper').blur()
+    }
+    if (!shortcutsDialog.value && shortcutsQItem.value !== null) {
+      shortcutsQItem.value.$el.querySelector('.q-focus-helper').blur()
+    }
+  })
 </script>
 
 <template lang="pug">
@@ -60,17 +78,35 @@ div
       q-icon(name="attach_money")
      q-item-section Donate
 
-    q-item(id="helpQItem", clickable, v-ripple, @click="helpDialog = true")
+    q-item(
+      id="helpQItem",
+      ref="helpQItem",
+      clickable,
+      v-ripple,
+      @click="helpDialog = true"
+    )
       q-item-section(avatar)
         q-icon(name="help")
       q-item-section Help
 
-    q-item(id="tuningForkQItem", clickable, v-ripple, @click="tuningDialog = true")
+    q-item(
+      id="tuningForkQItem",
+      ref="tuningForkQItem",
+      clickable,
+      v-ripple,
+      @click="tuningDialog = true"
+    )
       q-item-section(avatar)
         q-icon(name="hearing")
       q-item-section Tuning fork
 
-    q-item(clickable, v-ripple, @click="shortcutsDialog = true")
+    q-item(
+      id="shortcutsQItem",
+      ref="shortcutsQItem",
+      clickable,
+      v-ripple,
+      @click="shortcutsDialog = true"
+    )
       q-item-section(avatar)
         q-icon(name="keyboard")
       q-item-section Shortcuts
@@ -129,7 +165,13 @@ div
   )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
-        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
+        q-btn(
+          icon="close",
+          flat,
+          round,
+          dense,
+          v-close-popup
+        ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Help
       q-card-section.scroll(style="max-height: 80vh;")
         div
@@ -179,7 +221,13 @@ div
   )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
-        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
+        q-btn(
+          icon="close",
+          flat,
+          round,
+          dense,
+          v-close-popup
+        ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Tuning fork
       q-card-section.scroll(style="max-height: 80vh;")
         tuning-fork
@@ -192,7 +240,13 @@ div
   )
     q-card(style="width: 100%; overflow: hidden;")
       q-card-section
-        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
+        q-btn(
+          icon="close",
+          flat,
+          round,
+          dense,
+          v-close-popup
+        ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Shortcuts
       q-card-section.scroll(style="max-height: 80vh;")
         q-markup-table(flat)

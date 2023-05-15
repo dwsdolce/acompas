@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
@@ -7,6 +7,7 @@ import { usePaloStore } from 'src/stores/palo'
 import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
 import SelectDecay from 'src/components/SelectDecay.vue'
+import type { QBtn } from 'quasar'
 
 const route = useRoute()
 
@@ -15,7 +16,8 @@ const sessionStore = useSessionStore()
 
 const $q = useQuasar()
 
-const instrumentsDialog = ref(false)
+const mixerDialog = ref(false)
+const mixerBtn = ref<QBtn | null>(null)
 
 const {
   palo,
@@ -35,21 +37,28 @@ watch(selectedInstruments, (value) => {
     })
   }
 })
+
+onUpdated(() => {
+  if (!mixerDialog.value && mixerBtn.value !== null) {
+    mixerBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+})
 </script>
 
 <template lang="pug">
 div
   q-btn(
     id="mixerBtn",
+    ref="mixerBtn",
     outline,
     icon="tune",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Mixer",
-    @click="instrumentsDialog = true"
+    @click="mixerDialog = true"
   )
   q-dialog(
     id="mixerDialog",
-    v-model="instrumentsDialog",
+    v-model="mixerDialog",
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
