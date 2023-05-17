@@ -1,5 +1,5 @@
 {
-  "appId": "capacitor.acompas.org",
+  "appId": "audio.acompas.app",
   "appName": "A Compás",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
