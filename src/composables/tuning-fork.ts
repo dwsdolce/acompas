@@ -31,7 +31,8 @@ export const useTuningFork = () => {
         decay: 1,
         sustain: 1,
         release: 10
-      }
+      },
+      volume: 5
     })
   }
 

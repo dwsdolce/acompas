@@ -249,6 +249,7 @@ div
         ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Shortcuts
       q-card-section.scroll(style="max-height: 80vh;")
+        p.text-center The following shortcuts are available for usage with the keyboard:
         q-markup-table(flat)
           tbody
             tr

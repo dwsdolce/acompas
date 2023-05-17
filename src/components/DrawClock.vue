@@ -50,34 +50,43 @@ const getNumStyle = (i: number): CSSProperties => {
 }
 
 const idleClockPosition = () => {
-  const newDeg: number = startingPoint.value * clockStep.value + 0
-  clockDeg.value = newDeg
-
+  clockDeg.value = startingPoint.value * clockStep.value
   anime({
     targets: '.hand',
-    rotate: [ clockDeg.value, newDeg ],
-    duration: 0,
-    complete: () => {
-      clockDeg.value = newDeg
-    }
+    rotate: [ clockDeg.value ],
+    duration: 0
   })
 }
 
 const animateClock = (v: number | null) => {
+  if (v) clockDeg.value = v / 2 * clockStep.value
   const animation = anime({
     targets: '.hand',
     rotate: [ clockDeg.value, clockDeg.value + clockStep.value ],
     duration: clockVelocity.value,
     easing: 'linear',
-    begin: () => {
-      if (v !== null) clockDeg.value += clockStep.value
+    complete: () => {
+      if (v !== null) {
+        const newDeg = clockDeg.value + clockStep.value
+        if (newDeg >= 360) {
+          clockDeg.value = 0
+        } else {
+          clockDeg.value = newDeg
+        }
+      }
+    },
+    update: () => {
+      if (!isPlaying.value) {
+        animation.pause()
+        idleClockPosition()
+      }
     }
   })
-  if (isPlaying.value && v !== null) {
-    animation.play()
-  } else {
-    animation.pause()
-  }
+  // if (isPlaying.value && v !== null) {
+  //   animation.play()
+  // } else {
+  //   cancelAnimation(animation)
+  // }
 
   animation.finished.then(() => {
     if (!isPlaying.value) {
@@ -88,9 +97,8 @@ const animateClock = (v: number | null) => {
 
 const animateNum = (v: number | null) => {
   if (v !== null) {
-    const index = v
     anime({
-      targets: nums.value[index],
+      targets: nums.value[v],
       scale: [
         { value: 1, duration: 0 },
         { value: 2, duration: 1000 }
@@ -109,12 +117,9 @@ watch(
   ) => {
     animateClock(newMetronomeEvent)
     animateNum(newMetronomeEvent)
-    if (newStartingPoint !== prevStartingPoint) {
-      idleClockPosition()
-    }
-    if (newSelectedPrestartBeat !== prevSelectedPrestartBeat) {
-      idleClockPosition()
-    }
+    if (newMetronomeEvent === null) idleClockPosition()
+    if (newStartingPoint !== prevStartingPoint) idleClockPosition()
+    if (newSelectedPrestartBeat !== prevSelectedPrestartBeat) idleClockPosition()
   }
 )
 

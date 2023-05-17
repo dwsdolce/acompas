@@ -150,7 +150,7 @@ export const usePaloStore = (name: string | undefined) => {
     )
     const startingPoint = computed(() =>
       palo.value.selectedPrestartBeat
-        ? nbBeatsInPattern.value - palo.value.selectedPrestartBeat.value
+        ? (nbBeatsInPattern.value - palo.value.selectedPrestartBeat.value * 2) / 2
         : 0
     )
     const instrument = computed(

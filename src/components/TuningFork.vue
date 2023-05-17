@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
+import { usePaloStore } from 'src/stores/palo'
+
+const route = useRoute()
 
 const tuningForkStore = useTuningForkStore()
+const paloStore = usePaloStore(route.name as string)()
 
 const {
   notes,
@@ -17,8 +22,22 @@ const {
   stop
 } = tuningForkStore
 
+const {
+  init: initPalo,
+  stop: stopPalo
+} = paloStore
+
+const {
+  isPlaying: isPaloPlaying
+} = storeToRefs(paloStore)
+
 onMounted(() => {
+  if (isPaloPlaying.value) stopPalo()
   initTuningFork()
+})
+
+onUnmounted(() => {
+  initPalo()
 })
 </script>
 

@@ -68,10 +68,12 @@ const handleRestore = () => {
         )
       q-card-section(align="center")
         q-btn(
+          unelevated,
           color="primary",
           v-close-popup
         ).q-mr-md Close
         q-btn(
+          unelevated,
           color="red-10",
           v-close-popup,
           @click="handleRestore"

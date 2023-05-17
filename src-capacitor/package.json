@@ -6,7 +6,8 @@
   "private": true,
   "dependencies": {
     "@capacitor-community/keep-awake": "^4.0.0",
-    "@capacitor/cli": "^5.0.0",
-    "@capacitor/core": "^5.0.0"
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/cli": "^5.0.2",
+    "@capacitor/core": "^5.0.2"
   }
 }
