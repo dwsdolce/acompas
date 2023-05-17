@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace "capacitor.acompas.org"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "audio.acompas.app"
+        applicationId "capacitor.acompas.org"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

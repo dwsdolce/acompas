@@ -62,6 +62,8 @@ Here are a few commands that might help :
 cd ./src-capacitor
 # Install the Capacitor project's dependencies
 yarn install
+# Generate all icons for Capacitor
+icongenie generate -m capacitor -i ./app-icon.png
 ```
 
 ### Android

@@ -12,8 +12,12 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@capacitor-community/keep-awake": "^3.0.0",
-    "@capacitor/core": "^4.3.0",
+    "@capacitor-community/keep-awake": "^4.0.0",
+    "@capacitor/android": "^5.0.2",
+    "@capacitor/app": "^5.0.2",
+    "@capacitor/cli": "^5.0.2",
+    "@capacitor/core": "^5.0.2",
+    "@capacitor/splash-screen": "^5.0.2",
     "@quasar/extras": "^1.16.3",
     "@types/animejs": "^3.1.5",
     "@types/ramda": "^0.28.15",

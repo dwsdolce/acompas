@@ -27,7 +27,7 @@ export const useMatomo = () => {
 
   const init = () => {
     if (!trackingEnabled.value) return
-    const platformName = Platform.is.cordova ? 'Cordova' : 'Website'
+    const platformName = Platform.is.capacitor ? 'Capacitor' : 'Website'
 
     window._paq.push([ 'setCustomVariable', 1, 'AppVersion', platformName, 'visit' ])
     window._paq.push([ 'trackPageView' ])

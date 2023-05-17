@@ -1,4 +1,4 @@
-package audio.acompas.app;
+package capacitor.acompas.org;
 
 import com.getcapacitor.BridgeActivity;
 

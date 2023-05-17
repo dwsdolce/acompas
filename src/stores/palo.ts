@@ -245,7 +245,6 @@ export const usePaloStore = (name: string | undefined) => {
     }
 
     const selectPrestartBeat = (payload: number) => {
-      console.log('selectPrestartBeat', payload)
       if (!payload && !paloData) return
       palo.value.selectedPrestartBeat
         = paloData?.prestartBeats.find(el => el?.value === payload)

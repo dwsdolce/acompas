@@ -20,7 +20,10 @@ const { setVisualizationSize } = sessionStore
 const { init: intiMatomo, deleteScript } = useMatomo()
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
+
 Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
+
+const appVersion = process.env.APP_VERSION?.valueOf() || '3'
 
 const onResize = (size: Size) => {
   setVisualizationSize(size)
@@ -49,9 +52,10 @@ q-layout(view="hHh Lpr lFf")
       )
         q-icon(name="menu")
       q-toolbar-title.flex.items-center
-        img(:src="'AClogo.png'" alt="A Compás").q-my-auto
+        img(:src="'AClogo.png'" alt="A Compás").q-mr-sm
+        //- .text-subtitle2.text-weight-light.text-deep-orange-1.q-mt-xs Flamenco metronome
       q-space
-      .text-weight-light Version 3.0
+      .text-weight-light v{{ appVersion }}
 
   q-drawer(
     bordered,
