@@ -212,6 +212,7 @@ export const usePaloStore = (name: string | undefined) => {
     }
 
     const selectInstruments = async (key: string, payload: boolean) => {
+      console.log('selectInstruments', key, payload)
       const instru = instrument.value(key)
       if (instru) {
         instru.enabled = payload
@@ -252,25 +253,9 @@ export const usePaloStore = (name: string | undefined) => {
       stop()
     }
 
-    const toggleEighthNotes = (payload: instruOpts) => {
-      const instru: instruOpts | undefined = palo.value.instruments.find(
-        (i) => i.value === payload.value
-      )
+    const toggleEighthNotes = (key: string) => {
+      const instru = instrument.value(key)
       if (instru) instru.eighthNotes = !instru.eighthNotes
-    }
-
-    const enableEighthNotes = (payload: instruOpts) => {
-      const instru: instruOpts | undefined = palo.value.instruments.find(
-        (i) => i.value === payload.value
-      )
-      if (instru) instru.eighthNotes = true
-    }
-
-    const disableEighthNotes = (payload: instruOpts) => {
-      const instru: instruOpts | undefined = palo.value.instruments.find(
-        (i) => i.value === payload.value
-      )
-      if (instru) instru.eighthNotes = false
     }
 
     const toggleImprovise = () => {
@@ -400,8 +385,6 @@ export const usePaloStore = (name: string | undefined) => {
       selectInstruments,
       selectPrestartBeat,
       toggleEighthNotes,
-      enableEighthNotes,
-      disableEighthNotes,
       toggleImprovise,
       enableImprovise,
       disableImprovise,
