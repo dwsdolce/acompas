@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { onMounted, watch } from 'vue'
+import { Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { usePaloStore } from 'src/stores/palo'
 import { GlobalEvents } from 'vue-global-events'
+import { KeepAwake } from '@capacitor-community/keep-awake'
 
 const route = useRoute()
 const paloStore = usePaloStore(route.name as string)()
@@ -16,6 +19,32 @@ const {
   playStop,
   selectTempo
 } = paloStore
+
+const isSupported = async () => {
+  const result = await KeepAwake.isSupported()
+  return result.isSupported
+}
+
+const isKeptAwake = async () => {
+  const result = await KeepAwake.isKeptAwake()
+  return result.isKeptAwake
+}
+
+onMounted(async () => {
+  if (Platform.is.capacitor && await isSupported()) {
+    await KeepAwake.allowSleep()
+  }
+})
+
+watch(isPlaying, async (value) => {
+  if (Platform.is.capacitor && await isSupported()) {
+    if (value) {
+      await KeepAwake.keepAwake()
+    } else {
+      await KeepAwake.allowSleep()
+    }
+  }
+})
 </script>
 
 <template lang="pug">
