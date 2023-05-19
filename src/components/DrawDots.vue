@@ -80,9 +80,9 @@ const resizeDots = (size: Size) => {
   }
 }
 
-const animateDot = (v: number) => {
-  const index = v
-
+const animateDot = (index: number) => {
+  console.log('animateDot', index)
+  console.log('dots', dots.value[index])
   anime({
     targets: dots.value[index],
     scale: [
@@ -125,7 +125,11 @@ watch(
     [prevMetronomeEvent, prevVisualizationSize]
   ) => {
     if (newMetronomeEvent !== null) {
-      animateDot(newMetronomeEvent)
+      if (palo.value?.name === 'no-compas') {
+        animateDot(0)
+      } else {
+        animateDot(newMetronomeEvent)
+      }
     }
     if (newVisualizationSize !== prevVisualizationSize) {
       resizeDots(newVisualizationSize as Size)

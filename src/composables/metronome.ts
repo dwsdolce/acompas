@@ -94,22 +94,20 @@ export const useMetronome = () => {
   // Metronome palos settings
   // ========================
 
-  const noteIndexInPattern = (i: number) => {
+  const noteIndexInPattern = (note: number) => {
     if (
       palo.value.selectedPrestartBeat &&
       paloData.value?.nbBeatsInPattern
     ) {
-      let index =
-        i -
-        palo.value.selectedPrestartBeat.value * 2
+      let index = note - palo.value.selectedPrestartBeat.value * 2
+
       while (index < 0) {
         index += paloData.value?.nbBeatsInPattern
       }
-      if (paloData.value) {
-        return index % paloData.value?.nbBeatsInPattern
-      } else {
-        return null
-      }
+
+      return index % paloData.value?.nbBeatsInPattern
+    } else {
+      return note
     }
   }
 
@@ -285,8 +283,8 @@ export const useMetronome = () => {
           if (palo.value.name === 'no-compas') {
             paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
           } else {
-            const key = noteIndexInPattern(note)
-            if (key !== null) paloStore.triggerEvent(key as number | null)
+            const index = noteIndexInPattern(note)
+            if (index !== null) paloStore.triggerEvent(index as number | null)
           }
         }, time) // Use AudioContext time of the event
       }
