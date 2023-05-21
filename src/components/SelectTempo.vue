@@ -34,14 +34,6 @@ const increment = () => {
   if (palo.value.tempo) selectTempo(palo.value.tempo + 1)
 }
 
-const knobSize = computed(() => {
-  if (visualizationSize.value.width && visualizationSize.value.width < 860) {
-    return (visualizationSize.value.width * 25 / 100) + 'px'
-  } else {
-    return '148px'
-  }
-})
-
 onUpdated(() => {
   if (decreaseTempoBtn.value !== null) {
     decreaseTempoBtn.value.$el.querySelector('.q-focus-helper').blur()
@@ -65,7 +57,7 @@ div
       :min="paloData?.minTempo",
       :max="paloData?.maxTempo",
       show-value,
-      :size="knobSize",
+      :size="$q.screen.lt.md ? '106px' : '148px'",
       :thickness="0.2"
     ).text-weight-light
   .row.justify-between
@@ -75,7 +67,7 @@ div
       outline,
       round,
       color="white",
-      :size="$q.screen.xs ? 'sm' : 'md'",
+      :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="decrement"
     )
       q-icon(name="remove")
@@ -85,13 +77,8 @@ div
       outline,
       round,
       color="white",
-      :size="$q.screen.xs ? 'sm' : 'md'",
+      :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="increment"
     )
       q-icon(name="add")
 </template>
-
-<style lang="sass" scoped>
-.custom-input
-  max-width: 300px
-</style>

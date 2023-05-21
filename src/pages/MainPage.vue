@@ -52,75 +52,54 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-q-page.bg-grey-10.text-grey-1
+q-page.text-grey-1
   .main-panel
     .top-panel(ref="visualization")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
       draw-clock(v-if="visualizationMode === 'clock'")
-    .bottom-panel
-      .left-panel.q-px-xs
+    .bottom-panel.row.no-wrap
+      .left-panel.col-6.col-sm-5
         select-palo.q-mb-sm
         rhythm-options.q-mb-sm
         select-instruments
-      .middle-panel(v-if="$q.screen.gt.xs")
+      .middle-panel(v-if="$q.screen.gt.xs").col-2
         play-button
-      .right-panel.q-px-xs
+      .right-panel.col-6.col-sm-5
         select-tempo
     .sub-panel(v-if="$q.screen.lt.sm || $q.screen.xs")
       play-button
 </template>
 
 <style lang="sass">
-.top-panel,
-.left-panel,
-.middle-panel,
-.right-panel,
-.bottom-panel
-  display: flex
-  // flex-flow: column wrap
-  justify-content: center
-  align-items: center
-  text-align: center
-  align-content: center
-
 .main-panel
-  height: 78vh
+  height: calc( 100vh - 50px )
   display: flex
-  flex-flow: wrap
+  flex-direction: column
   .top-panel
-    width: 100%
-    // height: 20%
-    @media screen and (min-height: 600px)
-      height: 40%
-  .bottom-panel
-    width: 100%
-    height: 40%
-    @media screen and (min-width: 500px)
-      height: 30%
-    .left-panel
-      height: 100%
-      width: 50%
-      flex-flow: column nowrap
-      // justify-content: flex-start
-      @media screen and (min-width: 500px)
-        width: 40%
-    .middle-panel
-      width: 20%
-      height: 100%
-    .right-panel
-      height: 100%
-      width: 50%
-      flex-flow: column nowrap
-      // justify-content: flex-start
-      @media screen and (min-width: 500px)
-        width: 40%
-  .sub-panel
-    width: 100%
-    height: 30%
     display: flex
+    flex-wrap: nowrap
     justify-content: center
     align-items: center
     text-align: center
     align-content: center
+    flex-grow: 1
+  .bottom-panel
+    align-items: center
+    text-align: center
+    flex-grow: 3
+    .left-panel
+      flex-grow: 1
+    .middle-panel
+      flex-grow: 1
+    .right-panel
+      display: flex
+      align-items: center
+      flex-direction: column
+      flex-grow: 1
+  .sub-panel
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-grow: 1
 </style>

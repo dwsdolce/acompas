@@ -6,18 +6,15 @@ import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import GlobalEvents from 'src/components/GlobalEvents.vue'
 import { useSessionStore } from 'src/stores/session'
-import { useMatomo } from 'src/composables/matomo'
 import type { Size } from 'src/composables/models'
 
 const sessionStore = useSessionStore()
 
 const {
-  visualizationSize,
-  trackingEnabled
+  visualizationSize
 } = storeToRefs(sessionStore)
-const { setVisualizationSize } = sessionStore
 
-const { init: intiMatomo, deleteScript } = useMatomo()
+const { setVisualizationSize } = sessionStore
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
@@ -28,18 +25,11 @@ const appVersion = process.env.APP_VERSION?.valueOf() || '3'
 const onResize = (size: Size) => {
   setVisualizationSize(size)
 }
-
-onMounted(() => {
-  if (trackingEnabled.value) {
-    intiMatomo()
-  } else {
-    deleteScript()
-  }
-})
 </script>
 
 <template lang="pug">
 q-layout(view="hHh Lpr lFf")
+  global-events
   q-header
     q-toolbar
       q-btn(
@@ -52,8 +42,9 @@ q-layout(view="hHh Lpr lFf")
       )
         q-icon(name="menu")
       q-toolbar-title.flex.items-center
-        img(:src="'AClogo.png'" alt="A Compás").q-mr-sm
-        //- .text-subtitle2.text-weight-light.text-deep-orange-1.q-mt-xs Flamenco metronome
+        img(:src="'app-icon.png'" alt="A Compás icon" width="40").q-mr-sm
+        img(:src="'app-name.png'" alt="A Compás name title" width="90").q-mt-sm
+        //- .text-italic.text-weight-bold.text-white.q-mt-xs Compás
       q-space
       .text-weight-light v{{ appVersion }}
 
@@ -65,7 +56,7 @@ q-layout(view="hHh Lpr lFf")
   )
     left-drawer(id="sideMenu")
 
-  q-page-container.bg-dark.text-info
+  q-page-container.text-info
     #appMain
       q-resize-observer(
         debounce="10",
@@ -74,11 +65,12 @@ q-layout(view="hHh Lpr lFf")
       router-view(v-slot="{ Component, route }")
         Transition(name="fade", mode="out-in")
           component(:is="Component", :key="route.name")
-
-  global-events
 </template>
 
 <style lang="sass">
+#appMain
+  overflow: hidden
+  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
 .fade-enter-active,
 .fade-leave-active
   transition: opacity 0.5s ease

@@ -81,8 +81,6 @@ const resizeDots = (size: Size) => {
 }
 
 const animateDot = (index: number) => {
-  console.log('animateDot', index)
-  console.log('dots', dots.value[index])
   anime({
     targets: dots.value[index],
     scale: [

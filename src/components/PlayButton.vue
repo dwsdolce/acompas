@@ -33,7 +33,7 @@ q-btn(
 
 <style lang="sass" scoped>
 #playBtn
-  box-shadow: 0 0 20px 10px rgb(255 255 255 / 30%)
+  box-shadow: 0 0 30px 10px rgb(255 255 255 / 10%)
   &::before
-    box-shadow: 0 0 10px 5px rgb(0 0 0 / 70%)
+    box-shadow: 0 0 5px 5px rgb(10 10 10 / 70%)
 </style>

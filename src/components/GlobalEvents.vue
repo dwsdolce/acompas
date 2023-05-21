@@ -3,11 +3,19 @@ import { onMounted, watch } from 'vue'
 import { Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
 import { GlobalEvents } from 'vue-global-events'
 import { KeepAwake } from '@capacitor-community/keep-awake'
+import { usePaloStore } from 'src/stores/palo'
+import { useSessionStore } from 'src/stores/session'
+import { useMatomo } from 'src/composables/matomo'
 
 const route = useRoute()
+const sessionStore = useSessionStore()
+
+const {
+  trackingEnabled
+} = storeToRefs(sessionStore)
+
 const paloStore = usePaloStore(route.name as string)()
 
 const {
@@ -19,6 +27,8 @@ const {
   playStop,
   selectTempo
 } = paloStore
+
+const { init: intiMatomo, deleteScript } = useMatomo()
 
 const isSupported = async () => {
   const result = await KeepAwake.isSupported()
@@ -33,6 +43,11 @@ const isKeptAwake = async () => {
 onMounted(async () => {
   if (Platform.is.capacitor && await isSupported()) {
     await KeepAwake.allowSleep()
+  }
+  if (trackingEnabled.value) {
+    intiMatomo()
+  } else {
+    deleteScript()
   }
 })
 
