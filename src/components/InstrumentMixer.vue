@@ -27,6 +27,8 @@ const toggleBtn = ref<QToggle | null>(null)
 const sliderBtn = ref<QSlider | null>(null)
 const checkboxBtn = ref<QCheckbox | null>(null)
 
+const instru = computed(() => instrument(props.slug as string))
+
 const instrumentEnabled = computed({
   get() { return instrument(props.slug as string)?.enabled ?? false },
   set(value: boolean) { selectInstruments(props.slug, value) }
@@ -63,6 +65,7 @@ tr
     q-toggle(
       ref="toggleBtn"
       icon="audiotrack",
+      v-if="instru.eighthNotes !== null",
       v-model="instrumentEighthNotesEnabled",
       :disable="!instrumentEnabled",
       color="primary",

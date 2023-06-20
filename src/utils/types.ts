@@ -8,7 +8,9 @@ export interface SoundsDataKey {
 export interface SoundsData {
   name:                     string
   label:                    string
+  longLabel?:               string
   medias:                   SoundsDataKey[]
+  noEighthNotes?:           boolean
 }
 
 export interface ExtendedPlayer extends Player {

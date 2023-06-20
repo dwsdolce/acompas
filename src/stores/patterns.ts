@@ -152,9 +152,9 @@ export const usePatternStore = defineStore('patterns', () => {
             label: audio.label,
             value: audio.name,
             enabled: false,
-            eighthNotes: false,
+            eighthNotes: audio.noEighthNotes ? null : false,
             volume: 0,
-            decay: 0.5
+            decay: 0.5,
           }
         })
         tmp.isTooFast = false

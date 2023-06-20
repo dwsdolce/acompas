@@ -4,6 +4,7 @@ export default [
   {
     name: 'clara',
     label: 'Clara',
+    longLabel: 'Palma clara',
     medias: [
       {
         src: 'clara/clara_1',
@@ -22,6 +23,7 @@ export default [
   {
     name: 'sorda',
     label: 'Sorda',
+    longLabel: 'Palma sorda',
     medias: [
       {
         src: 'sorda/sorda_1',
@@ -108,6 +110,7 @@ export default [
   {
     name: 'jaleo',
     label: 'Jaleo',
+    noEighthNotes: true,
     medias: [
       {
         src: 'jaleo/jaleo_1',
@@ -182,6 +185,7 @@ export default [
   {
     name: 'click',
     label: 'Click',
+    noEighthNotes: true,
     medias: [
       {
         src: 'click/click_1',
