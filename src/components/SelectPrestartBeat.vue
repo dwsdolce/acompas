@@ -2,26 +2,15 @@
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
-import type { numOpts } from 'src/composables/models'
-
-const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
-
-const paloStore = usePaloStore(route.name as string)()
-const sessionStore = useSessionStore()
+import type { numOpts } from 'src/utils/types'
 
 const $q = useQuasar()
+const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
-const { palo, prestartBeats } = storeToRefs(paloStore)
-
-const {
-  selectPrestartBeat
-} = paloStore
+const { selectedPattern, prestartBeat } = storeToRefs(patternStore)
 
 const {
   toggleDialog
@@ -30,20 +19,20 @@ const {
 const arrayOfIndexes = computed(
   () => {
   const array = []
-  if (paloData?.prestartBeats.length) {
-    for (let index = 0; index < paloData?.prestartBeats.length; index++) {
+  if (selectedPattern.value?.prestartBeats.length) {
+    for (let index = 0; index < selectedPattern.value?.prestartBeats.length; index++) {
       array.push(index)
     }
   }
   return array
 })
 
-const dataSelectedPrestartBeat = paloData?.prestartBeats.find((el) => el !== undefined && el.value === palo.value.selectedPrestartBeat.value)
+const dataSelectedPrestartBeat = selectedPattern.value?.prestartBeats.find((el: numOpts) => el !== undefined && el.value === prestartBeat.value)
 
 const index = computed(
   (): number | null =>
-    palo.value.selectedPrestartBeat && paloData?.prestartBeats.length && dataSelectedPrestartBeat
-      ? paloData?.prestartBeats.indexOf(dataSelectedPrestartBeat) as number
+    prestartBeat.value && selectedPattern.value?.prestartBeats.length && dataSelectedPrestartBeat
+      ? selectedPattern.value?.prestartBeats.indexOf(dataSelectedPrestartBeat) as number
       : null
 )
 </script>
@@ -67,14 +56,13 @@ const index = computed(
         )
           p.text-body2 Optionaly define a beat from which a precount click will start before the actual loop starts.
   q-slider(
-    :model-value="index",
-    @change="val => { selectPrestartBeat(val) }",
+    v-model="prestartBeat",
     :min="arrayOfIndexes[0]",
     :max="arrayOfIndexes[arrayOfIndexes.length - 1]",
     :step="1",
     snap,
     markers,
-    :marker-labels="val => paloData?.prestartBeats[val].label",
+    :marker-labels="val => selectedPattern.prestartBeats[val].label",
     marker-labels-class="text-grey-5",
     switch-marker-labels-side
   ).q-mb-md

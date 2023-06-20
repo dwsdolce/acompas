@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 
-const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
-const paloStore = usePaloStore(route.name as string)()
-const { palo } = storeToRefs(paloStore)
-
-const {
-  toggleHumanize
-} = paloStore
+const patternStore = usePatternStore()
+const { selectedPattern, humanization } = storeToRefs(patternStore)
 </script>
 
 <template lang="pug">
@@ -35,8 +26,7 @@ const {
           p.text-body2 If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
 
   q-toggle(
-    :model-value="palo.humanization",
-    @update:model-value="toggleHumanize()",
+    v-model="humanization",
     left-label,
     color="primary",
     keep-color

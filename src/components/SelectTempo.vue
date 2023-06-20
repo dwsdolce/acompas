@@ -2,9 +2,7 @@
 import { ref, computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import type { QBtn } from 'quasar'
 
@@ -12,10 +10,13 @@ const decreaseTempoBtn = ref<QBtn | null>(null)
 const increaseTempoBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
-const route = useRoute()
-const paloData = palosData.find(palo => palo.value === route.name)
-const paloStore = usePaloStore(route.name as string)()
-const { palo } = storeToRefs(paloStore)
+const patternStore = usePatternStore()
+
+const {
+  selectedPattern,
+  tempo
+} = storeToRefs(patternStore)
+
 const sessionStore = useSessionStore()
 
 const {
@@ -24,14 +25,14 @@ const {
 
 const {
   selectTempo
-} = paloStore
+} = patternStore
 
 const decrement = () => {
-  if (palo.value.tempo) selectTempo(palo.value.tempo - 1)
+  tempo.value = tempo.value - 1
 }
 
 const increment = () => {
-  if (palo.value.tempo) selectTempo(palo.value.tempo + 1)
+  tempo.value = tempo.value + 1
 }
 
 onUpdated(() => {
@@ -49,13 +50,12 @@ div
   p Tempo
   .row.justify-center.items-end.content-end
     q-knob(
-      v-if="palo.tempo",
+      v-if="tempo",
       color="primary",
       track-color="grey-1",
-      :model-value="palo.tempo",
-      @update:model-value="selectTempo($event)",
-      :min="paloData?.minTempo",
-      :max="paloData?.maxTempo",
+      v-model="tempo",
+      :min="selectedPattern?.minTempo",
+      :max="selectedPattern?.maxTempo",
       show-value,
       :size="$q.screen.lt.md ? '106px' : '148px'",
       :thickness="0.2"

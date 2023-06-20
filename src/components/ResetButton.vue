@@ -3,23 +3,23 @@ import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
 const route = useRoute()
-const paloStore = usePaloStore(route.name as string)()
+const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
 const resetDialog = ref(false)
-const selectedResetOption = ref<string>('palo')
+const selectedResetOption = ref<string>('pattern')
 const resetOptions = [
-  { value: 'palo', label: 'Only for current palo' },
-  { value: 'all', label: 'All settings' }
+  { value: 'pattern', label: 'Only for current pattern' },
+  { value: 'all', label: 'All patterns and settings' }
 ]
 
 watch(resetDialog, () => {
-  selectedResetOption.value = 'palo'
+  selectedResetOption.value = 'pattern'
 })
 
 const {
@@ -28,14 +28,14 @@ const {
 
 const {
   restoreDefault
-} = paloStore
+} = patternStore
 
 const onSelectedOption = (v: string) => {
   selectedResetOption.value = v
 }
 
 const handleRestore = () => {
-  if (selectedResetOption.value === 'palo') {
+  if (selectedResetOption.value === 'pattern') {
     restoreDefault(route.name as string)
   } else if (selectedResetOption.value === 'all') {
     restoreDefault(selectedResetOption.value)

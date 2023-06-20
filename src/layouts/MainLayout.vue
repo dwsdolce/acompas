@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
-import { Screen } from 'quasar'
+import { useQuasar, Screen } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
-import GlobalEvents from 'src/components/GlobalEvents.vue'
 import { useSessionStore } from 'src/stores/session'
-import type { Size } from 'src/composables/models'
+import type { Size } from 'src/utils/types'
 
+const $q = useQuasar()
 const sessionStore = useSessionStore()
 
 const {
   visualizationSize
 } = storeToRefs(sessionStore)
 
-const { setVisualizationSize } = sessionStore
+const { setVisualizationSize, toggleDialog } = sessionStore
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
@@ -29,7 +29,6 @@ const onResize = (size: Size) => {
 
 <template lang="pug">
 q-layout(view="hHh Lpr lFf")
-  global-events
   q-header
     q-toolbar
       q-btn(
@@ -41,10 +40,10 @@ q-layout(view="hHh Lpr lFf")
         aria-label="Menu"
       )
         q-icon(name="menu")
-      q-toolbar-title.flex.items-center
-        img(:src="'app-icon.png'" alt="A Compás icon" width="40").q-mr-sm
-        img(:src="'app-name.png'" alt="A Compás name title" width="90").q-mt-sm
-        //- .text-italic.text-weight-bold.text-white.q-mt-xs Compás
+      q-toolbar-title
+        router-link(to="/").flex.items-center
+          img(:src="'app-icon.png'" alt="A Compás icon" width="40").q-mr-sm
+          img(:src="'app-name.png'" alt="A Compás name title" width="90").q-mt-sm
       q-space
       .text-weight-light v{{ appVersion }}
 

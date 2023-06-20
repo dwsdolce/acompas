@@ -1,13 +1,14 @@
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from 'src/stores/session'
-import { useMetronome } from 'src/composables/metronome'
+import { usePatternStore } from 'src/stores/patterns'
+import { on } from 'events'
 
 declare global {
   interface Window {
-    _paq: any
+    _paq: ((string | number)[])[]
   }
 }
 
@@ -15,13 +16,13 @@ window._paq = window._paq || []
 
 export const useMatomo = () => {
   const router = useRouter()
+  const sessionStore = useSessionStore()
+  const patternStore = usePatternStore()
+
+  const { getContext } = patternStore
 
   const playStartTime = ref<number | null>(null)
-
-  const sessionStore = useSessionStore()
   const trackingEnabled = ref(sessionStore.trackingEnabled)
-
-  const { getContext } = useMetronome()
 
   const audioContext = getContext()
 
@@ -84,6 +85,10 @@ export const useMatomo = () => {
       ])
     }
   }
+
+  // onMounted(() => {
+  //   console.log('Matomo mounted')
+  // })
 
   return {
     init,

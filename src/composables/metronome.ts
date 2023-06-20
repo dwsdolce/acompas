@@ -1,14 +1,14 @@
 import * as Tone from 'tone'
-import { ref } from 'vue'
-import { Loading, Notify } from 'quasar'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import audioData from 'src/data/audioData'
-import { usePaloStore } from 'src/stores/palo'
-import { forEachValue } from 'src/composables/utils'
+import { computed, ComputedRef, Ref, ref, watch, onMounted, onUpdated } from 'vue'
+import { Loading, Notify, Dialog } from 'quasar'
+import { storeToRefs } from 'pinia'
+import soundsData from 'src/data/soundsData'
+import { usePatternStore } from 'src/stores/patterns'
+import { forEachValue } from 'src/utils/utils'
 import type {
   VolumeOpts,
   DecayOpts,
+  numOpts,
   SoundsDataKey,
   SoundsData,
   Sounds,
@@ -16,101 +16,125 @@ import type {
   Seqs,
   Seq,
   SeqSubdiv,
-  PaloData,
-  PaloState,
+  PatternState,
   instruOpts,
   Players,
-  ExtendedPlayer
-} from 'src/composables/models'
-import { Instrument } from 'tone/build/esm/instrument/Instrument'
+  ExtendedPlayer,
+  InstruSeqs
+} from 'src/utils/types'
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
 const quarterChannel = new Tone.Channel(0, 0).toDestination()
 const eighthChannel = new Tone.Channel(-4, -0.5).toDestination()
-const reverb = new Tone.Reverb({
-  decay: 0.3,
-  preDelay: 0,
-  wet: 1
-}).toDestination()
-let audioFormat = ''
 
 export const useMetronome = () => {
-  const route = useRoute()
-  const paloStore = usePaloStore(route.name as string)()
-  const paloData = ref(palosData.find((palo) => palo.value === route.name))
-  const palo = ref(paloStore.palo)
+  const store = usePatternStore()
 
-  const initSounds = async () => {
+  const audioFormat = ref<string>('')
+  const reverbDecay = ref<number>(0.3)
+  const reverb = new Tone.Reverb({
+    decay: 0.3,
+    preDelay: 0,
+    wet: reverbDecay.value
+  }).toDestination()
+
+  const soundsIsLoaded = ref<boolean>(false)
+  const metronomeEvent = ref<number | null>(null)
+
+  /**
+   * Loads all sounds.
+   * @returns {void}
+   */
+  const loadSounds = async () => {
+    const path = 'audio/'
     const audio = new Audio()
+
     if (audio.canPlayType('audio/flac')) {
-      audioFormat = 'flac'
+      audioFormat.value = 'flac'
     } else if (audio.canPlayType('audio/mpeg')) {
-      audioFormat = 'mp3'
+      audioFormat.value = 'mp3'
     } else if (audio.canPlayType('audio/mp4')) {
-      audioFormat = 'mp4'
+      audioFormat.value = 'mp4'
     } else if (audio.canPlayType('audio/wav')) {
-      audioFormat = 'wav'
+      audioFormat.value = 'wav'
     } else if (audio.canPlayType('audio/ogg')) {
-      audioFormat = 'ogg'
+      audioFormat.value = 'ogg'
     } else {
       throw new Error('None of the available audio formats can be played')
     }
 
-    const path = 'audio/'
+    soundsData.forEach(({ name, medias }) => {
+      const s = () => {
+        const sound: Sound = {} as Sound
+        for (let i = 0; i < medias.length; i++) {
+          const url = path + medias[i].src + '.' + audioFormat.value
+          sound[i] = {
+            quarter: new Tone.Player({
+              url: url,
+              volume: medias[i].volume,
+              fadeOut: 1
+            }) as ExtendedPlayer,
+            eighth: new Tone.Player({
+              url: url,
+              volume: medias[i].volume,
+              fadeOut: 1
+            }) as ExtendedPlayer
+          }
 
-    forEachValue(audioData, (value: SoundsDataKey[], key: string) => {
-      sounds[key as keyof SoundsData] = {} as Sound
-      const sound = sounds[key as keyof SoundsData]
+          sound[i].quarter.defaultVolume = medias[i].volume
+          sound[i].eighth.defaultVolume = medias[i].volume
 
-      for (let i = 0; i < value.length; i++) {
-        const url = path + value[i].src + '.' + audioFormat
-        sound[i] = {
-          quarter: new Tone.Player({
-            url: url,
-            volume: value[i].volume,
-            fadeOut: 1
-          }) as ExtendedPlayer,
-          eighth: new Tone.Player({
-            url: url,
-            volume: value[i].volume,
-            fadeOut: 1
-          }) as ExtendedPlayer
+          sound[i].quarter.connect(quarterChannel)
+          quarterChannel.connect(reverb)
+
+          sound[i].eighth.connect(eighthChannel)
+          eighthChannel.connect(reverb)
         }
-
-        sound[i].quarter.defaultVolume = value[i].volume
-        sound[i].eighth.defaultVolume = value[i].volume
-
-        sound[i].quarter.connect(quarterChannel)
-        quarterChannel.connect(reverb)
-
-        sound[i].eighth.connect(eighthChannel)
-        eighthChannel.connect(reverb)
+        return sound
       }
+      sounds[name as keyof Sounds] = s()
     })
   }
 
-  // ========================
-  // Metronome palos settings
-  // ========================
+  const triggerEvent = (payload: number | null) => {
+    metronomeEvent.value = payload
+  }
 
-  const noteIndexInPattern = (note: number) => {
+  /**
+   * Returns the index of a note in the pattern.
+   * @param {number} note - The note to get the index of.
+   * @returns {number} - The index of the note in the pattern.
+   */
+  const noteIndexInPattern = (
+    note: number
+  ) => {
     if (
-      palo.value.selectedPrestartBeat &&
-      paloData.value?.nbBeatsInPattern
+      store.selectedPattern?.selectedPrestartBeat &&
+      store.selectedPattern?.nbBeatsInPattern
     ) {
-      let index = note - palo.value.selectedPrestartBeat.value * 2
+      let index = note - store.selectedPattern?.selectedPrestartBeat.value * 2
 
       while (index < 0) {
-        index += paloData.value?.nbBeatsInPattern
+        index += store.selectedPattern?.nbBeatsInPattern
       }
 
-      return index % paloData.value?.nbBeatsInPattern
+      return index % store.selectedPattern?.nbBeatsInPattern
     } else {
       return note
     }
   }
 
+  /**
+   * Improvises a sound on a given note.
+   * @param {string} type - The type of audio to be triggered.
+   * @param {number} time - The time at which the audio should be triggered.
+   * @param {Tone.Player} sound - The sound to be triggered.
+   * @param {number} note - The note associated with the audio.
+   * @param {number} key - The key associated with the audio.
+   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
+   * @returns {void}
+   */
   const improvise = (
     type: string,
     time: number,
@@ -126,7 +150,7 @@ export const useMetronome = () => {
     }
 
     // Don't mess with accents
-    if (paloData.value?.accents.includes((key / 2) as never)) {
+    if (store.selectedPattern?.accents.includes((key / 2) as never)) {
       sound?.start(time)
       return
     }
@@ -154,6 +178,12 @@ export const useMetronome = () => {
     }
   }
 
+  /**
+   * Improvises a jaleo sound on a given note.
+   * @param {number} note - The note associated with the audio.
+   * @param {number} time - The time at which the audio should be triggered.
+   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
+   */
   const improviseJaleo = (
     note: number,
     time: number,
@@ -164,7 +194,7 @@ export const useMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (paloData.value?.accents.includes(noteIndexInPattern(note) as never)) {
+    if (store.selectedPattern?.accents.includes(noteIndexInPattern(note) as never)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -177,27 +207,42 @@ export const useMetronome = () => {
     }
   }
 
+  /**
+   * Triggers a click sound on prestart beats.
+   * @param {number} time - The time at which the audio should be triggered.
+   * @param {number} note - The note associated with the audio.
+   * @returns
+   */
   const triggerPrestartBeatClick = (
     time: number,
     note: number
   ) => {
-    if (palo.value.selectedPrestartBeat?.value && paloData.value?.accents) {
-      if (
-        palo.value.selectedPrestartBeat?.value > 0 &&
-        note < palo.value.selectedPrestartBeat?.value * 2 &&
-        note % 2 === 0
-      ) {
-        const index = noteIndexInPattern(note)
-        if (!index) return
-        if (paloData.value?.accents.includes((index / 2) as never)) {
-          sounds.click[0].quarter.start(time)
-        } else {
-          sounds.click[1].quarter.start(time)
-        }
+    if (
+      store.selectedPattern?.accents &&
+      store.selectedPattern?.selectedPrestartBeat?.value &&
+      store.selectedPattern?.selectedPrestartBeat?.value > 0 &&
+      note % 2 == 0
+    ) {
+      const index = noteIndexInPattern(note)
+      if (!index) return
+      if (store.selectedPattern?.accents.includes((index / 2) as never)) {
+        sounds.click[0].quarter.start(time)
+      } else {
+        sounds.click[1].quarter.start(time)
       }
     }
   }
 
+  /**
+   * Triggers audio based on the specified parameters.
+   *
+   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
+   * @param {string} type - The type of audio to be triggered.
+   * @param {boolean} isLoop - Specifies whether the audio is looped.
+   * @param {number} time - The time at which the audio should be triggered.
+   * @param {number} note - The note associated with the audio.
+   * @returns {void}
+   */
   const triggerAudioOnEvent = (
     eighthNotes: boolean,
     type: string,
@@ -205,35 +250,33 @@ export const useMetronome = () => {
     time: number,
     note: number
   ) => {
-    // eighthNotes ? gain.gain.value = 0.2 : gain.gain = 1.2
-
     // Prepend prestart beats if required
-    if (type == 'prestartBeat') {
+    if (store.selectedPattern?.selectedPrestartBeat && type == 'prestartBeat') {
       triggerPrestartBeatClick(time, note)
     } else {
       // Don't play non-prestart sequences if note is during prestart
       if (
-        palo.value.selectedPrestartBeat?.value &&
-        note < palo.value.selectedPrestartBeat?.value * 2 &&
+        store.selectedPattern?.selectedPrestartBeat?.value &&
+        note < store.selectedPattern?.selectedPrestartBeat?.value * 2 &&
         !isLoop
       ) {
         return
       }
 
       if (type == 'jaleo') {
-        const jaleo = paloStore.instrument('jaleo')
+        const jaleo = store.instrument('jaleo')
         if (jaleo?.enabled) improviseJaleo(note, time, eighthNotes)
         return
       }
 
-      const instru = paloStore.instrument((type as string))
+      const instru = store.instrument((type as string))
 
       // index is a pulsation number, value is the sound number
-      if (instru?.enabled && paloData.value && type) {
-        (paloData.value[type as keyof PaloData] as (number | null)[]).forEach(
+      if (instru?.enabled && store.selectedPattern && type) {
+        (store.selectedPattern.sequences[type as keyof InstruSeqs] as (number | null)[]).forEach(
           (value: number | null, index: number) => {
             if (!value) return
-            const sound = sounds[type as keyof Sounds][value - 1]
+            const sound: Players = sounds[type as keyof Sounds][value - 1] as Players
             const key = noteIndexInPattern(note)
 
             if (
@@ -242,12 +285,12 @@ export const useMetronome = () => {
               (index as number) % 2 != 0 &&
               key == index
             ) {
-              palo.value.improvisation
+              store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
             }
             if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
-              palo.value.improvisation
+              store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
             }
@@ -258,9 +301,16 @@ export const useMetronome = () => {
   }
 
   /**
-   * Builds a compas sequence from a palo, an "is eighthNote ?" boolean and a sound
+   * Builds a compas sequence from a pattern, an "is eighthNote ?" boolean and a sound
+   * @param {string} name - The name of the pattern
+   * @param {boolean} eighthNotes - Specifies whether the sequence is on eighth notes.
+   * @param {string} type - The type of audio to be triggered.
+   * @param {number[]} sequence - The sequence of notes to be played.
+   * @param {boolean} isLoop - Specifies whether the sequence is looped.
+   * @returns {Tone.Sequence} - The built sequence.
    */
   const buildSequence = (
+    name: string,
     eighthNotes: boolean,
     type: string,
     sequence: number[],
@@ -280,11 +330,11 @@ export const useMetronome = () => {
       if (type === ('event') && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
-          if (palo.value.name === 'no-compas') {
-            paloStore.triggerEvent(paloStore.metronomeEvent === 0 ? 2 : 0)
+          if (name === 'simple-click') {
+            triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
           } else {
             const index = noteIndexInPattern(note)
-            if (index !== null) paloStore.triggerEvent(index as number | null)
+            if (index !== null) triggerEvent(index as number | null)
           }
         }, time) // Use AudioContext time of the event
       }
@@ -292,81 +342,58 @@ export const useMetronome = () => {
 
     // Set/unset sequence looping
     seq.loop = isLoop
-
     return seq
   }
 
-  // ========================
+    // ========================
   // Metronome init functions
   // ========================
 
+  /**
+   * Initializes all sequences for a given pattern.
+   * @returns {void}
+   */
   const initSequences = () => {
     const introSeq = []
-    const loopSeq = []
+    const loopSeq: number[] = []
 
-    if (paloData.value?.nbBeatsInPattern) {
+    if (store.selectedPattern?.nbBeatsInPattern) {
       if (
-        palo.value.selectedPrestartBeat
+        store.selectedPattern?.selectedPrestartBeat
       ) {
-        // Add prestart beat to introduction sequence
-        for (let i = 0; i < palo.value.selectedPrestartBeat?.value; i++) {
-          introSeq.push(i * 2)
-          introSeq.push(i * 2 + 1)
-        }
-
-        // Add beats to introduction sequence until loop begins
-        if (
-          palo.value.selectedPrestartBeat?.value !== 0
-        ) {
-          let i = introSeq.length
-          // Add items to introSeq until we find a beat with index 0 in the pattern
-          while (
-            (0 - palo.value.selectedPrestartBeat?.value * 2 +
-              i) %
-              paloData.value?.nbBeatsInPattern !==
-            0
-          ) {
-            introSeq.push(i)
-            i++
-          }
+        // Add prestart beats to intro sequence
+        const prestartBeat = store.selectedPattern?.nbBeatsInPattern - store.selectedPattern?.selectedPrestartBeat.value * 2
+        for (let i = prestartBeat; i < store.selectedPattern?.nbBeatsInPattern; i++) {
+          introSeq.push(i)
         }
       }
       // Add pattern beats to loopable sequence
-      for (let i = 0; i < paloData.value?.nbBeatsInPattern; i++) {
+      for (let i = 0; i < store.selectedPattern?.nbBeatsInPattern; i++) {
         loopSeq.push(i)
       }
     }
 
+    const instruKeys = soundsData.map((instru: SoundsData) => instru.name)
+    instruKeys.push('event')
+
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        prestartBeat: buildSequence(false, ('prestartBeat' as keyof PaloData), introSeq, false),
-        event: buildSequence(false, ('event' as keyof PaloData), introSeq, false),
+        prestartBeat: buildSequence(store.selectedPattern?.name, false, ('prestartBeat' as keyof InstruSeqs), introSeq, false),
+        event: buildSequence(store.selectedPattern?.name, false, ('event' as keyof InstruSeqs), introSeq, false),
       },
-      loop: {
-        clara: buildSequence(false, ('clara' as keyof PaloData), loopSeq, true),
-        sorda: buildSequence(false, ('sorda' as keyof PaloData), loopSeq, true),
-        pito: buildSequence(false, ('pito' as keyof PaloData), loopSeq, true),
-        cajon: buildSequence(false, ('cajon' as keyof PaloData), loopSeq, true),
-        nudillo: buildSequence(false, ('nudillo' as keyof PaloData), loopSeq, true),
-        udu: buildSequence(false, ('udu' as keyof PaloData), loopSeq, true),
-        jaleo: buildSequence(false, ('jaleo' as keyof PaloData), loopSeq, true),
-        click: buildSequence(false, ('click' as keyof PaloData), loopSeq, true),
-        event: buildSequence(false, ('event' as keyof PaloData), loopSeq, true),
-      },
+      loop: instruKeys.reduce((acc: Seq, instru: string) => {
+        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, false, (instru as keyof InstruSeqs), loopSeq, true)
+        return acc
+      }, {})
     }
 
     sequences.eighthNotes = {
-      loop: {
-        clara: buildSequence(true, ('clara' as keyof PaloData), loopSeq, true),
-        sorda: buildSequence(true, ('sorda' as keyof PaloData), loopSeq, true),
-        pito: buildSequence(true, ('pito' as keyof PaloData), loopSeq, true),
-        cajon: buildSequence(true, ('cajon' as keyof PaloData), loopSeq, true),
-        nudillo: buildSequence(true, ('nudillo' as keyof PaloData), loopSeq, true),
-        udu: buildSequence(true, ('udu' as keyof PaloData), loopSeq, true),
-        jaleo: buildSequence(true, ('jaleo' as keyof PaloData), loopSeq, true),
-        click: buildSequence(true, ('click' as keyof PaloData), loopSeq, true),
-      },
+      loop: instruKeys.reduce((acc: Seq, instru: string) => {
+        if (instru === 'event') return acc
+        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, true, (instru as keyof InstruSeqs), loopSeq, true)
+        return acc
+      }, {})
     }
   }
 
@@ -374,44 +401,56 @@ export const useMetronome = () => {
 
   const isSupported = Tone.supported
 
-  const reinitialize = (paloState: PaloState) => {
-    if (!paloState) return
-    palo.value = paloState
-    paloData.value = palosData.find((p) => p.value === palo.value.name)
-    initSequences()
-    changeTempo()
-    changeSwing(palo.value.swing)
-    forEachValue(sounds, (sound, key) => {
-      changeVolume({ instrument: key, volume: palo.value.instruments.find((i => i.value == key))?.volume || 0 })
-      changeDecay(palo.value.globalDecay)
-    })
+  const reinitialize = () => {
+    if (store.selectedPattern) {
+      initSequences()
+      if (store.selectedPattern?.tempo) changeTempo(store.selectedPattern?.tempo)
+      if (store.selectedPattern?.swing) changeSwing(store.selectedPattern?.swing)
+      forEachValue(sounds as Sounds, (sound, key) => {
+        if (store.selectedPattern?.instruments) changeVolume({ instrument: key, volume: store.selectedPattern?.instruments.find((i => i.value == key))?.volume ?? 0 })
+        if (store.selectedPattern?.globalDecay) changeDecay(store.selectedPattern?.globalDecay)
+      })
+    }
   }
 
-  const initMetronome = (paloState: PaloState) => {
+  /**
+   * Initializes the metronome.
+   * @returns {boolean} - Whether the initialization was successful.
+   */
+  const initMetronome = async () => {
     Loading.show({
-      delay: 100,
+      // delay: 100,
       message: 'Loading audio samples',
     })
-    Tone.loaded()
+    return await Tone.loaded()
       .then(() => {
-        initSounds()
-        reinitialize(paloState)
+        loadSounds()
+        reinitialize()
         Loading.hide()
+        Tone.Transport.debug = true
+        return true
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error(error)
         Loading.hide()
         Notify.create({
           message: 'Failed to load the audio samples !',
           color: 'secondary',
           icon: 'error',
         })
+        return false
       })
   }
+
 
   // =====================
   // Metronome user inputs
   // =====================
 
+  /**
+   * Starts all sequences.
+   * @returns {void}
+   */
   const startSequences = async () => {
     await Tone.start()
 
@@ -424,97 +463,142 @@ export const useMetronome = () => {
       if (sequences.quarterNotes.introduction?.event?.length !== 0) {
         sequences.quarterNotes.introduction?.event?.start(0).stop(loopStart)
         sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(loopStart)
-        forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
-          seq.start(loopStart, offset)
+        forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence) => {
+          seq.start(loopStart)
         })
-        forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
-          seq.start(loopStart, offset)
+        forEachValue(sequences.eighthNotes.loop as Seqs, (seq: Tone.Sequence) => {
+          seq.start(loopStart)
         })
       } else {
-        forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
+        forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence) => {
           seq.start(0)
         })
-        forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
+        forEachValue(sequences.eighthNotes.loop as Seqs, (seq: Tone.Sequence) => {
           seq.start(0)
         })
       }
     }
+
   }
 
+  /**
+   * Stops all sequences.
+   * @returns {void}
+   */
   const stopAllSequences = () => {
-    forEachValue(sequences, (seq: SeqSubdiv) => {
+    forEachValue(sequences as Seqs, (seq: SeqSubdiv) => {
       forEachValue(seq, (instrus: Seq) => {
         forEachValue(instrus, (s: Tone.Sequence) => {
           if (s !== null && s.state == 'started') s.stop()
-          if (s !== null) s.dispose()
+          // if (s !== null) s.dispose()
         })
       })
     })
     Tone.Transport.stop()
+    triggerEvent(null)
+    // reinitialize()
   }
 
-  const changeTempo = (tempo?: number) => {
-    if (tempo) {
-      Tone.Transport.bpm.value = tempo
-    } else if (palo.value.tempo) {
-      Tone.Transport.bpm.value = palo.value.tempo
-    } else if (paloData.value) {
-      Tone.Transport.bpm.value = paloData.value?.defaultTempo
-    }
+  /**
+   * Changes the tempo of the metronome.
+   * @param {number} tempo - The new tempo.
+   * @returns {void}
+   */
+  const changeTempo = (tempo: number) => {
+    Tone.Transport.bpm.value = tempo
   }
 
+  /**
+   * Changes the swing of the metronome.
+   * @param {number} swing - The new swing.
+   * @returns {void}
+   */
   const changeSwing = (swing: number) => {
     Tone.Transport.swing = swing
   }
 
-  const humanize = () => {
+  /**
+   * Changes the humanization of the metronome.
+   * @param {boolean} humanization - The new humanization.
+   * @returns {void}
+   */
+  const humanize = (humanization: boolean) => {
     // Do nothing if sequences have not been initialized
     if (typeof sequences.quarterNotes === 'undefined') return
 
-    forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence, type: string) => {
+    forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence, type: string) => {
       if (type === 'event' || type === 'prestartBeat' || type === 'click') {
         seq.humanize = false
       } else {
-        seq.humanize = palo.value.humanization
+        seq.humanize = humanization
       }
     })
-    forEachValue(sequences.eighthNotes, (seq: SeqSubdiv) => {
+    forEachValue(sequences.eighthNotes as SeqSubdiv, (seq: SeqSubdiv) => {
       forEachValue(seq, (s: Tone.Sequence) => {
-        s.humanize = palo.value.humanization
+        s.humanize = humanization
       })
     })
   }
 
+  /**
+   * Changes the volume of the metronome.
+   * @param {VolumeOpts} payload - The new volume.
+   * @returns {void}
+   */
   const changeVolume = async (payload: VolumeOpts) => {
     // increase volume of every player from the sounds instrument by the payload volume
     const sound = sounds[payload.instrument as keyof Sounds]
-    forEachValue(sound, (player: Players) => {
+    forEachValue(sound as Sound, (player: Players) => {
       player.quarter.volume.value = player.quarter.defaultVolume + payload.volume
       player.eighth.volume.value = player.eighth.defaultVolume + payload.volume
     })
   }
 
+  /**
+   * Changes the decay of the metronome.
+   * @param {DecayOpts} payload - The new decay.
+   * @returns {void}
+   */
   const changeDecay = async (decay: number) => {
     reverb.decay = decay
   }
 
+  onMounted(() => {
+    isSupported().catch(() => {
+      Dialog.create({
+        title: 'Update your browser!',
+        message:
+          "Your browser doesn't support one or more technologies used by this app. Please come back with another one or another version of this one.",
+        persistent: true
+      })
+    })
+  })
+
   return {
-    reinitialize,
-    initMetronome,
+    audioFormat,
+    reverbDecay,
+    reverb,
+    soundsIsLoaded,
+    metronomeEvent,
+    loadSounds,
+    triggerEvent,
+    noteIndexInPattern,
+    improvise,
+    improviseJaleo,
+    triggerPrestartBeatClick,
+    triggerAudioOnEvent,
+    buildSequence,
     getContext,
     isSupported,
     initSequences,
+    initMetronome,
+    reinitialize,
     startSequences,
     stopAllSequences,
-    changeVolume,
-    changeDecay,
-    humanize,
-    changeSwing,
     changeTempo,
-    triggerAudioOnEvent,
-    triggerPrestartBeatClick,
-    improviseJaleo,
-    improvise,
-    noteIndexInPattern,
+    changeSwing,
+    humanize,
+    changeVolume,
+    changeDecay
   }
 }

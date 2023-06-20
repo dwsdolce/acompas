@@ -4,8 +4,6 @@ import {
   createRouter,
   createWebHistory,
 } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
-
 import routes from 'src/router/routes'
 
 /*
@@ -18,6 +16,7 @@ import routes from 'src/router/routes'
  */
 
 export default route(function (/* { store, ssrContext } */) {
+
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : createWebHistory
@@ -30,15 +29,6 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
-  })
-
-  Router.beforeEach((to, from) => {
-    // ...
-    // explicitly return false to cancel the navigation
-    if (from.name && to.path !== '/privacy-policy') {
-      const paloStore = usePaloStore(from.name as string)()
-      paloStore.stop()
-    }
   })
 
   return Router

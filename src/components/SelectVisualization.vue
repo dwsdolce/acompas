@@ -1,30 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
-const route = useRoute()
-const paloStore = usePaloStore(route.name as string)()
+const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
 const {
   visualizationModes,
   visualizationMode
-} = storeToRefs(paloStore)
-
-const {
-  selectVisualizationMode
-} = paloStore
+} = storeToRefs(patternStore)
 
 const {
   toggleDialog
 } = sessionStore
-
-const onSelectVisualizationMode = (v: string) => {
-  selectVisualizationMode(v)
-}
 </script>
 
 <template lang="pug">
@@ -50,8 +40,7 @@ const onSelectVisualizationMode = (v: string) => {
     left-label,
     type="radio",
     color="primary",
-    :model-value="visualizationMode",
-    @update:model-value="onSelectVisualizationMode"
+    v-model="visualizationMode",
     :options="visualizationModes"
   ).q-mb-lg
 </template>

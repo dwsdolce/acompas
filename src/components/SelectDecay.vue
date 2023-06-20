@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 
-const route = useRoute()
-const paloStore = usePaloStore(route.name as string)()
+const patternStore = usePatternStore()
 
 const {
-  palo
-} = storeToRefs(paloStore)
+  selectedPattern
+} = storeToRefs(patternStore)
 
 const {
   selectDecay
-} = paloStore
+} = patternStore
 </script>
 
 <template lang="pug">
@@ -34,8 +32,8 @@ const {
         )
           p.text-body2 Set a decay for sounds reverb
   q-slider(
-    :model-value="palo.globalDecay",
-    @change="val => selectDecay(val || palo.globalDecay)",
+    :model-value="selectedPattern.globalDecay",
+    @change="val => selectDecay(val || selectedPattern.globalDecay)",
     :min="0.1",
     :max="1.2",
     :step="0.1",

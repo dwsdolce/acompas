@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 
-const route = useRoute()
-
-const paloData = palosData.find(palo => palo.value === route.name)
-const paloStore = usePaloStore(route.name as string)()
-const { palo } = storeToRefs(paloStore)
-
-const {
-  selectSwing
-} = paloStore
+const patternStore = usePatternStore()
+const { selectedPattern, swing } = storeToRefs(patternStore)
 </script>
 
 <template lang="pug">
@@ -34,8 +25,7 @@ const {
         )
           p.text-body2 If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rythm flavour.
   q-slider(
-    :model-value="palo.swing",
-    @change="val => { selectSwing(val) }",
+    v-model="swing",
     :min="0",
     :max="1",
     :step="0.1",

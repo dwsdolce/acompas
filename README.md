@@ -44,6 +44,7 @@ cd acompas
 yarn install
 
 # Build the icons
+# Run this command after generating the src-capacitor/android and /ios
 ./icongenie.sh
 
 # Serve with hot reload at localhost:9000

@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
-import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 
 const $q = useQuasar()
-const route = useRoute()
-const paloStore = usePaloStore(route.name as string)()
+const patternStore = usePatternStore()
 
 const {
   isPlaying
-} = storeToRefs(paloStore)
+} = storeToRefs(patternStore)
 
 const {
   play,
   stop
-} = paloStore
+} = patternStore
 </script>
 
 <template lang="pug">

@@ -1,16 +1,19 @@
-import { ref, watch } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, watch, computed } from 'vue'
+import { defineStore, storeToRefs } from 'pinia'
 import { Screen } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useMatomo } from 'src/composables/matomo'
-import type { Size, SessionState } from 'src/composables/models'
+import type { Size, SessionState } from 'src/utils/types'
 
 export const useSessionStore = defineStore('session', () => {
   const {
     init: initMatomo,
     deleteScript : deleteMatomo,
     scriptExists: matomoExists,
+    trackPlay,
+    trackStop
   } = useMatomo()
+
   const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))

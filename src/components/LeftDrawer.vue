@@ -3,10 +3,12 @@
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
   import { useRouter, useRoute } from 'vue-router'
-  import TuningFork from 'src/components/TuningFork.vue'
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
+  import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
+  import HelpApp from 'src/components/HelpApp.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
+  import { isFocusableElement } from 'src/utils/utils'
   import type { QItem } from 'quasar'
 
   const helpDialog = ref(false)
@@ -57,15 +59,10 @@
   })
 
   onUpdated(() => {
-    if (!helpDialog.value && helpQItem.value !== null) {
-      helpQItem.value.$el.querySelector('.q-focus-helper').blur()
-    }
-    if (!tuningDialog.value && tuningForkQItem.value !== null) {
-      tuningForkQItem.value.$el.querySelector('.q-focus-helper').blur()
-    }
-    if (!shortcutsDialog.value && shortcutsQItem.value !== null) {
-      shortcutsQItem.value.$el.querySelector('.q-focus-helper').blur()
-    }
+    if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
+    if (isFocusableElement(helpQItem.value?.$el)) helpQItem.value?.$el.blur()
+    if (isFocusableElement(tuningForkQItem.value?.$el)) tuningForkQItem.value?.$el.blur()
+    if (isFocusableElement(shortcutsQItem.value?.$el)) shortcutsQItem.value?.$el.blur()
   })
 </script>
 
@@ -89,13 +86,7 @@ div
         q-icon(name="help")
       q-item-section Help
 
-    q-item(
-      id="tuningForkQItem",
-      ref="tuningForkQItem",
-      clickable,
-      v-ripple,
-      @click="tuningDialog = true"
-    )
+    q-item(clickable, v-ripple, @click="router.push('/tuning-fork')")
       q-item-section(avatar)
         q-icon(name="hearing")
       q-item-section Tuning fork
@@ -157,6 +148,8 @@ div
         q-icon(name="bug_report")
       q-item-section Issues
 
+
+
   q-dialog(
     id="helpDialog",
     v-model="helpDialog",
@@ -174,36 +167,7 @@ div
         ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Help
       q-card-section.scroll(style="max-height: 80vh;")
-        div
-          p: b Palo
-          p Use this button to select the flamenco rhythm that you want.
-        div
-          p: b Pre-count
-          p Optionaly define a number of beats to use as pre-count for the selected palo.
-        div
-          p: b Start beat
-          p Optionaly change the start beat for the selected palo.
-        div
-          p: b Improvise
-          p If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
-        div
-          p: b Swing
-          p If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rhythm flavour.
-        div
-          p: b Humanize
-          p If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
-        div
-          p: b Tempo
-          p There are 2 ways to define the tempo: the knob circle, and you can decrement/increment the bpm with the + and - buttons.
-        div
-          p: b Instruments mixer
-          p Access the mixer. Select playing instruments, set its own relative volume, and wether playing quarter notes or eighth notes.
-        div
-          p: b View mode
-          p Choose between dots, counter and clock visualisations.
-        div
-          p: b Reset
-          p Reset the metronome's settings to the default values. You can reset all settings or reset settings for the current palo.
+        help-app
 
   q-dialog(
     id="privacyDialog",
@@ -212,25 +176,6 @@ div
     @hide="toggleDialog(false)"
   )
     select-privacy
-
-  q-dialog(
-    id="tuningDialog",
-    v-model="tuningDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
-  )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(
-          icon="close",
-          flat,
-          round,
-          dense,
-          v-close-popup
-        ).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Tuning fork
-      q-card-section.scroll(style="max-height: 80vh;")
-        tuning-fork
 
   q-dialog(
     id="shortcutsDialog",
@@ -249,73 +194,6 @@ div
         ).absolute.q-top-right.q-mr-sm
         .text-h6.text-center Shortcuts
       q-card-section.scroll(style="max-height: 80vh;")
-        p.text-center The following shortcuts are available for usage with the keyboard:
-        q-markup-table(flat)
-          tbody
-            tr
-              td.text-right
-                kbd Space
-              td.text-left
-                | Start / Stop metronome
-            tr
-              td.text-right
-                kbd Up
-              td.text-left
-                | Tempo + 1
-            tr
-              td.text-right
-                kbd Down
-              td.text-left
-                | Tempo - 1
-            tr
-              td.text-right
-                kbd Shift
-                | +
-                kbd Up
-              td.text-left
-                | Tempo + 2
-            tr
-              td.text-right
-                kbd Shift
-                | +
-                kbd Down
-              td.text-left
-                | Tempo - 2
-            tr
-              td.text-right
-                kbd Alt
-                | +
-                kbd Shift
-                | +
-                kbd Up
-              td.text-left
-                | Tempo + 5
-            tr
-              td.text-right
-                kbd Alt
-                | +
-                kbd Shift
-                | +
-                kbd Down
-              td.text-left
-                | Tempo - 5
-            tr
-              td.text-right
-                kbd Esc
-              td.text-left
-                | Close dialog
-            tr
-              td.text-right
-                kbd Tab
-              td.text-left
-                | Change focus button
+        keyboard-shortcuts
 </template>
 
-<style lang="sass">
-kbd
-  background-color: lightgray
-  padding: 3px 8px
-  margin: 3px
-  border-radius: 4px
-  text-shadow: 1px 1px 0 white
-</style>

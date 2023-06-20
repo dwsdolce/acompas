@@ -3,14 +3,10 @@ import { ref, watch, onMounted, onBeforeUpdate } from 'vue'
 import type { CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
-import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
-import palosData from 'src/data/palosData'
 
-const route = useRoute()
-const paloData = palosData.find(palo => palo.value === route.name)
-const paloStore = usePaloStore(route.name as string)()
+const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
 // how to get the browser viewport size in a vue environment?
@@ -18,11 +14,14 @@ const sessionStore = useSessionStore()
 
 const { innerWidth: width, innerHeight: height } = window
 const {
-  palo,
-  metronomeEvent
-} = storeToRefs(paloStore)
+  selectedPattern,
+  metronomeEvent,
+  beatLabels
+} = storeToRefs(patternStore)
 
-const { visualizationSize } = storeToRefs(sessionStore)
+const {
+  visualizationSize
+} = storeToRefs(sessionStore)
 
 const dotSize = ref<number>(20)
 const minDotSize = ref<number>(20)
@@ -42,13 +41,13 @@ interface Size {
 }
 
 const getDotStyle = (i: number): CSSProperties => {
-  if (paloData?.accents) {
+  if (selectedPattern.value?.accents) {
     return {
       width: dotSize.value / 2 + 'px',
       height: dotSize.value / 2 + 'px',
       borderRadius: borderRadius.value + '%',
       marginTop: dotSize.value / 2 + 'px',
-      backgroundColor: paloData?.accents.includes(i as never) ? 'firebrick' : 'tomato'
+      backgroundColor: selectedPattern.value?.accents.includes(i as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -61,8 +60,8 @@ const getNbStyle: CSSProperties = {
 }
 
 const resizeDots = (size: Size) => {
-  if (paloData?.nbBeatsInPattern) {
-    const computedDotSize = size.width / paloData.nbBeatsInPattern / 1.5
+  if (selectedPattern.value?.nbBeatsInPattern) {
+    const computedDotSize = size.width / selectedPattern.value.nbBeatsInPattern / 1.5
     if (computedDotSize < minDotSize.value) {
       dotSize.value = minDotSize.value
     } else if (computedDotSize > maxDotSize.value) {
@@ -123,7 +122,7 @@ watch(
     [prevMetronomeEvent, prevVisualizationSize]
   ) => {
     if (newMetronomeEvent !== null) {
-      if (palo.value?.name === 'no-compas') {
+      if (selectedPattern.value?.name === 'simple-click') {
         animateDot(0)
       } else {
         animateDot(newMetronomeEvent)
@@ -149,8 +148,8 @@ onBeforeUpdate(() => {
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around
   .column.items-center(
-    v-for="(n, i) in paloData?.beatLabels",
-    v-show="i !== paloData?.beatLabels.length - 1",
+    v-for="(n, i) in beatLabels",
+    v-show="i !== beatLabels.length - 1",
     :key="i"
   )
     .dot(
@@ -159,7 +158,7 @@ onBeforeUpdate(() => {
       :class="[`dot-${i} ${n === null ? 'invisible' : ''}`]"
     ).item-center.q-mb-md
     span(
-      v-if="palo && palo.name !== 'no-compas'",
+      v-if="selectedPattern.name !== 'simple-click'",
       :style="getNbStyle",
       :ref="el => { nbs[i] = el }"
     ).text-center {{ n }}

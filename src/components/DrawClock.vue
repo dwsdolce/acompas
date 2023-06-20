@@ -3,32 +3,37 @@ import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
 import type { CSSProperties } from 'vue'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
-import { useRoute } from 'vue-router'
-import palosData from 'src/data/palosData'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
 
-const route = useRoute()
-const paloStore = usePaloStore(route.name as string)()
-const paloData = palosData.find(palo => palo.value === route.name)
+const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const {
-  palo,
   isPlaying,
+  selectedPattern,
   metronomeEvent,
-  clockVelocity,
-  beatLabels,
-  startingPoint,
-  clockStep
-} = storeToRefs(paloStore)
+  prestartBeat,
+  beatLabels
+} = storeToRefs(patternStore)
 
 const clockDeg = ref<number>(0)
 const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
 
+const clockVelocity = computed(() =>
+    selectedPattern.value?.tempo
+  )
+const clockStep = computed(() => 360 / beatLabels.value?.length)
+const startingPoint = computed(() =>
+  prestartBeat.value
+    ? (selectedPattern.value?.nbBeatsInPattern - prestartBeat.value * 2) / 2
+    : 0
+  )
 // const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
 
 const getLiStyle = (i: number): CSSProperties => {
-  if (paloData && beatLabels.value) {
+  if (selectedPattern.value && beatLabels.value) {
     return {
       position: 'absolute',
       transform: `rotate(${(360 / beatLabels.value.length) * i}deg)`
@@ -39,10 +44,10 @@ const getLiStyle = (i: number): CSSProperties => {
 }
 
 const getNumStyle = (i: number): CSSProperties => {
-  if (paloData && beatLabels.value) {
+  if (beatLabels.value) {
     return {
       transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
-      color: paloData?.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
+      color: selectedPattern.value?.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -110,7 +115,7 @@ const animateNum = (v: number | null) => {
 }
 
 watch(
-  [metronomeEvent, startingPoint, palo.value.selectedPrestartBeat],
+  [metronomeEvent, startingPoint, prestartBeat],
   (
     [newMetronomeEvent, newStartingPoint, newSelectedPrestartBeat],
     [prevMetronomeEvent, prevStartingPoint, prevSelectedPrestartBeat]

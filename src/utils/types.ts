@@ -6,14 +6,9 @@ export interface SoundsDataKey {
 }
 
 export interface SoundsData {
-  clara:                    SoundsDataKey[]
-  sorda:                    SoundsDataKey[]
-  pito:                     SoundsDataKey[]
-  nudillo:                  SoundsDataKey[]
-  cajon:                    SoundsDataKey[]
-  udu:                      SoundsDataKey[]
-  jaleo:                    SoundsDataKey[]
-  click:                    SoundsDataKey[]
+  name:                     string
+  label:                    string
+  medias:                   SoundsDataKey[]
 }
 
 export interface ExtendedPlayer extends Player {
@@ -107,10 +102,21 @@ export interface DecayOpts {
   decay:                    number
 }
 
-export interface PaloData {
+export interface InstruSeqs {
+  clara:                  (number | null)[]
+  sorda:                  (number | null)[]
+  pito:                   (number | null)[]
+  cajon:                  (number | null)[]
+  nudillo:                (number | null)[]
+  udu:                    (number | null)[]
+  click:                  (number | null)[]
+  beatLabels:             (number | null)[]
+}
+
+export interface PatternState {
   id:                       number
+  name:                     string
   label:                    string
-  value:                    string
   minTempo:                 number
   maxTempo:                 number
   defaultTempo:             number
@@ -118,14 +124,7 @@ export interface PaloData {
   fastTempo:                number
   nbBeatsInPattern:         number
   accents:                  number[]
-  clara:                    (number | null)[]
-  sorda:                    (number | null)[]
-  pito:                     (number | null)[]
-  cajon:                    (number | null)[]
-  nudillo:                  (number | null)[]
-  udu:                      (number | null)[]
-  click:                    (number | null)[]
-  beatLabels:               (number | null)[]
+  sequences:                InstruSeqs
   prestartBeats:            numOpts[]
   slowMessage?:             string
   fastMessage?:             string
@@ -134,20 +133,18 @@ export interface PaloData {
   wikipediaUrl?:            string
   places?:                  string
   videoExample?:            string
-}
-
-export interface PaloState {
-  name:                     string
-  tempo:                    number
-  selectedPrestartBeat:     numOpts
-  swing:                    number
-  improvisation:            boolean
-  humanization:             boolean
-  isTooSlow:                boolean
-  isTooFast:                boolean
+  selectedPrestartBeat?:    numOpts
+  tempo?:                   number | undefined
+  isTooFast?:               boolean
+  isTooSlow?:               boolean
+  swing?:                   number
+  improvisation?:           boolean
+  humanization?:            boolean
   // visualizationModes:    visuOpts[]
-  instruments:              instruOpts[]
-  globalDecay:              number
+  instruments?:             instruOpts[]
+  globalDecay?:             number
+  visualizationMode?:       string
+
 }
 
 export interface SessionState {

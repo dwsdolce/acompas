@@ -2,34 +2,30 @@
 import { ref, watch, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
-import { useRoute } from 'vue-router'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
 import SelectDecay from 'src/components/SelectDecay.vue'
 import type { QBtn } from 'quasar'
 
-const route = useRoute()
-
-const paloStore = usePaloStore(route.name as string)()
-const sessionStore = useSessionStore()
-
 const $q = useQuasar()
+const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const mixerDialog = ref(false)
 const mixerBtn = ref<QBtn | null>(null)
 
 const {
-  palo,
+  selectedPattern,
   selectedInstruments
-} = storeToRefs(paloStore)
+} = storeToRefs(patternStore)
 
 const {
   toggleDialog
 } = sessionStore
 
 watch(selectedInstruments, (value) => {
-  if (!value.length) {
+  if (!value?.length) {
     $q.notify({
       message: 'No instrument is selected. You will have no sound in the metronome ...',
       color: 'secondary',
@@ -94,7 +90,7 @@ div
                   p.text-body2 Increase or decrease instrument volume
           tbody
             instrument-mixer(
-              v-for="instrument in palo.instruments",
+              v-for="instrument in selectedPattern.instruments",
               :key="instrument.value",
               :slug="instrument.value"
             )

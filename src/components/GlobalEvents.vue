@@ -2,31 +2,33 @@
 import { onMounted, watch } from 'vue'
 import { Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 import { GlobalEvents } from 'vue-global-events'
 import { KeepAwake } from '@capacitor-community/keep-awake'
-import { usePaloStore } from 'src/stores/palo'
+import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { useMatomo } from 'src/composables/matomo'
+import { isFocusableElement } from 'src/utils/utils'
 
-const route = useRoute()
 const sessionStore = useSessionStore()
 
 const {
   trackingEnabled
 } = storeToRefs(sessionStore)
 
-const paloStore = usePaloStore(route.name as string)()
+// const { playStop } = sessionStore
+
+const patternStore = usePatternStore()
 
 const {
-  isPlaying
-} = storeToRefs(paloStore)
+  isPlaying,
+  selectedPattern,
+  tempo
+} = storeToRefs(patternStore)
 
 const {
-  palo,
   playStop,
   selectTempo
-} = paloStore
+} = patternStore
 
 const { init: intiMatomo, deleteScript } = useMatomo()
 
@@ -38,6 +40,15 @@ const isSupported = async () => {
 const isKeptAwake = async () => {
   const result = await KeepAwake.isKeptAwake()
   return result.isKeptAwake
+}
+
+
+
+const handleSpace = (e: KeyboardEvent) => {
+  if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
+  if (e.code === 'Space') {
+    playStop()
+  }
 }
 
 onMounted(async () => {
@@ -64,13 +75,13 @@ watch(isPlaying, async (value) => {
 
 <template lang="pug">
 global-events(
-  @keyup.prevent.space.exact="playStop",
-  @keyup.prevent.up.exact="selectTempo(palo.tempo + 1)",
-  @keyup.prevent.down.exact="selectTempo(palo.tempo - 1)",
-  @keyup.prevent.shift.up.exact="selectTempo(palo.tempo + 2)",
-  @keyup.prevent.shift.down.exact="selectTempo(palo.tempo - 2)",
-  @keyup.prevent.alt.shift.up.exact="selectTempo(palo.tempo + 5)",
-  @keyup.prevent.alt.shift.down.exact="selectTempo(palo.tempo - 5)"
+  @keyup.prevent.space.exact="handleSpace",
+  @keyup.prevent.up.exact="selectTempo(selectedPattern.tempo + 1)",
+  @keyup.prevent.down.exact="selectTempo(selectedPattern.tempo - 1)",
+  @keyup.prevent.shift.up.exact="selectTempo(selectedPattern.tempo + 2)",
+  @keyup.prevent.shift.down.exact="selectTempo(selectedPattern.tempo - 2)",
+  @keyup.prevent.alt.shift.up.exact="selectTempo(selectedPattern.tempo + 5)",
+  @keyup.prevent.alt.shift.down.exact="selectTempo(selectedPattern.tempo - 5)"
 )
 
 </template>
