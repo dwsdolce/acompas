@@ -290,7 +290,6 @@ export const useMetronome = () => {
     // 'note' is an occurence of an element inside the sequence variable (integer)
     const seq = new Tone.Sequence((time, note) => {
       // Type is not an event, it is a prestartBeat or a selected instrument
-      console.log('note', note)
       if (type !== ('event')) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
@@ -303,7 +302,6 @@ export const useMetronome = () => {
           if (name === 'simple-click') {
             triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
           } else {
-            console.log('index', note)
             if (note !== null) triggerEvent(note as number | null)
           }
         }, time) // Use AudioContext time of the event
@@ -342,9 +340,6 @@ export const useMetronome = () => {
         loopSeq.push(i)
       }
     }
-
-    console.log('introSeq', introSeq)
-    console.log('loopSeq', loopSeq)
 
     const instruKeys = soundsData.map((instru: SoundsData) => instru.name)
     instruKeys.push('event')
@@ -392,8 +387,7 @@ export const useMetronome = () => {
    */
   const initMetronome = async () => {
     Loading.show({
-      delay: 0,
-      message: 'Loading audio samples',
+      message: 'Loading…',
     })
     return await Tone.loaded()
       .then(() => {
@@ -425,7 +419,7 @@ export const useMetronome = () => {
    */
   const startSequences = async () => {
     Loading.show({
-      delay: 50,
+      delay: 0,
       message: 'Loading…',
     })
     await Tone.start()
@@ -433,9 +427,6 @@ export const useMetronome = () => {
 
     const offset = sequences.quarterNotes.introduction?.event?.length || 0
     const loopStart = `0:${offset / 2}`
-
-    console.log('loopStart', loopStart)
-    console.log('offset', offset)
 
     await Tone.Transport.start()
     Loading.hide()
@@ -459,7 +450,6 @@ export const useMetronome = () => {
         })
       }
     }
-
   }
 
   /**

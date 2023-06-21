@@ -33,16 +33,14 @@ export const usePatternStore = defineStore('patterns', () => {
   } = useMetronome()
 
   const isPlaying = ref<boolean>(false)
-
   const patterns = useStorage('patterns', ref<PatternState[]>([]))
+  const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
 
   const visualizationModes = ref([
     { label: 'Dots', value: 'dots' },
     { label: 'Counter', value: 'counter' },
     { label: 'Clock', value: 'clock' }
   ])
-
-  const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
 
   const selectedPattern = computed(() =>
     patterns.value?.find((el: PatternState) => el.name === route.name) as PatternState
@@ -129,30 +127,32 @@ export const usePatternStore = defineStore('patterns', () => {
   const instrument = (slug: string): instruOpts | undefined =>
     instruments.value.find((el: instruOpts) => el.value === slug)
 
+  const buildPattern = (patternData: PatternState) => {
+    const tmp: PatternState = patternData
+    tmp.instruments = soundsData.map((audio) => {
+      return {
+        label: audio.label,
+        value: audio.name,
+        enabled: false,
+        eighthNotes: audio.noEighthNotes ? null : false,
+        volume: 0,
+        decay: 0.5,
+      }
+    })
+    tmp.tempo = patternData.defaultTempo
+    tmp.isTooFast = false
+    tmp.isTooSlow = false
+    tmp.swing = patternData.name === 'tientos' ? 0.6 : 0
+    tmp.improvisation = false
+    tmp.humanization = false
+    tmp.globalDecay = 0.5
+    tmp.instruments[0].enabled = true
+    return tmp
+  }
+
   const buildPatterns = () => {
     if (patterns.value.length == 0) {
-      patterns.value = patternsData.map((patternData) => {
-        const tmp: PatternState = patternData
-        tmp.instruments = soundsData.map((audio) => {
-          return {
-            label: audio.label,
-            value: audio.name,
-            enabled: false,
-            eighthNotes: audio.noEighthNotes ? null : false,
-            volume: 0,
-            decay: 0.5,
-          }
-        })
-        tmp.tempo = patternData.defaultTempo
-        tmp.isTooFast = false
-        tmp.isTooSlow = false
-        tmp.swing = patternData.name === 'tientos' ? 0.6 : 0
-        tmp.improvisation = false
-        tmp.humanization = false
-        tmp.globalDecay = 0.5
-        tmp.instruments[0].enabled = true
-        return tmp
-      })
+      patterns.value = patternsData.map((patternData) => buildPattern(patternData))
     }
   }
 
@@ -250,9 +250,12 @@ export const usePatternStore = defineStore('patterns', () => {
   const restoreDefault = (payload: string) => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
-      window.localStorage.clear()
+      patterns.value = []
+      buildPatterns()
     } else {
-      window.localStorage.removeItem(payload)
+      const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternState
+      const newPattern = buildPattern(patternsData.find(el => el.name === payload) as PatternState)
+      Object.assign(existingPattern, newPattern)
     }
     router.go(0)
   }
