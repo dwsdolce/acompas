@@ -3,11 +3,17 @@ import { defineStore } from 'pinia'
 import { useTuningFork } from 'src/composables/tuning-fork'
 
 export const useTuningForkStore = defineStore('tuning-fork', () => {
-  const { initTuningFork, playNote, startSequence, stopSequence } = useTuningFork()
+  const {
+    activeNote,
+    initTuningFork,
+    playNote,
+    startSequence,
+    stopSequence,
+    changeNote
+  } = useTuningFork()
 
   const isPlaying = ref<boolean>(false)
   const notes = ref<string[]>(['E2', 'A2', 'D3', 'G3', 'B3', 'E4'])
-  const activeNote = ref<string | null>(null)
 
   const init = () => {
     initTuningFork()
@@ -27,9 +33,9 @@ export const useTuningForkStore = defineStore('tuning-fork', () => {
     isPlaying.value = false
   }
 
-  const changeNote = (payload: string | null) => {
-    activeNote.value = payload
-  }
+  // const changeNote = (payload: string | null) => {
+  //   activeNote.value = payload
+  // }
 
   return {
     isPlaying,
@@ -38,6 +44,6 @@ export const useTuningForkStore = defineStore('tuning-fork', () => {
     init,
     play,
     stop,
-    changeNote,
+    changeNote
   }
 })

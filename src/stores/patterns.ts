@@ -10,32 +10,16 @@ import type {
   numOpts,
   instruOpts,
   VolumeOpts,
-  PatternState,
-  visuOpts,
-  Size
+  PatternState
 } from 'src/utils/types'
-import { on } from 'events'
 
 export const usePatternStore = defineStore('patterns', () => {
   const router = useRouter()
   const route = useRoute()
 
   const {
-    audioFormat,
-    reverbDecay,
-    reverb,
-    soundsIsLoaded,
     metronomeEvent,
-    loadSounds,
-    triggerEvent,
-    noteIndexInPattern,
-    improvise,
-    improviseJaleo,
-    triggerPrestartBeatClick,
-    triggerAudioOnEvent,
-    buildSequence,
     getContext,
-    isSupported,
     reinitialize,
     initSequences,
     initMetronome,

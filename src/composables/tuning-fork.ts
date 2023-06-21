@@ -1,7 +1,9 @@
 import * as Tone from 'tone'
-import { ref } from 'vue'
+import { ref, onMounted, onUpdated, onUnmounted, onBeforeUnmount } from 'vue'
+import { Loading } from 'quasar'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
 import type { Synth, Reverb, Volume, Sequence } from 'tone'
+import { on } from 'events'
 
 // interface Data {
 //   reverb: any
@@ -15,6 +17,8 @@ let sequence: Sequence = {} as Sequence
 
 export const useTuningFork = () => {
   const store = useTuningForkStore()
+
+  const activeNote = ref<string | null>(null)
 
   const initReverb = () => {
     return new Tone.Reverb({
@@ -36,12 +40,16 @@ export const useTuningFork = () => {
     })
   }
 
+  const changeNote = (payload: string | null) => {
+    activeNote.value = payload
+  }
+
   const initSequence = () => {
     const seq = new Tone.Sequence((time, note) => {
       synth.triggerAttackRelease(note, 1, time)
       Tone.Draw.schedule(() => {
         // trigger animation eventually by store
-        store.changeNote(note)
+        changeNote(note)
       }, time)
     }, store.notes)
     seq.loop = true
@@ -61,10 +69,16 @@ export const useTuningFork = () => {
   }
 
   const startSequence = async () => {
+    Loading.show({
+      delay: 50,
+      message: 'Loading…',
+    })
+    await Tone.start()
     initTuningFork()
     await Tone.start()
     Tone.Transport.bpm.value = 20
     await Tone.Transport.start('+0.1')
+    Loading.hide()
     sequence.start()
   }
 
@@ -73,11 +87,14 @@ export const useTuningFork = () => {
     Tone.Transport.stop()
     store.changeNote(null)
   }
+
   return {
+    activeNote,
     initTuningFork,
     playNote,
     startSequence,
-    stopSequence
+    stopSequence,
+    changeNote
   }
 }
 

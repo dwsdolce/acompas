@@ -3,61 +3,27 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
-import { usePatternStore } from 'src/stores/patterns'
 import { useTuningFork } from 'src/composables/tuning-fork'
 import { isFocusableElement } from 'src/utils/utils'
 import type { QBtn } from 'quasar'
 
 const router = useRouter()
-const patternStore = usePatternStore()
-
-const { initTuningFork, playNote, startSequence, stopSequence } = useTuningFork()
-
-const isPlaying = ref<boolean>(false)
-const notes = ref<string[]>(['E2', 'A2', 'D3', 'G3', 'B3', 'E4'])
-const activeNote = ref<string | null>(null)
-
-// const {
-//   notes,
-//   isPlaying,
-//   activeNote
-// } = storeToRefs(tuningForkStore)
-
-// const {
-//   init: initTuningFork,
-//   play,
-//   stop
-// } = tuningForkStore
+const tuningForkStore = useTuningForkStore()
 
 const {
-  isPlaying: isPatternPlaying
-} = storeToRefs(patternStore)
+  notes,
+  isPlaying,
+  activeNote
+} = storeToRefs(tuningForkStore)
 
 const {
-  stop: stopPattern
-} = patternStore
-
-const play = (note?: string) => {
-  if (note) {
-    playNote(note)
-  } else {
-    startSequence()
-    isPlaying.value = true
-  }
-}
-
-const stop = () => {
-  stopSequence()
-  isPlaying.value = false
-}
-
-const changeNote = (payload: string | null) => {
-  activeNote.value = payload
-}
+  init,
+  play,
+  stop
+} = tuningForkStore
 
 onMounted(() => {
-  if (isPatternPlaying.value) stopPattern()
-  initTuningFork()
+  init()
 })
 
 onUnmounted(() => {

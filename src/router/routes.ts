@@ -22,13 +22,13 @@ const routes: RouteRecordRaw[] = [
         path: 'tuning-fork',
         name: 'tuning-fork',
         component: () => import('pages/TuningFork.vue')
+      },
+      {
+        path: ':pathMatch(.*)*',
+        redirect: `/${patternsData[0].name}`,
       }
     ],
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: `/${patternsData[0].name}`,
-  },
+  }
 ]
 
 patternsData.forEach((pattern: PatternState) => {

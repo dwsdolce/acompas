@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { computed, ComputedRef, Ref, ref, watch, onMounted, onUpdated } from 'vue'
+import { computed, ComputedRef, Ref, ref, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import { Loading, Notify, Dialog } from 'quasar'
 import { storeToRefs } from 'pinia'
 import soundsData from 'src/data/soundsData'
@@ -102,30 +102,6 @@ export const useMetronome = () => {
   }
 
   /**
-   * Returns the index of a note in the pattern.
-   * @param {number} note - The note to get the index of.
-   * @returns {number} - The index of the note in the pattern.
-   */
-  const noteIndexInPattern = (
-    note: number
-  ) => {
-    if (
-      store.selectedPattern?.selectedPrestartBeat &&
-      store.selectedPattern?.nbBeatsInPattern
-    ) {
-      let index = note - store.selectedPattern?.selectedPrestartBeat.value * 2
-
-      while (index < 0) {
-        index += store.selectedPattern?.nbBeatsInPattern
-      }
-
-      return index % store.selectedPattern?.nbBeatsInPattern
-    } else {
-      return note
-    }
-  }
-
-  /**
    * Improvises a sound on a given note.
    * @param {string} type - The type of audio to be triggered.
    * @param {number} time - The time at which the audio should be triggered.
@@ -158,14 +134,13 @@ export const useMetronome = () => {
     // Pick a probability that the sound occurence is following the pattern
     const improvisationProbability = Math.random()
     const improvisationThreshold = 0.7 // 70% chances that we don't follow the pattern
-    const index = noteIndexInPattern(note)
 
     if (improvisationProbability > improvisationThreshold) {
       // Follow the pattern ?
-      if (index == key && eighthNotes && key % 2 !== 0) {
+      if (note == key && eighthNotes && key % 2 !== 0) {
         sound?.start(time)
       }
-      if (index == key && !eighthNotes && key % 2 === 0) {
+      if (note == key && !eighthNotes && key % 2 === 0) {
         sound?.start(time)
       }
     } else {
@@ -194,7 +169,7 @@ export const useMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (store.selectedPattern?.accents.includes(noteIndexInPattern(note) as never)) {
+    if (store.selectedPattern?.accents.includes((note / 2) as never)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -223,9 +198,7 @@ export const useMetronome = () => {
       store.selectedPattern?.selectedPrestartBeat?.value > 0 &&
       note % 2 == 0
     ) {
-      const index = noteIndexInPattern(note)
-      if (!index) return
-      if (store.selectedPattern?.accents.includes((index / 2) as never)) {
+      if (store.selectedPattern?.accents.includes((note / 2) as never)) {
         sounds.click[0].quarter.start(time)
       } else {
         sounds.click[1].quarter.start(time)
@@ -277,18 +250,17 @@ export const useMetronome = () => {
           (value: number | null, index: number) => {
             if (!value) return
             const sound: Players = sounds[type as keyof Sounds][value - 1] as Players
-            const key = noteIndexInPattern(note)
 
             if (
               eighthNotes &&
               instru?.eighthNotes &&
               (index as number) % 2 != 0 &&
-              key == index
+              note == index
             ) {
               store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
-            } else if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
+            } else if (!eighthNotes && (index as number) % 2 == 0 && note == index) {
               store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
@@ -318,6 +290,7 @@ export const useMetronome = () => {
     // 'note' is an occurence of an element inside the sequence variable (integer)
     const seq = new Tone.Sequence((time, note) => {
       // Type is not an event, it is a prestartBeat or a selected instrument
+      console.log('note', note)
       if (type !== ('event')) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
@@ -330,8 +303,8 @@ export const useMetronome = () => {
           if (name === 'simple-click') {
             triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
           } else {
-            const index = noteIndexInPattern(note)
-            if (index !== null) triggerEvent(index as number | null)
+            console.log('index', note)
+            if (note !== null) triggerEvent(note as number | null)
           }
         }, time) // Use AudioContext time of the event
       }
@@ -369,6 +342,9 @@ export const useMetronome = () => {
         loopSeq.push(i)
       }
     }
+
+    console.log('introSeq', introSeq)
+    console.log('loopSeq', loopSeq)
 
     const instruKeys = soundsData.map((instru: SoundsData) => instru.name)
     instruKeys.push('event')
@@ -449,21 +425,25 @@ export const useMetronome = () => {
    */
   const startSequences = async () => {
     Loading.show({
-      delay: 0,
-      message: 'Loading metronome',
+      delay: 50,
+      message: 'Loading…',
     })
     await Tone.start()
+    reinitialize()
 
-    const offset = sequences.quarterNotes?.introduction?.event?.length || 0
+    const offset = sequences.quarterNotes.introduction?.event?.length || 0
     const loopStart = `0:${offset / 2}`
+
+    console.log('loopStart', loopStart)
+    console.log('offset', offset)
 
     await Tone.Transport.start()
     Loading.hide()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
       if (sequences.quarterNotes.introduction?.event?.length !== 0) {
-        sequences.quarterNotes.introduction?.event?.start(0).stop(loopStart)
-        sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(loopStart)
+        sequences.quarterNotes.introduction?.event?.start(0).stop(offset)
+        sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(offset)
         forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence) => {
           seq.start(loopStart)
         })
@@ -583,7 +563,6 @@ export const useMetronome = () => {
     metronomeEvent,
     loadSounds,
     triggerEvent,
-    noteIndexInPattern,
     improvise,
     improviseJaleo,
     triggerPrestartBeatClick,
