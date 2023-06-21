@@ -288,8 +288,7 @@ export const useMetronome = () => {
               store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
-            }
-            if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
+            } else if (!eighthNotes && (index as number) % 2 == 0 && key == index) {
               store.selectedPattern?.improvisation
                 ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
                 : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
@@ -318,8 +317,6 @@ export const useMetronome = () => {
   ) => {
     // 'note' is an occurence of an element inside the sequence variable (integer)
     const seq = new Tone.Sequence((time, note) => {
-      // note = parseInt(note)
-
       // Type is not an event, it is a prestartBeat or a selected instrument
       if (type !== ('event')) {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
@@ -404,11 +401,11 @@ export const useMetronome = () => {
   const reinitialize = () => {
     if (store.selectedPattern) {
       initSequences()
-      if (store.selectedPattern?.tempo) changeTempo(store.selectedPattern?.tempo)
-      if (store.selectedPattern?.swing) changeSwing(store.selectedPattern?.swing)
+      changeTempo(store.selectedPattern.tempo)
+      changeSwing(store.selectedPattern.swing)
       forEachValue(sounds as Sounds, (sound, key) => {
-        if (store.selectedPattern?.instruments) changeVolume({ instrument: key, volume: store.selectedPattern?.instruments.find((i => i.value == key))?.volume ?? 0 })
-        if (store.selectedPattern?.globalDecay) changeDecay(store.selectedPattern?.globalDecay)
+        changeVolume({ instrument: key, volume: store.selectedPattern.instruments?.find((i => i.value == key))?.volume ?? 0 })
+        changeDecay(store.selectedPattern.globalDecay)
       })
     }
   }
@@ -419,7 +416,7 @@ export const useMetronome = () => {
    */
   const initMetronome = async () => {
     Loading.show({
-      // delay: 100,
+      delay: 0,
       message: 'Loading audio samples',
     })
     return await Tone.loaded()
@@ -427,7 +424,6 @@ export const useMetronome = () => {
         loadSounds()
         reinitialize()
         Loading.hide()
-        Tone.Transport.debug = true
         return true
       })
       .catch((error) => {
@@ -452,12 +448,17 @@ export const useMetronome = () => {
    * @returns {void}
    */
   const startSequences = async () => {
+    Loading.show({
+      delay: 0,
+      message: 'Loading metronome',
+    })
     await Tone.start()
 
     const offset = sequences.quarterNotes?.introduction?.event?.length || 0
-    const loopStart = '0:' + offset / 2
+    const loopStart = `0:${offset / 2}`
 
     await Tone.Transport.start()
+    Loading.hide()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
       if (sequences.quarterNotes.introduction?.event?.length !== 0) {
@@ -490,7 +491,7 @@ export const useMetronome = () => {
       forEachValue(seq, (instrus: Seq) => {
         forEachValue(instrus, (s: Tone.Sequence) => {
           if (s !== null && s.state == 'started') s.stop()
-          // if (s !== null) s.dispose()
+          if (s !== null) s.dispose()
         })
       })
     })

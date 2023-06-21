@@ -72,7 +72,7 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const tempo = computed({
-    get: () => selectedPattern.value?.tempo ?? 100,
+    get: () => selectedPattern.value?.tempo,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectTempo(value)
@@ -94,15 +94,17 @@ export const usePatternStore = defineStore('patterns', () => {
     set: (value: boolean) => {
       if (selectedPattern.value) {
         selectedPattern.value.humanization = value
+        humanize(value)
       }
     }
   })
 
   const swing = computed({
-    get: () => selectedPattern.value?.swing ?? 0,
+    get: () => selectedPattern.value?.swing,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.swing = value
+        changeSwing(value)
       }
     }
   })
@@ -144,7 +146,7 @@ export const usePatternStore = defineStore('patterns', () => {
     instruments.value.find((el: instruOpts) => el.value === slug)
 
   const buildPatterns = () => {
-    if (patterns.value.length === 0) {
+    if (patterns.value.length == 0) {
       patterns.value = patternsData.map((patternData) => {
         const tmp: PatternState = patternData
         tmp.instruments = soundsData.map((audio) => {
@@ -157,6 +159,7 @@ export const usePatternStore = defineStore('patterns', () => {
             decay: 0.5,
           }
         })
+        tmp.tempo = patternData.defaultTempo
         tmp.isTooFast = false
         tmp.isTooSlow = false
         tmp.swing = patternData.name === 'tientos' ? 0.6 : 0

@@ -38,11 +38,11 @@ const onSelectedPattern = (v: string) => {
   router.push(`/${v}`)
 }
 
-onUpdated(() => {
-  if (!patternsDialog.value && patternBtn.value !== null) {
-    patternBtn.value.$el.querySelector('.q-focus-helper').blur()
-  }
-})
+// onUpdated(() => {
+//   if (!patternsDialog.value && patternBtn.value !== null) {
+//     patternBtn.value.$el.querySelector('.q-focus-helper').blur()
+//   }
+// })
 </script>
 
 <template lang="pug">

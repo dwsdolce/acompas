@@ -20,14 +20,13 @@ const {
 const clockDeg = ref<number>(0)
 const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
-
+const clockStep = computed(() => 360 / (beatLabels.value?.length / 2))
 const clockVelocity = computed(() =>
-    selectedPattern.value?.tempo
+    60000 / selectedPattern.value.tempo
   )
-const clockStep = computed(() => 360 / beatLabels.value?.length)
 const startingPoint = computed(() =>
   prestartBeat.value
-    ? (selectedPattern.value?.nbBeatsInPattern - prestartBeat.value * 2) / 2
+    ? (selectedPattern.value.nbBeatsInPattern - prestartBeat.value * 2) / 2
     : 0
   )
 // const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
@@ -47,7 +46,7 @@ const getNumStyle = (i: number): CSSProperties => {
   if (beatLabels.value) {
     return {
       transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
-      color: selectedPattern.value?.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
+      color: selectedPattern.value.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -114,27 +113,27 @@ const animateNum = (v: number | null) => {
   }
 }
 
-watch(
-  [metronomeEvent, startingPoint, prestartBeat],
-  (
-    [newMetronomeEvent, newStartingPoint, newSelectedPrestartBeat],
-    [prevMetronomeEvent, prevStartingPoint, prevSelectedPrestartBeat]
-  ) => {
-    animateClock(newMetronomeEvent)
-    animateNum(newMetronomeEvent)
-    if (newMetronomeEvent === null) idleClockPosition()
-    if (newStartingPoint !== prevStartingPoint) idleClockPosition()
-    if (newSelectedPrestartBeat !== prevSelectedPrestartBeat) idleClockPosition()
-  }
-)
-
-onMounted(() => {
-  if (isPlaying.value && metronomeEvent.value !== null) {
-    clockDeg.value = metronomeEvent.value * clockStep.value
-  } else {
-    idleClockPosition()
-  }
+watch(metronomeEvent, (v) => {
+  animateClock(v)
+  animateNum(v)
+  if (v === null) idleClockPosition()
 })
+
+watch(startingPoint, (oldValue, newValue) => {
+  if (newValue !== oldValue) idleClockPosition()
+})
+
+watch(prestartBeat, (oldValue, newValue) => {
+  if (newValue !== oldValue) idleClockPosition()
+})
+
+// onMounted(() => {
+//   if (isPlaying.value && metronomeEvent.value !== null) {
+//     clockDeg.value = metronomeEvent.value * clockStep.value
+//   } else {
+//     idleClockPosition()
+//   }
+// })
 
 // make sure to reset the refs before each update
 onBeforeUpdate(() => {

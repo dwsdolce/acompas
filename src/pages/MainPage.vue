@@ -21,7 +21,7 @@ const { selectedPattern, visualizationMode } = storeToRefs(patternStore)
 
 <template lang="pug">
 q-page.text-grey-1
-  //- global-events
+  global-events
   .main-panel
     .top-panel(ref="visualization")
       draw-dots(v-if="visualizationMode === 'dots'")

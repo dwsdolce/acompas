@@ -136,15 +136,15 @@ export interface PatternState {
   places?:                  string
   videoExample?:            string
   selectedPrestartBeat?:    numOpts
-  tempo?:                   number | undefined
+  tempo:                    number
   isTooFast?:               boolean
   isTooSlow?:               boolean
-  swing?:                   number
+  swing:                    number
   improvisation?:           boolean
   humanization?:            boolean
   // visualizationModes:    visuOpts[]
   instruments?:             instruOpts[]
-  globalDecay?:             number
+  globalDecay:              number
   visualizationMode?:       string
 
 }

@@ -45,6 +45,7 @@ const isKeptAwake = async () => {
 
 
 const handleSpace = (e: KeyboardEvent) => {
+  console.log('handleSpace', e)
   if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
   if (e.code === 'Space') {
     playStop()
