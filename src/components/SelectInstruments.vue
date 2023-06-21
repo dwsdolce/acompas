@@ -24,15 +24,15 @@ const {
   toggleDialog
 } = sessionStore
 
-watch(selectedInstruments, (value) => {
-  if (!value?.length) {
-    $q.notify({
-      message: 'No instrument is selected. You will have no sound in the metronome ...',
-      color: 'secondary',
-      icon: 'warning'
-    })
-  }
-})
+// watch(selectedInstruments, (value) => {
+//   if (!value?.length) {
+//     $q.notify({
+//       message: 'No instrument is selected. You will have no sound in the metronome ...',
+//       color: 'secondary',
+//       icon: 'warning'
+//     })
+//   }
+// })
 
 onUpdated(() => {
   if (!mixerDialog.value && mixerBtn.value !== null) {

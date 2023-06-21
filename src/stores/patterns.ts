@@ -1,11 +1,13 @@
-import { ref, reactive, computed, onMounted, onUpdated } from 'vue'
-import { Notify } from 'quasar'
+import { ref, reactive, computed, onMounted, onUpdated, watch } from 'vue'
+import { Notify, Platform } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import soundsData from 'src/data/soundsData'
 import patternsData from 'src/data/patternsData'
 import { useMetronome } from 'src/composables/metronome'
+import { useMatomo } from 'src/composables/matomo'
+import { useKeepAwake } from 'src/composables/keep-awake'
 import type {
   numOpts,
   instruOpts,
@@ -31,6 +33,19 @@ export const usePatternStore = defineStore('patterns', () => {
     changeVolume,
     changeDecay
   } = useMetronome()
+
+  const {
+    isSupported,
+    keepAwake,
+    allowSleep
+  } = useKeepAwake()
+
+  const {
+    matomoExists,
+    trackPlay,
+    trackStop
+  } = useMatomo()
+
 
   const isPlaying = ref<boolean>(false)
   const patterns = useStorage('patterns', ref<PatternState[]>([]))
@@ -156,16 +171,20 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   }
 
-  const play = () => {
+  const play = async () => {
     if (selectedPattern.value) {
       isPlaying.value = true
       startSequences()
+      if (matomoExists()) trackPlay(selectedPattern.value.name)
+      if (Platform.is.capacitor && await isSupported()) keepAwake()
     }
   }
 
-  const stop = () => {
+  const stop = async () => {
     isPlaying.value = false
     stopAllSequences()
+    if (matomoExists()) trackStop(selectedPattern.value?.name)
+    if (Platform.is.capacitor && await isSupported()) allowSleep()
     reinitialize()
   }
 
@@ -268,6 +287,16 @@ export const usePatternStore = defineStore('patterns', () => {
 
   onUpdated(() => {
     stop()
+  })
+
+  watch(selectedInstruments, (value) => {
+    if (value?.length === 0) {
+      Notify.create({
+        message: 'At least one instrument must be selected !',
+        color: 'secondary',
+        icon: 'warning'
+      })
+    }
   })
 
   return {

@@ -19,15 +19,10 @@ export const useMatomo = () => {
   const sessionStore = useSessionStore()
   const patternStore = usePatternStore()
 
-  const { getContext } = patternStore
-
   const playStartTime = ref<number | null>(null)
-  const trackingEnabled = ref(sessionStore.trackingEnabled)
 
-  const audioContext = getContext()
-
-  const init = () => {
-    if (!trackingEnabled.value) return
+  const initMatomo = () => {
+    if (!sessionStore.trackingEnabled) return
     const platformName = Platform.is.capacitor ? 'Capacitor' : 'Website'
 
     window._paq.push([ 'setCustomVariable', 1, 'AppVersion', platformName, 'visit' ])
@@ -48,39 +43,39 @@ export const useMatomo = () => {
     if (s.parentNode) s.parentNode.insertBefore(g, s)
 
     router.afterEach((to) => {
-      if (trackingEnabled.value) window._paq.push([ 'trackPageView' ])
+      if (sessionStore.trackingEnabled) window._paq.push([ 'trackPageView' ])
     })
   }
 
-  const scriptExists = () => document.getElementById('matomo-script') !== null
+  const matomoExists = () => document.getElementById('matomo-script') !== null
 
-  const deleteScript = () => {
+  const deleteMatomo = () => {
     const script = document.getElementById('matomo-script')
     if (script) script.remove()
   }
 
-  const trackPlay = (label: string) => {
-    if (trackingEnabled.value) {
-      playStartTime.value = Math.round(audioContext.currentTime)
+  const trackPlay = (patternName: string) => {
+    if (sessionStore.trackingEnabled) {
+      playStartTime.value = Math.round(patternStore.getContext().currentTime)
 
       window._paq.push([
         'trackEvent',
         'Playing',
         'Start',
-        label
+        patternName
       ])
     }
   }
 
-  const trackStop = (label: string) => {
-    if (trackingEnabled.value) {
-      const playDuration = Math.round(audioContext.currentTime) - (playStartTime.value || 0)
+  const trackStop = (patternName: string) => {
+    if (sessionStore.trackingEnabled) {
+      const playDuration = Math.round(patternStore.getContext().currentTime) - (playStartTime.value || 0)
 
       window._paq.push([
         'trackEvent',
         'Playing',
         'Stop',
-        label,
+        patternName,
         playDuration
       ])
     }
@@ -91,9 +86,9 @@ export const useMatomo = () => {
   // })
 
   return {
-    init,
-    scriptExists,
-    deleteScript,
+    initMatomo,
+    matomoExists,
+    deleteMatomo,
     trackPlay,
     trackStop,
   }

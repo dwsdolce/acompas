@@ -1,15 +1,16 @@
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { Screen } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useMatomo } from 'src/composables/matomo'
 import type { Size, SessionState } from 'src/utils/types'
+import { o } from 'ramda'
 
 export const useSessionStore = defineStore('session', () => {
   const {
-    init: initMatomo,
-    deleteScript : deleteMatomo,
-    scriptExists: matomoExists,
+    initMatomo,
+    deleteMatomo,
+    matomoExists,
     trackPlay,
     trackStop
   } = useMatomo()
@@ -65,11 +66,19 @@ export const useSessionStore = defineStore('session', () => {
     visualizationSize.value = payload
   }
 
-  // watch(trackingEnabled, (value) => {
-  //   if (value) {
-  //     initializeTracking()
-  //   }
-  // }, { immediate: true })
+  onMounted(() => {
+    if (trackingEnabled.value) {
+      initializeTracking()
+    }
+  })
+
+  watch(trackingEnabled, (value) => {
+    if (value) {
+      initializeTracking()
+    } else {
+      deleteMatomo()
+    }
+  }, { immediate: true })
 
   return {
     trackingEnabled,

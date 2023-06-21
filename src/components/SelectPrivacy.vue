@@ -6,9 +6,17 @@ import { useSessionStore } from 'src/stores/session'
 const router = useRouter()
 const sessionStore = useSessionStore()
 
-const { enableTrackVisits, enableTrackingChosen, toggleTrackVisits, closePrivacyDialog } = sessionStore
+const {
+  enableTrackVisits,
+  enableTrackingChosen,
+  toggleTrackVisits,
+  closePrivacyDialog
+} = sessionStore
 
-const { trackingEnabled, privacyDialogOpen } = storeToRefs(sessionStore)
+const {
+  trackingEnabled,
+  privacyDialogOpen
+} = storeToRefs(sessionStore)
 
 const handleEnableAndClose = () => {
   enableTrackVisits()
