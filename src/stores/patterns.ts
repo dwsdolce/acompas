@@ -50,6 +50,7 @@ export const usePatternStore = defineStore('patterns', () => {
   const isPlaying = ref<boolean>(false)
   const patterns = useStorage('patterns', ref<PatternState[]>([]))
   const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
+  const selectedPatternName = useStorage('selected-pattern-name', ref('alegria'))
 
   const visualizationModes = ref([
     { label: 'Dots', value: 'dots' },
@@ -299,6 +300,12 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   })
 
+  watch(selectedPattern, (value) => {
+    if (value) {
+      selectedPatternName.value = value.name
+    }
+  })
+
   return {
     metronomeEvent,
     isPlaying,
@@ -306,6 +313,7 @@ export const usePatternStore = defineStore('patterns', () => {
     visualizationModes,
     visualizationMode,
     selectedPattern,
+    selectedPatternName,
     beatLabels,
     tempo,
     improvisation,

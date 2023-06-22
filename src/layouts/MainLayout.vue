@@ -1,20 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
-import { useQuasar, Screen } from 'quasar'
+import { Screen } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import { useSessionStore } from 'src/stores/session'
 import type { Size } from 'src/utils/types'
 
-const $q = useQuasar()
 const sessionStore = useSessionStore()
 
-const {
-  visualizationSize
-} = storeToRefs(sessionStore)
-
-const { setVisualizationSize, toggleDialog } = sessionStore
+const { setVisualizationSize } = sessionStore
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
@@ -44,7 +39,7 @@ q-layout(view="hHh Lpr lFf")
         router-link(to="/").flex.items-center
           img(:src="'app-icon.png'" alt="A Compás icon" width="40").q-mr-sm
           img(:src="'app-name.png'" alt="A Compás name title" width="90").q-mt-sm
-      q-space
+      //- q-space
       .text-weight-light v{{ appVersion }}
 
   q-drawer(

@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import CustomCard from 'src/components/CustomCard.vue'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
 import { useTuningFork } from 'src/composables/tuning-fork'
 import { isFocusableElement } from 'src/utils/utils'
@@ -32,18 +33,10 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-q-page.bg-grey-10.text-grey-1.q-pa-sm.flex.justify-center.items-center
-  q-card(style="max-width: 750px;").text-grey-10
-    q-card-section
-      q-btn(
-        icon="close",
-        flat,
-        round,
-        dense,
-        @click="router.back()"
-      ).absolute.q-top-right.q-mr-sm
-      .text-h6.text-center Tuning fork
-    q-card-section(align="center")
+q-page.q-pa-sm.flex.justify-center.items-center
+  custom-card(:popup="false")
+    template(v-slot:title) Tuning fork
+    template(v-slot:content)
       .column.wrap.content-center
         .flex.justify-center.q-gutter-md
           q-btn(

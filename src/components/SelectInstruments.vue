@@ -6,6 +6,7 @@ import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
 import SelectDecay from 'src/components/SelectDecay.vue'
+import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
 const $q = useQuasar()
@@ -17,22 +18,11 @@ const mixerBtn = ref<QBtn | null>(null)
 
 const {
   selectedPattern,
-  selectedInstruments
 } = storeToRefs(patternStore)
 
 const {
   toggleDialog
 } = sessionStore
-
-// watch(selectedInstruments, (value) => {
-//   if (!value?.length) {
-//     $q.notify({
-//       message: 'No instrument is selected. You will have no sound in the metronome ...',
-//       color: 'secondary',
-//       icon: 'warning'
-//     })
-//   }
-// })
 
 onUpdated(() => {
   if (!mixerDialog.value && mixerBtn.value !== null) {
@@ -58,13 +48,11 @@ div
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Instruments mixer
-      q-card-section.scroll(style="max-height: 80vh;").q-mb-md
+    custom-card
+      template(v-slot:title) Instruments mixer
+      template(v-slot:content)
         select-decay.q-mt-md
-        table(style="width: 100%;").q-table
+        table.q-table.q-mb-md
           thead
             tr
               th.text-center Active

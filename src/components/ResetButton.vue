@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
@@ -53,12 +54,15 @@ const handleRestore = () => {
     label="Reset settings",
     @click="resetDialog = true"
   )
-  q-dialog(v-model="resetDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
-      q-card-section
-        .text-h6.text-center Restore default parameters
+  q-dialog(
+    v-model="resetDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
+    custom-card
+      template(v-slot:title) Restore default parameters
+      template(v-slot:content)
         p.text-center Warning! This will delete your metronome settings.
-      q-card-section
         q-option-group(
           type="radio",
           color="primary",
@@ -66,7 +70,7 @@ const handleRestore = () => {
           :options="resetOptions",
           @update:model-value="onSelectedOption"
         )
-      q-card-section(align="center")
+      template(v-slot:actions)
         q-btn(
           unelevated,
           color="primary",

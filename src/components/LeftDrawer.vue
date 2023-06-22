@@ -6,6 +6,7 @@
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
+  import CustomCard from 'src/components/CustomCard.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
   import { isFocusableElement } from 'src/utils/utils'
@@ -156,17 +157,9 @@ div
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(
-          icon="close",
-          flat,
-          round,
-          dense,
-          v-close-popup
-        ).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Help
-      q-card-section.scroll(style="max-height: 80vh;")
+    custom-card
+      template(v-slot:title) Help
+      template(v-slot:content)
         help-app
 
   q-dialog(
@@ -183,17 +176,9 @@ div
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(
-          icon="close",
-          flat,
-          round,
-          dense,
-          v-close-popup
-        ).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Shortcuts
-      q-card-section.scroll(style="max-height: 80vh;")
+    custom-card
+      template(v-slot:title) Shortcuts
+      template(v-slot:content)
         keyboard-shortcuts
 </template>
 

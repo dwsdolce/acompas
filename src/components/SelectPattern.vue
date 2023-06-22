@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
+import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
 const patternBtn = ref<QBtn | null>(null)
@@ -62,11 +63,9 @@ div
     id="optDialog",
     v-model="patternsDialog"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Please select a pattern
-      q-card-section.scroll(style="max-height: 80vh;")
+    custom-card
+      template(v-slot:title) Please select a pattern
+      template(v-slot:content)
         q-option-group(
           type="radio",
           color="primary",

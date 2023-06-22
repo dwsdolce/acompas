@@ -8,6 +8,7 @@ import SelectSwing from 'src/components/SelectSwing.vue'
 import SelectPrestartBeat from 'src/components/SelectPrestartBeat.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
+import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
 const sessionStore = useSessionStore()
@@ -43,17 +44,9 @@ div
     id="optDialog",
     v-model="optDialog"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(
-          icon="close",
-          flat,
-          round,
-          dense,
-          v-close-popup
-        ).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center Rhythm options
-      q-card-section.scroll(style="max-height: 80vh;")
+    custom-card
+      template(v-slot:title) Rhythm options
+      template(v-slot:content)
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md
         select-swing.q-mb-md

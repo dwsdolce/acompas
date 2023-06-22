@@ -2,6 +2,7 @@
 import { ref, onUpdated } from 'vue'
 import { openURL, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
+import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { isFocusableElement } from 'src/utils/utils'
@@ -62,18 +63,9 @@ span.q-ml-sm
     @show="toggleDialog(true)",
     @hide="toggleDialog(false)"
   )
-    q-card(style="width: 100%; overflow: hidden;")
-      q-card-section
-        q-btn(
-          ref="closeBtn",
-          icon="close",
-          flat,
-          round,
-          dense,
-          v-close-popup
-        ).absolute.q-top-right.q-mr-sm
-        .text-h6.text-center {{ selectedPattern?.longLabel }}
-      q-card-section.scroll(style="max-height: 80vh;")
+    custom-card
+      template(v-slot:title) {{ selectedPattern?.longLabel }}
+      template(v-slot:content)
         div(v-html="selectedPattern?.doc")
         p {{ selectedPattern?.places }}
         p(v-if="selectedPattern?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPattern?.wikipediaUrl)")]

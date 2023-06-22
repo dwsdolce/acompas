@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, onUpdated } from 'vue'
-import { storeToRefs } from 'pinia'
 import { QCheckbox, QToggle, QSlider, useQuasar } from 'quasar'
 import type { instruOpts } from 'src/utils/types'
 import { usePatternStore } from 'src/stores/patterns'
@@ -15,11 +14,6 @@ const {
   selectVolume,
   selectInstruments
 } = patternStore
-
-const {
-  selectedPattern,
-  instruments
-} = storeToRefs(patternStore)
 
 const props = defineProps(['slug'])
 
