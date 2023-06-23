@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUpdated } from 'vue'
+import { ref, computed, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
@@ -27,12 +27,14 @@ const {
 
 const patternsDialog = ref(false)
 
-const patternsOptions = patterns.value.map(pattern => ({
-  label: pattern.label,
-  value: pattern.name
-}))
+const patternsOptions = computed(() => {
+  return patterns.value.map(pattern => ({
+    label: pattern.label,
+    value: pattern.name
+  }))
+})
 
-const selectedPatternOption = patternsOptions.find(pattern => pattern.value === selectedPattern.value?.name)
+const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
 
 const onSelectedPattern = (v: string) => {
   patternsDialog.value = false
