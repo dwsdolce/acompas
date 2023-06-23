@@ -57,7 +57,7 @@ div
       :min="selectedPattern?.minTempo",
       :max="selectedPattern?.maxTempo",
       show-value,
-      :size="$q.screen.lt.md ? '129px' : '149px'",
+      :size="$q.screen.lt.md ? '130px' : '142px'",
       :thickness="0.2"
     ).text-weight-light
   .row.justify-between
