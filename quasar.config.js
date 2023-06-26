@@ -128,16 +128,16 @@ module.exports = configure(function (/* ctx */) {
     animations: [],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
-    // sourceFiles: {
-    //   rootComponent: 'src/App.vue',
-    //   router: 'src/router/index',
-    //   store: 'src/store/index',
+    sourceFiles: {
+      // rootComponent: 'src/App.vue',
+      // router: 'src/router/index',
+      // store: 'src/store/index',
     //   registerServiceWorker: 'src-pwa/register-service-worker',
     //   serviceWorker: 'src-pwa/custom-service-worker',
     //   pwaManifestFile: 'src-pwa/manifest.json',
-    //   electronMain: 'src-electron/electron-main',
-    //   electronPreload: 'src-electron/electron-preload'
-    // },
+      electronMain: 'src-electron/electron-main',
+      electronPreload: 'src-electron/electron-preload'
+    },
 
     bin: {
       // Tell Quasar where the Android studio executable is located.
@@ -196,10 +196,10 @@ module.exports = configure(function (/* ctx */) {
       // extendElectronMainConf (esbuildConf)
       // extendElectronPreloadConf (esbuildConf)
 
-      inspectPort: 5858,
-
       bundler: 'packager', // 'packager' or 'builder'
 
+      // electron-packager options
+      // https://electron.github.io/electron-packager/main/
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
@@ -213,10 +213,35 @@ module.exports = configure(function (/* ctx */) {
         // win32metadata: { ... }
       },
 
+      // electron-builder options
+      // https://www.electron.build/configuration/configuration
       builder: {
-        // https://www.electron.build/configuration/configuration
-
         appId: 'quasar-project'
+      },
+
+      // Specify additional parameters when yarn/npm installing
+      // the UnPackaged folder, right before bundling with either
+      // electron packager or electron builder;
+      // Example: [ '--ignore-optional', '--some-other-param' ]
+      unPackagedInstallParams: [],
+
+      // optional; add/remove/change properties
+      // of production generated package.json
+      extendPackageJson (pkg) {
+        // directly change props of pkg;
+        // no need to return anything
+      },
+
+      inspectPort: 5858,
+
+      extendElectronMainConf (cfg) {
+        // do something with Esbuild config
+        // for the Electron Main thread
+      },
+
+      extendElectronPreloadConf (cfg) {
+        // do something with Esbuild config
+        // for the Electron Preload thread
       }
     },
 

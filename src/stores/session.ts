@@ -4,15 +4,11 @@ import { Screen } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useMatomo } from 'src/composables/matomo'
 import type { Size, SessionState } from 'src/utils/types'
-import { o } from 'ramda'
 
 export const useSessionStore = defineStore('session', () => {
   const {
     initMatomo,
     deleteMatomo,
-    matomoExists,
-    trackPlay,
-    trackStop
   } = useMatomo()
 
   const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
