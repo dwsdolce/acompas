@@ -82,7 +82,6 @@ export interface instruOpts extends stringOpts {
   enabled:                  boolean
   eighthNotes:              boolean | null
   volume:                   number
-  decay:                    number
 }
 
 export interface visuOpts extends stringOpts {

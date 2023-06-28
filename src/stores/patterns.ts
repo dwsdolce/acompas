@@ -124,10 +124,7 @@ export const usePatternStore = defineStore('patterns', () => {
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.globalDecay = value
-        selectedPattern.value.instruments?.forEach(instrument => {
-          instrument.decay = value
-          changeDecay(value)
-        })
+        changeDecay(value)
       }
     }
   })
@@ -164,8 +161,7 @@ export const usePatternStore = defineStore('patterns', () => {
         value: audio.name,
         enabled: false,
         eighthNotes: audio.noEighthNotes ? null : false,
-        volume: 0,
-        decay: 0.5,
+        volume: 0
       }
     })
     tmp.tempo = patternData.defaultTempo
