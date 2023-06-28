@@ -216,7 +216,7 @@ module.exports = configure(function (/* ctx */) {
       // electron-builder options
       // https://www.electron.build/configuration/configuration
       builder: {
-        appId: 'quasar-project'
+        appId: 'audio.acompas.app'
       },
 
       // Specify additional parameters when yarn/npm installing

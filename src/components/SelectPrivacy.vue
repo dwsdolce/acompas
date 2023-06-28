@@ -45,13 +45,6 @@ custom-card(:popup="false")
   template(v-slot:content)
     .text-center
       p: b We don't collect any nominative personal data.
-      p This app uses a tool called "Matomo" to collect anonymised visits analytics data.
-        | If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app),
-        | and observe some of your actions in the app
-        | (essentially metronome 'Play' and 'Stop' actions to infer time playing),
-        | anonymising your IP address.
-      p This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
-      p You can enable or disable this feature when you want to.
       p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
       q-toggle(
         :model-value="trackingEnabled",
@@ -59,6 +52,13 @@ custom-card(:popup="false")
         color="primary",
         keep-color
       ).primary
+      p This app uses a tool called "Matomo" to collect anonymised visits analytics data.
+        | If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app),
+        | and observe some of your actions in the app
+        | (essentially metronome 'Play' and 'Stop' actions to infer time playing),
+        | anonymising your IP address.
+      p This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
+      p You can enable or disable this feature when you want to.
   template(v-slot:actions)
     q-btn(
       unelevated,
