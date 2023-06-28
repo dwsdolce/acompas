@@ -34,9 +34,9 @@ export const useMetronome = () => {
   const audioFormat = ref<string>('')
   const reverbDecay = ref<number>(0.3)
   const reverb = new Tone.Reverb({
-    decay: 0.3,
+    decay: reverbDecay.value,
     preDelay: 0,
-    wet: reverbDecay.value
+    wet: 0.3
   }).toDestination()
 
   const soundsIsLoaded = ref<boolean>(false)

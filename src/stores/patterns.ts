@@ -119,6 +119,19 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   })
 
+  const globalDecay = computed({
+    get: () => selectedPattern.value?.globalDecay ?? 0.5,
+    set: (value: number) => {
+      if (selectedPattern.value) {
+        selectedPattern.value.globalDecay = value
+        selectedPattern.value.instruments?.forEach(instrument => {
+          instrument.decay = value
+          changeDecay(value)
+        })
+      }
+    }
+  })
+
   const instruments = computed({
     get: () => selectedPattern.value?.instruments ?? [],
     set: (value: instruOpts[]) => {
@@ -257,16 +270,6 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   }
 
-  const selectDecay = (decay: number) => {
-    if (decay && selectedPattern.value) {
-      selectedPattern.value.globalDecay = decay
-      selectedPattern.value.instruments?.forEach(instrument => {
-        instrument.decay = decay
-        changeDecay(decay)
-      })
-    }
-  }
-
   const restoreDefault = (payload: string) => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
@@ -323,6 +326,7 @@ export const usePatternStore = defineStore('patterns', () => {
     selectedInstruments,
     unselectedInstruments,
     instruments,
+    globalDecay,
     // numLabels,
     instrument,
     buildPatterns,
@@ -332,7 +336,6 @@ export const usePatternStore = defineStore('patterns', () => {
     selectVisualizationMode,
     selectInstruments,
     selectVolume,
-    selectDecay,
     toggleEighthNotes,
     selectTempo,
     restoreDefault,
