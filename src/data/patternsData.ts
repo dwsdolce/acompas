@@ -1027,10 +1027,10 @@ export default [
 
       click:
         [1, null],
-    },
-    beatLabels:
-      [1, null],
 
+      beatLabels:
+        [1, null]
+    },
     prestartBeats: [
       { value: 0, label: 'Off' }
     ],
