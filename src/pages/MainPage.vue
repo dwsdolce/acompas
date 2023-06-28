@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
+import { useQuasar, Platform } from 'quasar'
 import SelectPattern from 'src/components/SelectPattern.vue'
 import RhythmOptions from 'src/components/RhythmOptions.vue'
 import SelectInstruments from 'src/components/SelectInstruments.vue'
@@ -17,12 +17,13 @@ const $q = useQuasar()
 const patternStore = usePatternStore()
 
 const { selectedPattern, visualizationMode } = storeToRefs(patternStore)
+const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
 </script>
 
 <template lang="pug">
-q-page.text-grey-1
+q-page.text-grey-1.flex
   global-events
-  .main-panel.q-pa-xs
+  .main-panel.q-pa-xs.col-grow
     .top-panel(ref="visualization")
       draw-dots(v-if="visualizationMode === 'dots'")
       draw-counter(v-if="visualizationMode === 'counter'")
@@ -42,7 +43,7 @@ q-page.text-grey-1
 
 <style lang="sass">
 .main-panel
-  height: calc( 100vh - 50px )
+  height: 100%
   display: flex
   flex-direction: column
   .top-panel

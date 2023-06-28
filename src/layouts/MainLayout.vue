@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
-import { Screen } from 'quasar'
+import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import { useSessionStore } from 'src/stores/session'
@@ -23,8 +23,9 @@ const onResize = (size: Size) => {
 </script>
 
 <template lang="pug">
-q-layout(view="hHh Lpr lFf")
+q-layout(view="hhh LpR lFf")
   q-header
+    q-bar.q-electron-drag(v-if="Platform.is.electron")
     q-toolbar
       q-btn(
         id="menuBtn",
@@ -37,8 +38,8 @@ q-layout(view="hHh Lpr lFf")
         q-icon(name="menu")
       q-toolbar-title
         router-link(to="/").flex.items-center
-          img(:src="'app-icon.png'" alt="A Compás icon" width="40").q-mr-sm
-          img(:src="'app-name.png'" alt="A Compás name title" width="90").q-mt-sm
+          img(src="~assets/app-icon.png" alt="A Compás icon" width="40").q-mr-sm
+          img(src="~assets/app-name.png" alt="A Compás name title" width="90").q-mt-sm
       //- q-space
       .text-weight-light v{{ appVersion }}
 
@@ -48,22 +49,23 @@ q-layout(view="hHh Lpr lFf")
     content-class="bg-grey-2",
     :breakpoint="1439"
   )
-    left-drawer(id="sideMenu")
+    left-drawer
 
   q-page-container.text-info
-    #appMain
-      q-resize-observer(
-        debounce="10",
-        @resize="onResize"
-      )
-      router-view(v-slot="{ Component, route }")
-        Transition(name="fade", mode="out-in")
-          component(:is="Component", :key="route.name")
+    q-resize-observer(
+      debounce="10",
+      @resize="onResize"
+    )
+    router-view(v-slot="{ Component, route }")
+      Transition(name="fade", mode="out-in")
+        component#appMain(:is="Component", :key="route.name")
 </template>
 
 <style lang="sass">
+.q-electron-drag
+  background: transparent
 #appMain
-  overflow: hidden
+  // overflow: hidden
   background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
 .fade-enter-active,
 .fade-leave-active
