@@ -71,8 +71,8 @@ icongenie generate -m capacitor -i ./app-icon.png
 
 #### Setup
 
-You must first install Oracle's Java JDK 8 and set the JAVA_HOME environment
-variable in your shell.
+You must first install Oracle's Java 17 JDK and set the JAVA_HOME environment
+variable in your shell. Instructions for Ubuntu [here](https://www.rosehosting.com/blog/how-to-install-java-17-lts-on-ubuntu-20-04/)
 
 Furthermore, you need to install Google's Android Studio (get it
 [here](https://developer.android.com/studio)). Install the SDK from Android
