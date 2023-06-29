@@ -51,14 +51,14 @@ q-layout(view="hhh LpR lFf")
   )
     left-drawer
 
-  q-page-container.text-info
+  q-page-container#appMain.text-info
     q-resize-observer(
       debounce="10",
       @resize="onResize"
     )
     router-view(v-slot="{ Component, route }")
       Transition(name="fade", mode="out-in")
-        component#appMain(:is="Component", :key="route.name")
+        component(:is="Component", :key="route.name")
 </template>
 
 <style lang="sass">
