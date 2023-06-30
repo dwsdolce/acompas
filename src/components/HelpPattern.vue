@@ -1,0 +1,73 @@
+<script setup lang="ts">
+import { ref, onUpdated } from 'vue'
+import { openURL, Platform } from 'quasar'
+import { storeToRefs } from 'pinia'
+import CustomCard from 'src/components/CustomCard.vue'
+import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
+import { isFocusableElement } from 'src/utils/utils'
+import type { QBtn } from 'quasar'
+
+const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
+
+const { selectedPattern } = storeToRefs(patternStore)
+
+const {
+  visualizationMode,
+  selectTempo
+} = patternStore
+
+const {
+  toggleDialog
+} = sessionStore
+
+const patternHelpDialog = ref(false)
+
+const patternHelpBtn = ref<QBtn | null>(null)
+const closeBtn = ref<QBtn | null>(null)
+
+const launch = (url: string | undefined) => {
+  if (url) {
+    // if (Platform.is.cordova) {
+    //   cordova.InAppBrowser.open(url, '_system')
+    //   return
+    // }
+    openURL(url)
+  }
+}
+
+onUpdated(() => {
+  if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
+  if (isFocusableElement(patternHelpBtn.value?.$el)) patternHelpBtn.value?.$el.blur()
+  if (isFocusableElement(closeBtn.value?.$el)) closeBtn.value?.$el.blur()
+})
+</script>
+
+<template lang="pug">
+span.q-ml-sm
+  q-btn(
+    id="patternHelpBtn",
+    ref="patternHelpBtn",
+    dense,
+    round,
+    flat,
+    size="10px",
+    padding="none",
+    icon="help",
+    @click="patternHelpDialog = true"
+  )
+  q-dialog(
+    id="patternHelpDialog",
+    v-model="patternHelpDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
+    custom-card
+      template(v-slot:title) {{ selectedPattern?.longLabel }}
+      template(v-slot:content)
+        div(v-html="selectedPattern?.doc")
+        p {{ selectedPattern?.places }}
+        p(v-if="selectedPattern?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPattern?.wikipediaUrl)")]
+        p(v-if="selectedPattern?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPattern?.videoExample)")]
+</template>

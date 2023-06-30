@@ -1,0 +1,11 @@
+{
+  "appId": "audio.acompas.app",
+  "appName": "A Compás",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "url": "http://192.168.1.102:9500"
+  }
+}

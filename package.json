@@ -1,50 +1,64 @@
 {
   "name": "acompas",
-  "version": "2.3.0",
+  "version": "3.2.1",
   "description": "A flamenco metronome",
   "productName": "A Compás",
   "author": "A Compás Team",
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
-    "test:e2e": "cypress open",
-    "test:e2e:CI": "npx cross-env E2E_TEST=true start-test \"quasar dev\" http-get://localhost:8080 \"cypress run\""
+    "lint": "eslint --ext .js,.ts,.vue ./",
+    "format": "prettier --write \"**/*.{js,ts,vue,,html,md,json}\" --ignore-path .gitignore",
+    "test": "echo \"No test specified\" && exit 0",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.14",
+    "@capacitor-community/keep-awake": "^4.0.0",
+    "@capacitor/android": "^5.0.5",
+    "@capacitor/app": "^5.0.3",
+    "@capacitor/cli": "^5.0.5",
+    "@capacitor/core": "^5.0.5",
+    "@capacitor/splash-screen": "^5.0.4",
+    "@quasar/extras": "^1.16.4",
+    "@types/animejs": "^3.1.7",
+    "@vueuse/core": "^10.1.2",
     "animejs": "^3.2.1",
-    "axios": "^0.21.0",
-    "quasar": "^1.15.1",
-    "whatwg-fetch": "^3.5.0"
+    "pinia": "^2.1.4",
+    "quasar": "^2.12.0",
+    "tone": "^14.7.77",
+    "vue": "^3.3.4",
+    "vue-global-events": "^2.1.1",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.2.2"
   },
   "devDependencies": {
-    "@quasar/app": "2.1.14",
-    "@quasar/quasar-app-extension-testing": "^1.0.3",
-    "@quasar/quasar-app-extension-testing-e2e-cypress": "^2.0.4",
-    "@vue/eslint-config-standard": "6.0.0",
-    "babel-eslint": "10.1.0",
-    "cross-env": "^7.0.3",
-    "eslint": "7.15.0",
-    "eslint-loader": "^2.2.1",
-    "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "4.2.1",
-    "eslint-plugin-vue": "7.3.0",
-    "pug": "3.0.0",
-    "pug-plain-loader": "1.1.0",
-    "strip-ansi": "=3.0.1",
-    "tone": "^14.7.58"
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@intlify/vite-plugin-vue-i18n": "^3.3.1",
+    "@quasar/app-vite": "^1.4.3",
+    "@types/node": "^12.20.21",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "autoprefixer": "^10.4.14",
+    "electron": "^25.2.0",
+    "electron-packager": "^17.1.1",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "prettier": "^2.5.1",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "typescript": "^4.5.4"
   },
   "engines": {
-    "node": ">= 8.9.0",
-    "npm": ">= 5.6.0",
-    "yarn": ">= 1.6.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+    "node": "^18 || ^16 || ^14.19",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
 }

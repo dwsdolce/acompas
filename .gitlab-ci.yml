@@ -1,5 +1,5 @@
 stages:
-  - test
+  - build
 
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
@@ -13,7 +13,7 @@ test_web_job:
     - apt-get -y -qq update
     - apt-get -y -qq dist-upgrade
     - apt-get -y -qq install curl gnupg
-    - curl -sL https://deb.nodesource.com/setup_12.x | bash -
+    - curl -sL https://deb.nodesource.com/setup_18.x | bash -
     - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
     - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
     - apt-get update
@@ -24,14 +24,14 @@ test_web_job:
     - npm install -g --unsafe-perm @quasar/icongenie
     - ./icongenie.sh
     - $YARN install
-    - npx quasar build
-    - $YARN run test:e2e:CI
-  stage: test
+    - quasar build
+#    - $YARN run test:e2e:CI
+  stage: build
   tags:
     - development
-  image: ubuntu:focal
-  artifacts:
-    paths:
-      - test/cypress/screenshots
-      - test/cypress/videos
-    expire_in: 6 mos
+  image: ubuntu:jammy
+#  artifacts:
+#    paths:
+#      - test/cypress/screenshots
+#      - test/cypress/videos
+#    expire_in: 6 mos

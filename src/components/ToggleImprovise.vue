@@ -1,35 +1,41 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { usePatternStore } from 'src/stores/patterns'
+
+const patternStore = usePatternStore()
+const { selectedPattern, improvisation } = storeToRefs(patternStore)
+</script>
+
 <template lang="pug">
-.text-center
+.text-center.q-mx-md
   p.caption Improvise
+    span(v-if="selectedPattern.name !== 'simple-click'").q-ml-sm
+      q-btn(
+        dense,
+        round,
+        flat,
+        size="10px",
+        padding="none",
+        icon="help"
+      )
+        q-tooltip(
+          anchor="top middle",
+          self="bottom middle",
+          :offset="[10, 10]"
+        )
+          p.text-body2 If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
+
   q-toggle(
-    :value="improvise",
-    @input="toggleImprovise",
-    :disable="selectedPalo.value === 'no-compas'",
+    v-model="improvisation",
+    :disable="selectedPattern.name === 'simple-click'",
+    left-label,
     color="primary",
     keep-color
   )
     q-tooltip(
-      v-if="selectedPalo.value === 'no-compas'",
+      v-if="selectedPattern.name === 'simple-click'",
       anchor="top middle",
       self="bottom middle",
       :offset="[10, 10]"
-    ) This option is disabled for this palo.
+    ) This option is disabled for this pattern.
 </template>
-
-<script>
-import { mapState, mapActions } from 'vuex'
-
-export default {
-  computed: {
-    ...mapState({
-      improvise: state => state.improvise,
-      selectedPalo: state => state.selectedPalo
-    })
-  },
-  methods: {
-    ...mapActions([
-      'toggleImprovise'
-    ])
-  }
-}
-</script>

@@ -1,68 +1,85 @@
+<script setup lang="ts">
+import { ref, watch, onUpdated } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useQuasar } from 'quasar'
+import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
+import InstrumentMixer from 'src/components/InstrumentMixer.vue'
+import SelectDecay from 'src/components/SelectDecay.vue'
+import CustomCard from 'src/components/CustomCard.vue'
+import type { QBtn } from 'quasar'
+
+const $q = useQuasar()
+const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
+
+const mixerDialog = ref(false)
+const mixerBtn = ref<QBtn | null>(null)
+
+const {
+  selectedPattern,
+} = storeToRefs(patternStore)
+
+const {
+  toggleDialog
+} = sessionStore
+
+onUpdated(() => {
+  if (!mixerDialog.value && mixerBtn.value !== null) {
+    mixerBtn.value.$el.querySelector('.q-focus-helper').blur()
+  }
+})
+</script>
+
 <template lang="pug">
 div
-  p.caption Mixer
-  q-btn#mixerBtn(
+  q-btn(
+    id="mixerBtn",
+    ref="mixerBtn",
     outline,
     icon="tune",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    @click="instrumentsDialog = true"
+    label="Mixer",
+    @click="mixerDialog = true"
   )
-  q-dialog#mixerDialog(v-model="instrumentsDialog", @show="toggleDialog(true)", @hide="toggleDialog(false)")
-    q-card(style="width: 100%;")
-      q-card-section
-        .text-h6.text-center Instruments mixer
-      q-card-section
-        table(style="width: 100%;").q-table
+  q-dialog(
+    id="mixerDialog",
+    v-model="mixerDialog",
+    @show="toggleDialog(true)",
+    @hide="toggleDialog(false)"
+  )
+    custom-card
+      template(v-slot:title) Instruments mixer
+      template(v-slot:content)
+        select-decay.q-mt-md
+        table.q-table.q-mb-md
           thead
             tr
               th.text-center Active
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Play this instruments
               th.text-center 8th
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Toggle eighth notes
               th.text-center Volume (db)
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 Increase or decrease instrument volume
           tbody
             instrument-mixer(
-              v-for="instrument in instruments",
+              v-for="instrument in selectedPattern.instruments",
               :key="instrument.value",
               :slug="instrument.value"
             )
-      q-card-section(align="center")
-        q-btn#closeMixerDialogBtn(
-          color="primary",
-          v-close-popup
-        ) Close
 </template>
-
-<script>
-import { mapState, mapMutations } from 'vuex'
-import InstrumentMixer from './InstrumentMixer'
-
-export default {
-  components: { InstrumentMixer },
-  data () {
-    return {
-      instrumentsDialog: false
-    }
-  },
-  computed: {
-    ...mapState({
-      instruments: state => state.instruments,
-      selectedInstruments: state => state.selectedInstruments
-    })
-  },
-  watch: {
-    selectedInstruments (value) {
-      if (!value.length) {
-        this.$q.notify({
-          message: 'No instrument is selected. You will have no sound in the metronome ...',
-          color: 'secondary',
-          icon: 'warning'
-        })
-      }
-    }
-  },
-  methods: {
-    ...mapMutations({
-      toggleDialog: 'TOGGLE_DIALOG'
-    })
-  }
-}
-</script>

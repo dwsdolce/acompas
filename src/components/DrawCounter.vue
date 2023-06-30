@@ -1,48 +1,48 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSessionStore } from 'src/stores/session'
+import { usePatternStore } from 'src/stores/patterns'
+
+const sessionStore = useSessionStore()
+const patternStore = usePatternStore()
+
+const {
+  selectedPattern,
+  metronomeEvent,
+  beatLabels
+} = storeToRefs(patternStore)
+
+const counter = ref<number | null>(null)
+const className = ref<string>('')
+
+watch(metronomeEvent, (v: number | null) => {
+  if (v !== null && selectedPattern.value) {
+    counter.value = beatLabels.value[(v as number)]
+
+    if (selectedPattern.value?.accents.includes(((v as number) / 2) as never)) {
+      className.value = 'accent'
+    } else {
+      className.value = ''
+    }
+  } else {
+    counter.value = null
+    className.value = ''
+  }
+})
+</script>
+
 <template lang="pug">
 .item-center.full-width
-  h2(:class="className").text-center.q-ma-none
+  h1(:class="className").text-center.q-ma-none
     div(v-if="metronomeEvent === null")
       q-icon(name="more_horiz")
     div(v-else).counter {{ counter }}
 </template>
 
-<script>
-import { mapState } from 'vuex'
-
-export default {
-  data () {
-    return {
-      counter: null,
-      className: ''
-    }
-  },
-  computed: {
-    ...mapState({
-      metronomeEvent: state => state.metronomeEvent,
-      selectedPalo: state => state.selectedPalo
-    })
-  },
-  watch: {
-    metronomeEvent (v) {
-      let index = v - (this.$store.state.selectedPreCount.value * 2) + this.$store.state.selectedStartBeat.value
-      // index needs to be strictly positive as it will be used with a % operator
-      if (index < 0) {
-        index += this.$store.state.selectedPalo.nbBeatsInPattern
-      }
-      this.counter = this.selectedPalo.beatLabels[index % this.$store.state.selectedPalo.nbBeatsInPattern]
-      if (this.selectedPalo.accents.includes((index % this.$store.state.selectedPalo.nbBeatsInPattern) / 2)) {
-        this.className = 'accent'
-      } else {
-        this.className = ''
-      }
-    }
-  }
-}
-</script>
-
-<style lang="stylus" scoped>
-.counter
-  margin-bottom 9.5px
+<style lang="sass" scoped>
+.q-icon
+  height: 0.85rem
 .accent
   color: firebrick
 </style>

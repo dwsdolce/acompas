@@ -12,6 +12,23 @@ node_modules
 /src-cordova/plugins
 /src-cordova/www
 
+# A Compas specific ignores
+/src/statics/icons/favicon.ico
+/src/statics/icons/favicon-*.png
+/src-cordova/res
+/test/cypress/screenshots
+/test/cypress/videos
+/public/favicon.ico
+/public/icons/*.png
+
+# Capacitor related directories and files
+/src-capacitor/www
+/src-capacitor/node_modules
+
+# BEX related directories and files
+/src-bex/www
+/src-bex/js/core
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -25,11 +42,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-# A Compas specific ignores
-/src/statics/icons/favicon.ico
-/src/statics/icons/favicon-*.png
-/src-cordova/res
-/test/cypress/screenshots
-/test/cypress/videos
-/public/favicon.ico
-/public/icons/*.png
+yarn.lock
+
+out/
