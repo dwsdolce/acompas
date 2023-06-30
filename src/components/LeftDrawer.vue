@@ -13,8 +13,8 @@
   import type { QItem } from 'quasar'
 
   const helpDialog = ref(false)
-  const tuningDialog = ref(false)
   const shortcutsDialog = ref(false)
+  const aboutDialog = ref(false)
 
   const helpQItem = ref<QItem | null>(null)
   const tuningForkQItem = ref<QItem | null>(null)
@@ -49,10 +49,6 @@
     openURL(url)
   }
 
-  watch(tuningDialog, (value: boolean) => {
-    if (!value) tuningForkStore.stop()
-  })
-
   onMounted(() => {
     if (!trackingChosen.value && route.path !== '/privacy-policy') {
       openPrivacyDialog()
@@ -71,7 +67,11 @@
 div
   q-list(no-border, link, separator)
 
-    q-item(clickable, v-ripple, @click="launch('https://paypal.me/acompasorg')")
+    q-item(
+      clickable,
+      v-ripple,
+      @click="launch('https://www.paypal.com/donate/?hosted_button_id=NCN4GX9DL3L5W')"
+    )
      q-item-section(avatar)
       q-icon(name="attach_money")
      q-item-section Donate
@@ -148,7 +148,6 @@ div
       q-item-section(avatar)
         q-icon(name="bug_report")
       q-item-section Issues
-
 
 
   q-dialog(

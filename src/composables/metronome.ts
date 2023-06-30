@@ -22,6 +22,7 @@ import type {
   ExtendedPlayer,
   InstruSeqs
 } from 'src/utils/types'
+import { au } from 'app/dist/electron/UnPackaged/assets/index.d0997b1f'
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
@@ -33,14 +34,13 @@ export const useMetronome = () => {
 
   const audioFormat = ref<string>('')
   const reverbDecay = ref<number>(0.3)
+  const soundsIsLoaded = ref<boolean>(false)
+  const metronomeEvent = ref<number | null>(null)
   const reverb = new Tone.Reverb({
     decay: reverbDecay.value,
     preDelay: 0,
     wet: 0.3
   }).toDestination()
-
-  const soundsIsLoaded = ref<boolean>(false)
-  const metronomeEvent = ref<number | null>(null)
 
   /**
    * Loads all sounds.
