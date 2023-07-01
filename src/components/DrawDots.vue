@@ -146,7 +146,7 @@ onBeforeUpdate(() => {
 </script>
 
 <template lang="pug">
-.full-width.row.inline.no-wrap.justify-around
+.full-width.row.inline.no-wrap.justify-around.q-px-md
   .column.items-center(
     v-for="(n, i) in beatLabels",
     v-show="i !== beatLabels.length - 1",
