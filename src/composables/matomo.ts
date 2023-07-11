@@ -54,30 +54,38 @@ export const useMatomo = () => {
     if (script) script.remove()
   }
 
-  const trackPlay = (patternName: string) => {
+  const trackPlay = () => {
     if (sessionStore.trackingEnabled) {
       playStartTime.value = Math.round(patternStore.getContext().currentTime)
 
-      window._paq.push([
+      const matomoEvent = [
         'trackEvent',
         'Playing',
         'Start',
-        patternName
-      ])
+        patternStore.selectedPattern.name
+      ]
+
+      process.env.NODE_ENV !== 'production' ? matomoEvent.push('(test)') : null
+
+      window._paq.push(matomoEvent)
     }
   }
 
-  const trackStop = (patternName: string) => {
+  const trackStop = () => {
     if (sessionStore.trackingEnabled) {
       const playDuration = Math.round(patternStore.getContext().currentTime) - (playStartTime.value || 0)
 
-      window._paq.push([
+      const matomoEvent = [
         'trackEvent',
         'Playing',
         'Stop',
-        patternName,
+        patternStore.selectedPattern.name,
         playDuration
-      ])
+      ]
+
+      process.env.NODE_ENV !== 'production' ? matomoEvent.push('(test)') : null
+
+      window._paq.push(matomoEvent)
     }
   }
 
