@@ -86,11 +86,6 @@ const animateClock = (v: number | null) => {
       }
     }
   })
-  // if (isPlaying.value && v !== null) {
-  //   animation.play()
-  // } else {
-  //   cancelAnimation(animation)
-  // }
 
   animation.finished.then(() => {
     if (!isPlaying.value) {
@@ -127,13 +122,9 @@ watch(prestartBeat, (oldValue, newValue) => {
   if (newValue !== oldValue) idleClockPosition()
 })
 
-// onMounted(() => {
-//   if (isPlaying.value && metronomeEvent.value !== null) {
-//     clockDeg.value = metronomeEvent.value * clockStep.value
-//   } else {
-//     idleClockPosition()
-//   }
-// })
+onMounted(() => {
+  idleClockPosition()
+})
 
 // make sure to reset the refs before each update
 onBeforeUpdate(() => {
