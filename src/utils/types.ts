@@ -157,3 +157,9 @@ export interface SessionState {
   leftDrawerOpen:           boolean
   visualizationSize:        Size
 }
+
+export interface ContextOption {
+  label:                    string
+  value:                    string
+  color?:                   string
+}

@@ -34,18 +34,14 @@ const patternsOptions = computed(() => {
   }))
 })
 
-const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+const selectedPatternOption = computed(() => {
+  return patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+})
 
 const onSelectedPattern = (v: string) => {
   patternsDialog.value = false
   router.push(`/${v}`)
 }
-
-// onUpdated(() => {
-//   if (!patternsDialog.value && patternBtn.value !== null) {
-//     patternBtn.value.$el.querySelector('.q-focus-helper').blur()
-//   }
-// })
 </script>
 
 <template lang="pug">
