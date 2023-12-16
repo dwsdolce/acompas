@@ -5,6 +5,8 @@ import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import SelectContext from 'src/components/SelectContext.vue'
+import IconBase from 'src/components/IconBase.vue'
+import IconLogo from 'src/components/IconLogo.vue'
 import { useSessionStore } from 'src/stores/session'
 import type { Size } from 'src/utils/types'
 
@@ -40,7 +42,7 @@ q-layout(view="hhh LpR lFf")
         flat,
         to="/"
       ).row.items-center.no-wrap.q-gutter-sm
-        img(src="~assets/app-icon.png" alt="A Compás icon", width="40", height="40")
+        img(src="~assets/ACompas-3-logo.png" alt="A Compás icon", width="40", height="40")
         img(src="~assets/app-name.png" alt="A Compás name title", height="30").q-mt-sm.q-ml-md
 
       q-space
