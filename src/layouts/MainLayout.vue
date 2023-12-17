@@ -5,8 +5,6 @@ import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import SelectContext from 'src/components/SelectContext.vue'
-import IconBase from 'src/components/IconBase.vue'
-import IconLogo from 'src/components/IconLogo.vue'
 import { useSessionStore } from 'src/stores/session'
 import type { Size } from 'src/utils/types'
 
