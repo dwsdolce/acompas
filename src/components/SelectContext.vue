@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useContextStore } from 'src/stores/context'
 import CustomCard from 'src/components/CustomCard.vue'
 import type { Ref } from 'vue'
+import type { ContextOption } from 'src/utils/types'
 
 const contextStore = useContextStore()
 
@@ -11,6 +12,11 @@ const { context, options } = storeToRefs(contextStore)
 const { setContext } = contextStore
 
 const contextDialog: Ref<boolean> = ref(false)
+
+const onSelectedContext = async (context: ContextOption) => {
+  setContext(context)
+  contextDialog.value = false
+}
 
 </script>
 
@@ -39,11 +45,12 @@ div
             :key="option.value",
             clickable,
             v-ripple="false",
-            @click="setContext(option)",
+            @click="onSelectedContext(option)",
             :class="{ 'bg-grey-2': option.value === context.value }",
           )
             q-item-section
               q-item-label {{ option.label }}
+                q-badge(rounded, :color="option.colors.primary").q-ml-md
             q-item-section(side)
-              q-icon(name="check").q-ml-sm(v-if="option.value === context")
+              q-icon(name="check").q-ml-sm(v-if="option.value === context.value")
 </template>
