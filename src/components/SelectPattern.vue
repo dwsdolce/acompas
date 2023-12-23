@@ -59,7 +59,9 @@ const patternsOptions = computed(() => {
     .map(pattern => formatPattern(pattern))
 })
 
-const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+const selectedPatternOption = computed(() => {
+  return patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+})
 
 const stringMatchesRegex = (str: string, regex: RegExp) => {
   const matches = regex.test(str)

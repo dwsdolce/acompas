@@ -12,12 +12,26 @@ import DrawCounter from 'src/components/DrawCounter.vue'
 import DrawClock from 'src/components/DrawClock.vue'
 import GlobalEvents from 'src/components/GlobalEvents.vue'
 import { usePatternStore } from 'src/stores/patterns'
+import { useContextStore } from 'src/stores/context'
 
 const $q = useQuasar()
 const patternStore = usePatternStore()
+const contextStore = useContextStore()
+
+const { context } = storeToRefs(contextStore)
 
 const { selectedPattern, visualizationMode } = storeToRefs(patternStore)
+
+const componentKey = ref<string>('')
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
+
+// Maybe the componentKey part will not be needed anymore when the pattern change on context change is written.
+
+watch(context, async (newContext, prevContext) => {
+  if (newContext.value !== prevContext.value) {
+    componentKey.value = newContext.value
+  }
+})
 </script>
 
 <template lang="pug">
@@ -25,9 +39,9 @@ q-page.text-grey-1.flex
   global-events
   .main-panel.q-pa-xs.col-grow
     .top-panel(ref="visualization")
-      draw-dots(v-if="visualizationMode === 'dots'")
-      draw-counter(v-if="visualizationMode === 'counter'")
-      draw-clock(v-if="visualizationMode === 'clock'")
+      draw-dots(v-if="visualizationMode === 'dots'", :key="componentKey")
+      draw-counter(v-if="visualizationMode === 'counter'", :key="componentKey")
+      draw-clock(v-if="visualizationMode === 'clock'", :key="componentKey")
     .bottom-panel.row.no-wrap
       .left-panel.col-6.col-sm-5
         select-pattern.q-mb-sm
