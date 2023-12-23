@@ -161,23 +161,23 @@ $axis : 2vh
   .axis
     width: $axis
     height: $axis
-    border-radius: calc($axis / 2)
+    border-radius: $axis / 2
     background-color: black
     position: absolute
-    top: calc($size / 2 - $axis / 2)
-    left: calc($size / 2 - $axis / 2)
+    top: $size / 2 - $axis / 2
+    left: $size / 2 - $axis / 2
   .hand
-    width: calc($axis / 2)
-    height: calc($size / 3)
+    width: $axis / 2
+    height: ($size / 3)
     position: absolute
-    top: calc($size / 6 - $axis / 4)
-    left: calc($size / 2 - $axis / 4)
+    top: $size / 6 - $axis / 4
+    left: $size / 2 - $axis / 4
     background-color: black
     border-radius: 100% 100% 0% 0%
     // transform: v-bind('rotationValue')
-    transform-origin: center calc($size / 3 + $axis / 4)
+    transform-origin: center ($size / 3 + $axis / 4)
   ul
-    height: calc($size / 2.2)
+    height: $size / 2.2
     position: absolute
     list-style: none
     width: 0

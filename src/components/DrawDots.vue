@@ -5,8 +5,6 @@ import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
-import { colors, setCssVar, getCssVar } from 'quasar'
-
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
@@ -49,7 +47,7 @@ const getDotStyle = (i: number): CSSProperties => {
       height: dotSize.value / 2 + 'px',
       borderRadius: borderRadius.value + '%',
       marginTop: dotSize.value / 2 + 'px',
-      backgroundColor: selectedPattern.value?.accents.includes(i as never) ? getCssVar('secondary')?.toString() : getCssVar('primary')?.toString()
+      backgroundColor: selectedPattern.value?.accents.includes(i as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -117,21 +115,24 @@ const handleNbRef = (i: number, el: HTMLDivElement) => {
   }
 }
 
-watch(metronomeEvent, (newMetronomeEvent, prevMetronomeEvent) => {
-  if (newMetronomeEvent !== null) {
-    if (selectedPattern.value?.name === 'simple-click') {
-      animateDot(0)
-    } else {
-      animateDot(newMetronomeEvent)
+watch(
+  [metronomeEvent, visualizationSize],
+  (
+    [newMetronomeEvent, newVisualizationSize],
+    [prevMetronomeEvent, prevVisualizationSize]
+  ) => {
+    if (newMetronomeEvent !== null) {
+      if (selectedPattern.value?.name === 'simple-click') {
+        animateDot(0)
+      } else {
+        animateDot(newMetronomeEvent)
+      }
+    }
+    if (newVisualizationSize !== prevVisualizationSize) {
+      resizeDots(newVisualizationSize as Size)
     }
   }
-})
-
-watch(visualizationSize, (newVisualizationSize, prevVisualizationSize) => {
-  if (newVisualizationSize !== prevVisualizationSize) {
-    resizeDots(newVisualizationSize as Size)
-  }
-})
+)
 
 onMounted(() => {
   resizeDots(visualizationSize.value as Size)
@@ -162,3 +163,8 @@ onBeforeUpdate(() => {
       :ref="el => { nbs[i] = el }"
     ).text-center {{ n }}
 </template>
+
+<style lang="sass" scoped>
+.dot
+  background-color: $primary
+</style>
