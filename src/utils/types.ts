@@ -118,6 +118,7 @@ export interface PatternState {
   id:                       number
   name:                     string
   label:                    string
+  linkedPatterns?:          stringOpts[]
   minTempo:                 number
   maxTempo:                 number
   defaultTempo:             number

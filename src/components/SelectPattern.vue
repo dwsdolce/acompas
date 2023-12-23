@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onUpdated } from 'vue'
+import { ref, computed, onUpdated, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
@@ -8,6 +8,14 @@ import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
+
+import type { PatternState } from 'src/utils/types'
+
+
+interface PatternOtion {
+  name: string
+  label: string
+}
 
 const patternBtn = ref<QBtn | null>(null)
 
@@ -26,26 +34,46 @@ const {
 } = sessionStore
 
 const patternsDialog = ref(false)
+const filter = ref('')
 
-const patternsOptions = computed(() => {
-  return patterns.value.map(pattern => ({
+const formatPattern = (pattern: PatternState) => {
+  return {
     label: pattern.label,
     value: pattern.name
-  }))
+  }
+}
+
+const patternsOptions = computed(() => {
+  let selected = patterns.value
+  if (filter.value !== '') {
+    console.log('filter.value', filter.value)
+    const regex = new RegExp(filter.value, 'g')
+    selected = patterns.value.filter(pattern => {
+      return pattern.linkedPatterns?.some(linkedPattern => {
+        return regex.test(linkedPattern.value)
+      })
+    })
+  }
+
+  return selected
+    .map(pattern => formatPattern(pattern))
 })
 
 const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+
+const stringMatchesRegex = (str: string, regex: RegExp) => {
+  const matches = regex.test(str)
+}
 
 const onSelectedPattern = (v: string) => {
   patternsDialog.value = false
   router.push(`/${v}`)
 }
 
-// onUpdated(() => {
-//   if (!patternsDialog.value && patternBtn.value !== null) {
-//     patternBtn.value.$el.querySelector('.q-focus-helper').blur()
-//   }
-// })
+watch(filter, () => {
+  console.log('filter', filter.value)
+})
+
 </script>
 
 <template lang="pug">
@@ -61,6 +89,7 @@ div
     :label="selectedPattern?.label",
     @click="patternsDialog = true"
   )
+
   q-dialog(
     id="optDialog",
     v-model="patternsDialog"
@@ -68,6 +97,16 @@ div
     custom-card
       template(v-slot:title) Please select a pattern
       template(v-slot:content)
+        q-input(
+          v-model="filter",
+          outlined,
+          dense,
+          :debounce="500",
+          :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
+        ).q-mb-md
+          template(v-slot:append)
+            q-icon(name="close", @click="filter = ''").cursor-pointer
+
         q-option-group(
           type="radio",
           color="primary",

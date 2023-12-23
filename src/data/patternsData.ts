@@ -5,6 +5,19 @@ export default [
     id: 1,
     label: 'Alegría / Soleá por bulería',
     name: 'alegria',
+    linkedPatterns: [
+      { label: 'Soleá por bulería', value: 'solea-por-buleria' },
+      { label: 'Caña', value: 'cana' },
+      { label: 'Polo', value: 'polo' },
+      { label: 'Caracoles', value: 'caracoles' },
+      { label: 'Mirabras', value: 'mirabras' },
+      { label: 'Caña', value: 'cana' },
+      { label: 'Polo', value: 'polo' },
+      { label: 'Bambera', value: 'bambera' },
+      { label: 'Guajira', value: 'guajira' },
+      { label: 'Cantiñas', value: 'cantiñas' },
+      { label: 'Romera', value: 'romera' }
+    ],
     minTempo: 30,
     maxTempo: 200,
     defaultTempo: 130,
@@ -83,6 +96,11 @@ export default [
     id: 2,
     label: 'Abandolaos',
     name: 'abandolaos',
+    linkedPatterns: [
+      { label: 'Fandango abandolao', value: 'fandango-abandolao' },
+      { label: 'Jaleo extremeño', value: 'jaleo-extremeno' },
+      { label: 'Verdiales', value: 'verdiales' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 190,
@@ -157,6 +175,13 @@ export default [
     id: 3,
     label: 'Bulería (6)',
     name: 'buleria-6',
+    linkedPatterns: [
+      { label: 'Cancion por buleria', value: 'cancion-por-buleria' },
+      { label: 'Bulería de Jeréz', value: 'buleria-de-jerez' },
+      { label: 'Bulería de Cádiz', value: 'buleria-de-cadiz' },
+      { label: 'Bulería de Lebrija', value: 'buleria-de-lebrija' },
+      { label: 'Bulería de Utrera', value: 'buleria-de-utrera' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 190,
@@ -233,6 +258,13 @@ export default [
     id: 4,
     label: 'Bulería (12)',
     name: 'buleria-12',
+    linkedPatterns: [
+      { label: 'Cancion por buleria', value: 'cancion-por-buleria' },
+      { label: 'Bulería de Jeréz', value: 'buleria-de-jerez' },
+      { label: 'Bulería de Cádiz', value: 'buleria-de-cadiz' },
+      { label: 'Bulería de Lebrija', value: 'buleria-de-lebrija' },
+      { label: 'Bulería de Utrera', value: 'buleria-de-utrera' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 190,
@@ -312,6 +344,13 @@ export default [
     id: 5,
     label: 'Bulería (12) variation',
     name: 'buleria-12-variation',
+    linkedPatterns: [
+      { label: 'Cancion por buleria', value: 'cancion-por-buleria' },
+      { label: 'Bulería de Jeréz', value: 'buleria-de-jerez' },
+      { label: 'Bulería de Cádiz', value: 'buleria-de-cadiz' },
+      { label: 'Bulería de Lebrija', value: 'buleria-de-lebrija' },
+      { label: 'Bulería de Utrera', value: 'buleria-de-utrera' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 190,
@@ -389,6 +428,12 @@ export default [
     id: 6,
     label: 'Fandangos',
     name: 'fandangos',
+    linkedPatterns: [
+      { label: 'Fandangos de Huelva', value: 'fandangos-de-huelva' },
+      { label: 'Fandangos de Lucena', value: 'fandangos-de-lucena' },
+      { label: 'Fandangos de Alosno', value: 'fandangos-de-alosno' },
+      { label: 'Canastera', value: 'canastera' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 130,
@@ -467,6 +512,13 @@ export default [
     id: 7,
     label: 'Rumba',
     name: 'rumba',
+    linkedPatterns: [
+      { label: 'Rumba', value: 'rumba' },
+      { label: 'Tango arumbado', value: 'tango-arumbado' },
+      { label: 'Garrotin', value: 'garrotin' },
+      { label: 'Colombiana', value: 'colombiana' },
+      { label: 'Tanguillo', value: 'tanguillo' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 170,
@@ -546,6 +598,13 @@ export default [
     id: 8,
     label: 'Sevillanas',
     name: 'sevillana',
+    linkedPatterns: [
+      { label: 'Sevillanas', value: 'sevillanas' },
+      { label: 'Fandangos de Huelva', value: 'fandangos-de-huelva' },
+      { label: 'Fandangos de Lucena', value: 'fandangos-de-lucena' },
+      { label: 'Fandangos de Alosno', value: 'fandangos-de-alosno' },
+      { label: 'Canastera', value: 'canastera' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 130,
@@ -623,6 +682,12 @@ export default [
     id: 9,
     label: 'Siguiriya',
     name: 'siguiriya',
+    linkedPatterns: [
+      { label: 'Siguiriya', value: 'siguiriya' },
+      { label: 'Serrana', value: 'serrana' },
+      { label: 'Liviana', value: 'liviana' },
+      { label: 'Cabales', value: 'cabales' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 130,
@@ -701,6 +766,16 @@ export default [
     id: 10,
     label: 'Soleá',
     name: 'solea',
+    linkedPatterns: [
+      { label: 'Soleá', value: 'solea' },
+      { label: 'Soleá por Bulerías', value: 'solea-por-bulerias' },
+      { label: 'Caña', value: 'cana' },
+      { label: 'Polo', value: 'polo' },
+      { label: 'Soleá de Alcala', value: 'solea-de-alcala' },
+      { label: 'Soleá apola', value: 'solea-apola' },
+      { label: 'Soleá de Cadiz', value: 'solea-de-cadiz' },
+      { label: 'Soleá de Triana', value: 'solea-de-triana' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 80,
@@ -771,6 +846,12 @@ export default [
     id: 11,
     label: 'Tanguillos',
     name: 'tanguillos',
+    linkedPatterns: [
+      { label: 'Tanguillos', value: 'tanguillos' },
+      { label: 'Rumba', value: 'rumba' },
+      { label: 'Tangos de Cádiz', value: 'tangos-de-cadiz' },
+      { label: 'Tanguillos de Cádiz', value: 'tanguillos-de-cadiz' }
+    ],
     minTempo: 30,
     maxTempo: 300,
     defaultTempo: 150,
@@ -840,6 +921,18 @@ export default [
     id: 12,
     label: 'Tangos',
     name: 'tangos',
+    linkedPatterns: [
+      { label: 'Tangos', value: 'tangos' },
+      { label: 'Tangos de Málaga', value: 'tangos-de-malaga' },
+      { label: 'Tangos de Granada', value: 'tangos-de-granada' },
+      { label: 'Tangos de Triana', value: 'tangos-de-triana' },
+      { label: 'Tangos de Cádiz', value: 'tangos-de-cadiz' },
+      { label: 'Tangos del Titi', value: 'tangos-del-titi' },
+      { label: 'Tangos de Extremadura', value: 'tangos-de-extremadura' },
+      { label: 'Colombiana', value: 'colombiana' },
+      { label: 'Garrotin', value: 'garrotin' },
+      { label: 'Zambra', value: 'zambra' }
+    ],
     minTempo: 15,
     maxTempo: 300,
     defaultTempo: 130,
@@ -919,6 +1012,12 @@ export default [
     id: 13,
     label: 'Tientos',
     name: 'tientos',
+    linkedPatterns: [
+      { label: 'Tientos', value: 'tientos' },
+      { label: 'Tientos Tangos', value: 'tientos-tangos' },
+      { label: 'Farruca', value: 'farruca' },
+      { label: 'Zambra', value: 'zambra' }
+    ],
     minTempo: 15,
     maxTempo: 130,
     defaultTempo: 60,
