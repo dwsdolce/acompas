@@ -7,6 +7,7 @@ import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
+import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
 import type { QBtn } from 'quasar'
 
 import type { PatternState } from 'src/utils/types'
@@ -97,15 +98,17 @@ div
     custom-card
       template(v-slot:title) Please select a pattern
       template(v-slot:content)
-        q-input(
-          v-model="filter",
-          outlined,
-          dense,
-          :debounce="500",
-          :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
-        ).q-mb-md
-          template(v-slot:append)
-            q-icon(name="close", @click="filter = ''").cursor-pointer
+        .row.items-center.q-mb-md
+          HelpSearchPattern.col-1
+          q-input(
+            v-model="filter",
+            outlined,
+            dense,
+            :debounce="500",
+            :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
+          ).col-11
+            template(v-slot:append)
+              q-icon(name="close", @click="filter = ''").cursor-pointer
 
         q-option-group(
           type="radio",
