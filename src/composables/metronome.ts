@@ -2,7 +2,7 @@ import * as Tone from 'tone'
 import { computed, ComputedRef, Ref, ref, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import { Loading, Notify, Dialog } from 'quasar'
 import { storeToRefs } from 'pinia'
-import soundsData from 'src/data/soundsData'
+import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
 import { forEachValue } from 'src/utils/utils'
 import type {

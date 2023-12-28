@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
-import patternsData from 'src/data/patternsData'
+import patternsData from 'src/assets/data/patternsData'
 import type { PatternState } from 'src/utils/types'
 
 const routes: RouteRecordRaw[] = [

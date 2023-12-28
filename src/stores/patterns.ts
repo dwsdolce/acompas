@@ -3,8 +3,8 @@ import { Notify, Platform } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
-import soundsData from 'src/data/soundsData'
-import patternsData from 'src/data/patternsData'
+import soundsData from 'src/assets/data/soundsData'
+import patternsData from 'src/assets/data/patternsData'
 import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
@@ -181,6 +181,10 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   }
 
+  const rebuildPattern = (patternData: PatternState) => {
+    patterns.value[patterns.value.findIndex((el) => el.name === patternData.name)] = buildPattern(patternData)
+  }
+
   const play = async () => {
     if (selectedPattern.value) {
       isPlaying.value = true
@@ -326,6 +330,7 @@ export const usePatternStore = defineStore('patterns', () => {
     // numLabels,
     instrument,
     buildPatterns,
+    rebuildPattern,
     play,
     stop,
     playStop,
