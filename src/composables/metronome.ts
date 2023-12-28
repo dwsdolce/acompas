@@ -22,12 +22,12 @@ import type {
   ExtendedPlayer,
   InstruSeqs
 } from 'src/utils/types'
-import { au } from 'app/dist/electron/UnPackaged/assets/index.d0997b1f'
+// import { au } from 'app/dist/electron/UnPackaged/assets/index.d0997b1f'
 
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
-const quarterChannel = new Tone.Channel(0, 0).toDestination()
-const eighthChannel = new Tone.Channel(-4, -0.5).toDestination()
+const quarterChannel = new Tone.Channel(-4, 0).toDestination()
+const eighthChannel = new Tone.Channel(0, -0.5).toDestination()
 
 export const useMetronome = () => {
   const store = usePatternStore()

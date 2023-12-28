@@ -8,15 +8,15 @@ export default [
     medias: [
       {
         src: 'clara/clara_1',
-        volume: 8,
+        volume: 5,
       },
       {
         src: 'clara/clara_2',
-        volume: 8,
+        volume: 5,
       },
       {
         src: 'clara/clara_3',
-        volume: 8,
+        volume: 5,
       }
     ]
   },
@@ -27,15 +27,15 @@ export default [
     medias: [
       {
         src: 'sorda/sorda_1',
-        volume: 6,
+        volume: 0,
       },
       {
         src: 'sorda/sorda_2',
-        volume: 6,
+        volume: 0,
       },
       {
         src: 'sorda/sorda_3',
-        volume: 6,
+        volume: 0,
       }
     ]
   },
@@ -45,15 +45,15 @@ export default [
     medias: [
       {
         src: 'pito/pito_1',
-        volume: 12,
+        volume: 0,
       },
       {
         src: 'pito/pito_2',
-        volume: 12,
+        volume: 0,
       },
       {
         src: 'pito/pito_3',
-        volume: 12,
+        volume: 0,
       }
     ]
   },
