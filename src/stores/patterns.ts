@@ -190,7 +190,7 @@ export const usePatternStore = defineStore('patterns', () => {
       isPlaying.value = true
       startSequences()
       if (matomoExists()) trackPlay()
-      if (Platform.is.capacitor && await isSupported()) keepAwake()
+      if (await isSupported()) keepAwake()
     }
   }
 
@@ -198,7 +198,7 @@ export const usePatternStore = defineStore('patterns', () => {
     isPlaying.value = false
     stopAllSequences()
     if (matomoExists()) trackStop()
-    if (Platform.is.capacitor && await isSupported()) allowSleep()
+    if (await isSupported()) allowSleep()
     reinitialize()
   }
 

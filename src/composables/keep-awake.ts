@@ -1,3 +1,5 @@
+import { ref, watch } from 'vue'
+import { Platform } from 'quasar'
 import { KeepAwake } from '@capacitor-community/keep-awake'
 
 export const useKeepAwake = () => {
@@ -5,9 +7,13 @@ export const useKeepAwake = () => {
   //   await KeepAwake.allowSleep()
   // }
 
+  const screenLock = ref<WakeLockSentinel | null>(null)
+
   const isSupported = async () => {
-    const result = await KeepAwake.isSupported()
-    return result.isSupported
+    const screenWakeLockSupported = 'wakeLock' in navigator
+    const keepAwakeSupported = (await KeepAwake.isSupported()).isSupported
+
+    return screenWakeLockSupported || keepAwakeSupported
   }
 
   const isKeptAwake = async () => {
@@ -15,9 +21,39 @@ export const useKeepAwake = () => {
     return result.isKeptAwake
   }
 
-  const keepAwake = async () => { await KeepAwake.keepAwake() }
+  const keepAwake = async () => {
+    if (Platform.is.capacitor) {
+      await KeepAwake.keepAwake()
+    }
 
-  const allowSleep = async () => { await KeepAwake.allowSleep() }
+    else if ('wakeLock' in navigator) {
+      // Request a screen wake lock if supported
+      try {
+        screenLock.value = await navigator.wakeLock.request('screen')
+        console.log('Screen wake lock is active')
+      } catch (error) {
+        console.error('Unable to acquire screen wake lock:', error)
+      }
+    }
+  }
+
+  const allowSleep = async () => {
+    if (Platform.is.capacitor) {
+      await KeepAwake.allowSleep()
+    }
+
+    // Release the screen wake lock if it was requested
+    else if ('wakeLock' in navigator) {
+      try {
+        if (screenLock.value) {
+          screenLock.value.release()
+          console.log('Screen wake lock released')
+        }
+      } catch (error) {
+        console.error('Unable to release screen wake lock:', error)
+      }
+    }
+  }
 
   // watch(isPlaying, async (value) => {
   //   if (Platform.is.capacitor && await isSupported()) {
