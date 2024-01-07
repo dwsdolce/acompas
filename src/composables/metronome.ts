@@ -295,7 +295,7 @@ export const useMetronome = () => {
       // The 'event' sequence is used to trigger events which will trigger UI modifications
       if (type === ('event') && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(async() => {
-          await timeout(250)
+          // await timeout(250)
           console.log('draw', time)
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (name === 'simple-click') {
