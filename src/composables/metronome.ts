@@ -296,7 +296,6 @@ export const useMetronome = () => {
       if (type === ('event') && !eighthNotes && note % 2 === 0) {
         Tone.Draw.schedule(async() => {
           // await timeout(250)
-          console.log('draw', time)
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (name === 'simple-click') {
             triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
@@ -305,7 +304,6 @@ export const useMetronome = () => {
           }
         }, time) // Use AudioContext time of the event
       } else {
-        console.log('trigger', time)
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
     }, sequence)
