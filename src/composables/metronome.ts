@@ -4,7 +4,7 @@ import { Loading, Notify, Dialog } from 'quasar'
 import { storeToRefs } from 'pinia'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
-import { forEachValue } from 'src/utils/utils'
+import { forEachValue, timeout } from 'src/utils/utils'
 import type {
   VolumeOpts,
   DecayOpts,
@@ -290,14 +290,13 @@ export const useMetronome = () => {
     // 'note' is an occurence of an element inside the sequence variable (integer)
     const seq = new Tone.Sequence((time, note) => {
       // Type is not an event, it is a prestartBeat or a selected instrument
-      if (type !== ('event')) {
-        triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
-      }
 
       // Call animation on event time.
       // The 'event' sequence is used to trigger events which will trigger UI modifications
       if (type === ('event') && !eighthNotes && note % 2 === 0) {
-        Tone.Draw.schedule(() => {
+        Tone.Draw.schedule(async() => {
+          await timeout(250)
+          console.log('draw', time)
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (name === 'simple-click') {
             triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
@@ -305,6 +304,9 @@ export const useMetronome = () => {
             if (note !== null) triggerEvent(note as number | null)
           }
         }, time) // Use AudioContext time of the event
+      } else {
+        console.log('trigger', time)
+        triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
     }, sequence)
 

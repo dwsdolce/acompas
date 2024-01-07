@@ -27,10 +27,8 @@ export const useKeepAwake = () => {
     }
 
     else if ('wakeLock' in navigator) {
-      // Request a screen wake lock if supported
       try {
         screenLock.value = await navigator.wakeLock.request('screen')
-        console.log('Screen wake lock is active')
       } catch (error) {
         console.error('Unable to acquire screen wake lock:', error)
       }
@@ -42,28 +40,16 @@ export const useKeepAwake = () => {
       await KeepAwake.allowSleep()
     }
 
-    // Release the screen wake lock if it was requested
     else if ('wakeLock' in navigator) {
       try {
         if (screenLock.value) {
           screenLock.value.release()
-          console.log('Screen wake lock released')
         }
       } catch (error) {
         console.error('Unable to release screen wake lock:', error)
       }
     }
   }
-
-  // watch(isPlaying, async (value) => {
-  //   if (Platform.is.capacitor && await isSupported()) {
-  //     if (value) {
-  //       await KeepAwake.keepAwake()
-  //     } else {
-  //       await KeepAwake.allowSleep()
-  //     }
-  //   }
-  // })
 
   return {
     isSupported,

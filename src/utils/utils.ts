@@ -17,3 +17,7 @@ export function isFocusableElement(element?: Element | null): element is HTMLEle
   if (!element) return false
   return typeof (element as HTMLElement).blur === 'function'
 }
+
+export function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
