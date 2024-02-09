@@ -28,7 +28,7 @@ test_web_job:
 #    - $YARN run test:e2e:CI
   stage: build
   tags:
-    - development
+    - arm64
   image: ubuntu:jammy
 #  artifacts:
 #    paths:
