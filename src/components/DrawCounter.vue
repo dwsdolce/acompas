@@ -46,3 +46,4 @@ watch(metronomeEvent, (v: number | null) => {
 .accent
   color: firebrick
 </style>
+src/stores/settings

@@ -83,3 +83,4 @@ div
               :slug="instrument.value"
             )
 </template>
+src/stores/settings

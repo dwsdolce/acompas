@@ -82,3 +82,4 @@ div
     )
       q-icon(name="add")
 </template>
+src/stores/settings

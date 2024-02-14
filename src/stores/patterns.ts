@@ -4,16 +4,22 @@ import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import soundsData from 'src/assets/data/soundsData'
-import patternsData from 'src/assets/data/patternsData'
+// import patternsData from 'src/assets/data/patternsData'
 import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
+import { useContextStore } from 'src/stores/context'
+import { getDefaultPatterns } from 'src/utils/utils'
 import type {
   numOpts,
   instruOpts,
   VolumeOpts,
-  PatternState
+  PatternState,
+  PatternSetting
 } from 'src/utils/types'
+
+const defaultPatterns = await getDefaultPatterns()
+console.log('defaultPatterns', defaultPatterns)
 
 export const usePatternStore = defineStore('patterns', () => {
   const router = useRouter()
@@ -46,31 +52,22 @@ export const usePatternStore = defineStore('patterns', () => {
     trackStop
   } = useMatomo()
 
-
   const isPlaying = ref<boolean>(false)
-  const patterns = useStorage('patterns', ref<PatternState[]>([]))
-  const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
+  const patterns = useStorage('patterns', ref<PatternSetting[]>([]))
   const selectedPatternName = useStorage('selected-pattern-name', ref('alegria'))
 
-  const visualizationModes = ref([
-    { label: 'Dots', value: 'dots' },
-    { label: 'Counter', value: 'counter' },
-    { label: 'Clock', value: 'clock' }
-  ])
 
-  const selectedPattern = computed(() =>
-    patterns.value?.find((el: PatternState) => el.name === route.name) as PatternState
+
+  const selectedDefaultPattern = computed(() =>
+    defaultPatterns.find((el: PatternState) => el.name === route.name) as PatternState
   )
 
-  const visualizationMode = computed({
-    get: () => selectedVisualizationMode.value,
-    set: (value: string) => {
-      selectedVisualizationMode.value = value
-    }
-  })
+  const selectedPattern = computed(() =>
+    patterns.value?.find((el: PatternSetting) => el.name === route.name) as PatternSetting
+  )
 
   const tempo = computed({
-    get: () => selectedPattern.value?.tempo,
+    get: () => selectedPattern.value?.tempo ?? defaultPatterns.find(el => el.name === selectedPattern.value.name).defaultTempo,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectTempo(value)
@@ -98,7 +95,7 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const swing = computed({
-    get: () => selectedPattern.value?.swing,
+    get: () => selectedPattern.value?.swing ?? 0,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.swing = value
@@ -108,12 +105,12 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const prestartBeat = computed({
-    get: () => selectedPattern.value?.selectedPrestartBeat?.value ?? 0,
+    get: () => selectedPattern.value?.prestartBeat?.value ?? 0,
     set: (value: number) => {
       if (selectedPattern.value) {
-        selectedPattern.value.selectedPrestartBeat
-          = selectedPattern.value.prestartBeats.find(el => el?.value === value)
-          || (selectedPattern.value.prestartBeats[0] as numOpts)
+        selectedPattern.value.prestartBeat
+          = selectedDefaultPattern.value.prestartBeats.find(el => el?.value === value)
+          || (selectedDefaultPattern.value.prestartBeats[0] as numOpts)
         stop()
       }
     }
@@ -153,8 +150,17 @@ export const usePatternStore = defineStore('patterns', () => {
   const instrument = (slug: string): instruOpts | undefined =>
     instruments.value.find((el: instruOpts) => el.value === slug)
 
-  const buildPattern = (patternData: PatternState) => {
-    const tmp: PatternState = patternData
+  const buildPattern = (patternDefault: PatternState): PatternSetting => {
+    const tmp: PatternSetting = {} as PatternSetting
+
+    tmp.context = patternDefault.context || ''
+    tmp.tempo = patternDefault.defaultTempo
+    tmp.swing = patternDefault.name === 'tientos' ? 0.6 : 0
+    tmp.globalDecay = 0.5
+    tmp.improvisation = false
+    tmp.humanization = false
+    tmp.prestartBeat = patternDefault.prestartBeats[0]
+
     tmp.instruments = soundsData.map((audio) => {
       return {
         label: audio.label,
@@ -164,20 +170,17 @@ export const usePatternStore = defineStore('patterns', () => {
         volume: 0
       }
     })
-    tmp.tempo = patternData.defaultTempo
-    tmp.isTooFast = false
-    tmp.isTooSlow = false
-    tmp.swing = patternData.name === 'tientos' ? 0.6 : 0
-    tmp.improvisation = false
-    tmp.humanization = false
-    tmp.globalDecay = 0.5
+
     tmp.instruments[0].enabled = true
+    // tmp.isTooFast = false
+    // tmp.isTooSlow = false
+
     return tmp
   }
 
-  const buildPatterns = () => {
+  const buildPatterns = async () => {
     if (patterns.value.length == 0) {
-      patterns.value = patternsData.map((patternData) => buildPattern(patternData))
+      patterns.value = defaultPatterns.map((patternDefault) => buildPattern(patternDefault))
     }
   }
 
@@ -206,42 +209,37 @@ export const usePatternStore = defineStore('patterns', () => {
     isPlaying.value ? stop() : play()
   }
 
-  const selectVisualizationMode = (payload: string) => {
-    if (isPlaying.value) stop()
-    if (selectedPattern.value) selectedPattern.value.visualizationMode = payload
-  }
-
   const selectTempo = (payload: number) => {
     if (selectedPattern.value) {
       selectedPattern.value.tempo = payload
       changeTempo(selectedPattern.value.tempo)
       if (
-        selectedPattern.value.tempo < selectedPattern.value.minTempo ||
-        selectedPattern.value.tempo > selectedPattern.value.maxTempo
+        selectedPattern.value.tempo < selectedDefaultPattern.value.minTempo ||
+        selectedPattern.value.tempo > selectedDefaultPattern.value.maxTempo
       ) {
         Notify.create({
           message:
             'Tempo must be between ' +
-            selectedPattern.value.minTempo +
+            selectedDefaultPattern.value.minTempo +
             ' and ' +
-            selectedPattern.value.maxTempo +
+            selectedDefaultPattern.value.maxTempo +
             ' bpm !',
           color: 'warning',
           icon: 'warning',
         })
       }
 
-      if (selectedPattern.value.tempo > selectedPattern.value.fastTempo) {
+      if (selectedPattern.value.tempo > selectedDefaultPattern.value.fastTempo) {
         Notify.create({
-          message: selectedPattern.value.fastMessage,
+          message: selectedDefaultPattern.value.fastMessage,
           color: 'secondary',
           icon: 'warning',
         })
       }
 
-      if (selectedPattern.value.tempo < selectedPattern.value.slowTempo) {
+      if (selectedPattern.value.tempo < selectedDefaultPattern.value.slowTempo) {
         Notify.create({
-          message: selectedPattern.value.slowMessage,
+          message: selectedDefaultPattern.value.slowMessage,
           color: 'secondary',
           icon: 'warning',
         })
@@ -277,7 +275,7 @@ export const usePatternStore = defineStore('patterns', () => {
       buildPatterns()
     } else {
       const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternState
-      const newPattern = buildPattern(patternsData.find(el => el.name === payload) as PatternState)
+      const newPattern = buildPattern(defaultPatterns.find(el => el.name === payload) as PatternState)
       Object.assign(existingPattern, newPattern)
     }
     router.go(0)

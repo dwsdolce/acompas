@@ -71,3 +71,4 @@ span.q-ml-sm
         p(v-if="selectedPattern?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPattern?.wikipediaUrl)")]
         p(v-if="selectedPattern?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPattern?.videoExample)")]
 </template>
+src/stores/settings

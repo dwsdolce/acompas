@@ -67,3 +67,4 @@ const index = computed(
     switch-marker-labels-side
   ).q-mb-md
 </template>
+src/stores/settings

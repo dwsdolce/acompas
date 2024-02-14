@@ -118,3 +118,4 @@ div
           @update:model-value="onSelectedPattern($event)"
         )
 </template>
+src/stores/settings

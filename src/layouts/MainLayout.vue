@@ -4,6 +4,7 @@ import type { Ref } from 'vue'
 import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
+import SelectContext from 'src/components/SelectContext.vue'
 import { useSessionStore } from 'src/stores/session'
 import type { Size } from 'src/utils/types'
 
@@ -36,11 +37,24 @@ q-layout(view="hhh LpR lFf")
         aria-label="Menu"
       )
         q-icon(name="menu")
-      q-toolbar-title
-        router-link(to="/").flex.items-center
-          img(src="~assets/app-icon.png" alt="A Compás icon" width="40").q-mr-sm
-          img(src="~assets/app-name.png" alt="A Compás name title" width="90").q-mt-sm
-      //- q-space
+
+      q-btn(
+        flat,
+        to="/"
+      ).row.items-center.no-wrap.q-gutter-sm
+        q-avatar(size="40px").shadow-1
+          img(src="~assets/ACompas-4-logo.png" alt="A Compás icon", width="40")
+        img(src="~assets/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-sm.q-ml-md
+
+      q-space
+
+      SelectContext
+
+      //- q-toolbar-title
+      //-   router-link(to="/").flex.items-center
+      //-     img(src="~assets/ACompas-4-logo.png" alt="A Compás icon" width="40").q-mr-sm
+      //-     img(src="~assets/ACompas-4-name.png" alt="A Compás name title" width="90").q-mt-sm
+      q-space
       .text-weight-light v{{ appVersion }}
 
   q-drawer(

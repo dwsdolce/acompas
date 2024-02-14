@@ -18,6 +18,24 @@ export const useSessionStore = defineStore('session', () => {
   const dialogOpen = ref<boolean>(false)
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
+  const visualizationModes = ref([
+    { label: 'Dots', value: 'dots' },
+    { label: 'Counter', value: 'counter' },
+    { label: 'Clock', value: 'clock' }
+  ])
+  const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
+
+  const visualizationMode = computed({
+    get: () => selectedVisualizationMode.value,
+    set: (value: string) => {
+      selectedVisualizationMode.value = value
+    }
+  })
+
+  const selectVisualizationMode = (payload: string) => {
+    // if (isPlaying.value) stop()
+    selectedVisualizationMode.value = payload
+  }
 
   const toggleTrackVisits = (v: boolean) => {
     v ? enableTrackVisits() : disableTrackVisits()

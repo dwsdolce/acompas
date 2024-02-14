@@ -73,3 +73,4 @@ q-page.text-grey-1.flex
     align-items: center
     flex-grow: 1
 </style>
+src/stores/settings

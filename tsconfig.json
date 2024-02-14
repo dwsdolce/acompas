@@ -2,7 +2,10 @@
   "extends": "@quasar/app-vite/tsconfig-preset",
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es6", "dom", "es2017"],
-    "target": "es5"
-  }
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "strict": true,
+
+  },
+
 }

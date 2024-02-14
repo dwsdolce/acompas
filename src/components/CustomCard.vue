@@ -32,3 +32,4 @@ q-card(style="width: 700px; max-width: 90vw; max-height: 90vh;").text-black
   q-card-actions(v-if="$slots.actions", align="center")
     slot(name="actions")
 </template>
+src/stores/settings

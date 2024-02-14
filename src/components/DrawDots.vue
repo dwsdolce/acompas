@@ -168,3 +168,4 @@ onBeforeUpdate(() => {
 .dot
   background-color: $primary
 </style>
+src/stores/settings

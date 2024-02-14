@@ -84,3 +84,4 @@ tr
 tr > td
   padding: 0.5rem 0
 </style>
+src/stores/settings

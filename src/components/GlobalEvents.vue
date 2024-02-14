@@ -37,3 +37,4 @@ global-events(
 )
 
 </template>
+src/stores/settings

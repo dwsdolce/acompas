@@ -53,3 +53,4 @@ const decaySteps = {
     switch-marker-labels-side
   ).col-9.q-mb-md
 </template>
+src/stores/settings

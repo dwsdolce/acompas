@@ -39,3 +39,4 @@ const { selectedPattern, improvisation } = storeToRefs(patternStore)
       :offset="[10, 10]"
     ) This option is disabled for this pattern.
 </template>
+src/stores/settings

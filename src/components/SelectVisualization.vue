@@ -44,3 +44,4 @@ const {
     :options="visualizationModes"
   ).q-mb-lg
 </template>
+src/stores/settings
