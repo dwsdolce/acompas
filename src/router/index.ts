@@ -1,4 +1,6 @@
 import { route } from 'quasar/wrappers'
+import { storeToRefs } from 'pinia'
+import { usePatternStore } from 'src/stores/patterns'
 import {
   createMemoryHistory,
   createRouter,
@@ -16,7 +18,6 @@ import routes from 'src/router/routes'
  */
 
 export default route(function (/* { store, ssrContext } */) {
-
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : createWebHistory
@@ -30,6 +31,19 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
+
+  // Router.beforeEach((to, from, next) => {
+  //   const patternStore = usePatternStore()
+  //   console.debug(patternStore.data)
+  //     // if route.route.params.context is not in one or more of the data elements, redirect to the first context
+  //   if (!patternStore.data.some((el) => el.context === to.params.context)) {
+  //     next(`/${patternStore.data[0].context}/${patternStore.data[0].name}`)
+  //   }
+  //   // if route.route.params.pattern is not in one or more of the data elements, redirect to the first pattern in the context
+  //   if (!patternStore.data.some((el) => el.name === to.params.pattern)) {
+  //     next(`/${to.params.context}/${patternStore.data.find((el) => el.context === to.params.context)?.name}`)
+  //   }
+  // })
 
   return Router
 })

@@ -11,21 +11,17 @@ const increaseTempoBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
 const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const {
   selectedPattern,
+  selectedData,
   tempo
 } = storeToRefs(patternStore)
-
-const sessionStore = useSessionStore()
 
 const {
   visualizationSize
 } = storeToRefs(sessionStore)
-
-const {
-  selectTempo
-} = patternStore
 
 const decrement = () => {
   tempo.value = tempo.value - 1
@@ -54,8 +50,8 @@ div
       color="primary",
       track-color="grey-1",
       v-model="tempo",
-      :min="selectedPattern?.minTempo",
-      :max="selectedPattern?.maxTempo",
+      :min="selectedData?.minTempo",
+      :max="selectedData?.maxTempo",
       show-value,
       :size="$q.screen.lt.md ? '130px' : '142px'",
       :thickness="0.2"
@@ -82,4 +78,3 @@ div
     )
       q-icon(name="add")
 </template>
-src/stores/settings

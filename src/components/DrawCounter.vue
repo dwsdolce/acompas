@@ -9,6 +9,7 @@ const patternStore = usePatternStore()
 
 const {
   selectedPattern,
+  selectedData,
   metronomeEvent,
   beatLabels
 } = storeToRefs(patternStore)
@@ -20,7 +21,7 @@ watch(metronomeEvent, (v: number | null) => {
   if (v !== null && selectedPattern.value) {
     counter.value = beatLabels.value[(v as number)]
 
-    if (selectedPattern.value?.accents.includes(((v as number) / 2) as never)) {
+    if (selectedData.value?.accents.includes(((v as number) / 2) as never)) {
       className.value = 'accent'
     } else {
       className.value = ''
@@ -46,4 +47,3 @@ watch(metronomeEvent, (v: number | null) => {
 .accent
   color: firebrick
 </style>
-src/stores/settings

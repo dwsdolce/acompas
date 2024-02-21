@@ -47,7 +47,7 @@ export const useMetronome = () => {
    * @returns {void}
    */
   const loadSounds = async () => {
-    const path = 'audio/'
+    const path = '/audio/'
     const audio = new Audio()
 
     if (audio.canPlayType('audio/flac')) {
@@ -126,7 +126,7 @@ export const useMetronome = () => {
     }
 
     // Don't mess with accents
-    if (store.selectedPattern?.accents.includes((key / 2) as never)) {
+    if (store.selectedData?.accents.includes((key / 2) as never)) {
       sound?.start(time)
       return
     }
@@ -169,7 +169,7 @@ export const useMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (store.selectedPattern?.accents.includes((note / 2) as never)) {
+    if (store.selectedData?.accents.includes((note / 2) as never)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -193,12 +193,12 @@ export const useMetronome = () => {
     note: number
   ) => {
     if (
-      store.selectedPattern?.accents &&
-      store.selectedPattern?.selectedPrestartBeat?.value &&
-      store.selectedPattern?.selectedPrestartBeat?.value > 0 &&
+      store.selectedData?.accents &&
+      store.selectedData?.selectedPrestartBeat?.value &&
+      store.selectedData?.selectedPrestartBeat?.value > 0 &&
       note % 2 == 0
     ) {
-      if (store.selectedPattern?.accents.includes((note / 2) as never)) {
+      if (store.selectedData?.accents.includes((note / 2) as never)) {
         sounds.click[0].quarter.start(time)
       } else {
         sounds.click[1].quarter.start(time)
@@ -224,13 +224,13 @@ export const useMetronome = () => {
     note: number
   ) => {
     // Prepend prestart beats if required
-    if (store.selectedPattern?.selectedPrestartBeat && type == 'prestartBeat') {
+    if (store.selectedPattern?.prestartBeat && type == 'prestartBeat') {
       triggerPrestartBeatClick(time, note)
     } else {
       // Don't play non-prestart sequences if note is during prestart
       if (
-        store.selectedPattern?.selectedPrestartBeat?.value &&
-        note < store.selectedPattern?.selectedPrestartBeat?.value * 2 &&
+        store.selectedPattern?.prestartBeat?.value &&
+        note < store.selectedPattern?.prestartBeat?.value * 2 &&
         !isLoop
       ) {
         return
@@ -246,7 +246,7 @@ export const useMetronome = () => {
 
       // index is a pulsation number, value is the sound number
       if (instru?.enabled && store.selectedPattern && type) {
-        (store.selectedPattern.sequences[type as keyof InstruSeqs] as (number | null)[]).forEach(
+        (store.selectedData.sequences[type as keyof InstruSeqs] as (number | null)[]).forEach(
           (value: number | null, index: number) => {
             if (!value) return
             const sound: Players = sounds[type as keyof Sounds][value - 1] as Players
@@ -281,7 +281,7 @@ export const useMetronome = () => {
    * @returns {Tone.Sequence} - The built sequence.
    */
   const buildSequence = (
-    name: string,
+    name: string | undefined,
     eighthNotes: boolean,
     type: string,
     sequence: number[],
@@ -325,18 +325,18 @@ export const useMetronome = () => {
     const introSeq = []
     const loopSeq: number[] = []
 
-    if (store.selectedPattern?.nbBeatsInPattern) {
+    if (store.selectedData?.nbBeatsInPattern) {
       if (
-        store.selectedPattern?.selectedPrestartBeat
+        store.selectedData?.selectedPrestartBeat
       ) {
         // Add prestart beats to intro sequence
-        const prestartBeat = store.selectedPattern?.nbBeatsInPattern - store.selectedPattern?.selectedPrestartBeat.value * 2
-        for (let i = prestartBeat; i < store.selectedPattern?.nbBeatsInPattern; i++) {
+        const prestartBeat = store.selectedData?.nbBeatsInPattern - store.selectedPattern?.prestartBeat.value * 2
+        for (let i = prestartBeat; i < store.selectedData?.nbBeatsInPattern; i++) {
           introSeq.push(i)
         }
       }
       // Add pattern beats to loopable sequence
-      for (let i = 0; i < store.selectedPattern?.nbBeatsInPattern; i++) {
+      for (let i = 0; i < store.selectedData?.nbBeatsInPattern; i++) {
         loopSeq.push(i)
       }
     }
@@ -347,11 +347,11 @@ export const useMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        prestartBeat: buildSequence(store.selectedPattern?.name, false, ('prestartBeat' as keyof InstruSeqs), introSeq, false),
-        event: buildSequence(store.selectedPattern?.name, false, ('event' as keyof InstruSeqs), introSeq, false),
+        prestartBeat: buildSequence(store.selectedData?.name, false, ('prestartBeat' as keyof InstruSeqs) as string, introSeq, false),
+        event: buildSequence(store.selectedPattern?.name, false, ('event' as keyof InstruSeqs) as string, introSeq, false),
       },
       loop: instruKeys.reduce((acc: Seq, instru: string) => {
-        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, false, (instru as keyof InstruSeqs), loopSeq, true)
+        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, false, (instru as keyof InstruSeqs) as string, loopSeq, true)
         return acc
       }, {})
     }
@@ -359,7 +359,7 @@ export const useMetronome = () => {
     sequences.eighthNotes = {
       loop: instruKeys.reduce((acc: Seq, instru: string) => {
         if (instru === 'event') return acc
-        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, true, (instru as keyof InstruSeqs), loopSeq, true)
+        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, true, (instru as keyof InstruSeqs) as string, loopSeq, true)
         return acc
       }, {})
     }
@@ -372,11 +372,11 @@ export const useMetronome = () => {
   const reinitialize = () => {
     if (store.selectedPattern) {
       initSequences()
-      changeTempo(store.selectedPattern.tempo)
-      changeSwing(store.selectedPattern.swing)
+      changeTempo(store.tempo)
+      changeSwing(store.swing)
       forEachValue(sounds as Sounds, (sound, key) => {
-        changeVolume({ instrument: key, volume: store.selectedPattern.instruments?.find((i => i.value == key))?.volume ?? 0 })
-        changeDecay(store.selectedPattern.globalDecay)
+        changeVolume({ instrument: key, volume: store.instruments?.find((i => i.value == key))?.volume ?? 0 })
+        changeDecay(store.globalDecay)
       })
     }
   }
@@ -435,17 +435,18 @@ export const useMetronome = () => {
       if (sequences.quarterNotes.introduction?.event?.length !== 0) {
         sequences.quarterNotes.introduction?.event?.start(0).stop(offset)
         sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(offset)
-        forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence) => {
+
+        forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
           seq.start(loopStart)
         })
-        forEachValue(sequences.eighthNotes.loop as Seqs, (seq: Tone.Sequence) => {
+        forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
           seq.start(loopStart)
         })
       } else {
-        forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence) => {
+        forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
           seq.start(0)
         })
-        forEachValue(sequences.eighthNotes.loop as Seqs, (seq: Tone.Sequence) => {
+        forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
           seq.start(0)
         })
       }
@@ -497,7 +498,7 @@ export const useMetronome = () => {
     // Do nothing if sequences have not been initialized
     if (typeof sequences.quarterNotes === 'undefined') return
 
-    forEachValue(sequences.quarterNotes.loop as Seqs, (seq: Tone.Sequence, type: string) => {
+    forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence, type: string) => {
       if (type === 'event' || type === 'prestartBeat' || type === 'click') {
         seq.humanize = false
       } else {

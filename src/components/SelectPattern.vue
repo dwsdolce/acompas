@@ -8,9 +8,10 @@ import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
-import type { QBtn } from 'quasar'
+import { getDefaultPatterns } from 'src/utils/utils'
 
-import type { PatternState } from 'src/utils/types'
+import type { QBtn } from 'quasar'
+import type { PatternState, PatternSetting } from 'src/utils/types'
 
 
 interface PatternOtion {
@@ -26,8 +27,12 @@ const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
 const {
+  data,
   patterns,
-  selectedPattern
+  selectedContext,
+  selectedPattern,
+  selectedData,
+  patternsInSelectedContext
 } = storeToRefs(patternStore)
 
 const {
@@ -37,57 +42,42 @@ const {
 const patternsDialog = ref(false)
 const filter = ref('')
 
-const formatPattern = (pattern: PatternState) => {
-  return {
-    label: pattern.label,
-    value: pattern.name
-  }
-}
-
 const patternsOptions = computed(() => {
-  let selected = patterns.value
   if (filter.value !== '') {
-    console.log('filter.value', filter.value)
     const regex = new RegExp(filter.value, 'g')
-    selected = patterns.value.filter(pattern => {
-      return pattern.linkedPatterns?.some(linkedPattern => {
+    return patternsInSelectedContext.value.filter(pattern => {
+      const patternData = data.value.find(data => data.name === pattern.value)
+      return patternData?.linkedPatterns?.some(linkedPattern => {
         return regex.test(linkedPattern.value)
       })
     })
+  } else {
+    return patternsInSelectedContext.value
   }
-
-  return selected
-    .map(pattern => formatPattern(pattern))
 })
 
-const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+const selectedPatternOption = computed(() => {
+  return patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+})
 
-const stringMatchesRegex = (str: string, regex: RegExp) => {
-  const matches = regex.test(str)
-}
 
 const onSelectedPattern = (v: string) => {
   patternsDialog.value = false
-  router.push(`/${v}`)
+  router.push(`/${selectedContext.value.value}/${v}`)
 }
-
-watch(filter, () => {
-  console.log('filter', filter.value)
-})
-
 </script>
 
 <template lang="pug">
 div
   p Pattern
-    help-pattern(v-show="selectedPattern?.name !== 'simple-click'")
+    help-pattern(v-show="selectedData?.name !== 'simple-click'")
   q-btn(
     id="patternBtn",
     ref="patternBtn",
     outline,
     color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    :label="selectedPattern?.label",
+    :label="selectedData?.label",
     @click="patternsDialog = true"
   )
 
@@ -118,4 +108,3 @@ div
           @update:model-value="onSelectedPattern($event)"
         )
 </template>
-src/stores/settings

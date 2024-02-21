@@ -12,9 +12,11 @@ const sessionStore = useSessionStore()
 const {
   isPlaying,
   selectedPattern,
+  selectedData,
   metronomeEvent,
   prestartBeat,
-  beatLabels
+  beatLabels,
+  tempo
 } = storeToRefs(patternStore)
 
 const clockDeg = ref<number>(0)
@@ -22,11 +24,11 @@ const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
 const clockStep = computed(() => 360 / (beatLabels.value?.length / 2))
 const clockVelocity = computed(() =>
-    60000 / selectedPattern.value.tempo
+    60000 / tempo.value
   )
 const startingPoint = computed(() =>
   prestartBeat.value
-    ? (selectedPattern.value.nbBeatsInPattern - prestartBeat.value * 2) / 2
+    ? (selectedData.value.nbBeatsInPattern - prestartBeat.value * 2) / 2
     : 0
   )
 // const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
@@ -46,7 +48,7 @@ const getNumStyle = (i: number): CSSProperties => {
   if (beatLabels.value) {
     return {
       transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
-      color: selectedPattern.value.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
+      color: selectedData.value.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
     }
   } else {
     return {}
@@ -201,4 +203,3 @@ $axis : 2vh
         @media screen and (max-height: 600px)
           font-size: 1em
 </style>
-src/stores/settings

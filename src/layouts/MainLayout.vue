@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { Ref } from 'vue'
 import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import SelectContext from 'src/components/SelectContext.vue'
 import { useSessionStore } from 'src/stores/session'
+import type { Ref } from 'vue'
 import type { Size } from 'src/utils/types'
 
 const sessionStore = useSessionStore()

@@ -10,7 +10,7 @@ const sessionStore = useSessionStore()
 const {
   visualizationModes,
   visualizationMode
-} = storeToRefs(patternStore)
+} = storeToRefs(sessionStore)
 
 const {
   toggleDialog
@@ -44,4 +44,3 @@ const {
     :options="visualizationModes"
   ).q-mb-lg
 </template>
-src/stores/settings

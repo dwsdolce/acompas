@@ -39,4 +39,3 @@ const { selectedPattern, swing } = storeToRefs(patternStore)
     switch-marker-labels-side
   ).q-mb-md
 </template>
-src/stores/settings

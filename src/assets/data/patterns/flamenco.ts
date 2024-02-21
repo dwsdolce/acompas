@@ -782,7 +782,7 @@ export default [
     slowTempo: 60,
     fastTempo: 110,
     nbBeatsInPattern: 24,
-    accents: [2, 5, 7, 9, 11],
+    accents: [3, 6, 8, 10, 12],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]

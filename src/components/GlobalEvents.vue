@@ -10,11 +10,11 @@ const patternStore = usePatternStore()
 
 const {
   selectedPattern,
+  tempo
 } = storeToRefs(patternStore)
 
 const {
-  playStop,
-  selectTempo
+  playStop
 } = patternStore
 
 const handleSpace = (e: KeyboardEvent) => {
@@ -28,13 +28,11 @@ const handleSpace = (e: KeyboardEvent) => {
 <template lang="pug">
 global-events(
   @keyup.prevent.space.exact="handleSpace",
-  @keyup.prevent.up.exact="selectTempo(selectedPattern.tempo + 1)",
-  @keyup.prevent.down.exact="selectTempo(selectedPattern.tempo - 1)",
-  @keyup.prevent.shift.up.exact="selectTempo(selectedPattern.tempo + 2)",
-  @keyup.prevent.shift.down.exact="selectTempo(selectedPattern.tempo - 2)",
-  @keyup.prevent.alt.shift.up.exact="selectTempo(selectedPattern.tempo + 5)",
-  @keyup.prevent.alt.shift.down.exact="selectTempo(selectedPattern.tempo - 5)"
+  @keyup.prevent.up.exact="tempo.value = tempo.value + 1",
+  @keyup.prevent.down.exact="tempo.value = tempo.value - 1",
+  @keyup.prevent.shift.up.exact="tempo.value = tempo.value + 2",
+  @keyup.prevent.shift.down.exact="tempo.value = tempo.value - 2",
+  @keyup.prevent.alt.shift.up.exact="tempo.value = tempo.value + 5",
+  @keyup.prevent.alt.shift.down.exact="tempo.value = tempo.value - 5"
 )
-
 </template>
-src/stores/settings

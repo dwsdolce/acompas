@@ -102,7 +102,9 @@ export const useSessionStore = defineStore('session', () => {
     dialogOpen,
     leftDrawerOpen,
     visualizationSize,
-
+    visualizationModes,
+    selectedVisualizationMode,
+    visualizationMode,
     toggleTrackVisits,
     enableTrackVisits,
     disableTrackVisits,

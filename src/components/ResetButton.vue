@@ -83,4 +83,3 @@ const handleRestore = () => {
           @click="handleRestore"
         ) Proceed
 </template>
-src/stores/settings

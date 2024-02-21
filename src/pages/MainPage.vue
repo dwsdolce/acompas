@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar, Platform } from 'quasar'
+import { useRouter, useRoute } from 'vue-router'
 import SelectPattern from 'src/components/SelectPattern.vue'
 import RhythmOptions from 'src/components/RhythmOptions.vue'
 import SelectInstruments from 'src/components/SelectInstruments.vue'
@@ -12,12 +13,24 @@ import DrawCounter from 'src/components/DrawCounter.vue'
 import DrawClock from 'src/components/DrawClock.vue'
 import GlobalEvents from 'src/components/GlobalEvents.vue'
 import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
+const route = useRoute()
+const router = useRouter()
 const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
-const { selectedPattern, visualizationMode } = storeToRefs(patternStore)
+const { context, pattern } = route.params
+
+const { selectedPattern, data } = storeToRefs(patternStore)
+const { visualizationMode } = storeToRefs(sessionStore)
+const { setVisualizationSize } = sessionStore
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
+
+onMounted(() => {
+  console.debug('MainPage mounted')
+})
 </script>
 
 <template lang="pug">

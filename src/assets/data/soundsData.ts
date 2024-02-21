@@ -7,15 +7,15 @@ export default [
     longLabel: 'Palma clara',
     medias: [
       {
-        src: 'clara/clara_1',
+        src: 'acompas/clara/clara_1',
         volume: 5,
       },
       {
-        src: 'clara/clara_2',
+        src: 'acompas/clara/clara_2',
         volume: 5,
       },
       {
-        src: 'clara/clara_3',
+        src: 'acompas/clara/clara_3',
         volume: 5,
       }
     ]
@@ -26,15 +26,15 @@ export default [
     longLabel: 'Palma sorda',
     medias: [
       {
-        src: 'sorda/sorda_1',
+        src: 'acompas/sorda/sorda_1',
         volume: 0,
       },
       {
-        src: 'sorda/sorda_2',
+        src: 'acompas/sorda/sorda_2',
         volume: 0,
       },
       {
-        src: 'sorda/sorda_3',
+        src: 'acompas/sorda/sorda_3',
         volume: 0,
       }
     ]
@@ -44,15 +44,15 @@ export default [
     label: 'Pito',
     medias: [
       {
-        src: 'pito/pito_1',
+        src: 'acompas/pito/pito_1',
         volume: 0,
       },
       {
-        src: 'pito/pito_2',
+        src: 'acompas/pito/pito_2',
         volume: 0,
       },
       {
-        src: 'pito/pito_3',
+        src: 'acompas/pito/pito_3',
         volume: 0,
       }
     ]
@@ -62,11 +62,11 @@ export default [
     label: 'Nudillo',
     medias: [
       {
-        src: 'nudillo/nudillo_1',
+        src: 'acompas/nudillo/nudillo_1',
         volume: 0,
       },
       {
-        src: 'nudillo/nudillo_2',
+        src: 'acompas/nudillo/nudillo_2',
         volume: 5,
       }
     ]
@@ -76,15 +76,15 @@ export default [
     label: 'Cajon',
     medias: [
       {
-        src: 'cajon/cajon_1',
+        src: 'acompas/cajon/cajon_1',
         volume: -2,
       },
       {
-        src: 'cajon/cajon_2',
+        src: 'acompas/cajon/cajon_2',
         volume: -2,
       },
       {
-        src: 'cajon/cajon_2',
+        src: 'acompas/cajon/cajon_2',
         volume: -12,
       }
     ]
@@ -94,15 +94,15 @@ export default [
     label: 'Udu',
     medias: [
       {
-        src: 'udu/udu_1',
+        src: 'acompas/udu/udu_1',
         volume: -16,
       },
       {
-        src: 'udu/udu_2',
+        src: 'acompas/udu/udu_2',
         volume: -9,
       },
       {
-        src: 'udu/udu_3',
+        src: 'acompas/udu/udu_3',
         volume: -4,
       }
     ]
@@ -113,71 +113,71 @@ export default [
     noEighthNotes: true,
     medias: [
       {
-        src: 'jaleo/jaleo_1',
+        src: 'acompas/jaleo/jaleo_1',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_2',
+        src: 'acompas/jaleo/jaleo_2',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_3',
+        src: 'acompas/jaleo/jaleo_3',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_4',
+        src: 'acompas/jaleo/jaleo_4',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_5',
+        src: 'acompas/jaleo/jaleo_5',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_6',
+        src: 'acompas/jaleo/jaleo_6',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_7',
+        src: 'acompas/jaleo/jaleo_7',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_8',
+        src: 'acompas/jaleo/jaleo_8',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_9',
+        src: 'acompas/jaleo/jaleo_9',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_10',
+        src: 'acompas/jaleo/jaleo_10',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_11',
+        src: 'acompas/jaleo/jaleo_11',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_12',
+        src: 'acompas/jaleo/jaleo_12',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_13',
+        src: 'acompas/jaleo/jaleo_13',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_14',
+        src: 'acompas/jaleo/jaleo_14',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_15',
+        src: 'acompas/jaleo/jaleo_15',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_16',
+        src: 'acompas/jaleo/jaleo_16',
         volume: -6,
       },
       {
-        src: 'jaleo/jaleo_17',
+        src: 'acompas/jaleo/jaleo_17',
         volume: -6,
       }
     ]
@@ -188,11 +188,11 @@ export default [
     noEighthNotes: true,
     medias: [
       {
-        src: 'click/click_1',
+        src: 'acompas/click/click_1',
         volume: 15,
       },
       {
-        src: 'click/click_2',
+        src: 'acompas/click/click_2',
         volume: 15,
       }
     ]

@@ -11,14 +11,10 @@ import type { QBtn } from 'quasar'
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
-const { selectedPattern } = storeToRefs(patternStore)
+const { selectedData } = storeToRefs(patternStore)
 
 const {
   visualizationMode,
-  selectTempo
-} = patternStore
-
-const {
   toggleDialog
 } = sessionStore
 
@@ -64,11 +60,10 @@ span.q-ml-sm
     @hide="toggleDialog(false)"
   )
     custom-card
-      template(v-slot:title) {{ selectedPattern?.longLabel }}
+      template(v-slot:title) {{ selectedData?.longLabel }}
       template(v-slot:content)
-        div(v-html="selectedPattern?.doc")
-        p {{ selectedPattern?.places }}
-        p(v-if="selectedPattern?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPattern?.wikipediaUrl)")]
-        p(v-if="selectedPattern?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPattern?.videoExample)")]
+        div(v-html="selectedData?.doc")
+        p {{ selectedData?.places }}
+        p(v-if="selectedData?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedData?.wikipediaUrl)")]
+        p(v-if="selectedData?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedData?.videoExample)")]
 </template>
-src/stores/settings

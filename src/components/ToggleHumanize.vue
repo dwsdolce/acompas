@@ -32,4 +32,3 @@ const { selectedPattern, humanization } = storeToRefs(patternStore)
     keep-color
   )
 </template>
-src/stores/settings

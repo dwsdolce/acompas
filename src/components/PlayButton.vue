@@ -35,4 +35,3 @@ q-btn(
   &::before
     box-shadow: 0 0 5px 5px rgb(10 10 10 / 70%)
 </style>
-src/stores/settings

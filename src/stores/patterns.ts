@@ -1,29 +1,27 @@
 import { ref, reactive, computed, onMounted, onUpdated, watch } from 'vue'
-import { Notify, Platform } from 'quasar'
+import { Notify, Platform, colors, setCssVar } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import soundsData from 'src/assets/data/soundsData'
-// import patternsData from 'src/assets/data/patternsData'
 import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
-import { useContextStore } from 'src/stores/context'
-import { getDefaultPatterns } from 'src/utils/utils'
 import type {
   numOpts,
   instruOpts,
   VolumeOpts,
   PatternState,
-  PatternSetting
+  PatternSetting,
+  ContextOption
 } from 'src/utils/types'
 
-const defaultPatterns = await getDefaultPatterns()
-console.log('defaultPatterns', defaultPatterns)
 
 export const usePatternStore = defineStore('patterns', () => {
   const router = useRouter()
   const route = useRoute()
+
+  const { getPaletteColor } = colors
 
   const {
     metronomeEvent,
@@ -52,25 +50,68 @@ export const usePatternStore = defineStore('patterns', () => {
     trackStop
   } = useMatomo()
 
+  // **************
+  // State
+  // **************
+
   const isPlaying = ref<boolean>(false)
+  const data = ref<PatternState[]>([] as PatternState[])
   const patterns = useStorage('patterns', ref<PatternSetting[]>([]))
   const selectedPatternName = useStorage('selected-pattern-name', ref('alegria'))
+  const selectedContextName = useStorage('selected-context-name', ref('flamenco'))
+  const contexts = ref<ContextOption[]>([
+    { label: 'Flamenco', value: 'flamenco', colors: { primary: 'red-5', secondary: 'red-9' }},
+    { label: 'Afro-Cuban', value: 'afro-cuban', colors: { primary: 'amber-5', secondary: 'amber-9' }},
+    { label: 'Afro-Brazilian', value: 'afro-brazilian', colors: { primary: 'indigo-5', secondary: 'indigo-9' }},
+    { label: 'Fundamental Global', value: 'fundamental-global', colors: { primary: 'blue-5', secondary: 'blue-9' }},
+    { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'green-5', secondary: 'green-9' }}
+  ])
 
+  // **************
+  // Computed
+  // **************
 
+  const selectedContext = computed(() => {
+    const name = route.params.context ? route.params.context : selectedContextName.value
+    return contexts.value.find((el: ContextOption) => el.value === name) as ContextOption
+  })
 
-  const selectedDefaultPattern = computed(() =>
-    defaultPatterns.find((el: PatternState) => el.name === route.name) as PatternState
-  )
+  const selectedPattern = computed(() => {
+    const name = route.params.pattern ? route.params.pattern : selectedPatternName.value
+    return patterns.value?.find((el: PatternSetting) => el.name === name) as PatternSetting
+  })
 
-  const selectedPattern = computed(() =>
-    patterns.value?.find((el: PatternSetting) => el.name === route.name) as PatternSetting
-  )
+  const selectedData = computed(() => {
+    const name = route.params.pattern ? route.params.pattern : selectedPatternName.value
+    return data.value.find((el: PatternState) => el.name === name) as PatternState
+  })
+
+  const patternsInSelectedContext = computed(() => {
+    return data.value.filter((el: PatternState) => el.context === route.params.context).map((el: PatternState) => ({ label: el.label, value: el.name }))
+  })
 
   const tempo = computed({
-    get: () => selectedPattern.value?.tempo ?? defaultPatterns.find(el => el.name === selectedPattern.value.name).defaultTempo,
+    get: () => selectedPattern.value?.tempo ?? selectedData.value?.defaultTempo,
     set: (value: number) => {
       if (selectedPattern.value) {
-        selectTempo(value)
+        selectedPattern.value.tempo = value
+        changeTempo(value)
+
+        if (selectedData.value && value > selectedData.value.fastTempo) {
+          Notify.create({
+            message: selectedData.value.fastMessage,
+            color: 'secondary',
+            icon: 'warning',
+          })
+        }
+
+        if (selectedData.value && value < selectedData.value.slowTempo) {
+          Notify.create({
+            message: selectedData.value.slowMessage,
+            color: 'secondary',
+            icon: 'warning',
+          })
+        }
       }
     }
   })
@@ -109,8 +150,8 @@ export const usePatternStore = defineStore('patterns', () => {
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.prestartBeat
-          = selectedDefaultPattern.value.prestartBeats.find(el => el?.value === value)
-          || (selectedDefaultPattern.value.prestartBeats[0] as numOpts)
+          = selectedData.value?.prestartBeats.find(el => el?.value === value)
+          || (selectedData.value?.prestartBeats[0] as numOpts)
         stop()
       }
     }
@@ -144,22 +185,48 @@ export const usePatternStore = defineStore('patterns', () => {
   )
 
   const beatLabels = computed(() =>
-    selectedPattern.value?.sequences?.beatLabels
+    selectedData.value?.sequences?.beatLabels
   )
+
+  // **************
+  // Utility methods
+  // **************
+
+  const getAllData = async () => {
+    // const patternsModules = import.meta.glob('/src/assets/data/patterns/*.ts')
+    const patternsModules = import.meta.globEager('/src/assets/data/patterns/*.ts')
+
+    const patternsData = Object.entries(patternsModules).map(([path, patternsModule]) => {
+      const context = path.match(/\/src\/assets\/data\/patterns\/(.*)\.ts$/)![1] // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
+      const patterns = patternsModule.default.map((pattern: PatternState) => {
+        return {
+          ...pattern,
+          context
+        }
+      })
+
+      return patterns
+    })
+
+    // flatten the array
+    return patternsData.flat()
+  }
 
   const instrument = (slug: string): instruOpts | undefined =>
     instruments.value.find((el: instruOpts) => el.value === slug)
 
-  const buildPattern = (patternDefault: PatternState): PatternSetting => {
+  const buildPattern = async (): Promise<PatternSetting> => {
     const tmp: PatternSetting = {} as PatternSetting
 
-    tmp.context = patternDefault.context || ''
-    tmp.tempo = patternDefault.defaultTempo
-    tmp.swing = patternDefault.name === 'tientos' ? 0.6 : 0
+    tmp.name = selectedData.value.name
+    tmp.context = selectedData.value.context || ''
+    tmp.tempo = selectedData.value.defaultTempo
+    tmp.swing = selectedData.value.name === 'tientos' ? 0.6 : 0
     tmp.globalDecay = 0.5
     tmp.improvisation = false
     tmp.humanization = false
-    tmp.prestartBeat = patternDefault.prestartBeats[0]
+    tmp.prestartBeat = selectedData.value.prestartBeats[0]
 
     tmp.instruments = soundsData.map((audio) => {
       return {
@@ -172,21 +239,23 @@ export const usePatternStore = defineStore('patterns', () => {
     })
 
     tmp.instruments[0].enabled = true
-    // tmp.isTooFast = false
-    // tmp.isTooSlow = false
 
     return tmp
   }
 
-  const buildPatterns = async () => {
-    if (patterns.value.length == 0) {
-      patterns.value = defaultPatterns.map((patternDefault) => buildPattern(patternDefault))
-    }
-  }
+  // const buildPatterns = async () => {
+  //   if (patterns.value.length == 0) {
+  //     patterns.value = data.value.map((patternDefault) => buildPattern(patternDefault))
+  //   }
+  // }
 
-  const rebuildPattern = (patternData: PatternState) => {
-    patterns.value[patterns.value.findIndex((el) => el.name === patternData.name)] = buildPattern(patternData)
-  }
+  // const rebuildPattern = (patternData: PatternState) => {
+  //   patterns.value[patterns.value.findIndex((el) => el.name === patternData.name)] = buildPattern(patternData)
+  // }
+
+  // **************
+  // Actions
+  // **************
 
   const play = async () => {
     if (selectedPattern.value) {
@@ -207,44 +276,6 @@ export const usePatternStore = defineStore('patterns', () => {
 
   const playStop = () => {
     isPlaying.value ? stop() : play()
-  }
-
-  const selectTempo = (payload: number) => {
-    if (selectedPattern.value) {
-      selectedPattern.value.tempo = payload
-      changeTempo(selectedPattern.value.tempo)
-      if (
-        selectedPattern.value.tempo < selectedDefaultPattern.value.minTempo ||
-        selectedPattern.value.tempo > selectedDefaultPattern.value.maxTempo
-      ) {
-        Notify.create({
-          message:
-            'Tempo must be between ' +
-            selectedDefaultPattern.value.minTempo +
-            ' and ' +
-            selectedDefaultPattern.value.maxTempo +
-            ' bpm !',
-          color: 'warning',
-          icon: 'warning',
-        })
-      }
-
-      if (selectedPattern.value.tempo > selectedDefaultPattern.value.fastTempo) {
-        Notify.create({
-          message: selectedDefaultPattern.value.fastMessage,
-          color: 'secondary',
-          icon: 'warning',
-        })
-      }
-
-      if (selectedPattern.value.tempo < selectedDefaultPattern.value.slowTempo) {
-        Notify.create({
-          message: selectedDefaultPattern.value.slowMessage,
-          color: 'secondary',
-          icon: 'warning',
-        })
-      }
-    }
   }
 
   const selectInstruments = (key: string, payload: boolean) => {
@@ -272,22 +303,57 @@ export const usePatternStore = defineStore('patterns', () => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
       patterns.value = []
-      buildPatterns()
+      buildPattern()
     } else {
-      const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternState
-      const newPattern = buildPattern(defaultPatterns.find(el => el.name === payload) as PatternState)
+      const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternSetting
+      const newPattern = buildPattern()
       Object.assign(existingPattern, newPattern)
     }
     router.go(0)
   }
 
-  onMounted(() => {
-    buildPatterns()
+  // **************
+  // Lifecycle
+  // **************
+
+  const initStore = async () => {
+    data.value = await getAllData()
+
+    if (data.value.length === 0) {
+      Notify.create({
+        message: 'Error fetching data',
+        color: 'negative',
+        icon: 'warning'
+      })
+    }
+
+    if (!data.value.some((el) => el.context === route.params.context)) {
+      const selectedContext = selectedContextName.value || data.value[0].context;
+      const selectedPattern = data.value.find((el) => el.context === selectedContext)?.name;
+      return router.push(`/${selectedContext}/${selectedPattern}`);
+    }
+
+    if (!data.value.some((el) => el.name === route.params.pattern)) {
+      const selectedPattern = selectedPatternName.value || data.value.find((el) => el.context === route.params.context)?.name;
+      return router.push(`/${route.params.context}/${selectedPattern}`);
+    }
+
+    if (!selectedPattern.value) patterns.value.push(await buildPattern())
+
+    setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
+    setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
+  }
+
+  onMounted(async () => {
+    initStore()
     initMetronome()
     initSequences()
   })
 
-  onUpdated(() => {
+  onUpdated(async () => {
+    if (!selectedPattern.value) {
+      patterns.value.push(await buildPattern())
+    }
     stop()
   })
 
@@ -302,19 +368,26 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   watch(selectedPattern, (value) => {
-    if (value) {
-      selectedPatternName.value = value.name
-    }
+    if (value) selectedPatternName.value = value.name
+  })
+
+  watch(selectedContext, (newContext) => {
+    if (newContext) selectedContextName.value = newContext.value
+    setCssVar('primary', getPaletteColor(newContext.colors?.primary))
+    setCssVar('secondary', getPaletteColor(newContext.colors?.secondary))
   })
 
   return {
+    data,
     metronomeEvent,
     isPlaying,
     patterns,
-    visualizationModes,
-    visualizationMode,
+    contexts,
+    selectedContext,
     selectedPattern,
     selectedPatternName,
+    selectedData,
+    patternsInSelectedContext,
     beatLabels,
     tempo,
     improvisation,
@@ -327,16 +400,14 @@ export const usePatternStore = defineStore('patterns', () => {
     globalDecay,
     // numLabels,
     instrument,
-    buildPatterns,
-    rebuildPattern,
+    // buildPatterns,
+    // rebuildPattern,
     play,
     stop,
     playStop,
-    selectVisualizationMode,
     selectInstruments,
     selectVolume,
     toggleEighthNotes,
-    selectTempo,
     restoreDefault,
     getContext
   }

@@ -127,6 +127,7 @@ export interface PatternState {
 
 export interface PatternSetting {
   name:                     string
+  label:                    string
   context:                  string
   globalDecay:              number
   instruments:              instruOpts[]

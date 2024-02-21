@@ -10,7 +10,11 @@ const $q = useQuasar()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
-const { selectedPattern, prestartBeat } = storeToRefs(patternStore)
+const {
+  selectedPattern,
+  selectedData,
+  prestartBeat
+} = storeToRefs(patternStore)
 
 const {
   toggleDialog
@@ -19,20 +23,20 @@ const {
 const arrayOfIndexes = computed(
   () => {
   const array = []
-  if (selectedPattern.value?.prestartBeats.length) {
-    for (let index = 0; index < selectedPattern.value?.prestartBeats.length; index++) {
+  if (selectedData.value?.prestartBeats.length) {
+    for (let index = 0; index < selectedData.value?.prestartBeats.length; index++) {
       array.push(index)
     }
   }
   return array
 })
 
-const dataSelectedPrestartBeat = selectedPattern.value?.prestartBeats.find((el: numOpts) => el !== undefined && el.value === prestartBeat.value)
+const dataSelectedPrestartBeat = selectedData.value?.prestartBeats.find((el: numOpts) => el !== undefined && el.value === prestartBeat.value)
 
 const index = computed(
   (): number | null =>
-    prestartBeat.value && selectedPattern.value?.prestartBeats.length && dataSelectedPrestartBeat
-      ? selectedPattern.value?.prestartBeats.indexOf(dataSelectedPrestartBeat) as number
+    prestartBeat.value && selectedData.value?.prestartBeats.length && dataSelectedPrestartBeat
+      ? selectedData.value?.prestartBeats.indexOf(dataSelectedPrestartBeat) as number
       : null
 )
 </script>
@@ -67,4 +71,3 @@ const index = computed(
     switch-marker-labels-side
   ).q-mb-md
 </template>
-src/stores/settings
