@@ -112,17 +112,6 @@ export interface PatternState {
   wikipediaUrl?:            string
   places?:                  string
   videoExample?:            string
-  selectedPrestartBeat?:    numOpts
-  tempo?:                   number
-  isTooFast?:               boolean
-  isTooSlow?:               boolean
-  swing?:                   number
-  improvisation?:           boolean
-  humanization?:            boolean
-  // visualizationModes:    visuOpts[]
-  instruments?:             instruOpts[]
-  globalDecay?:             number
-  visualizationMode?:       string
 }
 
 export interface PatternSetting {

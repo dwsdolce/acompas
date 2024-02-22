@@ -194,8 +194,8 @@ export const useMetronome = () => {
   ) => {
     if (
       store.selectedData?.accents &&
-      store.selectedData?.selectedPrestartBeat?.value &&
-      store.selectedData?.selectedPrestartBeat?.value > 0 &&
+      store.prestartBeat &&
+      store.prestartBeat > 0 &&
       note % 2 == 0
     ) {
       if (store.selectedData?.accents.includes((note / 2) as never)) {
@@ -327,7 +327,7 @@ export const useMetronome = () => {
 
     if (store.selectedData?.nbBeatsInPattern) {
       if (
-        store.selectedData?.selectedPrestartBeat
+        store.prestartBeat
       ) {
         // Add prestart beats to intro sequence
         const prestartBeat = store.selectedData?.nbBeatsInPattern - store.selectedPattern?.prestartBeat.value * 2

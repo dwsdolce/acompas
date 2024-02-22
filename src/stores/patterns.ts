@@ -60,11 +60,11 @@ export const usePatternStore = defineStore('patterns', () => {
   const selectedPatternName = useStorage('selected-pattern-name', ref('alegria'))
   const selectedContextName = useStorage('selected-context-name', ref('flamenco'))
   const contexts = ref<ContextOption[]>([
-    { label: 'Flamenco', value: 'flamenco', colors: { primary: 'red-5', secondary: 'red-9' }},
-    { label: 'Afro-Cuban', value: 'afro-cuban', colors: { primary: 'amber-5', secondary: 'amber-9' }},
-    { label: 'Afro-Brazilian', value: 'afro-brazilian', colors: { primary: 'indigo-5', secondary: 'indigo-9' }},
-    { label: 'Fundamental Global', value: 'fundamental-global', colors: { primary: 'blue-5', secondary: 'blue-9' }},
-    { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'green-5', secondary: 'green-9' }}
+    { label: 'Flamenco', value: 'flamenco', colors: { primary: 'red-6', secondary: 'red-10' }},
+    { label: 'Afro-Cuban', value: 'afro-cuban', colors: { primary: 'orange-6', secondary: 'orange-10' }},
+    { label: 'Afro-Brazilian', value: 'afro-brazilian', colors: { primary: 'purple-6', secondary: 'purple-10' }},
+    { label: 'Fundamental Global', value: 'fundamental-global', colors: { primary: 'light-blue-6', secondary: 'light-blue-10' }},
+    { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'teal-6', secondary: 'teal-10' }}
   ])
 
   // **************
@@ -146,7 +146,7 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const prestartBeat = computed({
-    get: () => selectedPattern.value?.prestartBeat?.value ?? 0,
+    get: () => selectedPattern.value?.prestartBeat?.value,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.prestartBeat
