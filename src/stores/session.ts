@@ -1,6 +1,6 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import { Screen } from 'quasar'
+import { Screen, Dialog, is } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useMatomo } from 'src/composables/matomo'
 import type { Size, SessionState } from 'src/utils/types'
@@ -11,6 +11,7 @@ export const useSessionStore = defineStore('session', () => {
     deleteMatomo,
   } = useMatomo()
 
+  const isUpToDatev3 = useStorage('is-up-to-date-v3', ref<boolean>(false))
   const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
@@ -95,6 +96,7 @@ export const useSessionStore = defineStore('session', () => {
   }, { immediate: true })
 
   return {
+    isUpToDatev3,
     trackingEnabled,
     trackingInitialized,
     trackingChosen,

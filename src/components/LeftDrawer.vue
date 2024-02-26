@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { watch, ref, onMounted, onUpdated } from 'vue'
+  import { watch, ref, computed, onMounted, onUpdated } from 'vue'
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
   import { useRouter, useRoute } from 'vue-router'
@@ -7,6 +7,7 @@
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
   import CustomCard from 'src/components/CustomCard.vue'
+  import UpdateApp from 'src/components/UpdateApp.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
   import { isFocusableElement } from 'src/utils/utils'
@@ -27,7 +28,8 @@
   const {
     trackingChosen,
     trackingInitialized,
-    privacyDialogOpen
+    privacyDialogOpen,
+    isUpToDatev3
   } = storeToRefs(sessionStore)
 
   const {
@@ -40,6 +42,10 @@
   const {
     stop
   } = tuningForkStore
+
+  const updateDialog = computed(() => {
+    return !isUpToDatev3.value
+  })
 
   const launch = (url: string) => {
     // if (Platform.is.cordova) {
@@ -179,5 +185,14 @@ div
       template(v-slot:title) Shortcuts
       template(v-slot:content)
         keyboard-shortcuts
+
+  q-dialog(
+    id="updateDialog",
+    v-model="updateDialog"
+  )
+    custom-card(persistant="true")
+      template(v-slot:title) App successfuly updated
+      template(v-slot:content)
+        UpdateApp
 </template>
 

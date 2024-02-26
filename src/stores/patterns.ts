@@ -1,5 +1,5 @@
 import { ref, reactive, computed, onMounted, onUpdated, watch } from 'vue'
-import { Notify, Platform, colors, setCssVar } from 'quasar'
+import { Loading, Notify, Platform, colors, setCssVar } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
@@ -303,11 +303,14 @@ export const usePatternStore = defineStore('patterns', () => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
       patterns.value = []
-      buildPattern()
+      // buildPattern()
     } else {
-      const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternSetting
-      const newPattern = buildPattern()
-      Object.assign(existingPattern, newPattern)
+      const patternName = route.params.pattern ? route.params.pattern : selectedPatternName.value
+      const patternIndex = patterns.value.findIndex((el) => el.name === patternName)
+      patterns.value.splice(patternIndex, 1)
+      // const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternSetting
+      // const newPattern = buildPattern()
+      // Object.assign(existingPattern, newPattern)
     }
     router.go(0)
   }
@@ -345,9 +348,13 @@ export const usePatternStore = defineStore('patterns', () => {
   }
 
   onMounted(async () => {
-    initStore()
-    initMetronome()
-    initSequences()
+    Loading.show({
+      message: 'Loading…',
+    })
+    await initStore()
+    await initMetronome()
+    await initSequences()
+    Loading.hide()
   })
 
   onUpdated(async () => {

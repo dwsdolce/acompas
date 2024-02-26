@@ -386,19 +386,14 @@ export const useMetronome = () => {
    * @returns {boolean} - Whether the initialization was successful.
    */
   const initMetronome = async () => {
-    Loading.show({
-      message: 'Loading…',
-    })
     return await Tone.loaded()
       .then(() => {
         loadSounds()
         reinitialize()
-        Loading.hide()
         return true
       })
       .catch((error) => {
         console.error(error)
-        Loading.hide()
         Notify.create({
           message: 'Failed to load the audio samples !',
           color: 'secondary',

@@ -88,7 +88,7 @@ export interface DecayOpts {
 }
 
 export interface InstruSeqs {
-  [x: string]:            (number | null)[]
+  [x: string]:            (number | string | null)[]
 }
 export interface PatternState {
   id:                       number

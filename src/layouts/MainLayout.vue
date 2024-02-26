@@ -47,14 +47,9 @@ q-layout(view="hhh LpR lFf")
         img(src="~assets/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-sm.q-ml-md
 
       q-space
-
       SelectContext
-
-      //- q-toolbar-title
-      //-   router-link(to="/").flex.items-center
-      //-     img(src="~assets/ACompas-4-logo.png" alt="A Compás icon" width="40").q-mr-sm
-      //-     img(src="~assets/ACompas-4-name.png" alt="A Compás name title" width="90").q-mt-sm
       q-space
+
       .text-weight-light v{{ appVersion }}
 
   q-drawer(
@@ -78,9 +73,11 @@ q-layout(view="hhh LpR lFf")
 <style lang="sass">
 .q-electron-drag
   background: transparent
+
 #appMain
   // overflow: hidden
   background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
+
 .fade-enter-active,
 .fade-leave-active
   transition: opacity 0.5s ease
