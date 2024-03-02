@@ -132,6 +132,16 @@ div
             q-icon(name="ion-logo-twitter")
           q-item-section Twitter
 
+        q-item(clickable, v-ripple, @click="launch('https://mastodon.social/@acompas')")
+          q-item-section(avatar)
+            q-icon(name="ion-arrow-forward")
+          q-item-section Mastodon
+
+        q-item(clickable, v-ripple, @click="launch('https://bsky.app/profile/acompas.bsky.social')")
+          q-item-section(avatar)
+            q-icon(name="ion-arrow-forward")
+          q-item-section Bluesky
+
     q-expansion-item(icon="share", label="Share")
       q-list(no-border, link, inset-separator)
 
