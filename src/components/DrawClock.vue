@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
-import type { CSSProperties } from 'vue'
+import { getCssVar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
+import type { CSSProperties } from 'vue'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
@@ -33,7 +34,7 @@ const startingPoint = computed(() =>
   )
 // const rotationValue = computed(() => `rotate(${clockDeg.value}deg)`)
 
-const getLiStyle = (i: number): CSSProperties => {
+const getLiStyle = (i: number) => {
   if (selectedPattern.value && beatLabels.value) {
     return {
       position: 'absolute',
@@ -44,11 +45,11 @@ const getLiStyle = (i: number): CSSProperties => {
   }
 }
 
-const getNumStyle = (i: number): CSSProperties => {
+const getNumStyle = (i: number) => {
   if (beatLabels.value) {
     return {
       transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
-      color: selectedData.value.accents.includes(i / 2 as never) ? 'firebrick' : 'tomato'
+      color: selectedData.value.accents.includes(i / 2 as never) ? getCssVar('secondary') : getCssVar('primary')
     }
   } else {
     return {}
@@ -179,7 +180,7 @@ $axis : 2vh
     // transform: v-bind('rotationValue')
     transform-origin: center (calc($size / 3) + calc($axis / 4))
   ul
-    height: calc($size / 2).2
+    height: calc($size / 2.2)
     position: absolute
     list-style: none
     width: 0
@@ -187,19 +188,13 @@ $axis : 2vh
     bottom: 50%
     margin: 0
     li
-      // position absolute
-      // top 0
       left: 0
       height: 100%
       transform-origin: 0% 100%
       .num
         color: tomato
-        font-size: 1.5em
-        // position absolute
-        // top 0
-        // left 50%
-        // transform translateX(-50%)
+        font-size: calc($size / 10)
         font-weight: bold
-        @media screen and (max-height: 600px)
-          font-size: 1em
+        // @media screen and (max-height: 600px)
+        //   font-size: 0.8rem
 </style>

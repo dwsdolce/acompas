@@ -66,7 +66,7 @@ const index = computed(
     :step="1",
     snap,
     markers,
-    :marker-labels="val => selectedPattern.prestartBeats[val].label",
+    :marker-labels="val => selectedData.prestartBeats[val].label",
     marker-labels-class="text-grey-5",
     switch-marker-labels-side
   ).q-mb-md

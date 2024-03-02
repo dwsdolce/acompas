@@ -27,10 +27,6 @@ const { selectedPattern, data } = storeToRefs(patternStore)
 const { visualizationMode } = storeToRefs(sessionStore)
 const { setVisualizationSize } = sessionStore
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
-
-onMounted(() => {
-  console.debug('MainPage mounted')
-})
 </script>
 
 <template lang="pug">
@@ -46,11 +42,11 @@ q-page.text-grey-1.flex
         select-pattern.q-mb-sm
         rhythm-options.q-mb-sm
         select-instruments
-      .middle-panel(v-if="$q.screen.gt.xs").col-2
+      .middle-panel(v-if="$q.screen.md || $q.screen.gt.md").col-2
         play-button
       .right-panel.col-6.col-sm-5
         select-tempo
-    .sub-panel(v-if="$q.screen.lt.sm || $q.screen.xs")
+    .sub-panel(v-if="$q.screen.lt.md")
       play-button
 </template>
 

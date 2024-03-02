@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUpdated } from 'vue'
+import { ref, computed, watch, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { usePatternStore } from 'src/stores/patterns'
@@ -31,6 +31,10 @@ const increment = () => {
   tempo.value = tempo.value + 1
 }
 
+const handleTempoChange = (newTempo: number) => {
+  tempo.value = newTempo
+}
+
 onUpdated(() => {
   if (decreaseTempoBtn.value !== null) {
     decreaseTempoBtn.value.$el.querySelector('.q-focus-helper').blur()
@@ -49,13 +53,16 @@ div
       v-if="tempo",
       color="primary",
       track-color="grey-1",
-      v-model="tempo",
+      :model-value="tempo",
+      @update:model-value="handleTempoChange($event)",
       :min="selectedData?.minTempo",
       :max="selectedData?.maxTempo",
       show-value,
       :size="$q.screen.lt.md ? '130px' : '142px'",
       :thickness="0.2"
-    ).text-weight-light
+    )
+      .text-weight-light {{ tempo }}
+        .text-subtitle2 BPM
   .row.justify-between
     q-btn(
       id="decreaseTempoBtn",

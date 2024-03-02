@@ -91,7 +91,7 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const tempo = computed({
-    get: () => selectedPattern.value?.tempo ?? selectedData.value?.defaultTempo,
+    get: () => selectedPattern.value?.tempo || selectedData.value?.defaultTempo,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.tempo = value
@@ -343,6 +343,9 @@ export const usePatternStore = defineStore('patterns', () => {
 
     if (!selectedPattern.value) patterns.value.push(await buildPattern())
 
+    selectedContextName.value = route.params.context as string
+    selectedPatternName.value = route.params.pattern as string
+
     setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
     setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
   }
@@ -393,6 +396,7 @@ export const usePatternStore = defineStore('patterns', () => {
     selectedContext,
     selectedPattern,
     selectedPatternName,
+    selectedContextName,
     selectedData,
     patternsInSelectedContext,
     beatLabels,

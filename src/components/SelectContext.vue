@@ -19,10 +19,6 @@ const onSelectedContext = async (context: ContextOption) => {
   contextDialog.value = false
   router.push(`/${context.value}/${data.value.find(pattern => pattern.context === context.value)?.name}`)
 }
-
-onMounted(() => {
-  console.debug('SelectContext mounted')
-})
 </script>
 
 <template lang="pug">
