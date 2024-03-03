@@ -91,8 +91,9 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const tempo = computed({
-    get: () => selectedPattern.value?.tempo || selectedData.value?.defaultTempo,
+    get: () => selectedPattern.value?.tempo || selectedData.value?.defaultTempo || 120,
     set: (value: number) => {
+      if (!selectedData.value?.defaultTempo) value = selectedPattern.value?.tempo || 120
       if (selectedPattern.value) {
         selectedPattern.value.tempo = value
         changeTempo(value)
@@ -341,8 +342,11 @@ export const usePatternStore = defineStore('patterns', () => {
       return router.push(`/${route.params.context}/${selectedPattern}`);
     }
 
-    if (!selectedPattern.value) patterns.value.push(await buildPattern())
+    if (!selectedPattern.value) {
+      patterns.value.push(await buildPattern())
+    }
 
+    tempo.value = selectedPattern.value.tempo
     selectedContextName.value = route.params.context as string
     selectedPatternName.value = route.params.pattern as string
 

@@ -4,9 +4,6 @@ import { useStorage } from '@vueuse/core'
 const selectedPatternName = useStorage('selected-pattern-name', '')
 const selectedContextName = useStorage('selected-context-name', '')
 
-console.log('pattern in storage', selectedPatternName)
-console.log('context in storage', selectedContextName)
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
