@@ -68,10 +68,13 @@ convert() {
 unconvert() {
   echo "Starting files unconverting script"
 
+  dir=${directory:+$basedir/$directory}
+  dir=${dir:-$basedir}
+
   # Loop over all the extensions
   for ext in "${extensions[@]}"; do
     # Find all files with the current extension in the directory and its subdirectories and delete them
-    find "$basedir" -type f -name "*.$ext" -exec rm -f {} \;
+    find "$dir" -type f -name "*.$ext" -exec rm -f {} \;
   done
 }
 
