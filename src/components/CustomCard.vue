@@ -18,6 +18,7 @@ const props = defineProps({
 })
 
 const {
+  selectedContextName,
   selectedPatternName
 } = storeToRefs(patternStore)
 </script>
@@ -27,7 +28,7 @@ q-card(style="width: 700px; max-width: 90vw; max-height: 90vh;").text-black
   q-card-section
     div(v-if="!persistant")
       q-btn(v-if="popup", icon="close", flat, round, dense, v-close-popup).absolute.q-top-right.q-mr-sm
-      q-btn(v-else, icon="close", flat, round, dense, @click="router.push(`/${selectedPatternName}`)").absolute.q-top-right.q-mr-sm
+      q-btn(v-else, icon="close", flat, round, dense, @click="router.push(`/${selectedContextName}/${selectedPatternName}`)").absolute.q-top-right.q-mr-sm
     .text-h6.text-center
       slot(name="title")
   q-separator
