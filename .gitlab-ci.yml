@@ -4,6 +4,10 @@ stages:
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
   DEBIAN_FRONTEND: "noninteractive"
+  ANDROID_SDK_ROOT: "/android-sdk"
+  ANDROID_HOME: "/android-sdk"
+  ANDROID_SDK_HOME: "/root"
+  JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
 # Jobs
 
@@ -25,10 +29,19 @@ test_web_job:
     - ./icongenie.sh
     - $YARN install
     - quasar build
-#    - $YARN run test:e2e:CI
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre sdkmanager
+    - (cd src-capacitor && $YARN install && icongenie generate -m capacitor -i ./app-icon.png)
+    - mkdir $ANDROID_HOME
+    - sdkmanager --install tools
+    - sdkmanager --install platform-tools
+    - sdkmanager --install 'build-tools;30.0.3'
+    - sdkmanager --install 'platforms;android-33'
+    - echo yes | sdkmanager --licenses
+    - quasar build -m capacitor -T android
+
   stage: build
   tags:
-    - arm64
+    - amd64
   image: ubuntu:jammy
 #  artifacts:
 #    paths:
