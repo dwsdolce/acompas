@@ -34,7 +34,6 @@ export default route(function (/* { store, ssrContext } */) {
 
   // Router.beforeEach((to, from, next) => {
   //   const patternStore = usePatternStore()
-  //   console.debug(patternStore.data)
   //     // if route.route.params.context is not in one or more of the data elements, redirect to the first context
   //   if (!patternStore.data.some((el) => el.context === to.params.context)) {
   //     next(`/${patternStore.data[0].context}/${patternStore.data[0].name}`)

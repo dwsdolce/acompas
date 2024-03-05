@@ -50,7 +50,6 @@ div
   p Tempo
   .row.justify-center.items-end.content-end
     q-knob(
-      v-if="tempo",
       color="primary",
       track-color="grey-1",
       :model-value="tempo",

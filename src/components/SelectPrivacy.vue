@@ -3,9 +3,11 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import CustomCard from 'src/components/CustomCard.vue'
 import { useSessionStore } from 'src/stores/session'
+import { usePatternStore } from 'src/stores/patterns'
 
 const router = useRouter()
 const sessionStore = useSessionStore()
+const patternStore = usePatternStore()
 
 const {
   enableTrackVisits,
@@ -19,13 +21,18 @@ const {
   privacyDialogOpen
 } = storeToRefs(sessionStore)
 
+const {
+  selectedContextName,
+  selectedPatternName
+} = storeToRefs(patternStore)
+
 const handleEnableAndClose = () => {
   enableTrackVisits()
   enableTrackingChosen()
   if (privacyDialogOpen.value) {
     closePrivacyDialog()
   } else {
-    router.back()
+    router.push(`/${selectedContextName.value}/${selectedPatternName.value}`)
   }
 }
 
@@ -34,7 +41,7 @@ const handleClose = () => {
   if (privacyDialogOpen.value) {
     closePrivacyDialog()
   } else {
-    router.back()
+    router.push(`/${selectedContextName.value}/${selectedPatternName.value}`)
   }
 }
 </script>
