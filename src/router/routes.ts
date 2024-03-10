@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'home',
-        redirect: selectedContextName.value !== "" && selectedPatternName.value !== ""
+        redirect: selectedContextName.value !== '' && selectedPatternName.value !== ''
           ? `/${selectedContextName.value}/${selectedPatternName.value}` : '/flamenco/alegria'
       },
       {

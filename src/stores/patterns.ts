@@ -10,6 +10,7 @@ import { useKeepAwake } from 'src/composables/keep-awake'
 import type {
   numOpts,
   instruOpts,
+  InstruSeqs,
   VolumeOpts,
   PatternState,
   PatternSetting,
@@ -229,12 +230,13 @@ export const usePatternStore = defineStore('patterns', () => {
     tmp.humanization = false
     tmp.prestartBeat = selectedData.value.prestartBeats[0]
 
-    tmp.instruments = soundsData.map((audio) => {
+    tmp.instruments = Object.entries(selectedData.value.sequences).map(([key, value]) => {
+      const sound = soundsData.find((el) => el.name === key)
       return {
-        label: audio.label,
-        value: audio.name,
+        label: sound?.label || '',
+        value: key,
         enabled: false,
-        eighthNotes: audio.noEighthNotes ? null : false,
+        eighthNotes: sound?.noEighthNotes ? null : false,
         volume: 0
       }
     })
