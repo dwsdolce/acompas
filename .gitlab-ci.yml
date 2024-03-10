@@ -4,6 +4,10 @@ stages:
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
   DEBIAN_FRONTEND: "noninteractive"
+  ANDROID_SDK_ROOT: "/android-sdk"
+  ANDROID_HOME: "/android-sdk"
+  ANDROID_SDK_HOME: "/root"
+  JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
 # Jobs
 
@@ -22,14 +26,31 @@ test_web_job:
     - apt-get install -y -qq nodejs git make g++ gcc rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
     - npm install -g @quasar/cli
     - npm install -g --unsafe-perm @quasar/icongenie
+    # SPA
     - ./icongenie.sh
     - $YARN install
     - quasar build
-#    - $YARN run test:e2e:CI
+    - (cd dist && tar cvzf spa.tar.gz spa)
+    # Android app
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre sdkmanager
+    - (cd src-capacitor && $YARN install && icongenie generate -m capacitor -i ./app-icon.png)
+    - mkdir $ANDROID_HOME
+    - sdkmanager --install tools
+    - sdkmanager --install platform-tools
+    - sdkmanager --install 'build-tools;30.0.3'
+    - sdkmanager --install 'platforms;android-33'
+    - echo yes | sdkmanager --licenses
+    - quasar build -m capacitor -T android
+
   stage: build
   tags:
-    - arm64
+    - amd64
   image: ubuntu:jammy
+  artifacts:
+    paths:
+      - dist/capacitor/android/apk/release/app-release-unsigned.apk
+      - dist/spa.tar.gz
+    expire_in: 6 mos
 #  artifacts:
 #    paths:
 #      - test/cypress/screenshots
