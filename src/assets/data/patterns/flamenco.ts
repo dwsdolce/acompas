@@ -176,7 +176,7 @@ export default [
     label: 'Bulería (6)',
     name: 'buleria-6',
     linkedPatterns: [
-      { label: 'Cancion por buleria', value: 'cancion-por-buleria' },
+      { label: 'Canción por buleria', value: 'cancion-por-buleria' },
       { label: 'Bulería de Jeréz', value: 'buleria-de-jerez' },
       { label: 'Bulería de Cádiz', value: 'buleria-de-cadiz' },
       { label: 'Bulería de Lebrija', value: 'buleria-de-lebrija' },
@@ -686,7 +686,10 @@ export default [
       { label: 'Siguiriya', value: 'siguiriya' },
       { label: 'Serrana', value: 'serrana' },
       { label: 'Liviana', value: 'liviana' },
-      { label: 'Cabales', value: 'cabales' }
+      { label: 'Cabales', value: 'cabales' },
+      { label: 'Toná', value: 'tona' },
+      { label: 'Petenera', value: 'petenera' },
+      { label: 'Martinete', value: 'martinete' }
     ],
     minTempo: 15,
     maxTempo: 300,
