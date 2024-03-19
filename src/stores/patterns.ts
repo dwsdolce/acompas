@@ -219,7 +219,7 @@ export const usePatternStore = defineStore('patterns', () => {
     instruments.value.find((el: instruOpts) => el.value === slug)
 
   const buildPattern = async (): Promise<PatternSetting> => {
-    const tmp: PatternSetting = {} as PatternSetting
+    const tmp = {} as PatternSetting
 
     tmp.name = selectedData.value.name
     tmp.context = selectedData.value.context || ''
@@ -322,33 +322,9 @@ export const usePatternStore = defineStore('patterns', () => {
   // Lifecycle
   // **************
 
-  const initStore = async () => {
-    data.value = await getAllData()
+  const initPattern = async () => {
+    patterns.value.push(await buildPattern())
 
-    if (data.value.length === 0) {
-      Notify.create({
-        message: 'Error fetching data',
-        color: 'negative',
-        icon: 'warning'
-      })
-    }
-
-    if (!data.value.some((el) => el.context === route.params.context)) {
-      const selectedContext = selectedContextName.value || data.value[0].context;
-      const selectedPattern = data.value.find((el) => el.context === selectedContext)?.name;
-      return router.push(`/${selectedContext}/${selectedPattern}`);
-    }
-
-    if (!data.value.some((el) => el.name === route.params.pattern)) {
-      const selectedPattern = selectedPatternName.value || data.value.find((el) => el.context === route.params.context)?.name;
-      return router.push(`/${route.params.context}/${selectedPattern}`);
-    }
-
-    if (!selectedPattern.value) {
-      patterns.value.push(await buildPattern())
-    }
-
-    tempo.value = selectedPattern.value.tempo
     selectedContextName.value = route.params.context as string
     selectedPatternName.value = route.params.pattern as string
 
@@ -356,20 +332,42 @@ export const usePatternStore = defineStore('patterns', () => {
     setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
   }
 
+  const initStore = async () => {
+    data.value = await getAllData()
+
+    if (!data.value.length) {
+      Notify.create({
+        message: 'Error fetching data',
+        color: 'negative',
+        icon: 'warning'
+      })
+    }
+
+    if (!selectedContext.value) {
+      const selectedContext = selectedContextName.value || data.value[0].context
+      const selectedPattern = data.value.find((el) => el.context === selectedContext)?.name
+      return router.push(`/${selectedContext}/${selectedPattern}`)
+    }
+
+    if (!selectedPattern.value) {
+      const selectedPattern = selectedPatternName.value || data.value.find((el) => el.context === route.params.context)?.name
+      return router.push(`/${route.params.context}/${selectedPattern}`)
+    }
+  }
+
   onMounted(async () => {
     Loading.show({
       message: 'Loading…',
     })
     await initStore()
+    await initPattern()
     await initMetronome()
     await initSequences()
     Loading.hide()
   })
 
   onUpdated(async () => {
-    if (!selectedPattern.value) {
-      patterns.value.push(await buildPattern())
-    }
+    if (!selectedPattern.value) await initPattern()
     stop()
   })
 
