@@ -51,7 +51,7 @@ div
   .row.justify-center.items-end.content-end
     q-knob(
       color="primary",
-      track-color="grey-1",
+      track-color="grey-8",
       :model-value="tempo",
       @update:model-value="handleTempoChange($event)",
       :min="selectedData?.minTempo",

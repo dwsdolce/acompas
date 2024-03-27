@@ -48,13 +48,19 @@ const getLiStyle = (i: number) => {
 const getNumStyle = (i: number) => {
   if (beatLabels.value) {
     return {
-      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`,
-      color: selectedData.value.accents.includes(i / 2 as never) ? getCssVar('secondary') : getCssVar('primary')
+      transform: `translateX(-62%) translateY(-35%) rotate(-${(360 / beatLabels.value.length) * i}deg)`
     }
   } else {
     return {}
   }
 }
+
+const getNumClass = computed(() => (i: number) => {
+  return {
+    'text-secondary': selectedData.value.accents.includes(i / 2 as never),
+    'text-primary': !selectedData.value.accents.includes(i / 2 as never)
+  }
+})
 
 const idleClockPosition = () => {
   clockDeg.value = startingPoint.value * clockStep.value
@@ -146,7 +152,8 @@ onBeforeUpdate(() => {
     )
       .num(
         :ref="el => { nums[i] = el }",
-        :style="getNumStyle(i)"
+        :style="getNumStyle(i)",
+        :class="getNumClass(i)"
       ) {{ n }}
 </template>
 
@@ -192,7 +199,7 @@ $axis : 2vh
       height: 100%
       transform-origin: 0% 100%
       .num
-        color: tomato
+        color: $primary
         font-size: calc($size / 10)
         font-weight: bold
         // @media screen and (max-height: 600px)

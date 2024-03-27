@@ -16,6 +16,7 @@ const sessionStore = useSessionStore()
 const { innerWidth: width, innerHeight: height } = window
 const {
   selectedPattern,
+  selectedContext,
   selectedData,
   metronomeEvent,
   beatLabels
@@ -77,8 +78,7 @@ const dotStyle = computed(() => (n: number) => {
     width: dotSize.value / 2 + 'px',
     height: dotSize.value / 2 + 'px',
     borderRadius: borderRadius.value + '%',
-    marginTop: dotSize.value / 2 + 'px',
-    backgroundColor: selectedData.value?.accents.includes(n) ? getCssVar('secondary') : getCssVar('primary')
+    marginTop: dotSize.value / 2 + 'px'
   }
 })
 
@@ -112,13 +112,6 @@ const animateDot = (index: number) => {
 
 watch(metronomeEvent, (v) => {
   if (v !== null) animateDot(v)
-  // if (v !== null) {
-  //   if (selectedPattern.value?.name === 'simple-click') {
-  //     animateDot(0)
-  //   } else {
-  //     animateDot(v)
-  //   }
-  // }
 })
 
 // make sure to reset the refs before each update
@@ -135,10 +128,11 @@ onBeforeUpdate(() => {
     v-show="i !== beatLabels.length - 1",
     :key="i"
   )
-    .dot(
+    span(
       :style="dotStyle(n)",
+      color="primary",
       :ref="el => { dots[i] = el }",
-      :class="[`dot-${i} ${n === null ? 'invisible' : ''}`]"
+      :class="[`dot-${i}`, `${n === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(n) ? 'secondary' : 'primary'}`]"
     ).item-center.q-mb-md
     span(
       v-if="selectedPattern && selectedPattern.name !== 'simple-click'",
@@ -147,7 +141,3 @@ onBeforeUpdate(() => {
     ).text-center {{ n }}
 </template>
 
-<style lang="sass" scoped>
-.dot
-  background-color: $primary
-</style>
