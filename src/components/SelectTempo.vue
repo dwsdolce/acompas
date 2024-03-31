@@ -60,7 +60,7 @@ div
       :size="$q.screen.lt.md ? '130px' : '142px'",
       :thickness="0.2"
     )
-      .text-weight-light {{ tempo }}
+      .text-weight-regular {{ tempo }}
         .text-subtitle2 BPM
   .row.justify-between
     q-btn(
@@ -72,7 +72,7 @@ div
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="decrement"
     )
-      q-icon(name="remove")
+      q-icon(name="mdi-minus")
     q-btn(
       id="increaseTempoBtn",
       ref="increaseTempoBtn",
@@ -82,5 +82,5 @@ div
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="increment"
     )
-      q-icon(name="add")
+      q-icon(name="mdi-plus")
 </template>

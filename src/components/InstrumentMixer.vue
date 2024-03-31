@@ -58,7 +58,7 @@ tr
   td
     q-toggle(
       ref="toggleBtn"
-      icon="audiotrack",
+      icon="mdi-music-note-eighth",
       v-if="instru.eighthNotes !== null",
       v-model="instrumentEighthNotesEnabled",
       :disable="!instrumentEnabled",

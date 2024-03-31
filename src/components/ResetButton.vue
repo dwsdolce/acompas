@@ -48,8 +48,9 @@ const handleRestore = () => {
 .text-center.q-mx-md
   //- p.caption Reset
   q-btn(
-    outline,
-    icon="settings_backup_restore",
+    unelevated,
+    color="red-9",
+    icon="mdi-restore-alert",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Reset settings",
     @click="resetDialog = true"

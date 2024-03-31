@@ -50,7 +50,7 @@ span.q-ml-sm
     flat,
     size="10px",
     padding="none",
-    icon="help",
+    icon="mdi-help-circle",
     @click="patternHelpDialog = true"
   )
   q-dialog(
@@ -64,6 +64,6 @@ span.q-ml-sm
       template(v-slot:content)
         div(v-html="selectedData?.doc")
         p {{ selectedData?.places }}
-        p(v-if="selectedData?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedData?.wikipediaUrl)")]
-        p(v-if="selectedData?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedData?.videoExample)")]
+        p(v-if="selectedData?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="mdi-link-variant", @click="launch(selectedData?.wikipediaUrl)")]
+        p(v-if="selectedData?.videoExample") Example video : #[q-btn(round, icon="mdi-link-variant", @click="launch(selectedData?.videoExample)")]
 </template>

@@ -4,6 +4,7 @@ import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
 import SelectContext from 'src/components/SelectContext.vue'
+import SelectSettings from 'src/components/SelectSettings.vue'
 import { useSessionStore } from 'src/stores/session'
 import type { Ref } from 'vue'
 import type { Size } from 'src/utils/types'
@@ -36,7 +37,7 @@ q-layout(view="hhh LpR lFf")
         @click="leftDrawerOpen = !leftDrawerOpen",
         aria-label="Menu"
       )
-        q-icon(name="menu")
+        q-icon(name="mdi-menu")
 
       q-btn(
         flat,
@@ -50,7 +51,8 @@ q-layout(view="hhh LpR lFf")
       SelectContext
       q-space
 
-      .text-weight-light v{{ appVersion }}
+      SelectSettings
+      .text-weight-regular v{{ appVersion }}
 
   q-drawer(
     bordered,

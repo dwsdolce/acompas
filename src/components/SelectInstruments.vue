@@ -37,7 +37,7 @@ div
     id="mixerBtn",
     ref="mixerBtn",
     outline,
-    icon="tune",
+    icon="mdi-tune-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Mixer",
     @click="mixerDialog = true"

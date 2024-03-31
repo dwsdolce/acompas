@@ -16,7 +16,7 @@ const { selectedPattern, humanization } = storeToRefs(patternStore)
         flat,
         size="10px",
         padding="none",
-        icon="help"
+        icon="mdi-help-circle"
       )
         q-tooltip(
           anchor="top middle",

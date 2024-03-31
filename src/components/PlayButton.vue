@@ -25,7 +25,7 @@ q-btn(
   size="xl",
   :padding="$q.screen.lt.md ? 'md' : 'xl'",
   color="primary",
-  :icon="isPlaying ? 'stop' : 'play_arrow'",
+  :icon="isPlaying ? 'mdi-stop' : 'mdi-play'",
   @click="isPlaying ? stop() : play()"
 )
 </template>

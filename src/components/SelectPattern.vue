@@ -98,7 +98,7 @@ div
             :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
           ).col-11
             template(v-slot:append)
-              q-icon(name="close", @click="filter = ''").cursor-pointer
+              q-icon(name="mdi-close", @click="filter = ''").cursor-pointer
 
         q-option-group(
           type="radio",

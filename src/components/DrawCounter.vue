@@ -46,6 +46,6 @@ watch(metronomeEvent, (v: number | null) => {
     :class="getClass"
   ).text-center.q-ma-none
     div(v-if="metronomeEvent === null")
-      q-icon(name="more_horiz", size="85px")
+      q-icon(name="mdi-dots-horizontal", size="85px")
     div(v-else).counter {{ counter }}
 </template>

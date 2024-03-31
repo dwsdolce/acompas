@@ -18,7 +18,7 @@ span
     flat,
     size="15px",
     padding="none",
-    icon="help",
+    icon="mdi-help-box",
     @click="patternSearchHelpDialog = true"
   )
 

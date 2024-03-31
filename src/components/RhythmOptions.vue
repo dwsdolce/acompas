@@ -6,8 +6,7 @@ import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
 import SelectSwing from 'src/components/SelectSwing.vue'
 import SelectPrestartBeat from 'src/components/SelectPrestartBeat.vue'
-import SelectVisualization from 'src/components/SelectVisualization.vue'
-import ResetButton from 'src/components/ResetButton.vue'
+
 import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
@@ -35,7 +34,7 @@ div
     ref="optBtn",
     outline,
     color="white",
-    icon="settings",
+    icon="mdi-tune-vertical-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Rhythm options",
     @click="optDialog = true"
@@ -51,6 +50,5 @@ div
         toggle-humanize.q-mb-md
         select-swing.q-mb-md
         select-prestart-beat.q-mb-md
-        select-visualization.q-mb-md
-        reset-button.q-mb-md
+
 </template>

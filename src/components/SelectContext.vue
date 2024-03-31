@@ -53,5 +53,5 @@ div
               q-item-label {{ option.label }}
                 q-badge(rounded, :color="option.colors.primary").q-ml-md
             q-item-section(side)
-              q-icon(name="check").q-ml-sm(v-if="option.value === selectedContext.value")
+              q-icon(name="mdi-check").q-ml-sm(v-if="option.value === selectedContext.value")
 </template>
