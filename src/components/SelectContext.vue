@@ -29,6 +29,7 @@ div
     unelevated,
     color="grey-4",
     text-color="black",
+    icon="mdi-music",
     :label="selectedContext?.label || 'Select context'",
     :aria-label="selectedContext?.label || 'Select context'",
     @click="contextDialog = true"
