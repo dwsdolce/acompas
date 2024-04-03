@@ -52,7 +52,7 @@ q-page.q-pa-sm.flex.justify-center.items-center
             q-btn(
               flat,
               round,
-              :icon="isPlaying ? 'stop' : 'play_arrow'",
+              :icon="isPlaying ? 'mdi-stop' : 'mdi-play'",
               @click="isPlaying ? stop() : play()"
             )
 </template>
