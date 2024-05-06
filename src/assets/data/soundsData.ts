@@ -108,8 +108,8 @@ export default [
     ]
   },
   {
-    name: 'jaleo',
-    label: 'Jaleo',
+    name: 'jaleos',
+    label: 'Jaleos',
     noEighthNotes: true,
     medias: [
       {

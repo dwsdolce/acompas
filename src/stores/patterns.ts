@@ -16,6 +16,7 @@ import type {
   PatternSetting,
   ContextOption
 } from 'src/utils/types'
+import { context } from 'tone'
 
 
 export const usePatternStore = defineStore('patterns', () => {
@@ -51,9 +52,9 @@ export const usePatternStore = defineStore('patterns', () => {
     trackStop
   } = useMatomo()
 
-  // **************
+  // *****************************************
   // State
-  // **************
+  // *****************************************
 
   const isPlaying = ref<boolean>(false)
   const data = ref<PatternState[]>([] as PatternState[])
@@ -68,9 +69,9 @@ export const usePatternStore = defineStore('patterns', () => {
     { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'teal-6', secondary: 'teal-10' }}
   ])
 
-  // **************
+  // *****************************************
   // Computed
-  // **************
+  // *****************************************
 
   const selectedContext = computed(() => {
     const name = route.params.context ? route.params.context : selectedContextName.value
@@ -179,20 +180,20 @@ export const usePatternStore = defineStore('patterns', () => {
   })
 
   const selectedInstruments = computed(() =>
-    selectedPattern.value?.instruments?.filter((i: instruOpts) => i.enabled)
+    selectedPattern.value?.instruments?.filter((i: instruOpts) => i?.enabled ?? false)
   )
 
   const unselectedInstruments = computed(() =>
-    selectedPattern.value?.instruments?.filter((i: instruOpts) => !i.enabled)
+    selectedPattern.value?.instruments?.filter((i: instruOpts) => !i?.enabled ?? false)
   )
 
   const beatLabels = computed(() =>
     selectedData.value?.sequences?.beatLabels
   )
 
-  // **************
+  // *****************************************
   // Utility methods
-  // **************
+  // *****************************************
 
   const getAllData = async () => {
     // const patternsModules = import.meta.glob('/src/assets/data/patterns/*.ts')
@@ -211,7 +212,6 @@ export const usePatternStore = defineStore('patterns', () => {
       return patterns
     })
 
-    // flatten the array
     return patternsData.flat()
   }
 
@@ -219,29 +219,41 @@ export const usePatternStore = defineStore('patterns', () => {
     instruments.value.find((el: instruOpts) => el.value === slug)
 
   const buildPattern = async (): Promise<PatternSetting> => {
-    const tmp = {} as PatternSetting
-
-    tmp.name = selectedData.value.name
-    tmp.context = selectedData.value.context || ''
-    tmp.tempo = selectedData.value.defaultTempo
-    tmp.swing = selectedData.value.name === 'tientos' ? 0.6 : 0
-    tmp.globalDecay = 0.5
-    tmp.improvisation = false
-    tmp.humanization = false
-    tmp.prestartBeat = selectedData.value.prestartBeats[0]
-
-    tmp.instruments = Object.entries(selectedData.value.sequences).map(([key, value]) => {
-      const sound = soundsData.find((el) => el.name === key)
-      return {
-        label: sound?.label || '',
-        value: key,
-        enabled: false,
-        eighthNotes: sound?.noEighthNotes ? null : false,
-        volume: 0
-      }
-    })
+    const tmp = {
+      name: selectedData.value.name,
+      context: selectedData.value.context || '',
+      tempo: selectedData.value.defaultTempo,
+      swing: selectedData.value.name === 'tientos' ? 0.6 : 0,
+      globalDecay: 0.5,
+      improvisation: false,
+      humanization: false,
+      prestartBeat: selectedData.value.prestartBeats[0],
+      instruments: Object.entries(selectedData.value.sequences).reduce((acc, [key, value]) => {
+        const sound = soundsData.find((el) => el.name === key)
+        if (key !== 'beatLabels' && sound) {
+          acc.push({
+            label: sound?.label || '',
+            value: key,
+            enabled: false,
+            eighthNotes: sound?.noEighthNotes ? null : false,
+            volume: 0
+          })
+        }
+        return acc
+      }, [] as instruOpts[])
+    } as PatternSetting
 
     tmp.instruments[0].enabled = true
+
+    if (selectedContext.value.value === 'flamenco') {
+      tmp.instruments.push({
+        label: 'Jaleos',
+        value: 'jaleo',
+        enabled: false,
+        eighthNotes: null,
+        volume: 0
+      })
+    }
 
     return tmp
   }
@@ -256,9 +268,9 @@ export const usePatternStore = defineStore('patterns', () => {
   //   patterns.value[patterns.value.findIndex((el) => el.name === patternData.name)] = buildPattern(patternData)
   // }
 
-  // **************
+  // *****************************************
   // Actions
-  // **************
+  // *****************************************
 
   const play = async () => {
     if (selectedPattern.value) {
@@ -318,9 +330,9 @@ export const usePatternStore = defineStore('patterns', () => {
     router.go(0)
   }
 
-  // **************
-  // Lifecycle
-  // **************
+  // *****************************************
+  // Initialization
+  // *****************************************
 
   const initPattern = async () => {
     patterns.value.push(await buildPattern())
@@ -354,6 +366,10 @@ export const usePatternStore = defineStore('patterns', () => {
       return router.push(`/${route.params.context}/${selectedPattern}`)
     }
   }
+
+  // *****************************************
+  // Lifecycle
+  // *****************************************
 
   onMounted(async () => {
     Loading.show({
@@ -390,6 +406,10 @@ export const usePatternStore = defineStore('patterns', () => {
     setCssVar('primary', getPaletteColor(newContext.colors?.primary))
     setCssVar('secondary', getPaletteColor(newContext.colors?.secondary))
   })
+
+  // *****************************************
+  // Return
+  // *****************************************
 
   return {
     data,

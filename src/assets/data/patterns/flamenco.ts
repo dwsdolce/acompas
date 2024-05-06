@@ -24,7 +24,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [0, 3, 7, 8, 10],
+    accents: [12, 3, 7, 8, 10],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
         [ 1,    3,    3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    2,    1,    2,    1,    null, 3,    1,    1,    null, 3,    null ],
@@ -107,7 +107,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [0, 2, 4],
+    accents: [6, 2, 4],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -188,7 +188,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [0, 3],
+    accents: [6, 3],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -271,7 +271,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [0, 3, 6, 8, 10],
+    accents: [12, 3, 6, 8, 10],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -357,7 +357,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [0, 3, 7, 8, 10],
+    accents: [12, 3, 7, 8, 10],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -440,7 +440,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [0, 3, 6, 9, 10],
+    accents: [12, 3, 6, 9, 10],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]

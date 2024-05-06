@@ -396,7 +396,7 @@ export const useMetronome = () => {
         Notify.create({
           message: 'Failed to load the audio samples !',
           color: 'secondary',
-          icon: 'error',
+          icon: 'mdi-alert-circle-outline',
         })
         return false
       })

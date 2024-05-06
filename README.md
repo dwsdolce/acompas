@@ -131,11 +131,11 @@ Tip: Delete local storage in the browser after app update.
 
 ## Contributing to the project
 
-### Adding a new rhythm
+### Adding a new rhythm (pattern)
 
 If you're a musician and would like to contribute to the project, you can submit some new patterns. Ultimately, A Compas project is getting generalistic and will be able to play any kind of rhythm. You can also contribute to the code, by submitting a merge request.
 
-To submit a new rythm, you can create a new file in the `src/assets/patterns` folder. The file should be named `your-pattern-name.ts`.
+To submit a new rythm, you can create a new file in the `src/assets/patterns` folder. The file should be named `your-context-name.ts`.
 
 The file should contain an array of objects, each object representing a pattern.
 

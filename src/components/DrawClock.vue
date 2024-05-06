@@ -56,9 +56,10 @@ const getNumStyle = (i: number) => {
 }
 
 const getNumClass = computed(() => (i: number) => {
+  const isAccent = selectedData.value.accents.includes(i / 2 as never)
   return {
-    'text-secondary': selectedData.value.accents.includes(i / 2 as never),
-    'text-primary': !selectedData.value.accents.includes(i / 2 as never)
+    'text-secondary': isAccent,
+    'text-primary': !isAccent
   }
 })
 

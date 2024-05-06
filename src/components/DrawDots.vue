@@ -124,20 +124,20 @@ onBeforeUpdate(() => {
 <template lang="pug">
 .full-width.row.inline.no-wrap.justify-around.q-px-md
   .column.items-center(
-    v-for="(n, i) in beatLabels",
+    v-for="(beat, i) in beatLabels",
     v-show="i !== beatLabels.length - 1",
     :key="i"
   )
     span(
-      :style="dotStyle(n)",
+      :style="dotStyle(beat)",
       color="primary",
       :ref="el => { dots[i] = el }",
-      :class="[`dot-${i}`, `${n === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(n) ? 'secondary' : 'primary'}`]"
+      :class="[`dot-${i}`, `${beat === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(beat) ? 'secondary' : 'primary'}`]"
     ).item-center.q-mb-md
     span(
       v-if="selectedPattern && selectedPattern.name !== 'simple-click'",
       :style="nbStyle",
       :ref="el => { nbs[i] = el }"
-    ).text-center {{ n }}
+    ).text-center {{ beat }}
 </template>
 
