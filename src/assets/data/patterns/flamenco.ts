@@ -15,7 +15,7 @@ export default [
       { label: 'Polo', value: 'polo' },
       { label: 'Bambera', value: 'bambera' },
       { label: 'Guajira', value: 'guajira' },
-      { label: 'Cantiñas', value: 'cantiñas' },
+      { label: 'Cantiñas', value: 'cantinas' },
       { label: 'Romera', value: 'romera' }
     ],
     minTempo: 30,
