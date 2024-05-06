@@ -24,7 +24,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [12, 3, 7, 8, 10],
+    accents: [0, 6, 14, 16, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
         [ 1,    3,    3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    2,    1,    2,    1,    null, 3,    1,    1,    null, 3,    null ],
@@ -107,7 +107,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [6, 2, 4],
+    accents: [0, 4, 8],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -188,7 +188,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 12,
-    accents: [6, 3],
+    accents: [0, 6],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -271,7 +271,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [12, 3, 6, 8, 10],
+    accents: [0, 6, 12, 16, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -357,7 +357,7 @@ export default [
     slowTempo: 135,
     fastTempo: 230,
     nbBeatsInPattern: 24,
-    accents: [12, 3, 7, 8, 10],
+    accents: [0, 6, 14, 16, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -440,7 +440,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [12, 3, 6, 9, 10],
+    accents: [0, 6, 12, 18, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -525,7 +525,7 @@ export default [
     slowTempo: 140,
     fastTempo: 220,
     nbBeatsInPattern: 16,
-    accents: [0, 4],
+    accents: [0, 8],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -611,7 +611,7 @@ export default [
     slowTempo: 110,
     fastTempo: 170,
     nbBeatsInPattern: 12,
-    accents: [0, 3, 4],
+    accents: [0, 6, 8],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -697,7 +697,7 @@ export default [
     slowTempo: 70,
     fastTempo: 170,
     nbBeatsInPattern: 24,
-    accents: [4, 10],
+    accents: [0, 4, 8, 14, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -785,7 +785,7 @@ export default [
     slowTempo: 60,
     fastTempo: 110,
     nbBeatsInPattern: 24,
-    accents: [3, 6, 8, 10, 12],
+    accents: [4, 10, 14, 18, 22],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -861,7 +861,7 @@ export default [
     slowTempo: 90,
     fastTempo: 200,
     nbBeatsInPattern: 12,
-    accents: [0, 3],
+    accents: [0, 6],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //  0     1     2     3     4     5     6     7     8     9     10    11
@@ -942,7 +942,7 @@ export default [
     slowTempo: 90,
     fastTempo: 150,
     nbBeatsInPattern: 16,
-    accents: [0, 4],
+    accents: [0, 8],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -1027,7 +1027,7 @@ export default [
     slowTempo: 40,
     fastTempo: 90,
     nbBeatsInPattern: 16,
-    accents: [0, 4],
+    accents: [0, 8],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]

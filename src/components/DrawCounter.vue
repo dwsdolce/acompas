@@ -20,16 +20,11 @@ const counter = ref<string | number | null>(null)
 const className = ref<string>('')
 
 const getClass = computed(() => {
-  const isAccent = selectedData.value?.accents.includes(((metronomeEvent.value as number) / 2) as never)
+  const isAccent = selectedData.value?.accents.includes((metronomeEvent.value as number) as never)
   return {
     'text-primary': !isAccent,
     'text-secondary': isAccent
   }
-  // if (!counter.value || !selectedData.value?.accents.includes(((metronomeEvent.value as number) / 2) as never)) {
-  //   return { color: getCssVar('primary') }
-  // } else {
-  //   return { color: getCssVar('secondary') }
-  // }
 })
 
 watch(metronomeEvent, (v: number | null) => {

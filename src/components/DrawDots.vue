@@ -132,7 +132,7 @@ onBeforeUpdate(() => {
       :style="dotStyle(beat)",
       color="primary",
       :ref="el => { dots[i] = el }",
-      :class="[`dot-${i}`, `${beat === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(beat) ? 'secondary' : 'primary'}`]"
+      :class="[`dot-${i}`, `${beat === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(i) ? 'secondary' : 'primary'}`]"
     ).item-center.q-mb-md
     span(
       v-if="selectedPattern && selectedPattern.name !== 'simple-click'",

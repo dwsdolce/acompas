@@ -154,7 +154,7 @@ export interface PatternState {
   slowTempo:                number // Slow tempo. If the tempo is below this value, a message will be displayed to the user.
   fastTempo:                number // Fast tempo. If the tempo is above this value, a message will be displayed to the user.
   nbBeatsInPattern:         number // Number of beats in the pattern. It is the number of eighth notes in the pattern. For example, a 4/4 pattern has 8 beats.
-  accents:                  number[] // Array of accents. Each number is the index of the beat in the pattern. For example, [0, 4] means that the first and fifth beats are accented.
+  accents:                  number[] // Array of the accentuated eighth notes. Max elements and max value for each element are equal to nbBeatsInPattern. The accents are displayed in a different color.
   sequences:                InstruSeqs
   prestartBeats:            numOpts[] // Array of possible prestart beats.
   slowMessage?:             string // Message displayed to the user when the tempo is too slow.

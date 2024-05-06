@@ -126,7 +126,7 @@ export const useMetronome = () => {
     }
 
     // Don't mess with accents
-    if (store.selectedData?.accents.includes((key / 2) as never)) {
+    if (store.selectedData?.accents.includes((key) as never)) {
       sound?.start(time)
       return
     }
@@ -169,7 +169,7 @@ export const useMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (store.selectedData?.accents.includes((note / 2) as never)) {
+    if (store.selectedData?.accents.includes((note) as never)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -198,7 +198,7 @@ export const useMetronome = () => {
       store.prestartBeat > 0 &&
       note % 2 == 0
     ) {
-      if (store.selectedData?.accents.includes((note / 2) as never)) {
+      if (store.selectedData?.accents.includes((note) as never)) {
         sounds.click[0].quarter.start(time)
       } else {
         sounds.click[1].quarter.start(time)
