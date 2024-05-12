@@ -104,7 +104,7 @@ export const usePatternStore = defineStore('patterns', () => {
           Notify.create({
             message: selectedData.value.fastMessage,
             color: 'secondary',
-            icon: 'warning',
+            icon: 'mdi-alert-circle-outline'
           })
         }
 
@@ -112,7 +112,7 @@ export const usePatternStore = defineStore('patterns', () => {
           Notify.create({
             message: selectedData.value.slowMessage,
             color: 'secondary',
-            icon: 'warning',
+            icon: 'mdi-alert-circle-outline'
           })
         }
       }
@@ -351,7 +351,7 @@ export const usePatternStore = defineStore('patterns', () => {
       Notify.create({
         message: 'Error fetching data',
         color: 'negative',
-        icon: 'warning'
+        icon: 'mdi-alert-circle-outline'
       })
     }
 
@@ -392,7 +392,7 @@ export const usePatternStore = defineStore('patterns', () => {
       Notify.create({
         message: 'At least one instrument must be selected !',
         color: 'secondary',
-        icon: 'warning'
+        icon: 'mdi-alert-circle-outline'
       })
     }
   })
