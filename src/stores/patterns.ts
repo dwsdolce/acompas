@@ -215,8 +215,9 @@ export const usePatternStore = defineStore('patterns', () => {
     return patternsData.flat()
   }
 
-  const instrument = (slug: string): instruOpts | undefined =>
-    instruments.value.find((el: instruOpts) => el.value === slug)
+  const instrument = (type: string): instruOpts | undefined => {
+    return instruments.value.find((el: instruOpts) => el.value === type)
+  }
 
   const buildPattern = async (): Promise<PatternSetting> => {
     const tmp = {
@@ -248,7 +249,7 @@ export const usePatternStore = defineStore('patterns', () => {
     if (selectedContext.value.value === 'flamenco') {
       tmp.instruments.push({
         label: 'Jaleos',
-        value: 'jaleo',
+        value: 'jaleos',
         enabled: false,
         eighthNotes: null,
         volume: 0

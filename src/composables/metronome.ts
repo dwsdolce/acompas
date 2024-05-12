@@ -95,6 +95,8 @@ export const useMetronome = () => {
       }
       sounds[name as keyof Sounds] = s()
     })
+
+    console.debug('Sounds loaded', sounds)
   }
 
   const triggerEvent = (payload: number | null) => {
@@ -164,6 +166,7 @@ export const useMetronome = () => {
     time: number,
     eighthNotes: boolean
   ) => {
+    console.debug('Improvising jaleo', note, time, eighthNotes)
     if (!eighthNotes && note % 2 !== 0) {
       return
     }
@@ -176,9 +179,10 @@ export const useMetronome = () => {
     const playProbability = Math.random()
     if (playProbability > playThreshold) {
       // Pick a random index in the available jaleo sounds
-      const jaleoSoundsCount = Object.keys(sounds.jaleo).length
+      const jaleoSoundsCount = Object.keys(sounds.jaleos).length
       const randomIndex = Math.round(Math.random() * (jaleoSoundsCount - 1))
-      sounds.jaleo[randomIndex][eighthNotes ? 'eighth' : 'quarter'].start(time)
+      console.debug('Improvise jaleo', randomIndex)
+      sounds.jaleos[randomIndex][eighthNotes ? 'eighth' : 'quarter'].start(time)
     }
   }
 
@@ -236,13 +240,14 @@ export const useMetronome = () => {
         return
       }
 
-      if (type == 'jaleo') {
-        const jaleo = store.instrument('jaleo')
-        if (jaleo?.enabled) improviseJaleo(note, time, eighthNotes)
+      const instru = store.instrument((type as string))
+      console.debug(instru)
+
+      if (type == 'jaleos') {
+        console.debug(type)
+        if (instru?.enabled) improviseJaleo(note, time, eighthNotes)
         return
       }
-
-      const instru = store.instrument((type as string))
 
       // index is a pulsation number, value is the sound number
       if (instru?.enabled && store.selectedPattern && type) {
