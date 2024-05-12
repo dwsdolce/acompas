@@ -46,7 +46,7 @@ export const useMetronome = () => {
    * Loads all sounds.
    * @returns {void}
    */
-  const loadSounds = async () => {
+  const loadSounds = async (): Promise<void> => {
     const path = '/audio/'
     const audio = new Audio()
 
@@ -320,7 +320,7 @@ export const useMetronome = () => {
    * Initializes all sequences for a given pattern.
    * @returns {void}
    */
-  const initSequences = () => {
+  const initSequences = async (): Promise<void> => {
     const introSeq = []
     const loopSeq: number[] = []
 
@@ -364,18 +364,18 @@ export const useMetronome = () => {
     }
   }
 
-  const getContext = () => Tone.context
-
+  const getContext = () => Tone.getContext()
+  const getTransport = () => Tone.getTransport()
   const isSupported = Tone.supported
 
-  const reinitialize = () => {
+  const reinitialize = async (): Promise<void> => {
     if (store.selectedPattern) {
-      initSequences()
-      changeTempo(store.tempo)
-      changeSwing(store.swing)
-      forEachValue(sounds as Sounds, (sound, key) => {
-        changeVolume({ instrument: key, volume: store.instruments?.find((i => i.value == key))?.volume ?? 0 })
-        changeDecay(store.globalDecay)
+      await initSequences()
+      await changeTempo(store.tempo)
+      await changeSwing(store.swing)
+      forEachValue(sounds as Sounds, async (sound, key) => {
+        await changeVolume({ instrument: key, volume: store.instruments?.find((i => i.value == key))?.volume ?? 0 })
+        await changeDecay(store.globalDecay)
       })
     }
   }
@@ -386,9 +386,9 @@ export const useMetronome = () => {
    */
   const initMetronome = async () => {
     return await Tone.loaded()
-      .then(() => {
-        loadSounds()
-        reinitialize()
+      .then(async () => {
+        await loadSounds()
+        await reinitialize()
         return true
       })
       .catch((error) => {
@@ -411,18 +411,18 @@ export const useMetronome = () => {
    * Starts all sequences.
    * @returns {void}
    */
-  const startSequences = async () => {
+  const startSequences = async (): Promise<void> => {
     Loading.show({
       delay: 0,
       message: 'Loading…',
     })
     await Tone.start()
-    reinitialize()
+    await reinitialize()
 
     const offset = sequences.quarterNotes.introduction?.event?.length || 0
     const loopStart = `0:${offset / 2}`
 
-    await Tone.Transport.start()
+    getTransport().start()
     Loading.hide()
 
     if (sequences.quarterNotes && sequences.eighthNotes) {
@@ -460,7 +460,8 @@ export const useMetronome = () => {
         })
       })
     })
-    Tone.Transport.stop()
+
+    getTransport().stop()
     triggerEvent(null)
     // reinitialize()
   }
@@ -470,8 +471,8 @@ export const useMetronome = () => {
    * @param {number} tempo - The new tempo.
    * @returns {void}
    */
-  const changeTempo = (tempo: number) => {
-    Tone.Transport.bpm.value = tempo
+  const changeTempo = async (tempo: number): Promise<void> => {
+    getTransport().bpm.value = tempo
   }
 
   /**
@@ -479,8 +480,8 @@ export const useMetronome = () => {
    * @param {number} swing - The new swing.
    * @returns {void}
    */
-  const changeSwing = (swing: number) => {
-    Tone.Transport.swing = swing
+  const changeSwing = async (swing: number): Promise<void> => {
+    getTransport().swing = swing
   }
 
   /**
@@ -488,7 +489,7 @@ export const useMetronome = () => {
    * @param {boolean} humanization - The new humanization.
    * @returns {void}
    */
-  const humanize = (humanization: boolean) => {
+  const humanize = async (humanization: boolean): Promise<void> => {
     // Do nothing if sequences have not been initialized
     if (typeof sequences.quarterNotes === 'undefined') return
 
@@ -511,7 +512,7 @@ export const useMetronome = () => {
    * @param {VolumeOpts} payload - The new volume.
    * @returns {void}
    */
-  const changeVolume = async (payload: VolumeOpts) => {
+  const changeVolume = async (payload: VolumeOpts): Promise<void> => {
     // increase volume of every player from the sounds instrument by the payload volume
     const sound = sounds[payload.instrument as keyof Sounds]
     forEachValue(sound as Sound, (player: Players) => {
@@ -525,7 +526,7 @@ export const useMetronome = () => {
    * @param {DecayOpts} payload - The new decay.
    * @returns {void}
    */
-  const changeDecay = async (decay: number) => {
+  const changeDecay = async (decay: number): Promise<void> => {
     reverb.decay = decay
   }
 
