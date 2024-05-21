@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
 import { useTuningFork } from 'src/composables/tuning-fork'
@@ -9,6 +10,8 @@ import { isFocusableElement } from 'src/utils/utils'
 import type { QBtn } from 'quasar'
 
 const router = useRouter()
+const { t } = useI18n()
+
 const tuningForkStore = useTuningForkStore()
 
 const {
@@ -35,7 +38,7 @@ onUnmounted(() => {
 <template lang="pug">
 q-page.q-pa-sm.flex.justify-center.items-center
   custom-card(:popup="false")
-    template(v-slot:title) Tuning fork
+    template(v-slot:title) {{ t('doc.tuning.title') }}
     template(v-slot:content)
       .column.wrap.content-center
         .flex.justify-center.q-gutter-md
@@ -48,7 +51,7 @@ q-page.q-pa-sm.flex.justify-center.items-center
           ) {{ note }}
         .flex.justify-center.q-gutter-md.q-mt-md
           div
-            p.caption {{ isPlaying ? 'Stop' : 'Play' }} all
+            p.caption {{ isPlaying ? $t('doc.tuning.stop') : $t('doc.tuning.play') }} {{ $t('doc.tuning.caption') }}
             q-btn(
               flat,
               round,

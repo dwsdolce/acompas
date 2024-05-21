@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import CustomCard from 'src/components/CustomCard.vue'
 import type { Ref } from 'vue'
 import type { ContextOption } from 'src/utils/types'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const patternStore = usePatternStore()
 
@@ -30,8 +32,8 @@ div
     color="grey-4",
     text-color="black",
     icon="mdi-music",
-    :label="selectedContext?.label ?? 'Select context'",
-    :aria-label="selectedContext?.label ?? 'Select context'",
+    :label="selectedContext?.label ?? $t('buttons.context')",
+    :aria-label="selectedContext?.label ?? $t('buttons.context')",
     @click="contextDialog = true"
   )
   q-dialog(
@@ -39,7 +41,7 @@ div
     v-model="contextDialog"
   )
     custom-card
-      template(v-slot:title) Please select a context
+      template(v-slot:title) {{ $t('doc.context.title') }}
       template(v-slot:content)
         q-list
           q-item(

@@ -2,11 +2,13 @@
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import type { numOpts } from 'src/utils/types'
 
 const $q = useQuasar()
+const { t } = useI18n()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
@@ -43,7 +45,7 @@ const index = computed(
 
 <template lang="pug">
 .text-center.q-mx-md
-  .caption Prestart from beat
+  .caption {{ $t('doc.prestart.title') }}
     span.q-ml-sm
       q-btn(
         dense,
@@ -58,7 +60,7 @@ const index = computed(
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 Optionaly define a beat from which a precount click will start before the actual loop starts.
+          p.text-body2 {{ $t('doc.prestart.content') }}
   q-slider(
     v-model="prestartBeat",
     :min="arrayOfIndexes[0]",

@@ -3,6 +3,7 @@ import { ref, computed, onUpdated, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
@@ -23,6 +24,7 @@ const patternBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
 const router = useRouter()
+const { t } = useI18n()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
@@ -69,7 +71,7 @@ const onSelectedPattern = (v: string) => {
 
 <template lang="pug">
 div
-  p Pattern
+  p {{ $t('buttons.pattern') }}
     help-pattern(v-show="selectedData?.name !== 'simple-click'")
   q-btn(
     id="patternBtn",
@@ -86,7 +88,7 @@ div
     v-model="patternsDialog"
   )
     custom-card
-      template(v-slot:title) Please select a pattern
+      template(v-slot:title) {{ $t('doc.pattern.title') }}
       template(v-slot:content)
         .row.items-center.q-mb-md
           HelpSearchPattern.col-1
@@ -95,7 +97,7 @@ div
             outlined,
             dense,
             :debounce="500",
-            :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
+            :placeholder="$q.screen.lt.md ? $t('doc.pattern.searchSM') : $t('doc.pattern.search')"
           ).col-11
             template(v-slot:append)
               q-icon(name="mdi-close", @click="filter = ''").cursor-pointer

@@ -3,6 +3,7 @@
   import { openURL, Platform } from 'quasar'
   import { storeToRefs } from 'pinia'
   import { useRouter, useRoute } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
@@ -23,6 +24,7 @@
 
   const router = useRouter()
   const route = useRoute()
+  const { t } = useI18n()
   const sessionStore = useSessionStore()
 
   const {
@@ -80,7 +82,7 @@ div
     )
      q-item-section(avatar)
       q-icon(name="mdi-currency-usd")
-     q-item-section Donate
+     q-item-section {{ $t('donate') }}
 
     q-item(
       id="helpQItem",
@@ -91,12 +93,12 @@ div
     )
       q-item-section(avatar)
         q-icon(name="mdi-help-circle")
-      q-item-section Help
+      q-item-section {{ $t('help') }}
 
     q-item(clickable, v-ripple, @click="router.push('/tuning-fork')")
       q-item-section(avatar)
         q-icon(name="mdi-ear-hearing")
-      q-item-section Tuning fork
+      q-item-section {{ $t('tuning') }}
 
     q-item(
       id="shortcutsQItem",
@@ -107,19 +109,19 @@ div
     )
       q-item-section(avatar)
         q-icon(name="mdi-keyboard")
-      q-item-section Shortcuts
+      q-item-section {{ $t('shortcuts') }}
 
     q-item(clickable, v-ripple, @click="router.push('/privacy-policy')")
       q-item-section(avatar)
         q-icon(name="mdi-security")
-      q-item-section Privacy policy
+      q-item-section {{ $t('privacy') }}
 
     q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
       q-item-section(avatar)
         q-icon(name="mdi-android")
-      q-item-section Get the Android app
+      q-item-section {{ $t('android') }}
 
-    q-expansion-item(icon="mdi-web", label="Follow")
+    q-expansion-item(icon="mdi-web", :label="$t('follow')")
       q-list(no-border, link, inset-separator)
 
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/acompas.org/')")
@@ -142,28 +144,28 @@ div
             q-icon(name="mdi-weather-cloudy")
           q-item-section Bluesky
 
-    q-expansion-item(icon="mdi-share-variant", label="Share")
+    q-expansion-item(icon="mdi-share-variant", :label="$t('share')")
       q-list(no-border, link, inset-separator)
 
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="mdi-facebook")
-          q-item-section Share on Facebook
+          q-item-section Facebook
 
         q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=https://acompas.org')")
           q-item-section(avatar)
             q-icon(name="mdi-twitter")
-          q-item-section Share on Twitter
+          q-item-section Twitter
 
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
       q-item-section(avatar)
         q-icon(name="mdi-xml")
-      q-item-section Source code
+      q-item-section {{ $t('source') }}
 
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
       q-item-section(avatar)
         q-icon(name="mdi-bug")
-      q-item-section Issues
+      q-item-section {{ $t('issues') }}
 
 
   q-dialog(
@@ -173,7 +175,7 @@ div
     @hide="toggleDialog(false)"
   )
     custom-card
-      template(v-slot:title) Help
+      template(v-slot:title) {{ $t('help') }}
       template(v-slot:content)
         help-app
 
@@ -192,7 +194,7 @@ div
     @hide="toggleDialog(false)"
   )
     custom-card
-      template(v-slot:title) Shortcuts
+      template(v-slot:title) {{ $t('shortcuts') }}
       template(v-slot:content)
         keyboard-shortcuts
 
@@ -201,7 +203,7 @@ div
     v-model="updateDialog"
   )
     custom-card(persistant="true")
-      template(v-slot:title) App successfuly updated
+      template(v-slot:title) {{ $t('updated') }}
       template(v-slot:content)
         UpdateApp
 </template>

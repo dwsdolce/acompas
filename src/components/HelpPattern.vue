@@ -2,6 +2,7 @@
 import { ref, onUpdated } from 'vue'
 import { openURL, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
@@ -10,6 +11,7 @@ import type { QBtn } from 'quasar'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
+const { t } = useI18n()
 
 const { selectedData } = storeToRefs(patternStore)
 
@@ -64,6 +66,20 @@ span.q-ml-sm
       template(v-slot:content)
         div(v-html="selectedData?.doc")
         p {{ selectedData?.places }}
-        p(v-if="selectedData?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="mdi-link-variant", @click="launch(selectedData?.wikipediaUrl)")]
-        p(v-if="selectedData?.videoExample") Example video : #[q-btn(round, icon="mdi-link-variant", @click="launch(selectedData?.videoExample)")]
+        p(v-if="selectedData?.wikipediaUrl") {{ $t('doc.utils.wikipediaUrl') }}
+          q-btn(
+            outline,
+            size="sm",
+            icon="mdi-link-variant",
+            :label="$t('doc.utils.openLink')"
+            @click="launch(selectedData?.wikipediaUrl)"
+          ).q-ml-md
+        p(v-if="selectedData?.videoExample") {{ $t('doc.utils.videoExample') }}
+          q-btn(
+            outline,
+            size="sm",
+            icon="mdi-link-variant",
+            :label="$t('doc.utils.openLink')"
+            @click="launch(selectedData?.videoExample)"
+          ).q-ml-md
 </template>

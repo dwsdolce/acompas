@@ -49,33 +49,33 @@ div
     @hide="toggleDialog(false)"
   )
     custom-card
-      template(v-slot:title) Instruments mixer
+      template(v-slot:title) {{ $t('doc.mixer.title') }}
       template(v-slot:content)
         select-decay.q-mt-md
         table.q-table.q-mb-md
           thead
             tr
-              th.text-center Active
+              th.text-center {{ $t('doc.mixer.active.title') }}
                 q-tooltip(
                   anchor="center middle",
                   self="bottom middle",
                   :offset="[10, 10]"
                 )
-                  p.text-body2 Play this instruments
-              th.text-center 8th
+                  p.text-body2 {{ $t('doc.mixer.active.content') }}
+              th.text-center {{ $t('doc.mixer.eighth.title') }}
                 q-tooltip(
                   anchor="center middle",
                   self="bottom middle",
                   :offset="[10, 10]"
                 )
-                  p.text-body2 Toggle eighth notes
-              th.text-center Volume (db)
+                  p.text-body2 {{ $t('doc.mixer.eighth.content') }}
+              th.text-center {{ $t('doc.mixer.volume.title') }}
                 q-tooltip(
                   anchor="center middle",
                   self="bottom middle",
                   :offset="[10, 10]"
                 )
-                  p.text-body2 Increase or decrease instrument volume
+                  p.text-body2 {{ $t('doc.mixer.volume.content') }}
           tbody
             instrument-mixer(
               v-for="instrument in selectedPattern.instruments",

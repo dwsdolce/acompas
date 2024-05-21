@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 
+const { t } = useI18n()
+
 const patternStore = usePatternStore()
+
 const { selectedPattern, humanization } = storeToRefs(patternStore)
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  p.caption Humanize
+  p.caption {{ $t('doc.options.content.humanize.title') }}
     span.q-ml-sm
       q-btn(
         dense,
@@ -23,7 +27,7 @@ const { selectedPattern, humanization } = storeToRefs(patternStore)
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 If it is on, then random little time variations are applied to the sounds. The result is a bit more realistic.
+          p.text-body2 {{ $t('doc.options.content.humanize.content') }}
 
   q-toggle(
     v-model="humanization",

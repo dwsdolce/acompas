@@ -3,12 +3,14 @@ import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
 const route = useRoute()
+const { t } = useI18n()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
@@ -48,11 +50,11 @@ const handleRestore = () => {
 .text-center.q-mx-md
   //- p.caption Reset
   q-btn(
-    unelevated,
+    outline,
     color="red-9",
     icon="mdi-restore-alert",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Reset settings",
+    :label="$t('buttons.restore')",
     @click="resetDialog = true"
   )
   q-dialog(
@@ -61,9 +63,9 @@ const handleRestore = () => {
     @hide="toggleDialog(false)"
   )
     custom-card
-      template(v-slot:title) Restore default parameters
+      template(v-slot:title) {{ $t('doc.reset.title') }}
       template(v-slot:content)
-        p.text-center Warning! This will delete your metronome settings.
+        p.text-center {{ $t('doc.reset.warning') }}
         q-option-group(
           type="radio",
           color="primary",
@@ -76,11 +78,11 @@ const handleRestore = () => {
           unelevated,
           color="primary",
           v-close-popup
-        ).q-mr-md Close
+        ).q-mr-md {{ $t('doc.reset.close') }}
         q-btn(
           unelevated,
           color="red-10",
           v-close-popup,
           @click="handleRestore"
-        ) Proceed
+        ) {{ $t('doc.reset.proceed') }}
 </template>

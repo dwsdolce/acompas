@@ -8,7 +8,7 @@ const { selectedPattern, improvisation } = storeToRefs(patternStore)
 
 <template lang="pug">
 .text-center.q-mx-md
-  p.caption Improvise
+  p.caption {{ $t('doc.options.content.improvise.title') }}
     span(v-if="selectedPattern.name !== 'simple-click'").q-ml-sm
       q-btn(
         dense,
@@ -23,7 +23,7 @@ const { selectedPattern, improvisation } = storeToRefs(patternStore)
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random patterns for one or more instrument(s).
+          p.text-body2 {{ $t('doc.options.content.improvise.content') }}
 
   q-toggle(
     v-model="improvisation",
@@ -37,5 +37,5 @@ const { selectedPattern, improvisation } = storeToRefs(patternStore)
       anchor="top middle",
       self="bottom middle",
       :offset="[10, 10]"
-    ) This option is disabled for this pattern.
+    ) {{ $t('doc.utils.disabled') }}
 </template>

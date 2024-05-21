@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
+
+const { t } = useI18n()
 
 const settingsDialog = ref(false)
 
@@ -24,7 +27,7 @@ div
     v-model="settingsDialog"
   )
     CustomCard
-      template(v-slot:title) App settings
+      template(v-slot:title) {{ t('buttons.settings') }}
       template(v-slot:content)
         select-visualization.q-mb-md
         reset-button.q-mb-md

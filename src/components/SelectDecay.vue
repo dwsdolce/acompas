@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 
+const { t } = useI18n()
 const patternStore = usePatternStore()
 
 const {
@@ -22,7 +24,7 @@ const decaySteps = {
 
 <template lang="pug">
 .row.items-center
-  .col-3 Reverb decay
+  .col-3 {{ $t('doc.reverb.title') }}
     span.q-ml-sm
       q-btn(
         dense,
@@ -37,7 +39,7 @@ const decaySteps = {
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 Set a decay for sounds reverb
+          p.text-body2 {{ $t('doc.reverb.content') }}
   q-slider(
     v-model="globalDecay",
     :min="0.1",

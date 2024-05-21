@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import type { QBtn } from 'quasar'
@@ -10,6 +11,8 @@ const decreaseTempoBtn = ref<QBtn | null>(null)
 const increaseTempoBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
+const { t } = useI18n()
+
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
@@ -47,7 +50,7 @@ onUpdated(() => {
 
 <template lang="pug">
 div
-  p Tempo
+  p {{ $t('doc.tempo.title') }}
   .row.justify-center.items-end.content-end
     q-knob(
       color="primary",
@@ -61,7 +64,7 @@ div
       :thickness="0.2"
     )
       .text-weight-regular {{ tempo }}
-        .text-subtitle2 BPM
+        .text-subtitle2 {{ $t('doc.tempo.bpm') }}
   .row.justify-between
     q-btn(
       id="decreaseTempoBtn",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUpdated } from 'vue'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import { useSessionStore } from 'src/stores/session'
 import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
@@ -13,6 +14,7 @@ import type { QBtn } from 'quasar'
 const sessionStore = useSessionStore()
 
 const $q = useQuasar()
+const { t } = useI18n()
 
 const optDialog = ref(false)
 const optBtn = ref<QBtn | null>(null)
@@ -36,7 +38,7 @@ div
     color="white",
     icon="mdi-tune-vertical-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Rhythm options",
+    :label="t('buttons.options')",
     @click="optDialog = true"
   )
   q-dialog(
@@ -44,7 +46,7 @@ div
     v-model="optDialog"
   )
     custom-card
-      template(v-slot:title) Rhythm options
+      template(v-slot:title) {{ t('buttons.options') }}
       template(v-slot:content)
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md

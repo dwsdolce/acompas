@@ -26,8 +26,7 @@ const handleUpdateApp = () => {
 
 <template lang="pug">
 .text-center
-  p You need to delete all your local settings and reload the page in order to use the new version of the app.
-  p You will lose all your settings and patterns. But this is the only way to get the new features.
+  div(v-html="$t('doc.update.content')").q-mb-md
   q-btn(
     unelevated,
     label="Delete settings and reload",
