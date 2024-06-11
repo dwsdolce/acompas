@@ -240,3 +240,11 @@ There, we load two times the same sound with a different volume. The volume is a
 Don't forget to run the sh script `./format_audio.sh` to convert the .wav files to .mp3, .mp4, .ogg and .flac files. This is necessary for the mobile app.
 
 Beware of the licence of the sounds you use. You must have the right to use them in a free software.
+
+## To do
+
+- Package the app for iOS
+- Package the app for Electron
+- Package the app for WindoAndroid TV
+- Add more sound samples
+- Add more rhythmic patterns

@@ -8,7 +8,6 @@
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
   import CustomCard from 'src/components/CustomCard.vue'
-  import UpdateApp from 'src/components/UpdateApp.vue'
   import { useTuningForkStore } from 'src/stores/tuning-fork'
   import { useSessionStore } from 'src/stores/session'
   import { isFocusableElement } from 'src/utils/utils'
@@ -45,10 +44,6 @@
     stop
   } = tuningForkStore
 
-  const updateDialog = computed(() => {
-    return !isUpToDatev3.value
-  })
-
   const launch = (url: string) => {
     // if (Platform.is.cordova) {
     //   cordova.InAppBrowser.open(url, '_system')
@@ -57,11 +52,11 @@
     openURL(url)
   }
 
-  onMounted(() => {
-    if (!trackingChosen.value && route.path !== '/privacy-policy') {
-      openPrivacyDialog()
-    }
-  })
+  // onMounted(() => {
+  //   if (!trackingChosen.value && route.path !== '/privacy-policy') {
+  //     openPrivacyDialog()
+  //   }
+  // })
 
   onUpdated(() => {
     if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
@@ -179,13 +174,13 @@ div
       template(v-slot:content)
         help-app
 
-  q-dialog(
-    id="privacyDialog",
-    v-model="privacyDialogOpen",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
-  )
-    select-privacy
+  //- q-dialog(
+  //-   id="privacyDialog",
+  //-   v-model="privacyDialogOpen",
+  //-   @show="toggleDialog(true)",
+  //-   @hide="toggleDialog(false)"
+  //- )
+  //-   select-privacy
 
   q-dialog(
     id="shortcutsDialog",
@@ -197,14 +192,5 @@ div
       template(v-slot:title) {{ $t('shortcuts') }}
       template(v-slot:content)
         keyboard-shortcuts
-
-  q-dialog(
-    id="updateDialog",
-    v-model="updateDialog"
-  )
-    custom-card(persistant="true")
-      template(v-slot:title) {{ $t('updated') }}
-      template(v-slot:content)
-        UpdateApp
 </template>
 

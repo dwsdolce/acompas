@@ -24,6 +24,9 @@ import type {
 } from 'src/utils/types'
 // import { au } from 'app/dist/electron/UnPackaged/assets/index.d0997b1f'
 
+// Vite plugin vue devtools
+
+// Privé, ne peut être utilisé que dans ce fichier
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
 const quarterChannel = new Tone.Channel(-4, 0).toDestination()
@@ -311,7 +314,7 @@ export const useMetronome = () => {
     return seq
   }
 
-    // ========================
+  // ========================
   // Metronome init functions
   // ========================
 

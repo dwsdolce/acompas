@@ -113,8 +113,8 @@ export default {
     shortcuts: {
       title: 'The following shortcuts are available for usage with the keyboard:',
       space: 'Play/Stop the metronome',
-      up: 'Increment the tempo',
-      down: 'Decrement the tempo',
+      up: 'Increment the tempo (maintain key pressed to increment faster)',
+      down: 'Decrement the tempo (maintain key pressed to decrement faster)',
       left: 'Previous pattern',
       right: 'Next pattern',
       esc: 'Close the modal window',

@@ -1,5 +1,5 @@
 import { ref, reactive, computed, onMounted, onUpdated, watch } from 'vue'
-import { Loading, Notify, Platform, colors, setCssVar } from 'quasar'
+import { Loading, Notify, Platform, is } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
@@ -16,14 +16,14 @@ import type {
   PatternSetting,
   ContextOption
 } from 'src/utils/types'
-import { context } from 'tone'
+
+const findInArray = (array: any[], key: string, value: string) => {
+  return array.find((el) => el[key] === value)
+}
 
 
 export const usePatternStore = defineStore('patterns', () => {
   const router = useRouter()
-  const route = useRoute()
-
-  const { getPaletteColor } = colors
 
   const {
     metronomeEvent,
@@ -74,22 +74,24 @@ export const usePatternStore = defineStore('patterns', () => {
   // *****************************************
 
   const selectedContext = computed(() => {
-    const name = route.params.context ? route.params.context : selectedContextName.value
-    return contexts.value.find((el: ContextOption) => el.value === name) as ContextOption
+    return findInArray(contexts.value, 'value', selectedContextName.value) as ContextOption
+    // return contexts.value.find((el: ContextOption) => el.value === selectedContextName.value) as ContextOption
   })
 
   const selectedPattern = computed(() => {
-    const name = route.params.pattern ? route.params.pattern : selectedPatternName.value
-    return patterns.value?.find((el: PatternSetting) => el.name === name) as PatternSetting
+    return findInArray(patterns.value, 'name', selectedPatternName.value) as PatternSetting
+    // return patterns.value?.find((el: PatternSetting) => el.name === selectedPatternName.value) as PatternSetting
   })
 
   const selectedData = computed(() => {
-    const name = route.params.pattern ? route.params.pattern : selectedPatternName.value
-    return data.value.find((el: PatternState) => el.name === name) as PatternState
+    return findInArray(data.value, 'name', selectedPatternName.value) as PatternState
+    // return data.value.find((el: PatternState) => el.name === selectedPatternName.value) as PatternState
   })
 
   const patternsInSelectedContext = computed(() => {
-    return data.value.filter((el: PatternState) => el.context === route.params.context).map((el: PatternState) => ({ label: el.label, value: el.name }))
+    return data.value
+      .filter((el: PatternState) => el.context === selectedContextName.value)
+      .map((el: PatternState) => ({ label: el.label, value: el.name }))
   })
 
   const tempo = computed({
@@ -259,16 +261,6 @@ export const usePatternStore = defineStore('patterns', () => {
     return tmp
   }
 
-  // const buildPatterns = async () => {
-  //   if (patterns.value.length == 0) {
-  //     patterns.value = data.value.map((patternDefault) => buildPattern(patternDefault))
-  //   }
-  // }
-
-  // const rebuildPattern = (patternData: PatternState) => {
-  //   patterns.value[patterns.value.findIndex((el) => el.name === patternData.name)] = buildPattern(patternData)
-  // }
-
   // *****************************************
   // Actions
   // *****************************************
@@ -315,37 +307,25 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   }
 
-  const restoreDefault = (payload: string) => {
+  const restoreDefault = async (payload: string) => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
       patterns.value = []
-      // buildPattern()
     } else {
-      const patternName = route.params.pattern ? route.params.pattern : selectedPatternName.value
+      const patternName = selectedPatternName.value
       const patternIndex = patterns.value.findIndex((el) => el.name === patternName)
       patterns.value.splice(patternIndex, 1)
-      // const existingPattern = patterns.value.find((el) => el.name === route.name) as PatternSetting
-      // const newPattern = buildPattern()
-      // Object.assign(existingPattern, newPattern)
     }
-    router.go(0)
+    return
+    // router.go(0)
   }
 
   // *****************************************
   // Initialization
   // *****************************************
 
-  const initPattern = async () => {
-    patterns.value.push(await buildPattern())
-
-    selectedContextName.value = route.params.context as string
-    selectedPatternName.value = route.params.pattern as string
-
-    setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
-    setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
-  }
-
   const initStore = async () => {
+    // Load the data
     data.value = await getAllData()
 
     if (!data.value.length) {
@@ -356,37 +336,45 @@ export const usePatternStore = defineStore('patterns', () => {
       })
     }
 
-    if (!selectedContext.value) {
-      const selectedContext = selectedContextName.value || data.value[0].context
-      const selectedPattern = data.value.find((el) => el.context === selectedContext)?.name
-      return router.push(`/${selectedContext}/${selectedPattern}`)
+    // If no selected context, select the first one and redirect
+    if (!selectedContext.value || !selectedPattern.value) {
+      const tmpContext = selectedContextName.value || data.value[0].context
+      const tmpPattern: string = selectedPatternName.value || data.value.find((el) => el.context === tmpContext)?.name || ''
+      return router.push(`/${tmpContext}/${tmpPattern}`)
     }
+  }
+  const initContext = async (contextName: string) => {
+    selectedContextName.value = contextName
+    selectedPatternName.value = data.value.find((el) => el.context === contextName)?.name || ''
 
-    if (!selectedPattern.value) {
-      const selectedPattern = selectedPatternName.value || data.value.find((el) => el.context === route.params.context)?.name
-      return router.push(`/${route.params.context}/${selectedPattern}`)
-    }
+  }
+
+  const initPattern = async (contextName: string, patternName: string) => {
+    selectedPatternName.value = patternName
+
+    patterns.value.push(await buildPattern())
+  }
+
+  const initAll = async (contextName: string, patternName: string) => {
+    Loading.show({
+      message: 'Loading…',
+    })
+    await initStore()
+    await initContext(contextName)
+    await initPattern(contextName, patternName)
+    await initMetronome()
+    await initSequences()
+    Loading.hide()
   }
 
   // *****************************************
   // Lifecycle
   // *****************************************
 
-  onMounted(async () => {
-    Loading.show({
-      message: 'Loading…',
-    })
-    await initStore()
-    await initPattern()
-    await initMetronome()
-    await initSequences()
-    Loading.hide()
-  })
-
-  onUpdated(async () => {
-    if (!selectedPattern.value) await initPattern()
-    stop()
-  })
+  // onUpdated(async () => {
+  //   if (!selectedPattern.value) await initPattern()
+  //   stop()
+  // })
 
   watch(selectedInstruments, (value) => {
     if (value?.length === 0) {
@@ -398,15 +386,16 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   })
 
-  watch(selectedPattern, (value) => {
-    if (value) selectedPatternName.value = value.name
+  watch(selectedContext, async (newContext) => {
+    if (isPlaying.value) stop()
+    if (newContext) await initContext(newContext.value)
   })
 
-  watch(selectedContext, (newContext) => {
-    if (newContext) selectedContextName.value = newContext.value
-    setCssVar('primary', getPaletteColor(newContext.colors?.primary))
-    setCssVar('secondary', getPaletteColor(newContext.colors?.secondary))
+  watch(selectedPattern, async (newPattern) => {
+    if (isPlaying.value) stop()
+    if (newPattern) await initPattern(selectedContextName.value, newPattern.name)
   })
+
 
   // *****************************************
   // Return
@@ -435,7 +424,10 @@ export const usePatternStore = defineStore('patterns', () => {
     instruments,
     globalDecay,
     // numLabels,
+    initAll,
     instrument,
+    initContext,
+    initPattern,
     // buildPatterns,
     // rebuildPattern,
     play,

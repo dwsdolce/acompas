@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { Loading } from 'quasar'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
@@ -17,9 +18,13 @@ const {
   restoreDefault
 } = patternStore
 
-const handleUpdateApp = () => {
+const handleUpdateApp = async () => {
+  Loading.show({
+    message: 'Loading…',
+  })
   isUpToDatev3.value = true
-  restoreDefault('all')
+  await restoreDefault('all')
+  Loading.hide()
 }
 
 </script>

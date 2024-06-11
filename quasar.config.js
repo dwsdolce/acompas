@@ -8,6 +8,8 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
+// const VueDevTools = require('vite-plugin-vue-devtools');
+
 
 const { configure } = require('quasar/wrappers');
 const path = require('path');
@@ -64,7 +66,7 @@ module.exports = configure(function (/* ctx */) {
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
-      // vueDevtools,
+      vueDevtools: true,
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup

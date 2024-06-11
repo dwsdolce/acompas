@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar, Platform } from 'quasar'
+import { useQuasar, Platform, setCssVar, colors } from 'quasar'
 import { useRouter, useRoute } from 'vue-router'
 import SelectPattern from 'src/components/SelectPattern.vue'
 import RhythmOptions from 'src/components/RhythmOptions.vue'
@@ -21,12 +21,51 @@ const router = useRouter()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
+const { getPaletteColor } = colors
 const { context, pattern } = route.params
 
-const { selectedPattern, data } = storeToRefs(patternStore)
+
+const {
+  data,
+  selectedPattern,
+  selectedContext,
+  selectedContextName,
+  selectedPatternName
+} = storeToRefs(patternStore)
+
+const {
+  initAll,
+  initContext,
+  initPattern,
+} = patternStore
+
 const { visualizationMode } = storeToRefs(sessionStore)
+
 const { setVisualizationSize } = sessionStore
+
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
+
+
+onMounted(() => {
+  if (context && pattern) {
+    initAll(context as string, pattern as string)
+  }
+})
+
+watch(() => route.params, async (params) => {
+  console.debug('MainPage watch route.params', params)
+  if (params.context && params.pattern) {
+    await initContext(params.context as string)
+    await initPattern(params.context as string, params.pattern as string)
+  }
+})
+
+watch(() => selectedContext.value, async (context) => {
+  if (context) {
+    setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
+    setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
+  }
+})
 </script>
 
 <template lang="pug">
@@ -82,4 +121,3 @@ q-page.text-grey-1.flex
     align-items: center
     flex-grow: 1
 </style>
-src/stores/settings

@@ -32,10 +32,8 @@ div
     color="grey-4",
     text-color="black",
     icon="mdi-music",
-    :label="selectedContext?.label ?? $t('buttons.context')",
-    :aria-label="selectedContext?.label ?? $t('buttons.context')",
     @click="contextDialog = true"
-  )
+  ) {{ selectedContext?.label ?? $t('buttons.context') }}
   q-dialog(
     id="contextDialog",
     v-model="contextDialog"
