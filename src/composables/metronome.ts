@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { computed, ComputedRef, Ref, ref, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
+import { computed, ComputedRef, Ref, ref, reactive, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import { Loading, Notify, Dialog } from 'quasar'
 import { storeToRefs } from 'pinia'
 import soundsData from 'src/assets/data/soundsData'

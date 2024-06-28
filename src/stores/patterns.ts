@@ -324,6 +324,12 @@ export const usePatternStore = defineStore('patterns', () => {
   // Initialization
   // *****************************************
 
+  const resetContextPattern = () => {
+    const tmpContext = selectedContextName.value || data.value[0].context
+    const tmpPattern: string = selectedPatternName.value || data.value.find((el) => el.context === tmpContext)?.name || ''
+    return router.push(`/${tmpContext}/${tmpPattern}`)
+  }
+
   const initStore = async () => {
     // Load the data
     data.value = await getAllData()
@@ -338,21 +344,27 @@ export const usePatternStore = defineStore('patterns', () => {
 
     // If no selected context, select the first one and redirect
     if (!selectedContext.value || !selectedPattern.value) {
-      const tmpContext = selectedContextName.value || data.value[0].context
-      const tmpPattern: string = selectedPatternName.value || data.value.find((el) => el.context === tmpContext)?.name || ''
-      return router.push(`/${tmpContext}/${tmpPattern}`)
+      resetContextPattern()
     }
   }
-  const initContext = async (contextName: string) => {
-    selectedContextName.value = contextName
-    selectedPatternName.value = data.value.find((el) => el.context === contextName)?.name || ''
 
+  const initContext = async (contextName: string) => {
+    const contextExists = data.value.some((el) => el.context === contextName)
+    if (contextExists) {
+      selectedContextName.value = contextName
+      selectedPatternName.value = data.value.find((el) => el.context === contextName)?.name || ''
+    } else {
+      resetContextPattern()
+    }
   }
 
   const initPattern = async (contextName: string, patternName: string) => {
     selectedPatternName.value = patternName
 
-    patterns.value.push(await buildPattern())
+    const existingPattern = patterns.value.find(pattern => pattern.name === patternName);
+    if (!existingPattern) {
+      patterns.value.push(await buildPattern());
+    }
   }
 
   const initAll = async (contextName: string, patternName: string) => {

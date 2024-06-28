@@ -49,11 +49,12 @@ const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electro
 onMounted(() => {
   if (context && pattern) {
     initAll(context as string, pattern as string)
+    setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
+    setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
   }
 })
 
 watch(() => route.params, async (params) => {
-  console.debug('MainPage watch route.params', params)
   if (params.context && params.pattern) {
     await initContext(params.context as string)
     await initPattern(params.context as string, params.pattern as string)

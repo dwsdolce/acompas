@@ -1,8 +1,8 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { useStorage } from '@vueuse/core'
 
-const selectedPatternName = useStorage('selected-pattern-name', '')
-const selectedContextName = useStorage('selected-context-name', '')
+const selectedContextName = useStorage('selected-context-name', 'flamenco')
+const selectedPatternName = useStorage('selected-pattern-name', 'alegria')
 
 const routes: RouteRecordRaw[] = [
   {
