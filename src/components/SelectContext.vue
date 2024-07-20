@@ -24,7 +24,7 @@ const onSelectedContext = async (context: ContextOption) => {
 </script>
 
 <template lang="pug">
-div
+div(v-if="contexts.length > 1")
   q-btn(
     id="contextBtn",
     ref="contextBtn",

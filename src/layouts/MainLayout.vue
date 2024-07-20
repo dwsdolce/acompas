@@ -42,10 +42,10 @@ q-layout(view="hhh LpR lFf")
       q-btn(
         flat,
         to="/"
-      ).row.items-center.no-wrap.q-gutter-sm
-        q-avatar(size="40px").shadow-1
+      ).row.items-center.no-wrap.q-px-sm
+        q-avatar.shadow-1
           img(src="~assets/ACompas-4-logo.png" alt="A Compás icon", width="40")
-        img(src="~assets/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-sm.q-ml-md
+        img(src="~assets/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
       SelectContext
