@@ -7,7 +7,7 @@
     ],
     "icon": "app-icon-rebase.png",
     "background": "background-image.png",
-    "splashscreenColor": "#191919",
+    "splashscreenColor": "191919",
     "splashscreenIconRatio": "50"
   },
   "assets": [
