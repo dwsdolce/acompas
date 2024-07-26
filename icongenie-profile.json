@@ -1,10 +1,6 @@
 {
   "params": {
     "skipTrim": true,
-    "padding": [
-      10,
-      10
-    ],
     "icon": "app-icon-rebase.png",
     "background": "background-image.png",
     "splashscreenColor": "191919",
