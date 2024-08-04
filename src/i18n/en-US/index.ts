@@ -202,7 +202,7 @@ export default {
                   You need to delete all your local settings and reload the page in order to use the new version of the app.
                 </p>
                 <p>
-                  You will lose all your settings and patterns. But this is the only way to get the new features.
+                  If you were previously using this app, you will lose all your settings and patterns. But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.
                 </p>`
     },
     tuning: {
