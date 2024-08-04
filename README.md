@@ -32,26 +32,82 @@ You also need [yarn](https://classic.yarnpkg.com/en/docs/install/) installed.
 
 ``` bash
 cd /path/to/acompas
-# Install requirements
+```
+
+### Install requirements
+
+``` bash
 sudo npm install -g @quasar/cli yarn
 sudo npm install -g --unsafe-perm @quasar/icongenie
+```
 
-# Cloning the git repository
+### Cloning the git repository
+
+``` bash
 git clone https://gitlab.com/acompas/acompas.git
 cd acompas
+```
 
-# Install dependencies
+### Install dependencies
+
+``` bash
 yarn install
+```
 
-# Build the icons
-# Run this command after generating the src-capacitor/android and /ios
+### Build the icons
+Run this command after generating the src-capacitor/android and /ios
+
+``` bash
 ./icongenie.sh
+```
 
-# Generate the audio files
-# By default, it converts all wav files inside the ./public/audio folder
-# sh ./format_audio.sh --help
-sh ./format_audio.sh convert # Optionnaly you can specify a subdirectory to convert only a subset
+### Generate the audio files
+The script uses `ffmpeg` to convert the files, so make sure you have it installed on your machine.
 
+1. For Windows:
+
+  * Download the ffmpeg build from https://ffmpeg.org/download.html
+  * Extract the zip file
+  * Add the bin folder to your system PATH
+
+2. For macOS (using Homebrew):
+
+``` bash
+brew install ffmpeg
+```
+
+3. For Ubuntu/Debian:
+
+``` bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+4. For CentOS/RHEL:
+
+``` bash
+sudo yum install epel-release
+sudo yum install ffmpeg
+```
+
+By default, the format_audio script converts all wav files inside the ./public/audio folder
+
+``` bash
+bash ./format_audio.sh --help
+bash ./format_audio.sh convert # Optionnaly you can specify a subdirectory to convert only a subset
+```
+
+Alternatively, you can do it with Python
+
+To do so you also have to install some Python dependencies
+``` bash
+pip install colorama
+```
+
+### Run the app
+Then you should be ready to launch the app:
+
+``` bash
 # Serve with hot reload at localhost:9000
 quasar dev
 
@@ -61,7 +117,7 @@ quasar build
 
 ## Mobile app
 
-Here are a few commands that might help :
+Here are a few commands that might help:
 
 ```bash
 # Go to the Capacitor project folder
