@@ -48,7 +48,9 @@ yarn install
 ./icongenie.sh
 
 # Generate the audio files
-./format_audio.sh -a convert
+# By default, it converts all wav files inside the ./public/audio folder
+# sh ./format_audio.sh --help
+sh ./format_audio.sh convert # Optionnaly you can specify a subdirectory to convert only a subset
 
 # Serve with hot reload at localhost:9000
 quasar dev
