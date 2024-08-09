@@ -18,7 +18,7 @@ test_web_job:
     - apt-get -y -qq dist-upgrade
     - apt-get -y -qq install curl gnupg
     - curl -fsSL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh
-    - sudo -E bash /tmp/nodesource_setup.sh
+    - bash /tmp/nodesource_setup.sh
     - apt-get update
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
