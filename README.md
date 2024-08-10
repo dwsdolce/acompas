@@ -28,16 +28,18 @@ Before anything, you need Node.js 20.x installed on your machine. See the nodejs
 [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
-You also need [yarn](https://classic.yarnpkg.com/en/docs/install/) installed.
-
-``` bash
-cd /path/to/acompas
+You also need to enable yarn after installing the nodejs package :
+```bash
+corepack enable
 ```
+
+You only need to run the previous command once and the "yarn" command will
+be added to your shell.
 
 ### Install requirements
 
 ``` bash
-sudo npm install -g @quasar/cli yarn
+sudo npm install -g @quasar/cli
 sudo npm install -g --unsafe-perm @quasar/icongenie
 ```
 
@@ -90,7 +92,7 @@ sudo yum install epel-release
 sudo yum install ffmpeg
 ```
 
-By default, the format_audio script converts all wav files inside the ./public/audio folder
+By default, the format_audio.sh script converts all wav files inside the ./public/audio folder
 
 ``` bash
 bash ./format_audio.sh --help
@@ -102,6 +104,12 @@ Alternatively, you can do it with Python
 To do so you also have to install some Python dependencies
 ``` bash
 pip install colorama
+```
+
+Then, you can run the Python script :
+
+``` bash
+python3 public/format_audio.py convert
 ```
 
 ### Run the app
@@ -133,7 +141,8 @@ icongenie generate -m capacitor -i ./app-icon.png
 #### Setup
 
 You must first install Oracle's Java 17 JDK and set the JAVA_HOME environment
-variable in your shell. Instructions for Ubuntu [here](https://www.rosehosting.com/blog/how-to-install-java-17-lts-on-ubuntu-20-04/)
+variable in your shell. Instructions for Ubuntu [here](https://www.rosehosting.com/blog/how-to-install-java-21-on-ubuntu-24-04/)
+(read the "Install Oracle Java" section and replace version 21 with version 17).
 
 Furthermore, you need to install Google's Android Studio (get it
 [here](https://developer.android.com/studio)). Install the SDK from Android
@@ -153,7 +162,8 @@ Here is an example ~/.bashrc configuration :
 ``` bash
 export ANDROID_SDK_ROOT=/path/to/android-sdk
 export ANDROID_SDK_HOME=/home/username
-export JAVA_HOME=/path/to/jdk
+# Here, replace the path with the location of your JDK in the /usr/lib/jvm folder.
+export JAVA_HOME=/usr/lib/jvm/jdk-17.0.xxx-oracle-x64
 export PATH=$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$JAVA_HOME/bin:$PATH
 ```
 
@@ -186,6 +196,11 @@ In case cocoapods is missing in your environment, [go here](https://guides.cocoa
 
 Tip: Delete local storage in the browser after app update.
 
+
+## Licensing
+The source code is published under the terms of the GNU [AGPL license](https://www.gnu.org/licenses/agpl-3.0.html) (see the LICENSE file at the
+root of the git repository).
+There is an exception to this : the drumkits. All the .wav files located in public/audio are licensed under the terms of the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0).
 
 ## Contributing to the project
 

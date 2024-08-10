@@ -6,7 +6,9 @@ android {
     defaultConfig {
         applicationId "audio.acompas.app"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        // Changed for A Compas
+        // targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion 33
         versionCode 701000460
         versionName "4.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
