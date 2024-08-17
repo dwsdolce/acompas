@@ -7,7 +7,7 @@ variables:
   ANDROID_SDK_ROOT: "/android-sdk"
   ANDROID_HOME: "/android-sdk"
   ANDROID_SDK_HOME: "/root"
-  JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
+  JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
 # Jobs
 
@@ -33,7 +33,7 @@ test_web_job:
     - quasar build
     - (cd dist && tar cvzf spa.tar.gz spa)
     # Android app
-    - apt -y -qq install openjdk-21-jdk openjdk-21-jre google-android-cmdline-tools-13.0-installer
+    - apt -y -qq install openjdk-21-jdk openjdk-17-jre google-android-cmdline-tools-13.0-installer
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
     - sdkmanager --install tools
