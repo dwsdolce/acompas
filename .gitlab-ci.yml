@@ -33,7 +33,7 @@ test_web_job:
     - quasar build
     - (cd dist && tar cvzf spa.tar.gz spa)
     # Android app
-    - apt -y -qq install openjdk-17-jdk openjdk-17-jre sdkmanager
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre google-android-cmdline-tools-13.0-installer
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
     - sdkmanager --install tools
