@@ -7,7 +7,7 @@ variables:
   ANDROID_SDK_ROOT: "/android-sdk"
   ANDROID_HOME: "/android-sdk"
   ANDROID_SDK_HOME: "/root"
-  JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+  JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
 
 # Jobs
 
