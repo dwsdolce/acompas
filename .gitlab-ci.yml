@@ -40,7 +40,7 @@ test_web_job:
     - sdkmanager --install platform-tools
     - sdkmanager --install 'build-tools;30.0.3'
     - sdkmanager --install 'platforms;android-33'
-    - sdkmanager --licenses
+    - echo yes | sdkmanager --licenses
     - quasar build -m capacitor -T android
 
   stage: build
