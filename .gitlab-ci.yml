@@ -36,10 +36,10 @@ test_web_job:
     - apt -y -qq install openjdk-17-jdk openjdk-17-jre google-android-cmdline-tools-13.0-installer
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
-    - sdkmanager --install tools
-    - sdkmanager --install platform-tools
-    - sdkmanager --install 'build-tools;30.0.3'
-    - sdkmanager --install 'platforms;android-33'
+    - echo yes | sdkmanager --install tools
+    - echo yes | sdkmanager --install platform-tools
+    - echo yes | sdkmanager --install 'build-tools;30.0.3'
+    - echo yes | sdkmanager --install 'platforms;android-33'
     - echo yes | sdkmanager --licenses
     - quasar build -m capacitor -T android
 
