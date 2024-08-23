@@ -10,6 +10,10 @@ export default {
   success: 'Action was successful',
 
   welcome: 'Welcome to A Compás app',
+  notFound: {
+    header: 'Sorry, this page doesn\'t exist.',
+    btn: 'Go back to patterns'
+  },
 
   donate: 'Donate',
   help: 'Help',

@@ -1,8 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { useStorage } from '@vueuse/core'
+import type { PatternState } from 'src/utils/types'
 
 const selectedContextName = useStorage('selected-context-name', 'flamenco')
 const selectedPatternName = useStorage('selected-pattern-name', 'alegria')
+const patterns = useStorage('patterns', [] as PatternState[])
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,8 +15,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'home',
-        redirect: selectedContextName.value !== '' && selectedPatternName.value !== ''
-          ? `/${selectedContextName.value}/${selectedPatternName.value}` : '/flamenco/alegria'
+        redirect: to => {
+          return {
+            path: `/${selectedContextName.value}/${selectedPatternName.value}`
+          }
+        }
       },
       {
         path: 'privacy-policy',
@@ -29,6 +34,17 @@ const routes: RouteRecordRaw[] = [
       {
         path: ':context',
         name: 'context',
+        beforeEnter: (to, from, next) => {
+          const pattern = patterns.value.find(p => to.params.pattern === p.name)
+          console.debug('pattern', pattern)
+          if (pattern?.context === to.params.context) {
+            next()
+          } else {
+            next({
+              name: 'not-found'
+            })
+          }
+        },
         children: [
           {
             path: ':pattern',
@@ -38,8 +54,13 @@ const routes: RouteRecordRaw[] = [
         ]
       },
       {
+        path: 'not-found',
+        name: 'not-found',
+        component: () => import('pages/NotFound.vue')
+      },
+      {
         path: ':pathMatch(.*)*',
-        redirect: `/${selectedContextName.value}/${selectedPatternName.value}`
+        redirect: `/not-found`
       }
     ]
   }
