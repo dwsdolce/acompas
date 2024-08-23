@@ -124,10 +124,10 @@ div
             q-icon(name="mdi-facebook")
           q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://twitter.com/acompas_org')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/acompas_org')")
           q-item-section(avatar)
-            q-icon(name="mdi-twitter")
-          q-item-section Twitter
+            q-icon(name="mdi-alpha-x")
+          q-item-section X
 
         q-item(clickable, v-ripple, @click="launch('https://mastodon.social/@acompas')")
           q-item-section(avatar)
@@ -147,10 +147,10 @@ div
             q-icon(name="mdi-facebook")
           q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=https://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="mdi-twitter")
-          q-item-section Twitter
+            q-icon(name="mdi-alpha-x")
+          q-item-section X
 
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
       q-item-section(avatar)

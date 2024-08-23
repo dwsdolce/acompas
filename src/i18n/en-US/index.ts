@@ -30,7 +30,7 @@ export default {
 
   doc: {
     welcome: {
-      title: 'Welcome to A Compás app',
+      title: 'Welcome to the A Compás app',
       content: `This app is designed to help you learn and practice your musical instrument.
                 It is a work in progress, so please be patient with us as we continue to improve it.
                 If you have any questions or suggestions, please contact us.`
@@ -38,7 +38,6 @@ export default {
     getStarted: {
       title: 'Get started',
       content: `<ul>
-                  <li>Select a <b>context</b> from the list. A context is like a musical style, containing a group of patterns.</li>
                   <li>Select a <b>pattern</b> from the list. A pattern (also called "palo" in flamenco) is a rhythmic style.</li>
                   <li>Adjust the <b>tempo</b> (speed) of the pattern.</li>
                   <li>Select <b>instruments</b> in the mixer.</li>

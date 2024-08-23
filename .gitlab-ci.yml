@@ -17,35 +17,36 @@ test_web_job:
     - apt-get -y -qq update
     - apt-get -y -qq dist-upgrade
     - apt-get -y -qq install curl gnupg
-    - curl -sL https://deb.nodesource.com/setup_20.x | bash -
-    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+    - curl -fsSL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh
+    - bash /tmp/nodesource_setup.sh
     - apt-get update
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
-    - apt-get install -y -qq nodejs git make g++ gcc rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+    - apt-get install -y -qq nodejs git make g++ gcc rsync xvfb libgtk-3-dev libnotify-dev libnss3 libxss1
     - npm install -g @quasar/cli
     - npm install -g --unsafe-perm @quasar/icongenie
     # SPA
     - ./icongenie.sh
+    # Enable yarn
+    - corepack enable
     - $YARN install
     - quasar build
     - (cd dist && tar cvzf spa.tar.gz spa)
     # Android app
-    - apt -y -qq install openjdk-17-jdk openjdk-17-jre sdkmanager
-    - (cd src-capacitor && $YARN install && icongenie generate -m capacitor -i ./app-icon.png)
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre google-android-cmdline-tools-13.0-installer
+    - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
-    - sdkmanager --install tools
-    - sdkmanager --install platform-tools
-    - sdkmanager --install 'build-tools;30.0.3'
-    - sdkmanager --install 'platforms;android-33'
-    - echo yes | sdkmanager --licenses
+    - (yes | sdkmanager --install tools || exit 0)
+    - (yes | sdkmanager --install platform-tools || exit 0)
+    - (yes | sdkmanager --install 'build-tools;30.0.3' || exit 0)
+    - (yes | sdkmanager --install 'platforms;android-33' || exit 0)
+    - (( yes | sdkmanager --licenses) || exit 0 )
     - quasar build -m capacitor -T android
 
   stage: build
   tags:
     - amd64
-  image: ubuntu:jammy
+  image: ubuntu:noble
   artifacts:
     paths:
       - dist/capacitor/android/apk/release/app-release-unsigned.apk
