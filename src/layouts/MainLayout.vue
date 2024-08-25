@@ -69,7 +69,7 @@ q-layout(view="hhh LpR lFf")
     )
     router-view(v-slot="{ Component, route }")
       Transition(name="fade", mode="out-in")
-        component(:is="Component", :key="route.name")
+        component(:is="Component", :key="route.fullPath")
 </template>
 
 <style lang="sass">
