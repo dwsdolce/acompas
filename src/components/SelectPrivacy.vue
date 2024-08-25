@@ -34,7 +34,7 @@ const handleEnableAndClose = () => {
   if (privacyDialogOpen.value) {
     closePrivacyDialog()
   } else {
-    router.push(`/${selectedContextName.value}/${selectedPatternName.value}`)
+    router.push('/')
   }
 }
 
@@ -43,7 +43,7 @@ const handleClose = () => {
   if (privacyDialogOpen.value) {
     closePrivacyDialog()
   } else {
-    router.push(`/${selectedContextName.value}/${selectedPatternName.value}`)
+    router.push('/')
   }
 }
 </script>

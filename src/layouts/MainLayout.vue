@@ -17,7 +17,7 @@ const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
 Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
 
-const appVersion = process.env.APP_VERSION?.valueOf() || '3'
+const appVersion = process.env.APP_VERSION?.valueOf() || '4'
 
 const onResize = (size: Size) => {
   setVisualizationSize(size)

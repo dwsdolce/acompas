@@ -206,7 +206,8 @@ export default {
                 </p>
                 <p>
                   If you were previously using this app, you will lose all your settings and patterns. But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.
-                </p>`
+                </p>`,
+      button: 'Delete settings and reload'
     },
     tuning: {
       title: 'Tuning fork',

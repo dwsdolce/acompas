@@ -34,7 +34,7 @@ const handleUpdateApp = async () => {
   div(v-html="$t('doc.update.content')").q-mb-md
   q-btn(
     unelevated,
-    label="Delete settings and reload",
+    :label="$t('doc.update.button')",
     color="primary",
     @click="handleUpdateApp()"
   ).q-mt-md

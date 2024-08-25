@@ -311,6 +311,7 @@ export const usePatternStore = defineStore('patterns', () => {
     if (isPlaying.value) stop()
     if (payload === 'all') {
       patterns.value = []
+      if (!data.value.length) initStore()
     } else {
       const patternName = selectedPatternName.value
       const patternIndex = patterns.value.findIndex((el) => el.name === patternName)
@@ -437,6 +438,7 @@ export const usePatternStore = defineStore('patterns', () => {
     globalDecay,
     // numLabels,
     initAll,
+    initStore,
     instrument,
     initContext,
     initPattern,
