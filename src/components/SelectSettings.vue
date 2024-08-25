@@ -21,6 +21,10 @@ watch(visualizationMode, () => {
   settingsDialog.value = false
 })
 
+const handleReset = () => {
+  settingsDialog.value = false
+}
+
 </script>
 
 <template lang="pug">
@@ -42,5 +46,7 @@ div
       template(v-slot:title) {{ t('buttons.settings') }}
       template(v-slot:content)
         select-visualization.q-mb-md
-        reset-button.q-mb-md
+        reset-button(
+          @reset="handleReset"
+        ).q-mb-md
 </template>

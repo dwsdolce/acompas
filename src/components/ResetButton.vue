@@ -2,13 +2,14 @@
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
+const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 const patternStore = usePatternStore()
@@ -21,6 +22,8 @@ const resetOptions = [
   { value: 'all', label: 'All patterns and settings' }
 ]
 
+const emit = defineEmits(['reset'])
+
 watch(resetDialog, () => {
   selectedResetOption.value = 'pattern'
 })
@@ -30,19 +33,34 @@ const {
 } = sessionStore
 
 const {
-  restoreDefault
+  restoreDefault,
+  initAll
 } = patternStore
+
+const {
+  selectedContextName,
+  selectedPatternName,
+} = storeToRefs(patternStore)
 
 const onSelectedOption = (v: string) => {
   selectedResetOption.value = v
 }
 
-const handleRestore = () => {
+const handleRestore = async () => {
   if (selectedResetOption.value === 'pattern') {
-    restoreDefault(route.name as string)
+    await restoreDefault(route.name as string)
   } else if (selectedResetOption.value === 'all') {
-    restoreDefault(selectedResetOption.value)
+    await restoreDefault(selectedResetOption.value)
   }
+  // router.go(0)
+  await initAll(selectedContextName.value, selectedPatternName.value)
+  $q.notify({
+    message: t('doc.reset.success'),
+    color: 'positive',
+    icon: 'mdi-check-circle-outline'
+  })
+  resetDialog.value = false
+  emit('reset', true)
 }
 </script>
 

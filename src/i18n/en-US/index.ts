@@ -127,7 +127,8 @@ export default {
       title: 'Restore default parameters',
       warning: 'Warning! This will delete your metronome settings.',
       close: 'Close',
-      proceed: 'Proceed'
+      proceed: 'Proceed',
+      success: 'Success! Your metronome setting has been reset.',
     },
     context: {
       title: 'Select a context',
