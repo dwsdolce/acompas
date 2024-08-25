@@ -1,13 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+import { useSessionStore } from 'src/stores/session'
 import CustomCard from 'src/components/CustomCard.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 
 const { t } = useI18n()
 
+const sessionStore = useSessionStore()
+
+const {
+  visualizationMode
+} = storeToRefs(sessionStore)
+
 const settingsDialog = ref(false)
+
+watch(visualizationMode, () => {
+  settingsDialog.value = false
+})
 
 </script>
 
