@@ -344,9 +344,9 @@ export const usePatternStore = defineStore('patterns', () => {
     }
 
     // If no selected context, select the first one and redirect
-    if (!selectedContext.value || !selectedPattern.value) {
-      resetContextPattern()
-    }
+    // if (!selectedContext.value || !selectedPattern.value) {
+    //   resetContextPattern()
+    // }
   }
 
   const initContext = async (contextName: string) => {
