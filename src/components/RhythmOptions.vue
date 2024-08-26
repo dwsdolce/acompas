@@ -2,7 +2,6 @@
 import { ref, onMounted, onUpdated } from 'vue'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
-import { useSessionStore } from 'src/stores/session'
 import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
 import SelectSwing from 'src/components/SelectSwing.vue'
@@ -11,17 +10,11 @@ import SelectPrestartBeat from 'src/components/SelectPrestartBeat.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
-const sessionStore = useSessionStore()
-
 const $q = useQuasar()
 const { t } = useI18n()
 
 const optDialog = ref(false)
 const optBtn = ref<QBtn | null>(null)
-
-const {
-  toggleDialog
-} = sessionStore
 
 onUpdated(() => {
   if (!optDialog.value && optBtn.value !== null) {

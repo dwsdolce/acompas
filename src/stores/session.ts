@@ -15,8 +15,6 @@ export const useSessionStore = defineStore('session', () => {
   const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
-  const privacyDialogOpen = ref<boolean>(false)
-  const dialogOpen = ref<boolean>(false)
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
   const visualizationModes = ref([
@@ -32,11 +30,6 @@ export const useSessionStore = defineStore('session', () => {
       selectedVisualizationMode.value = value
     }
   })
-
-  const selectVisualizationMode = (payload: string) => {
-    // if (isPlaying.value) stop()
-    selectedVisualizationMode.value = payload
-  }
 
   const toggleTrackVisits = (v: boolean) => {
     v ? enableTrackVisits() : disableTrackVisits()
@@ -59,18 +52,6 @@ export const useSessionStore = defineStore('session', () => {
 
   const enableTrackingChosen = () => {
     trackingChosen.value = true
-  }
-
-  const openPrivacyDialog = () => {
-    privacyDialogOpen.value = true
-  }
-
-  const closePrivacyDialog = () => {
-    privacyDialogOpen.value = false
-  }
-
-  const toggleDialog = (payload: boolean) => {
-    dialogOpen.value = payload
   }
 
   const toggleLeftDrawer = () => {
@@ -100,8 +81,6 @@ export const useSessionStore = defineStore('session', () => {
     trackingEnabled,
     trackingInitialized,
     trackingChosen,
-    privacyDialogOpen,
-    dialogOpen,
     leftDrawerOpen,
     visualizationSize,
     visualizationModes,
@@ -112,9 +91,6 @@ export const useSessionStore = defineStore('session', () => {
     disableTrackVisits,
     initializeTracking,
     enableTrackingChosen,
-    openPrivacyDialog,
-    closePrivacyDialog,
-    toggleDialog,
     toggleLeftDrawer,
     setVisualizationSize
   }

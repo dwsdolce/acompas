@@ -29,10 +29,6 @@ watch(resetDialog, () => {
 })
 
 const {
-  toggleDialog
-} = sessionStore
-
-const {
   restoreDefault,
   initAll
 } = patternStore
@@ -76,9 +72,7 @@ const handleRestore = async () => {
     @click="resetDialog = true"
   )
   q-dialog(
-    v-model="resetDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="resetDialog"
   )
     custom-card
       template(v-slot:title) {{ $t('doc.reset.title') }}

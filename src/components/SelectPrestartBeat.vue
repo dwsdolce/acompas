@@ -4,23 +4,17 @@ import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
-import { useSessionStore } from 'src/stores/session'
 import type { numOpts } from 'src/utils/types'
 
 const $q = useQuasar()
 const { t } = useI18n()
 const patternStore = usePatternStore()
-const sessionStore = useSessionStore()
 
 const {
   selectedPattern,
   selectedData,
   prestartBeat
 } = storeToRefs(patternStore)
-
-const {
-  toggleDialog
-} = sessionStore
 
 const arrayOfIndexes = computed(
   () => {

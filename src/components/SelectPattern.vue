@@ -5,7 +5,6 @@ import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
-import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
@@ -26,20 +25,14 @@ const $q = useQuasar()
 const router = useRouter()
 const { t } = useI18n()
 const patternStore = usePatternStore()
-const sessionStore = useSessionStore()
 
 const {
   data,
-  patterns,
   selectedContext,
   selectedPattern,
   selectedData,
   patternsInSelectedContext
 } = storeToRefs(patternStore)
-
-const {
-  toggleDialog
-} = sessionStore
 
 const patternsDialog = ref(false)
 const filter = ref('')

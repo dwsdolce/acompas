@@ -14,10 +14,6 @@ const {
   visualizationModes,
   visualizationMode
 } = storeToRefs(sessionStore)
-
-const {
-  toggleDialog
-} = sessionStore
 </script>
 
 <template lang="pug">

@@ -24,7 +24,6 @@ watch(visualizationMode, () => {
 const handleReset = () => {
   settingsDialog.value = false
 }
-
 </script>
 
 <template lang="pug">

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onUpdated } from 'vue'
 import { QCheckbox, QToggle, QSlider, useQuasar } from 'quasar'
-import type { instruOpts } from 'src/utils/types'
 import { usePatternStore } from 'src/stores/patterns'
 import { isFocusableElement } from 'src/utils/utils'
 

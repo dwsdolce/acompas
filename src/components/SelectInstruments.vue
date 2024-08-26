@@ -3,7 +3,6 @@ import { ref, watch, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { usePatternStore } from 'src/stores/patterns'
-import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
 import SelectDecay from 'src/components/SelectDecay.vue'
 import CustomCard from 'src/components/CustomCard.vue'
@@ -11,7 +10,6 @@ import type { QBtn } from 'quasar'
 
 const $q = useQuasar()
 const patternStore = usePatternStore()
-const sessionStore = useSessionStore()
 
 const mixerDialog = ref(false)
 const mixerBtn = ref<QBtn | null>(null)
@@ -19,10 +17,6 @@ const mixerBtn = ref<QBtn | null>(null)
 const {
   selectedPattern,
 } = storeToRefs(patternStore)
-
-const {
-  toggleDialog
-} = sessionStore
 
 onUpdated(() => {
   if (!mixerDialog.value && mixerBtn.value !== null) {
@@ -44,9 +38,7 @@ div
   )
   q-dialog(
     id="mixerDialog",
-    v-model="mixerDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="mixerDialog"
   )
     custom-card
       template(v-slot:title) {{ $t('doc.mixer.title') }}

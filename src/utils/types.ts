@@ -132,8 +132,6 @@ export interface SessionState {
   trackingEnabled:          boolean
   trackingInitialized:      boolean
   trackingChosen:           boolean
-  privacyDialogOpen:        boolean
-  dialogOpen:               boolean
   leftDrawerOpen:           boolean
   visualizationSize:        Size
 }

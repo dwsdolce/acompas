@@ -15,11 +15,6 @@ const { t } = useI18n()
 
 const { selectedData } = storeToRefs(patternStore)
 
-const {
-  visualizationMode,
-  toggleDialog
-} = sessionStore
-
 const patternHelpDialog = ref(false)
 
 const patternHelpBtn = ref<QBtn | null>(null)
@@ -57,9 +52,7 @@ span.q-ml-sm
   )
   q-dialog(
     id="patternHelpDialog",
-    v-model="patternHelpDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="patternHelpDialog"
   )
     custom-card
       template(v-slot:title) {{ selectedData?.longLabel }}

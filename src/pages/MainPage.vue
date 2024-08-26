@@ -45,7 +45,6 @@ const { setVisualizationSize } = sessionStore
 
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
 
-
 onMounted(() => {
   if (context && pattern) {
     initAll(context as string, pattern as string)

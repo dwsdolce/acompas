@@ -1,15 +1,12 @@
 <script setup lang="ts">
-  import { watch, ref, computed, onMounted, onUpdated } from 'vue'
+  import { ref, onUpdated } from 'vue'
   import { openURL, Platform } from 'quasar'
-  import { storeToRefs } from 'pinia'
-  import { useRouter, useRoute } from 'vue-router'
+  import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
   import CustomCard from 'src/components/CustomCard.vue'
-  import { useTuningForkStore } from 'src/stores/tuning-fork'
-  import { useSessionStore } from 'src/stores/session'
   import { isFocusableElement } from 'src/utils/utils'
   import type { QItem } from 'quasar'
 
@@ -22,27 +19,7 @@
   const shortcutsQItem = ref<QItem | null>(null)
 
   const router = useRouter()
-  const route = useRoute()
   const { t } = useI18n()
-  const sessionStore = useSessionStore()
-
-  const {
-    trackingChosen,
-    trackingInitialized,
-    privacyDialogOpen,
-    isUpToDatev3
-  } = storeToRefs(sessionStore)
-
-  const {
-    openPrivacyDialog,
-    toggleDialog
-  } = sessionStore
-
-  const tuningForkStore = useTuningForkStore()
-
-  const {
-    stop
-  } = tuningForkStore
 
   const launch = (url: string) => {
     // if (Platform.is.cordova) {
@@ -51,12 +28,6 @@
     // }
     openURL(url)
   }
-
-  // onMounted(() => {
-  //   if (!trackingChosen.value && route.path !== '/privacy-policy') {
-  //     openPrivacyDialog()
-  //   }
-  // })
 
   onUpdated(() => {
     if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
@@ -165,28 +136,17 @@ div
 
   q-dialog(
     id="helpDialog",
-    v-model="helpDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="helpDialog"
   )
     custom-card
       template(v-slot:title) {{ $t('help') }}
       template(v-slot:content)
         help-app
 
-  //- q-dialog(
-  //-   id="privacyDialog",
-  //-   v-model="privacyDialogOpen",
-  //-   @show="toggleDialog(true)",
-  //-   @hide="toggleDialog(false)"
-  //- )
-  //-   select-privacy
 
   q-dialog(
     id="shortcutsDialog",
-    v-model="shortcutsDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="shortcutsDialog"
   )
     custom-card
       template(v-slot:title) {{ $t('shortcuts') }}

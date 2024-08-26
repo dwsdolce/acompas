@@ -4,47 +4,30 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { useSessionStore } from 'src/stores/session'
-import { usePatternStore } from 'src/stores/patterns'
 
 const router = useRouter()
 const { t } = useI18n()
 const sessionStore = useSessionStore()
-const patternStore = usePatternStore()
 
 const {
   enableTrackVisits,
   enableTrackingChosen,
-  toggleTrackVisits,
-  closePrivacyDialog
+  toggleTrackVisits
 } = sessionStore
 
 const {
-  trackingEnabled,
-  privacyDialogOpen
+  trackingEnabled
 } = storeToRefs(sessionStore)
-
-const {
-  selectedContextName,
-  selectedPatternName
-} = storeToRefs(patternStore)
 
 const handleEnableAndClose = () => {
   enableTrackVisits()
   enableTrackingChosen()
-  if (privacyDialogOpen.value) {
-    closePrivacyDialog()
-  } else {
-    router.push('/')
-  }
+  router.push('/')
 }
 
 const handleClose = () => {
   enableTrackingChosen()
-  if (privacyDialogOpen.value) {
-    closePrivacyDialog()
-  } else {
-    router.push('/')
-  }
+  router.push('/')
 }
 </script>
 
