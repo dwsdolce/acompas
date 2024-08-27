@@ -11,7 +11,7 @@ const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
 const {
-  isUpToDatev3
+  isUpToDatev4
 } = storeToRefs(sessionStore)
 
 const {
@@ -22,7 +22,7 @@ const handleUpdateApp = async () => {
   Loading.show({
     message: 'Loading…',
   })
-  isUpToDatev3.value = true
+  isUpToDatev4.value = true
   await restoreDefault('all')
   Loading.hide()
 }

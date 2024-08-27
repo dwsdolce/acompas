@@ -13,11 +13,11 @@ const sessionStore = useSessionStore()
 
 const {
   trackingChosen,
-  isUpToDatev3
+  isUpToDatev4
 } = storeToRefs(sessionStore)
 
 const updateDialog = computed(() => {
-  return !isUpToDatev3.value
+  return !isUpToDatev4.value
 })
 
 onMounted(() => {
