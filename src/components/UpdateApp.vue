@@ -25,6 +25,7 @@ const handleUpdateApp = async () => {
   isUpToDatev4.value = true
   await restoreDefault('all')
   Loading.hide()
+  router.go(0)
 }
 
 </script>
