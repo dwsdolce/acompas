@@ -103,13 +103,15 @@ Alternatively, you can do it with Python
 
 To do so you also have to install some Python dependencies
 ``` bash
+python -m venv acompasenv
+source acompasenv/bin/activate
 pip install colorama
 ```
 
 Then, you can run the Python script :
 
 ``` bash
-python3 public/format_audio.py convert
+python format_audio.py convert
 ```
 
 ### Run the app
