@@ -23,6 +23,7 @@ const handleUpdateApp = async () => {
     message: 'Loading…',
   })
   isUpToDatev4.value = true
+  localStorage.clear()
   await restoreDefault('all')
   Loading.hide()
   router.go(0)
