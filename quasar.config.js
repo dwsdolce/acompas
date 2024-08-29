@@ -199,7 +199,7 @@ module.exports = configure(function (/* ctx */) {
       // extendElectronMainConf (esbuildConf)
       // extendElectronPreloadConf (esbuildConf)
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
       // electron-packager options
       // https://electron.github.io/electron-packager/main/
@@ -219,7 +219,18 @@ module.exports = configure(function (/* ctx */) {
       // electron-builder options
       // https://www.electron.build/configuration/configuration
       builder: {
-        appId: 'audio.acompas.app'
+        appId: 'audio.acompas.app',
+        productName: 'Acompas Audio',
+        copyright: 'Copyright © 2024 Acompas Audio',
+        mac: {
+          category: 'public.app-category.music'
+        },
+        win: {
+          target: ['nsis', 'portable']
+        },
+        linux: {
+          target: ['AppImage', 'deb']
+        }
       },
 
       // Specify additional parameters when yarn/npm installing

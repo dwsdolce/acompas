@@ -192,6 +192,19 @@ quasar dev -m ios
 quasar build -m ios
 ```
 
+### Electron
+#### Setup
+```bash
+quasar mode add electron
+```
+
+``` bash
+# Build and run electron app in debug mode
+quasar dev -m electron
+# Build electron app for production
+quasar build -m electron
+```
+
 #### Troubleshooting
 
 In case cocoapods is missing in your environment, [go here](https://guides.cocoapods.org/using/getting-started.html).

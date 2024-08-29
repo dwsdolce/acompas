@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
 import { initialize, enable } from '@electron/remote/main' // <-- add this
 import path from 'path'
 import os from 'os'
@@ -21,6 +21,7 @@ let mainWindow: BrowserWindow | undefined
 // }
 
 function createWindow() {
+  let powerSaveBlockerId: number
   /**
    * Initial window options
    */
@@ -28,14 +29,15 @@ function createWindow() {
 
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
-    width: 1000,
-    height: 600,
+    width: 1500,
+    height: 800,
     frame: false,
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 10, y: 10 },
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
+      sandbox: false,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
       preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD),
     },
@@ -54,6 +56,14 @@ function createWindow() {
       mainWindow?.webContents.closeDevTools()
     })
   }
+
+  ipcMain.on('keep-awake', () => {
+    powerSaveBlockerId = powerSaveBlocker.start('prevent-display-sleep')
+  })
+
+  ipcMain.on('allow-sleep', () => {
+    powerSaveBlocker.stop(powerSaveBlockerId as number)
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = undefined
