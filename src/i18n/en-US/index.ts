@@ -8,13 +8,11 @@ import { context } from "tone";
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
-
   welcome: 'Welcome to A Compás app',
   notFound: {
     header: 'Sorry, this page doesn\'t exist.',
     btn: 'Go back to patterns'
   },
-
   donate: 'Donate',
   help: 'Help',
   tuning: 'Tuning fork',
@@ -25,9 +23,6 @@ export default {
   share: 'Share',
   source: 'Source code',
   issues: 'Issues',
-
-  updated: 'App successfuly updated',
-
   doc: {
     welcome: {
       title: 'Welcome to the A Compás app',
@@ -201,14 +196,14 @@ export default {
       bpm: 'BPM'
     },
     update: {
-      title: 'App update',
+      title: 'App initialization',
       content: `<p>
-                  You need to delete all your local settings and reload the page in order to use the new version of the app.
+                  The settings of the app have to be (re-)initialized.
                 </p>
                 <p>
-                  If you were previously using this app, you will lose all your settings and patterns. But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.
+                  If you were using a previous version of this app, you will lose all your settings and patterns. But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.
                 </p>`,
-      button: 'Delete settings and reload'
+      button: 'Reload app'
     },
     tuning: {
       title: 'Tuning fork',

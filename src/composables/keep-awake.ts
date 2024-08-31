@@ -1,7 +1,6 @@
 import { ref, watch } from 'vue'
 import { Platform } from 'quasar'
 import { KeepAwake } from '@capacitor-community/keep-awake'
-// import { ipcRenderer } from 'electron'
 
 export const useKeepAwake = () => {
   // if (Platform.is.capacitor && await isSupported()) {

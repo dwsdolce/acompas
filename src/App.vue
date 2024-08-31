@@ -36,7 +36,7 @@ div
       v-model="updateDialog"
     )
       custom-card(:persistant="true")
-        template(v-slot:title) {{ $t('updated') }}
+        template(v-slot:title) {{ $t('doc.update.title') }}
         template(v-slot:content)
           UpdateApp
 </template>

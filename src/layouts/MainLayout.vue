@@ -44,8 +44,8 @@ q-layout(view="hhh LpR lFf")
         to="/"
       ).row.items-center.no-wrap.q-px-sm
         q-avatar.shadow-1
-          img(src="~assets/ACompas-4-logo.png" alt="A Compás icon", width="40")
-        img(src="~assets/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
+          img(src="/ACompas-4-logo.png" alt="A Compás icon", width="40")
+        img(src="/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
       SelectContext

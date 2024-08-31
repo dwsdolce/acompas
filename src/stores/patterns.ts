@@ -318,7 +318,6 @@ export const usePatternStore = defineStore('patterns', () => {
       patterns.value.splice(patternIndex, 1)
     }
     return
-    // router.go(0)
   }
 
   // *****************************************
