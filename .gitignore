@@ -20,6 +20,7 @@ node_modules
 /test/cypress/videos
 /public/favicon.ico
 /public/icons/*.png
+/public/icons/*.svg
 /public/audio/*.mp3
 /public/audio/*.wav
 /public/audio/*.ogg
@@ -33,6 +34,9 @@ node_modules
 # Capacitor related directories and files
 /src-capacitor/www
 /src-capacitor/node_modules
+
+# Electron related directories and files
+/src-electron/icons
 
 # BEX related directories and files
 /src-bex/www
