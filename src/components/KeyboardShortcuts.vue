@@ -29,12 +29,3 @@ q-markup-table(flat)
         kbd Tab
       td.text-left {{ $t('doc.shortcuts.tab') }}
 </template>
-
-<style lang="sass">
-kbd
-  background-color: lightgray
-  padding: 3px 8px
-  margin: 3px
-  border-radius: 4px
-  text-shadow: 1px 1px 0 white
-</style>

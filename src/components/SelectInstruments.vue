@@ -44,7 +44,7 @@ div
       template(v-slot:title) {{ $t('doc.mixer.title') }}
       template(v-slot:content)
         select-decay.q-mt-md
-        table.q-table.q-mb-md
+        table#table.q-table.q-mb-md
           thead
             tr
               th.text-center {{ $t('doc.mixer.active.title') }}

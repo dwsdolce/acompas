@@ -88,36 +88,3 @@ q-page.text-grey-1.flex
     .sub-panel(v-if="$q.screen.lt.md")
       play-button
 </template>
-
-<style lang="sass">
-.main-panel
-  height: 100%
-  display: flex
-  flex-direction: column
-  .top-panel
-    display: flex
-    flex-wrap: nowrap
-    justify-content: center
-    align-items: center
-    text-align: center
-    align-content: center
-    flex-grow: 1
-  .bottom-panel
-    align-items: center
-    text-align: center
-    flex-grow: 3
-    .left-panel
-      flex-grow: 1
-    .middle-panel
-      flex-grow: 1
-    .right-panel
-      display: flex
-      align-items: center
-      flex-direction: column
-      flex-grow: 1
-  .sub-panel
-    display: flex
-    justify-content: center
-    align-items: center
-    flex-grow: 1
-</style>

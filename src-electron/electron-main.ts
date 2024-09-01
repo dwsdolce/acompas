@@ -20,8 +20,11 @@ let mainWindow: BrowserWindow | undefined
 //   global.__statics = __dirname
 // }
 
+
+
 function createWindow() {
   let powerSaveBlockerId: number
+
   /**
    * Initial window options
    */
@@ -39,7 +42,7 @@ function createWindow() {
       contextIsolation: true,
       sandbox: false,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD),
+      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
     },
   })
 
@@ -64,6 +67,12 @@ function createWindow() {
   ipcMain.on('allow-sleep', () => {
     powerSaveBlocker.stop(powerSaveBlockerId as number)
   })
+
+  // ipcMain.on('getAssetPath', (path: string) => {
+  //   return app.isPackaged
+  //     ? path.join(process.resourcesPath, 'public', path)
+  //     : path.join(__dirname, '..', 'public', path)
+  // })
 
   mainWindow.on('closed', () => {
     mainWindow = undefined

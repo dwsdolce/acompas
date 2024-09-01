@@ -9,6 +9,8 @@ declare namespace NodeJS {
 
 interface Window {
   electronAPI: {
-    sendMessage: (channel: string, data?: any) => void
+    sendMessage: (channel: string, data?: any) => void,
+    getAssetPath: (path: string) => string,
+    getPublicPath: () => string
   }
 }

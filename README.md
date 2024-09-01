@@ -196,6 +196,7 @@ quasar build -m ios
 #### Setup
 ```bash
 quasar mode add electron
+icongenie generate -m electron -i ./app-icon.png
 ```
 
 ``` bash

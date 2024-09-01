@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Screen, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import LeftDrawer from 'src/components/LeftDrawer.vue'
@@ -22,6 +22,9 @@ const appVersion = process.env.APP_VERSION?.valueOf() || '4'
 const onResize = (size: Size) => {
   setVisualizationSize(size)
 }
+
+const publicFolder = computed(() => Platform.is.electron ? window.electronAPI.getPublicPath() : '')
+
 </script>
 
 <template lang="pug">
@@ -44,8 +47,8 @@ q-layout(view="hhh LpR lFf")
         to="/"
       ).row.items-center.no-wrap.q-px-sm
         q-avatar.shadow-1
-          img(src="/ACompas-4-logo.png" alt="A Compás icon", width="40")
-        img(src="/ACompas-4-name.png" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
+          img(:src="`${publicFolder}/ACompas-4-logo.png`" alt="A Compás icon", width="40")
+        img(:src="`${publicFolder}/ACompas-4-name.png`" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
       SelectContext
@@ -71,20 +74,3 @@ q-layout(view="hhh LpR lFf")
       Transition(name="fade", mode="out-in")
         component(:is="Component", :key="route.fullPath")
 </template>
-
-<style lang="sass">
-.q-electron-drag
-  background: transparent
-
-#appMain
-  // overflow: hidden
-  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
-
-.fade-enter-active,
-.fade-leave-active
-  transition: opacity 0.5s ease
-
-.fade-enter-from,
-.fade-leave-to
-  opacity: 0
-</style>

@@ -59,11 +59,3 @@ q-page.q-pa-sm.flex.justify-center.items-center
               @click="isPlaying ? stop() : play()"
             )
 </template>
-
-<style lang="sass" scoped>
-.tuning-btn
-  border: 1px solid black
-  background: transparent
-  &.active
-    background: rgba(0, 0, 0, 0.15)
-</style>

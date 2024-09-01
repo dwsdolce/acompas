@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import { computed, ComputedRef, Ref, ref, reactive, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
-import { Loading, Notify, Dialog } from 'quasar'
+import { Loading, Notify, Dialog, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
@@ -50,7 +50,8 @@ export const useMetronome = () => {
    * @returns {void}
    */
   const loadSounds = async (): Promise<void> => {
-    const path = '/audio/'
+    const publicFolder = Platform.is.electron ? window.electronAPI.getPublicPath() : ''
+    const path = `${publicFolder}/audio/`
     const audio = new Audio()
 
     if (audio.canPlayType('audio/flac')) {

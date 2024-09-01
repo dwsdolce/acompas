@@ -72,7 +72,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: '/',
       // analyze: true,
       // env: {},
       // rawDefine: {}
@@ -220,17 +220,20 @@ module.exports = configure(function (/* ctx */) {
       // https://www.electron.build/configuration/configuration
       builder: {
         appId: 'audio.acompas.app',
-        productName: 'Acompas Audio',
-        copyright: 'Copyright © 2024 Acompas Audio',
+        productName: 'Acompas',
+        copyright: 'Copyright © 2024 Acompas',
         mac: {
-          category: 'public.app-category.music'
+          category: 'public.app-category.music',
+          extraResources: [
+            'public'
+          ]
         },
-        win: {
-          target: ['nsis', 'portable']
-        },
-        linux: {
-          target: ['AppImage', 'deb']
-        }
+        // win: {
+        //   target: ['nsis', 'portable']
+        // },
+        // linux: {
+        //   target: ['AppImage', 'deb']
+        // }
       },
 
       // Specify additional parameters when yarn/npm installing

@@ -8,3 +8,130 @@ p
   &.caption, &.lonely-btn
     margin-top: 14px
     margin-bottom: 7px
+
+kbd
+  background-color: lightgray
+  padding: 3px 8px
+  margin: 3px
+  border-radius: 4px
+  text-shadow: 1px 1px 0 white
+
+#table
+  tr > td
+    padding: 0.5rem 0
+
+.q-electron-drag
+  background: transparent
+
+#appMain
+  // overflow: hidden
+  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
+
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 0.5s ease
+
+.fade-enter-from,
+.fade-leave-to
+  opacity: 0
+
+.main-panel
+  height: 100%
+  display: flex
+  flex-direction: column
+  .top-panel
+    display: flex
+    flex-wrap: nowrap
+    justify-content: center
+    align-items: center
+    text-align: center
+    align-content: center
+    flex-grow: 1
+  .bottom-panel
+    align-items: center
+    text-align: center
+    flex-grow: 3
+    .left-panel
+      flex-grow: 1
+    .middle-panel
+      flex-grow: 1
+    .right-panel
+      display: flex
+      align-items: center
+      flex-direction: column
+      flex-grow: 1
+  .sub-panel
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-grow: 1
+
+.page404
+  margin: 0 auto
+  .page404-hero
+    font-family: 'Playball'
+    font-size: 18rem
+    margin: -60px auto
+  .page404-subtitle
+    font-size: 1.5rem
+
+$shadow_1: 0 0 5px 5px rgba(0,0,0,0.4)
+$shadow_2: 0 0 15px 15px rgba(255,255,255,0.12)
+$shadow_3: inset 0 0 2px 2px rgba(255,255,255,0.2)
+
+#playBtn
+  text-shadow: 0 0 15px rgba(0,0,0,0.5)
+  &::before
+    box-shadow: $shadow_1, $shadow_2, $shadow_3
+
+$size : 30vh
+$axis : 2vh
+
+#clock
+  width: $size
+  height: $size
+  border-radius: 50%
+  background-color: $blue-grey-1
+  position: relative
+  .axis
+    width: $axis
+    height: $axis
+    border-radius: calc($axis / 2)
+    background-color: black
+    position: absolute
+    top: calc($size / 2) - calc($axis / 2)
+    left: calc($size / 2) - calc($axis / 2)
+  .hand
+    width: calc($axis / 2)
+    height: calc($size / 3)
+    position: absolute
+    top: calc($size / 6) - calc($axis / 4)
+    left: calc($size / 2) - calc($axis / 4)
+    background-color: black
+    border-radius: 100% 100% 0% 0%
+    // transform: v-bind('rotationValue')
+    transform-origin: center (calc($size / 3) + calc($axis / 4))
+  ul
+    height: calc($size / 2.2)
+    position: absolute
+    list-style: none
+    width: 0
+    left: 50%
+    bottom: 50%
+    margin: 0
+    li
+      left: 0
+      height: 100%
+      transform-origin: 0% 100%
+      .num
+        color: $primary
+        font-size: calc($size / 10)
+        font-weight: bold
+        // @media screen and (max-height: 600px)
+        //   font-size: 0.8rem
+
+.tuning-btn
+  border: 1px solid black
+  background: transparent
+  &.active
+    background: rgba(0, 0, 0, 0.15)

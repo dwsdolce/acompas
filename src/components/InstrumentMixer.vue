@@ -78,8 +78,3 @@ tr
       markers
     )
 </template>
-
-<style lang="sass" scoped>
-tr > td
-  padding: 0.5rem 0
-</style>

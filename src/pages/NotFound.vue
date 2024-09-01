@@ -21,14 +21,3 @@ q-page.text-grey-1.q-pa-sm.flex.justify-center.items-center
       to="/"
     )
 </template>
-
-<style lang="sass">
-.page404
-  margin: 0 auto
-.page404-hero
-  font-family: 'Playball'
-  font-size: 18rem
-  margin: -60px auto
-.page404-subtitle
-  font-size: 1.5rem
-</style>
