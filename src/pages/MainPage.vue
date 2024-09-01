@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onUpdated, onMounted, onUnmounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar, Platform, setCssVar, colors } from 'quasar'
+import { useQuasar, Platform, setCssVar, colors, is } from 'quasar'
 import { useRouter, useRoute } from 'vue-router'
 import SelectPattern from 'src/components/SelectPattern.vue'
 import RhythmOptions from 'src/components/RhythmOptions.vue'
@@ -27,6 +27,7 @@ const { context, pattern } = route.params
 
 const {
   data,
+  isPlaying,
   selectedPattern,
   selectedContext,
   selectedContextName,
@@ -37,6 +38,7 @@ const {
   initAll,
   initContext,
   initPattern,
+  stop
 } = patternStore
 
 const { visualizationMode } = storeToRefs(sessionStore)
@@ -51,6 +53,10 @@ onMounted(() => {
     setCssVar('primary', getPaletteColor(selectedContext.value.colors?.primary))
     setCssVar('secondary', getPaletteColor(selectedContext.value.colors?.secondary))
   }
+})
+
+onUnmounted(() => {
+  if (isPlaying.value) stop()
 })
 
 watch(() => route.params, async (params) => {
