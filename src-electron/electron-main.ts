@@ -1,7 +1,8 @@
 import { app, BrowserWindow, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
 import { initialize, enable } from '@electron/remote/main' // <-- add this
-import path from 'path'
 import os from 'os'
+import url from 'url'
+import path from 'path'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -20,6 +21,14 @@ let mainWindow: BrowserWindow | undefined
 //   global.__statics = __dirname
 // }
 
+let isRemoteInitialized = false;
+
+function initializeRemote() {
+  if (!isRemoteInitialized) {
+    initialize();
+    isRemoteInitialized = true;
+  }
+}
 
 
 function createWindow() {
@@ -28,7 +37,7 @@ function createWindow() {
   /**
    * Initial window options
    */
-  initialize() // <-- add this
+  initializeRemote() // <-- add this
 
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
@@ -48,13 +57,18 @@ function createWindow() {
 
   enable(mainWindow.webContents) // <-- add this
 
-  mainWindow.loadURL(process.env.APP_URL)
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
+    mainWindow.loadURL(process.env.APP_URL)
     mainWindow.webContents.openDevTools()
   } else {
     // we're on production no access to devtools pls
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file',
+      slashes: true
+    }))
     mainWindow.webContents.on('devtools-opened', () => {
       mainWindow?.webContents.closeDevTools()
     })
@@ -67,12 +81,6 @@ function createWindow() {
   ipcMain.on('allow-sleep', () => {
     powerSaveBlocker.stop(powerSaveBlockerId as number)
   })
-
-  // ipcMain.on('getAssetPath', (path: string) => {
-  //   return app.isPackaged
-  //     ? path.join(process.resourcesPath, 'public', path)
-  //     : path.join(__dirname, '..', 'public', path)
-  // })
 
   mainWindow.on('closed', () => {
     mainWindow = undefined

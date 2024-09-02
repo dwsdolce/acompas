@@ -1,8 +1,4 @@
 // app global css in Sass form
-@font-face
-  font-family: 'Playball'
-  src: url('/fonts/Playball/Playball-Regular.ttf') format('truetype')
-
 p
   margin: 0 0 7px
   &.caption, &.lonely-btn
@@ -66,14 +62,15 @@ kbd
     align-items: center
     flex-grow: 1
 
-.page404
-  margin: 0 auto
-  .page404-hero
-    font-family: 'Playball'
-    font-size: 18rem
-    margin: -60px auto
-  .page404-subtitle
+#page404
+  .title
+    h1
+      font-size: 18rem
+      font-weight: lighter
+      margin: 6rem
+  .subtitle
     font-size: 1.5rem
+    margin-bottom: 1.5rem
 
 $shadow_1: 0 0 5px 5px rgba(0,0,0,0.4)
 $shadow_2: 0 0 15px 15px rgba(255,255,255,0.12)

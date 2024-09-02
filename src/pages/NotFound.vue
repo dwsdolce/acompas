@@ -12,12 +12,12 @@ const { t } = useI18n()
 
 <template lang="pug">
 q-page.text-grey-1.q-pa-sm.flex.justify-center.items-center
-  .main-panel.page404.column.flex-center.text-center.relative-position
-    .page404-hero.text-grey-5.flex.flex-center.no-wrap.q-gutter-sm 404
-    .page404-subtitle.q-mb-xl {{ $t('notFound.header') }}
+  .main-panel#page404.column.flex-center.text-center.relative-position
+    .title.col: h1.text-grey-5 404
+    .subtitle.col {{ $t('notFound.header') }}
     q-btn(
       color="primary",
       :label="$t('notFound.btn')",
       to="/"
-    )
+    ).col
 </template>
