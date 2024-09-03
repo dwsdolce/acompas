@@ -83,15 +83,15 @@ div
     custom-card
       template(v-slot:title) {{ $t('doc.pattern.title') }}
       template(v-slot:content)
-        .row.items-center.q-mb-md
-          HelpSearchPattern.col-1
+        .flex.no-wrap.items-center.q-mb-md
+          HelpSearchPattern
           q-input(
             v-model="filter",
             outlined,
             dense,
             :debounce="500",
-            :placeholder="$q.screen.lt.md ? $t('doc.pattern.searchSM') : $t('doc.pattern.search')"
-          ).col-11
+            :placeholder="$q.screen.lt.md ? $t('doc.pattern.search') : $t('doc.pattern.search')"
+          ).full-width
             template(v-slot:append)
               q-icon(name="mdi-close", @click="filter = ''").cursor-pointer
 

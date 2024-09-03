@@ -23,8 +23,9 @@ q-btn(
   round,
   unelevated,
   size="xl",
-  :padding="$q.screen.lt.md ? 'md' : 'xl'",
   color="primary",
+  :debounce="500",
+  :padding="$q.screen.lt.md ? 'md' : 'xl'",
   :icon="isPlaying ? 'mdi-stop' : 'mdi-play'",
   @click="isPlaying ? stop() : play()"
 )

@@ -9,12 +9,12 @@ const patternSearchHelpDialog = ref(false)
 </script>
 
 <template lang="pug">
-span
+span.q-px-sm
   q-btn(
+    flat,
+    round,
     id="patternSearchHelpBtn",
     ref="patternSearchHelpBtn",
-    round,
-    flat,
     size="15px",
     padding="none",
     icon="mdi-help-box",
