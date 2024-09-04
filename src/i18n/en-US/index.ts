@@ -1,10 +1,6 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-import { get } from "http";
-import { title } from "process";
-import { context } from "tone";
-
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
@@ -26,37 +22,40 @@ export default {
   doc: {
     welcome: {
       title: 'Welcome to the A Compás app',
-      content: `This app is designed to help you learn and practice your musical instrument.
-                It is a work in progress, so please be patient with us as we continue to improve it.
-                If you have any questions or suggestions, please contact us.`
+      content: `
+This app is designed to help you learn and practice your musical instrument.
+It is a work in progress, so please be patient with us as we continue to improve it.
+If you have any questions or suggestions, please contact us.`
     },
     getStarted: {
       title: 'Get started',
-      content: `<ul>
-                  <li>Select a <b>pattern</b> from the list. A pattern (also called "palo" in flamenco) is a rhythmic style.</li>
-                  <li>Adjust the <b>tempo</b> (speed) of the pattern.</li>
-                  <li>Select <b>instruments</b> in the mixer.</li>
-                  <li><b>Start</b> playing the metronome.</li>
-                </ul>`
+      content: `
+- Select a **pattern** from the list. A pattern (also called "palo" in flamenco) is a rhythmic style.
+- Adjust the **tempo** (speed) of the pattern.
+- Select **instruments** in the mixer.
+- **Start** playing the metronome.`
     },
     options: {
       title: 'List of options',
       content: {
         tempo: {
           title: 'Tempo',
-          content: `There are 2 ways to define the tempo: the knob circle, and you can decrement/increment the bpm with the + and - buttons.
-                    You can also type the tempo directly in the input field, use the mouse wheel, or the up and down arrow keys.
-                    The tempo is the speed of the metronome, measured in beats per minute.`,
+          content: `
+There are 2 ways to define the tempo: the knob circle, and you can decrement/increment the bpm with the + and - buttons.
+You can also type the tempo directly in the input field, use the mouse wheel, or the up and down arrow keys.
+The tempo is the speed of the metronome, measured in beats per minute.`,
         },
         mixer: {
           title: 'Instruments mixer',
-          content: `Select playing instruments (make sure to have at least one active instrument),
-                    set its own relative volume, and wether playing quarter notes or eighth notes.`,
+          content: `
+Select playing instruments (make sure to have at least one active instrument),
+set its own relative volume, and wether playing quarter notes or eighth notes.`,
         },
         improvise: {
           title: 'Improvise',
-          content: `If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random beats for one or more instrument(s).
-                    This produces some "surprise" in the pattern.`,
+          content: `
+If it is on, then sometimes the metronome will stop sticking to the pre-programmed pattern and play random beats for one or more instrument(s).
+This produces some "surprise" in the pattern.`,
         },
         humanize: {
           title: 'Humanize',
@@ -72,11 +71,12 @@ export default {
         },
         startBeat: {
           title: 'Start beat',
-          content: `Change the start beat (which beat selected the pattern starts on).
-                    This is useful if you want to start the pattern on a different beat.
-                    For example, if you want to start on the 2nd beat of the pattern, set the start beat to 2.
-                    The start beat is also useful if you want to practice a particular part of the pattern.
-                    The notes between the start beat and the begining of the pattern will be played as a click sound.ct the beat where the metronome will start playing.`,
+          content: `
+Change the start beat (which beat selected the pattern starts on).
+This is useful if you want to start the pattern on a different beat.
+For example, if you want to start on the 2nd beat of the pattern, set the start beat to 2.
+The start beat is also useful if you want to practice a particular part of the pattern.
+The notes between the start beat and the begining of the pattern will be played as a click sound.`,
         },
         viewMode: {
           title: 'View mode',
@@ -96,17 +96,14 @@ export default {
     },
     searchPattern: {
       title: 'Search for a pattern',
-      content: `<p>
-                  Many flamenco "palos" are actually derived from other rhythmical structures.
-                  For example, "farruca" is derived from "tientos", "columbiana" or "garrotín" are kinds of "tangos".
-                  Here you can input the name of any "palo" you ever heard of and A Compás will search for the patterns which it is derived from.
-                </p>
-                <ul>
-                  <li>Search for a pattern by typing its name or a part of it.</li>
-                  <li>The search is case insensitive.</li>
-                  <li>The search is performed on the pattern name and on the linked patterns.</li>
-                  <li>The search is performed on the whole string, not on the words.</li>
-                </ul>`,
+      content: `
+Many flamenco **palos** are actually derived from other rhythmical structures.
+For example, "farruca" is derived from "tientos", "columbiana" or "garrotín" are kinds of "tangos".
+Here you can input the name of any "palo" you ever heard of and A Compás will search for the patterns which it is derived from.
+- Search for a pattern by typing its name or a part of it.
+- The search is case insensitive.
+- The search is performed on the pattern name and on the linked patterns.
+- The search is performed on the whole string, not on the words.`
     },
     shortcuts: {
       title: 'The following shortcuts are available for usage with the keyboard:',
@@ -168,25 +165,21 @@ export default {
     },
     privacy: {
       title: 'Privacy policy',
-      content: `<p>
-                  This app uses a tool called "Matomo" to collect anonymised visits analytics data.
-                  If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app),
-                  and observe some of your actions in the app
-                  (essentially metronome 'Play' and 'Stop' actions to infer time playing),
-                  anonymising your IP address.
-                </p>
-                <p>
-                  This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
-                </p>
-                <p>
-                  You can enable or disable this feature when you want to.
-                </p>`,
-      allow: `<p>
-                <b>We don't collect any nominative personal data.</b>
-             </p>
-             <p>
-                <b>Allow this app to send us some anonymised usage data ?</b>
-             </p>`,
+      content: `
+This app uses a tool called **Matomo** to collect anonymised visits analytics data.
+
+If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website),
+or in the mobile device (for the Android app),
+and observe some of your actions in the app
+(essentially metronome 'Play' and 'Stop' actions to infer time playing),
+anonymising your IP address.
+
+This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
+You can enable or disable this feature when you want to.`,
+      allow: `
+We don't collect any nominative personal data.
+
+**Allow this app to send us some anonymised usage data ?**`,
       enable: 'Enable & close',
       close: 'Close',
     },
@@ -197,12 +190,11 @@ export default {
     },
     update: {
       title: 'App initialization',
-      content: `<p>
-                  The settings of the app have to be (re-)initialized.
-                </p>
-                <p>
-                  If you were using a previous version of this app, you will lose all your settings and patterns. But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.
-                </p>`,
+      content: `
+The settings of the app have to be (re-)initialized.
+
+If you were using a previous version of this app, you will lose all your settings and patterns.
+But this is the only way to get the new features. If it is your first use, this will change nothing so go ahead.`,
       button: 'Reload app'
     },
     tuning: {

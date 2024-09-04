@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { Loading } from 'quasar'
+import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
@@ -33,7 +34,7 @@ const handleUpdateApp = async () => {
 
 <template lang="pug">
 .text-center
-  div(v-html="$t('doc.update.content')").q-mb-md
+  MarkdownRenderer(:content="$t('doc.update.content')").q-mb-md
   q-btn(
     unelevated,
     :label="$t('doc.update.button')",

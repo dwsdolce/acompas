@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
+import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { useSessionStore } from 'src/stores/session'
 
 const router = useRouter()
@@ -36,14 +37,14 @@ custom-card(:popup="false")
   template(v-slot:title) {{ $t('doc.privacy.title') }}
   template(v-slot:content)
     .text-center
-      div(v-html="$t('doc.privacy.allow')").q-mb-sm
+      MarkdownRenderer(:content="$t('doc.privacy.allow')").q-mb-sm
       q-toggle(
         :model-value="trackingEnabled",
         @update:model-value="toggleTrackVisits($event)",
         color="primary",
         keep-color
       ).primary
-      div(v-html="$t('doc.privacy.content')")
+      MarkdownRenderer(:content="$t('doc.privacy.content')")
   template(v-slot:actions)
     q-btn(
       unelevated,

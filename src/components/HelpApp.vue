@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 
 const { t } = useI18n()
 </script>
@@ -14,7 +15,7 @@ div
   q-separator.q-mb-md
   div.q-mb-md
     .text-h6.text-center {{ $t('doc.getStarted.title') }}
-    div(v-html="$t('doc.getStarted.content')")
+    MarkdownRenderer(:content="$t('doc.getStarted.content')")
 
   q-separator.q-mb-md
   div.q-mb-md

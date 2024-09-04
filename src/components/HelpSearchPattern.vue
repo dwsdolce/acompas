@@ -2,6 +2,7 @@
 import { ref, computed, onUpdated, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
+import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 
 const { t } = useI18n()
 const patternSearchHelpDialog = ref(false)
@@ -28,5 +29,5 @@ span.q-px-sm
     custom-card
       template(v-slot:title) {{ t('doc.searchPattern.title') }}
       template(v-slot:content)
-        div(v-html="t('doc.searchPattern.content')")
+        MarkdownRenderer(:content="t('doc.searchPattern.content')")
 </template>
