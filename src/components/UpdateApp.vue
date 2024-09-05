@@ -2,10 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { Loading } from 'quasar'
+import { Loading, Platform } from 'quasar'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
+import { AppRestart } from 'src/plugins/app-restart'
 
 const router = useRouter()
 const patternStore = usePatternStore()
@@ -27,6 +28,9 @@ const handleUpdateApp = async () => {
   isUpToDatev4.value = true
   await restoreDefault('all')
   Loading.hide()
+  if (Platform.is.capacitor) {
+    await AppRestart.restart()
+  }
   router.go(0)
 }
 
