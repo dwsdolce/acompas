@@ -1,5 +1,6 @@
-package main.java.audio.acompas.app; // package audio.acompas.app;
+package audio.acompas.app;
 
+import audio.acompas.app.MainActivity;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
