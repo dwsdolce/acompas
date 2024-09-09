@@ -2,5 +2,14 @@
   "appId": "audio.acompas.app",
   "appName": "A Compás",
   "npmClient": "yarn",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "AppRestart": {
+      "android": "audio.acompas.app.AppRestartPlugin"
+    }
+  },
+  "server": {
+    "cleartext": true,
+    "url": "http://192.168.1.174:9500"
+  }
 }

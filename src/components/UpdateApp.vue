@@ -7,6 +7,7 @@ import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { AppRestart } from 'src/plugins/app-restart'
+import { Capacitor } from '@capacitor/core'
 
 const router = useRouter()
 const patternStore = usePatternStore()
@@ -28,8 +29,13 @@ const handleUpdateApp = async () => {
   isUpToDatev4.value = true
   await restoreDefault('all')
   Loading.hide()
-  if (Platform.is.capacitor) {
-    await AppRestart.restart()
+
+  if (Capacitor.isNativePlatform()) {
+    try {
+      await AppRestart.restart()
+    } catch (error) {
+      console.error(error)
+    }
   }
   router.go(0)
 }
