@@ -9,7 +9,6 @@
     }
   },
   "server": {
-    "cleartext": true,
-    "url": "http://192.168.1.174:9500"
+    "cleartext": true
   }
 }
