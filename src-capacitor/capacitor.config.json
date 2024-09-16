@@ -9,6 +9,8 @@
     }
   },
   "server": {
+    "androidScheme": "https",
+    "hostname": "acompas.org",
     "cleartext": true
   }
 }
