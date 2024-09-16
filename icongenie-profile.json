@@ -46,7 +46,6 @@
       "generator": "png",
       "name": "apple-icon-{size}x{size}.png",
       "folder": "public/icons",
-      "background": true,
       "sizes": [
         120,
         152,
@@ -283,8 +282,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         20
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -292,8 +290,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         40
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -301,8 +298,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         40
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -310,8 +306,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         60
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -319,8 +314,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         29
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -328,8 +322,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         58
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -337,8 +330,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         58
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -346,8 +338,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         87
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -355,8 +346,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         40
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -364,8 +354,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         80
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -373,8 +362,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         80
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -382,8 +370,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         120
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -391,8 +378,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         120
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -400,8 +386,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         180
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -409,8 +394,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         76
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -418,8 +402,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         152
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -427,8 +410,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         167
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "png",
@@ -436,8 +418,7 @@
       "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
       "sizes": [
         1024
-      ],
-      "background": true
+      ]
     },
     {
       "generator": "splashscreen",
