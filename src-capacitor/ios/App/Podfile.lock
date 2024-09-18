@@ -1,11 +1,11 @@
 PODS:
-  - Capacitor (5.0.5):
+  - Capacitor (6.1.2):
     - CapacitorCordova
-  - CapacitorApp (5.0.3):
+  - CapacitorApp (6.0.1):
     - Capacitor
-  - CapacitorCommunityKeepAwake (4.0.0):
+  - CapacitorCommunityKeepAwake (5.0.1):
     - Capacitor
-  - CapacitorCordova (5.0.5)
+  - CapacitorCordova (6.1.2)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -24,11 +24,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
-  Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
-  CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
-  CapacitorCommunityKeepAwake: f3442e3e9b666dd0162522fbd053da1fe81ede20
-  CapacitorCordova: f8c06b897c74ee8f7701fe10e6443b40822bc83a
+  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
+  CapacitorApp: 0bc633b4eae40a1f32cd2834788fad3bc42da6a1
+  CapacitorCommunityKeepAwake: e2ddd50812e3407f8dc3a2c28e97d66e9b59b2f5
+  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
 
 PODFILE CHECKSUM: 9d978203e948aee1f1d7d0c773744d6b73c6244a
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.15.2
