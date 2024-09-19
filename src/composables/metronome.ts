@@ -72,7 +72,7 @@ export const useMetronome = () => {
       const s = () => {
         const sound: Sound = {} as Sound
         for (let i = 0; i < medias.length; i++) {
-          const url = path + medias[i].src + '.' + audioFormat.value
+          const url = `${path}${medias[i].src}.${audioFormat.value}`
           sound[i] = {
             quarter: new Tone.Player({
               url: url,

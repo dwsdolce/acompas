@@ -6,6 +6,7 @@ import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import type { CSSProperties } from 'vue'
+import type { Size } from 'src/utils/types'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
@@ -37,11 +38,6 @@ const borderRadius = ref<number>(50)
 
 const dots = ref<HTMLDivElement[] | null[]>([])
 const nbs = ref<HTMLDivElement[] | null[]>([])
-
-interface Size {
-  width: number,
-  height: number
-}
 
 const dotSize = computed(() => {
   if (visualizationSize.value.width && selectedData.value?.nbBeatsInPattern) {

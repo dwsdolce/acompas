@@ -197,106 +197,106 @@ export default [
       }
     ]
   },
-  {
-    name: 'clave',
-    label: 'Clave',
-    noEighthNotes: false,
-    medias: [
-      {
-        src: 'hydrogen/FreePats_synthesizer_percussion/Claves01',
-        volume: 0,
-      }
-    ]
-  },
-  {
-    name: 'conga',
-    label: 'Conga',
-    noEighthNotes: false,
-    medias: [
-      {
-        src: 'hydrogen/World_percussion/Conga_v2_01_01', // 1
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/Conga_v2_01_02', // 2
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/Conga_v2_02_02', // 3
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/Conga_v3_01_02', // 4
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/Conga_v3_02_02', // 5
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/HighConga_v2_01_02', // 6
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/HighConga_v2_02_02', // 7
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/HighConga_v3_01_02', // 8
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/LowConga_v3_01_02', // 9
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/LowConga_v3_02_02', // 10
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/LowConga_v4_01_01', // 11
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedConga_v1_02_02', // 12
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedHighConga_v2_01_01', // 13
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedHighConga_v2_01_02', // 14
-        volume: -20,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v3_01_01', // 15
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v3_02_01', // 16
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v3_02_02', // 17
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v4_01_01', // 18
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v4_01_02', // 19
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v4_02_01', // 20
-        volume: 0,
-      },
-      {
-        src: 'hydrogen/World_percussion/MutedLowConga_v4_02_02', // 21
-        volume: 0,
-      },
-    ]
-  }
+  // {
+  //   name: 'clave',
+  //   label: 'Clave',
+  //   noEighthNotes: false,
+  //   medias: [
+  //     {
+  //       src: 'hydrogen/FreePats_synthesizer_percussion/Claves01',
+  //       volume: 0,
+  //     }
+  //   ]
+  // },
+  // {
+  //   name: 'conga',
+  //   label: 'Conga',
+  //   noEighthNotes: false,
+  //   medias: [
+  //     {
+  //       src: 'hydrogen/World_percussion/Conga_v2_01_01', // 1
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/Conga_v2_01_02', // 2
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/Conga_v2_02_02', // 3
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/Conga_v3_01_02', // 4
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/Conga_v3_02_02', // 5
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/HighConga_v2_01_02', // 6
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/HighConga_v2_02_02', // 7
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/HighConga_v3_01_02', // 8
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/LowConga_v3_01_02', // 9
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/LowConga_v3_02_02', // 10
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/LowConga_v4_01_01', // 11
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedConga_v1_02_02', // 12
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedHighConga_v2_01_01', // 13
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedHighConga_v2_01_02', // 14
+  //       volume: -20,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v3_01_01', // 15
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v3_02_01', // 16
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v3_02_02', // 17
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v4_01_01', // 18
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v4_01_02', // 19
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v4_02_01', // 20
+  //       volume: 0,
+  //     },
+  //     {
+  //       src: 'hydrogen/World_percussion/MutedLowConga_v4_02_02', // 21
+  //       volume: 0,
+  //     },
+  //   ]
+  // }
 ] as SoundsData[]

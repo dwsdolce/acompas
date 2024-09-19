@@ -47,6 +47,16 @@ const { setVisualizationSize } = sessionStore
 
 const headerHeight = computed(() => window.innerHeight - ($q.platform.is.electron ? 82 : 50))
 
+const activeComponent = computed(() => {
+  if (visualizationMode.value === 'dots') {
+    return DrawDots
+  } else if (visualizationMode.value === 'counter') {
+    return DrawCounter
+  } else if (visualizationMode.value === 'clock') {
+    return DrawClock
+  }
+})
+
 onMounted(() => {
   if (context && pattern) {
     initAll(context as string, pattern as string)
@@ -79,9 +89,8 @@ q-page.text-grey-1.flex
   global-events
   .main-panel.q-pa-xs.col-grow
     .top-panel(ref="visualization")
-      draw-dots(v-if="visualizationMode === 'dots'")
-      draw-counter(v-if="visualizationMode === 'counter'")
-      draw-clock(v-if="visualizationMode === 'clock'")
+      transition(name="fade" mode="out-in")
+        component(:is="activeComponent", :key="visualizationMode")
     .bottom-panel.row.no-wrap
       .left-panel.col-6.col-sm-5
         select-pattern.q-mb-sm
