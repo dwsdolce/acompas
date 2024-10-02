@@ -37,7 +37,7 @@ test_web_job:
     # Install required apt-utils package (to avoid 'debconf: delaying package configuration, since apt-utils is not installed' while installing android packages from google)
     - apt -y -qq install apt-utils
     # Install android packages from google
-    - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-30.0.3 google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-33-installer google-android-platform-34-installer
+    - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-30.0.3-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-33-installer google-android-platform-34-installer
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
     # Install required android packages
