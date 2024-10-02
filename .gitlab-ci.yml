@@ -32,13 +32,17 @@ test_web_job:
     - $YARN install
     - quasar build
     - (cd dist && tar cvzf spa.tar.gz spa)
-    # Android app
-    - apt -y -qq install openjdk-17-jdk openjdk-17-jre google-android-cmdline-tools-13.0-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-34-installer
+    # Install openjdk 17
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre
+    # Install required apt-utils package (to avoid 'debconf: delaying package configuration, since apt-utils is not installed' while installing android packages from google)
+    - apt -y -qq install apt-utils
+    # Install android packages from google
+    - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-34-installer
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
     # Install required android packages
     # - ((yes | sdkmanager --install tools) || exit 0)
-    - ((yes | sdkmanager --install emulator) || exit 0)
+    # - ((yes | sdkmanager --install emulator) || exit 0)
     # - ((yes | sdkmanager --install platform-tools) || exit 0)
     # - ((yes | sdkmanager --install 'build-tools;30.0.3') || exit 0)
     # This must be the same as in src-capacitor/android/app/build.gradle (targetSdkVersion)
