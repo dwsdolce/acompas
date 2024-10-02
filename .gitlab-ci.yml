@@ -23,6 +23,8 @@ test_web_job:
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
     - apt-get install -y -qq nodejs git make g++ gcc rsync xvfb libgtk-3-dev libnotify-dev libnss3 libxss1
+    # Update npm (more up to date than the one from the nodejs deb package)
+    - npm install -g npm
     - npm install -g @quasar/cli
     - npm install -g --unsafe-perm @quasar/icongenie
     # SPA
@@ -39,16 +41,6 @@ test_web_job:
     # Install android packages from google
     - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-30.0.3-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-33-installer google-android-platform-34-installer
     - (cd src-capacitor && $YARN install)
-    # - mkdir $ANDROID_HOME
-    # Install required android packages
-    # - ((yes | sdkmanager --install tools) || exit 0)
-    # - ((yes | sdkmanager --install emulator) || exit 0)
-    # - ((yes | sdkmanager --install platform-tools) || exit 0)
-    # - ((yes | sdkmanager --install 'build-tools;30.0.3') || exit 0)
-    # This must be the same as in src-capacitor/android/app/build.gradle (targetSdkVersion)
-    # - ((yes | sdkmanager --install 'platforms;android-34') || exit 0)
-    # No idea why, this is required at the moment
-    # - ((yes | sdkmanager --install 'platforms;android-33') || exit 0)
     - ((yes | sdkmanager --licenses) || exit 0)
     - sdkmanager --update
     - quasar build -m capacitor -T android
