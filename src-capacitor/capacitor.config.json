@@ -7,10 +7,5 @@
     "AppRestart": {
       "android": "audio.acompas.app.AppRestartPlugin"
     }
-  },
-  "server": {
-    "androidScheme": "https",
-    "hostname": "acompas.org",
-    "cleartext": true
   }
 }
