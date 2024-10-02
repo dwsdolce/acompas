@@ -6,6 +6,7 @@ android {
     defaultConfig {
         applicationId "audio.acompas.app"
         minSdkVersion rootProject.ext.minSdkVersion
+        // If you change this, please also update the version number in .gitlab-ci.yml
         targetSdkVersion 35
         versionCode 701000461
         versionName "4.0.0"
