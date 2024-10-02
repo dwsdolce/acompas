@@ -33,7 +33,7 @@ test_web_job:
     - python3 -m venv acompasenv
     - source acompasenv/bin/activate
     - pip install colorama
-    - python3 format_audio.py convert > /dev/null
+    - python3 format_audio.py convert 2> /dev/null
     # Enable yarn
     - corepack enable
     - $YARN install
