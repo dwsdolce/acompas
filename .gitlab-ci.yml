@@ -4,8 +4,8 @@ stages:
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
   DEBIAN_FRONTEND: "noninteractive"
-  ANDROID_SDK_ROOT: "/android-sdk"
-  ANDROID_HOME: "/android-sdk"
+  ANDROID_SDK_ROOT: "/usr/lib/android-sdk"
+  ANDROID_HOME: "/usr/lib/android-sdk"
   ANDROID_SDK_HOME: "/root"
   JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
@@ -39,7 +39,7 @@ test_web_job:
     # Install android packages from google
     - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-30.0.3-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-33-installer google-android-platform-34-installer
     - (cd src-capacitor && $YARN install)
-    - mkdir $ANDROID_HOME
+    # - mkdir $ANDROID_HOME
     # Install required android packages
     # - ((yes | sdkmanager --install tools) || exit 0)
     # - ((yes | sdkmanager --install emulator) || exit 0)
