@@ -30,6 +30,9 @@ test_web_job:
     # SPA
     - ./icongenie.sh
     # Generate audio files
+    - python3 -m venv acompasenv
+    - source acompasenv/bin/activate
+    - pip install colorama
     - python3 format_audio.py convert
     # Enable yarn
     - corepack enable
