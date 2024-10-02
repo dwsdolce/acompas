@@ -50,7 +50,7 @@ test_web_job:
     # No idea why, this is required at the moment
     # - ((yes | sdkmanager --install 'platforms;android-33') || exit 0)
     - ((yes | sdkmanager --licenses) || exit 0)
-    - sdkmanager update
+    - sdkmanager --update
     - quasar build -m capacitor -T android
 
   stage: build
