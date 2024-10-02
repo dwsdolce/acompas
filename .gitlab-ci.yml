@@ -37,15 +37,15 @@ test_web_job:
     - (cd src-capacitor && $YARN install)
     - mkdir $ANDROID_HOME
     # Install required android packages
-    - ((yes | sdkmanager --install tools) || exit 0)
-    - ((yes | sdkmanager --install emulator) || exit 0)
-    - ((yes | sdkmanager --install platform-tools) || exit 0)
-    - ((yes | sdkmanager --install 'build-tools;30.0.3') || exit 0)
+    - ((yes yes| sdkmanager --install tools) || exit 0)
+    - ((yes yes | sdkmanager --install emulator) || exit 0)
+    - ((yes yes | sdkmanager --install platform-tools) || exit 0)
+    - ((yes yes | sdkmanager --install 'build-tools;30.0.3') || exit 0)
     # This must be the same as in src-capacitor/android/app/build.gradle (targetSdkVersion)
-    - ((yes | sdkmanager --install 'platforms;android-35') || exit 0)
+    - ((yes yes | sdkmanager --install 'platforms;android-35') || exit 0)
     # No idea why, this is required at the moment
-    - ((yes | sdkmanager --install 'platforms;android-33') || exit 0)
-    - (( yes | sdkmanager --licenses) || exit 0 )
+    - ((yes yes | sdkmanager --install 'platforms;android-33') || exit 0)
+    - (( yes yes | sdkmanager --licenses) || exit 0 )
     - quasar build -m capacitor -T android
 
   stage: build
