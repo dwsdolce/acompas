@@ -48,20 +48,20 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@capacitor-community/keep-awake@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@capacitor-community/keep-awake/-/keep-awake-5.0.0.tgz#c75cba2e3f526724bef64c56c8476e0f9b174749"
-  integrity sha512-eRNdwOswOHB0olRwzNRCxOBzZnlgp+vJuZaoTS6QSwcKoj6iUtWxdKjyM/EThVYPo6qfMdD5uWX7Gyh5HOz5Sg==
+"@capacitor-community/keep-awake@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/keep-awake/-/keep-awake-5.0.1.tgz#2d007343751e7bc4cfaf97459245af3b6e71bafb"
+  integrity sha512-5ZeJ5DQE5Aa1NwzD1kKv8IkHoLwKhkGYlURWHh4/SDrug0KBaGocKuk1q1TAk1nsCs6ndbSsEvUt2LZDoPo9SQ==
 
-"@capacitor/android@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-6.1.0.tgz#68a64de088f2a42dafa3bcbcdeba860ca33e2fc4"
-  integrity sha512-S4PW4N5xtKHTrICjG7bkBhI70jdXbb+8nbm1pJpuXChCD0gkCcofJhPaw4bCoO0egcugBN1U7DkegNw5jWpHcw==
+"@capacitor/android@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-6.1.2.tgz#7c767af5d8f708f19a1abcd9db38b458a76adb14"
+  integrity sha512-Yh0gQDY1bgRrL25J6ecIlvvs2kF8iNSwIPXjyw6Yz9mnwYxBazF5KZbjpKtGPnJgicJhFkYGsqOkEtxrve0EoQ==
 
-"@capacitor/app@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-6.0.0.tgz#b383c97543e2fb9462e8bd69c0f512c33bba0089"
-  integrity sha512-X5UGd90Jh5p9rmoPyMqFyFWqOypdJgVJhYcM5X1YyDVJJGzmJ5MuYv1+ajj5DW9Qyh+5a3th9WYptdGby8jidA==
+"@capacitor/app@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/app/-/app-6.0.1.tgz#601878ea1b4488a9a89b61b437644bbe134a0532"
+  integrity sha512-0kXbOl7LPPMFVcAii3u/7Ps0DvXlr7dtHT97r9J1faDlgdQLQUvtGp48tjvFm48gqHI0aOPRJnTBr5JXW4ETYg==
 
 "@capacitor/cli@^6.1.2":
   version "6.1.2"
@@ -94,10 +94,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@capacitor/splash-screen@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/splash-screen/-/splash-screen-6.0.1.tgz#562213f375a200a89cf8f33addf1f69ca882c1df"
-  integrity sha512-ndsqq335Mb6NxDrcXsT0PVwomo/UrDN4ykqpu8wY8F3HT4vbr8Hojh5PLqtlTy6TCIIIen58fkEgIoyGPsPSaw==
+"@capacitor/splash-screen@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/splash-screen/-/splash-screen-6.0.2.tgz#b235f8eed0554707bfa0ce76bd0a2ff120144b4a"
+  integrity sha512-WC0KYZ+ev15up03xs4fTnoTKwBVUSxXsKKQr/8XAncvi/nAG8qrpanW8OlavSC5zF5e1IZZDLsI2GSv0SkZ7VQ==
 
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"

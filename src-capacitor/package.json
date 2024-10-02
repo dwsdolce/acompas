@@ -5,11 +5,12 @@
   "author": "A Compás Team",
   "private": true,
   "dependencies": {
-    "@capacitor-community/keep-awake": "^5.0.0",
+    "@capacitor-community/keep-awake": "^5.0.1",
     "@capacitor/android": "^6.1.2",
     "@capacitor/app": "^6.0.1",
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
-    "@capacitor/ios": "^6.1.2"
+    "@capacitor/ios": "^6.1.2",
+    "@capacitor/splash-screen": "^6.0.2"
   }
 }
