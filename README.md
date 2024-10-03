@@ -30,7 +30,7 @@ Before anything, you need Node.js 20.x installed on your machine. See the nodejs
 
 You also need to enable yarn after installing the nodejs package :
 ```bash
-sudo corepack enable
+corepack enable
 ```
 
 You only need to run the previous command once and the "yarn" command will

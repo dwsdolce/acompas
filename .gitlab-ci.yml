@@ -27,7 +27,7 @@ test_web_job:
     - npm install -g npm
     - npm install -g @quasar/cli
     - npm install -g --unsafe-perm @quasar/icongenie
-    # SPA
+    # Generate icons
     - ./icongenie.sh
     # Generate audio files
     - python3 -m venv acompasenv
@@ -37,6 +37,7 @@ test_web_job:
     # Enable yarn
     - corepack enable
     - $YARN install
+    # Build spa app
     - quasar build
     - (cd dist && tar cvzf spa.tar.gz spa)
     # Install openjdk 17
