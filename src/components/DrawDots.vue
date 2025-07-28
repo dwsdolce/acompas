@@ -32,7 +32,7 @@ const minDotSize = ref<number>(20)
 const maxDotSize = ref<number>(60)
 // const fontSize = ref<number>(16)
 const minFontSize = ref<number>(16)
-const maxFontSize = ref<number>(35)
+const maxFontSize = ref<number>(30)
 const gutter = ref<number>(10)
 const borderRadius = ref<number>(50)
 
@@ -65,7 +65,7 @@ const fontSize = computed(() => {
       return computedDotSize
     }
   } else {
-    return 16
+    return minFontSize.value
   }
 })
 
