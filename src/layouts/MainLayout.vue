@@ -6,12 +6,15 @@ import LeftDrawer from 'src/components/LeftDrawer.vue'
 import SelectContext from 'src/components/SelectContext.vue'
 import SelectSettings from 'src/components/SelectSettings.vue'
 import { useSessionStore } from 'src/stores/session'
+import { usePatternStore } from 'src/stores/patterns'
 import type { Ref } from 'vue'
 import type { Size } from 'src/utils/types'
 
 const sessionStore = useSessionStore()
+const patternStore = usePatternStore()
 
 const { setVisualizationSize } = sessionStore
+const { contexts } = storeToRefs(patternStore)
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
@@ -51,7 +54,7 @@ q-layout(view="hhh LpR lFf")
         img(:src="`${publicFolder}/ACompas-4-name.png`" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
-      SelectContext
+      SelectContext(v-if="contexts.length > 1")
       q-space
 
       SelectSettings

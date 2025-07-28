@@ -6,10 +6,14 @@ import { useSessionStore } from 'src/stores/session'
 import CustomCard from 'src/components/CustomCard.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
+import PerformancePanel from 'src/components/PerformancePanel.vue'
 
 const { t } = useI18n()
 
 const sessionStore = useSessionStore()
+
+// Performance monitoring (development only)
+const ENABLE_PERFORMANCE_MONITORING = process.env.NODE_ENV === 'development'
 
 const {
   visualizationMode
@@ -48,4 +52,10 @@ div
         reset-button(
           @reset="handleReset"
         ).q-mb-md
+
+        //-- Performance Monitoring (Development Only
+        //- div(v-if="ENABLE_PERFORMANCE_MONITORING")
+          q-separator.q-mb-md
+          .text-subtitle1.q-mb-sm 🔧 Developer Tools
+          performance-panel
 </template>

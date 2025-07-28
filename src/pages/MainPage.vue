@@ -55,6 +55,7 @@ const activeComponent = computed(() => {
   } else if (visualizationMode.value === 'clock') {
     return DrawClock
   }
+  return DrawDots // Default fallback
 })
 
 onMounted(() => {

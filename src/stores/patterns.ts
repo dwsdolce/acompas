@@ -17,7 +17,7 @@ import type {
   ContextOption
 } from 'src/utils/types'
 
-const findInArray = (array: any[], key: string, value: string) => {
+const findInArray = <T>(array: T[], key: keyof T, value: string): T | undefined => {
   return array.find((el) => el[key] === value)
 }
 
@@ -186,7 +186,7 @@ export const usePatternStore = defineStore('patterns', () => {
   )
 
   const unselectedInstruments = computed(() =>
-    selectedPattern.value?.instruments?.filter((i: instruOpts) => !i?.enabled ?? false)
+    selectedPattern.value?.instruments?.filter((i: instruOpts) => !(i?.enabled ?? false))
   )
 
   const beatLabels = computed(() =>

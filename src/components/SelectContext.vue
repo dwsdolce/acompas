@@ -24,7 +24,7 @@ const onSelectedContext = async (context: ContextOption) => {
 </script>
 
 <template lang="pug">
-div(v-if="contexts.length > 1")
+div
   q-btn(
     id="contextBtn",
     ref="contextBtn",
@@ -52,7 +52,15 @@ div(v-if="contexts.length > 1")
           )
             q-item-section
               q-item-label {{ option.label }}
-                q-badge(rounded, :color="option.colors.primary").q-ml-md
+                q-badge(
+                  rounded,
+                  :color="option.colors.primary",
+                  class="q-ml-md"
+                )
             q-item-section(side)
-              q-icon(name="mdi-check").q-ml-sm(v-if="option.value === selectedContext.value")
+              q-icon(
+                name="mdi-check",
+                class="q-ml-sm",
+                v-if="option.value === selectedContext.value"
+              )
 </template>

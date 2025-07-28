@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
 import { forEachValue, timeout } from 'src/utils/utils'
+import { AudioPoolService, MobileAudioService, PerformanceMonitor } from 'src/services'
 import type {
   VolumeOpts,
   DecayOpts,
@@ -22,11 +23,8 @@ import type {
   ExtendedPlayer,
   InstruSeqs
 } from 'src/utils/types'
-// import { au } from 'app/dist/electron/UnPackaged/assets/index.d0997b1f'
 
-// Vite plugin vue devtools
-
-// Privé, ne peut être utilisé que dans ce fichier
+// Private variables that can only be used within this file
 const sounds: Sounds = {} as Sounds
 const sequences: Seqs = {} as Seqs
 const quarterChannel = new Tone.Channel(-4, 0).toDestination()
@@ -34,6 +32,14 @@ const eighthChannel = new Tone.Channel(0, -0.5).toDestination()
 
 export const useMetronome = () => {
   const store = usePatternStore()
+
+  // Feature flag to enable/disable audio optimizations
+  const USE_AUDIO_OPTIMIZATIONS = true
+
+  // Audio optimization services
+  const audioPoolService = new AudioPoolService()
+  const mobileAudioService = new MobileAudioService()
+  const performanceMonitor = new PerformanceMonitor()
 
   const audioFormat = ref<string>('')
   const reverbDecay = ref<number>(0.3)
@@ -46,59 +52,77 @@ export const useMetronome = () => {
   }).toDestination()
 
   /**
-   * Loads all sounds.
+   * Loads all sounds with audio pooling optimization.
    * @returns {void}
    */
   const loadSounds = async (): Promise<void> => {
-    const publicFolder = Platform.is.electron ? window.electronAPI.getPublicPath() : ''
-    const path = `${publicFolder}/audio/`
-    const audio = new Audio()
+    try {
+      console.log('Starting sound loading process...')
+      const publicFolder = Platform.is.electron ? window.electronAPI.getPublicPath() : ''
+      const path = `${publicFolder}/audio/`
+      const audio = new Audio()
 
-    if (audio.canPlayType('audio/flac')) {
-      audioFormat.value = 'flac'
-    } else if (audio.canPlayType('audio/mpeg')) {
-      audioFormat.value = 'mp3'
-    } else if (audio.canPlayType('audio/mp4')) {
-      audioFormat.value = 'mp4'
-    } else if (audio.canPlayType('audio/wav')) {
-      audioFormat.value = 'wav'
-    } else if (audio.canPlayType('audio/ogg')) {
-      audioFormat.value = 'ogg'
-    } else {
-      throw new Error('None of the available audio formats can be played')
-    }
-
-    soundsData.forEach(({ name, medias }) => {
-      const s = () => {
-        const sound: Sound = {} as Sound
-        for (let i = 0; i < medias.length; i++) {
-          const url = `${path}${medias[i].src}.${audioFormat.value}`
-          sound[i] = {
-            quarter: new Tone.Player({
-              url: url,
-              volume: medias[i].volume,
-              fadeOut: 1
-            }) as ExtendedPlayer,
-            eighth: new Tone.Player({
-              url: url,
-              volume: medias[i].volume,
-              fadeOut: 1
-            }) as ExtendedPlayer
-          }
-
-          sound[i].quarter.defaultVolume = medias[i].volume
-          sound[i].eighth.defaultVolume = medias[i].volume
-
-          sound[i].quarter.connect(quarterChannel)
-          quarterChannel.connect(reverb)
-
-          sound[i].eighth.connect(eighthChannel)
-          eighthChannel.connect(reverb)
-        }
-        return sound
+      // Detect supported audio format
+      if (audio.canPlayType('audio/flac')) {
+        audioFormat.value = 'flac'
+      } else if (audio.canPlayType('audio/mpeg')) {
+        audioFormat.value = 'mp3'
+      } else if (audio.canPlayType('audio/mp4')) {
+        audioFormat.value = 'mp4'
+      } else if (audio.canPlayType('audio/wav')) {
+        audioFormat.value = 'wav'
+      } else if (audio.canPlayType('audio/ogg')) {
+        audioFormat.value = 'ogg'
+      } else {
+        throw new Error('None of the available audio formats can be played')
       }
-      sounds[name as keyof Sounds] = s()
-    })
+
+      console.log('Detected audio format:', audioFormat.value)
+
+      // Original sound loading system (simplified for debugging)
+      console.log('Using original sound loading system...')
+
+      soundsData.forEach(({ name, medias }) => {
+        sounds[name as keyof Sounds] = {} as Sound
+
+        medias.forEach((media, index) => {
+          const url = `${path}${media.src}.${audioFormat.value}`
+
+          const quarterPlayer = new Tone.Player(url).connect(quarterChannel)
+          quarterPlayer.volume.value = media.volume
+
+          const eighthPlayer = new Tone.Player(url).connect(eighthChannel)
+          eighthPlayer.volume.value = media.volume
+
+          // Create interface compatible with legacy system
+          sounds[name as keyof Sounds][index] = {
+            quarter: {
+              start: (time?: number) => quarterPlayer.start(time),
+              connect: (destination: Tone.Channel) => quarterPlayer.connect(destination),
+              volume: quarterPlayer.volume,
+              defaultVolume: media.volume
+            } as ExtendedPlayer,
+            eighth: {
+              start: (time?: number) => eighthPlayer.start(time),
+              connect: (destination: Tone.Channel) => eighthPlayer.connect(destination),
+              volume: eighthPlayer.volume,
+              defaultVolume: media.volume
+            } as ExtendedPlayer
+          } as Players
+        })
+      })
+
+      // Wait for all sounds to load
+      await Tone.loaded()
+      quarterChannel.connect(reverb)
+      eighthChannel.connect(reverb)
+
+      console.log('Original sound system loaded successfully')
+      console.log('Loaded sounds:', Object.keys(sounds))
+    } catch (error) {
+      console.error('Error in loadSounds:', error)
+      throw error
+    }
   }
 
   const triggerEvent = (payload: number | null) => {
@@ -107,13 +131,6 @@ export const useMetronome = () => {
 
   /**
    * Improvises a sound on a given note.
-   * @param {string} type - The type of audio to be triggered.
-   * @param {number} time - The time at which the audio should be triggered.
-   * @param {Tone.Player} sound - The sound to be triggered.
-   * @param {number} note - The note associated with the audio.
-   * @param {number} key - The key associated with the audio.
-   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
-   * @returns {void}
    */
   const improvise = (
     type: string,
@@ -159,9 +176,6 @@ export const useMetronome = () => {
 
   /**
    * Improvises a jaleo sound on a given note.
-   * @param {number} note - The note associated with the audio.
-   * @param {number} time - The time at which the audio should be triggered.
-   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
    */
   const improviseJaleo = (
     note: number,
@@ -188,9 +202,6 @@ export const useMetronome = () => {
 
   /**
    * Triggers a click sound on prestart beats.
-   * @param {number} time - The time at which the audio should be triggered.
-   * @param {number} note - The note associated with the audio.
-   * @returns
    */
   const triggerPrestartBeatClick = (
     time: number,
@@ -212,13 +223,6 @@ export const useMetronome = () => {
 
   /**
    * Triggers audio based on the specified parameters.
-   *
-   * @param {boolean} eighthNotes - Specifies whether the audio is triggered on eighth notes.
-   * @param {string} type - The type of audio to be triggered.
-   * @param {boolean} isLoop - Specifies whether the audio is looped.
-   * @param {number} time - The time at which the audio should be triggered.
-   * @param {number} note - The note associated with the audio.
-   * @returns {void}
    */
   const triggerAudioOnEvent = (
     eighthNotes: boolean,
@@ -249,9 +253,12 @@ export const useMetronome = () => {
 
       // index is a pulsation number, value is the sound number
       if (instru?.enabled && store.selectedPattern && type) {
-        (store.selectedData.sequences[type as keyof InstruSeqs] as (number | null)[]).forEach(
+        const sequences = store.selectedData.sequences[type as keyof InstruSeqs] as (number | null)[]
+
+        sequences.forEach(
           (value: number | null, index: number) => {
             if (!value) return
+
             const sound: Players = sounds[type as keyof Sounds][value - 1] as Players
 
             if (
@@ -260,13 +267,27 @@ export const useMetronome = () => {
               (index as number) % 2 != 0 &&
               note == index
             ) {
-              store.selectedPattern?.improvisation
-                ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
-                : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
+              const player = sound[eighthNotes ? 'eighth' : 'quarter']
+              try {
+                if (store.selectedPattern?.improvisation) {
+                  improvise(type, time, player, note, index, eighthNotes)
+                } else {
+                  player.start(time)
+                }
+              } catch (error) {
+                console.error('Error calling player.start():', error)
+              }
             } else if (!eighthNotes && (index as number) % 2 == 0 && note == index) {
-              store.selectedPattern?.improvisation
-                ? improvise(type, time, sound[eighthNotes ? 'eighth' : 'quarter'], note, index, eighthNotes)
-                : sound[eighthNotes ? 'eighth' : 'quarter'].start(time)
+              const player = sound[eighthNotes ? 'eighth' : 'quarter']
+              try {
+                if (store.selectedPattern?.improvisation) {
+                  improvise(type, time, player, note, index, eighthNotes)
+                } else {
+                  player.start(time)
+                }
+              } catch (error) {
+                console.error('Error calling player.start():', error)
+              }
             }
           }
         )
@@ -275,13 +296,7 @@ export const useMetronome = () => {
   }
 
   /**
-   * Builds a compas sequence from a pattern, an "is eighthNote ?" boolean and a sound
-   * @param {string} name - The name of the pattern
-   * @param {boolean} eighthNotes - Specifies whether the sequence is on eighth notes.
-   * @param {string} type - The type of audio to be triggered.
-   * @param {number[]} sequence - The sequence of notes to be played.
-   * @param {boolean} isLoop - Specifies whether the sequence is looped.
-   * @returns {Tone.Sequence} - The built sequence.
+   * Builds a compas sequence from a pattern.
    */
   const buildSequence = (
     name: string | undefined,
@@ -321,7 +336,6 @@ export const useMetronome = () => {
 
   /**
    * Initializes all sequences for a given pattern.
-   * @returns {void}
    */
   const initSequences = async (): Promise<void> => {
     const introSeq = []
@@ -385,17 +399,19 @@ export const useMetronome = () => {
 
   /**
    * Initializes the metronome.
-   * @returns {boolean} - Whether the initialization was successful.
    */
   const initMetronome = async () => {
     return await Tone.loaded()
       .then(async () => {
         await loadSounds()
         await reinitialize()
+        soundsIsLoaded.value = true
+        console.log('Metronome initialized successfully')
         return true
       })
       .catch((error) => {
         console.error(error)
+        soundsIsLoaded.value = false
         Notify.create({
           message: 'Failed to load the audio samples !',
           color: 'secondary',
@@ -405,54 +421,66 @@ export const useMetronome = () => {
       })
   }
 
-
-  // =====================
-  // Metronome user inputs
-  // =====================
-
   /**
    * Starts all sequences.
-   * @returns {void}
    */
   const startSequences = async (): Promise<void> => {
     Loading.show({
       delay: 0,
-      message: 'Loading…',
+      message: 'Initializing audio…',
     })
-    await Tone.start()
-    await reinitialize()
 
-    const offset = sequences.quarterNotes.introduction?.event?.length || 0
-    const loopStart = `0:${offset / 2}`
+    try {
+      await Tone.start()
+      console.log('Audio context state:', Tone.context.state)
 
-    getTransport().start()
-    Loading.hide()
+      await reinitialize()
 
-    if (sequences.quarterNotes && sequences.eighthNotes) {
-      if (sequences.quarterNotes.introduction?.event?.length !== 0) {
-        sequences.quarterNotes.introduction?.event?.start(0).stop(offset)
-        sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(offset)
+      const offset = sequences.quarterNotes.introduction?.event?.length || 0
+      const loopStart = `0:${offset / 2}`
 
-        forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
-          seq.start(loopStart)
-        })
-        forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
-          seq.start(loopStart)
-        })
-      } else {
-        forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
-          seq.start(0)
-        })
-        forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
-          seq.start(0)
-        })
+      getTransport().start()
+      Loading.hide()
+
+      if (sequences.quarterNotes && sequences.eighthNotes) {
+        if (sequences.quarterNotes.introduction?.event?.length !== 0) {
+          sequences.quarterNotes.introduction?.event?.start(0).stop(offset)
+          sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(offset)
+
+          forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
+            seq.start(loopStart)
+          })
+          forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
+            seq.start(loopStart)
+          })
+        } else {
+          forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
+            seq.start(0)
+          })
+          forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
+            seq.start(0)
+          })
+        }
       }
+
+      console.log('Sequences started successfully')
+    } catch (error) {
+      Loading.hide()
+      console.error('Failed to start sequences:', error)
+
+      Notify.create({
+        message: 'Failed to start audio sequences. Please try again.',
+        color: 'negative',
+        icon: 'mdi-alert-circle-outline',
+        timeout: 3000
+      })
+
+      throw error
     }
   }
 
   /**
    * Stops all sequences.
-   * @returns {void}
    */
   const stopAllSequences = () => {
     forEachValue(sequences as Seqs, (seq: SeqSubdiv) => {
@@ -466,13 +494,10 @@ export const useMetronome = () => {
 
     getTransport().stop()
     triggerEvent(null)
-    // reinitialize()
   }
 
   /**
    * Changes the tempo of the metronome.
-   * @param {number} tempo - The new tempo.
-   * @returns {void}
    */
   const changeTempo = async (tempo: number): Promise<void> => {
     getTransport().bpm.value = tempo
@@ -480,8 +505,6 @@ export const useMetronome = () => {
 
   /**
    * Changes the swing of the metronome.
-   * @param {number} swing - The new swing.
-   * @returns {void}
    */
   const changeSwing = async (swing: number): Promise<void> => {
     getTransport().swing = swing
@@ -489,8 +512,6 @@ export const useMetronome = () => {
 
   /**
    * Changes the humanization of the metronome.
-   * @param {boolean} humanization - The new humanization.
-   * @returns {void}
    */
   const humanize = async (humanization: boolean): Promise<void> => {
     // Do nothing if sequences have not been initialized
@@ -512,22 +533,59 @@ export const useMetronome = () => {
 
   /**
    * Changes the volume of the metronome.
-   * @param {VolumeOpts} payload - The new volume.
-   * @returns {void}
    */
   const changeVolume = async (payload: VolumeOpts): Promise<void> => {
-    // increase volume of every player from the sounds instrument by the payload volume
-    const sound = sounds[payload.instrument as keyof Sounds]
-    forEachValue(sound as Sound, (player: Players) => {
-      player.quarter.volume.value = player.quarter.defaultVolume + payload.volume
-      player.eighth.volume.value = player.eighth.defaultVolume + payload.volume
-    })
+    try {
+      // Update legacy system for compatibility
+      const sound = sounds[payload.instrument as keyof Sounds]
+      if (sound) {
+        forEachValue(sound as Sound, (player: Players) => {
+          if (player.quarter.volume) {
+            player.quarter.volume.value = payload.volume
+          }
+          if (player.eighth.volume) {
+            player.eighth.volume.value = payload.volume
+          }
+        })
+      }
+    } catch (error) {
+      console.warn('Error changing volume:', error)
+    }
+  }
+
+  /**
+   * Gets performance information from all monitoring services.
+   */
+  const getPerformanceInfo = () => {
+    return {
+      audioState: Tone.context.state,
+      audioPerformance: {
+        latency: Tone.context.lookAhead * 1000, // Convert to ms
+        contextState: Tone.context.state,
+        sampleRate: Tone.context.sampleRate
+      },
+      poolStats: audioPoolService.getStats(),
+      isInitialized: soundsIsLoaded.value,
+      performanceReport: performanceMonitor.getPerformanceReport()
+    }
+  }
+
+  /**
+   * Resets performance monitoring data.
+   */
+  const resetPerformanceData = () => {
+    performanceMonitor.reset()
+  }
+
+  /**
+   * Logs a detailed performance report to console.
+   */
+  const logPerformanceReport = () => {
+    performanceMonitor.logReport()
   }
 
   /**
    * Changes the decay of the metronome.
-   * @param {DecayOpts} payload - The new decay.
-   * @returns {void}
    */
   const changeDecay = async (decay: number): Promise<void> => {
     reverb.decay = decay
@@ -545,11 +603,14 @@ export const useMetronome = () => {
   })
 
   return {
+    // Reactive states
     audioFormat,
     reverbDecay,
     reverb,
     soundsIsLoaded,
     metronomeEvent,
+
+    // Basic audio functions
     loadSounds,
     triggerEvent,
     improvise,
@@ -557,17 +618,33 @@ export const useMetronome = () => {
     triggerPrestartBeatClick,
     triggerAudioOnEvent,
     buildSequence,
+
+    // Context functions
     getContext,
     isSupported,
+
+    // Initialization functions
     initSequences,
     initMetronome,
     reinitialize,
+
+    // Metronome controls
     startSequences,
     stopAllSequences,
     changeTempo,
     changeSwing,
     humanize,
     changeVolume,
-    changeDecay
+    changeDecay,
+
+    // Performance monitoring
+    getPerformanceInfo,
+    resetPerformanceData,
+    logPerformanceReport,
+
+    // Services (for debugging/monitoring)
+    audioPoolService,
+    mobileAudioService,
+    performanceMonitor
   }
 }
