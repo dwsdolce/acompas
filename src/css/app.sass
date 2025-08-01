@@ -155,6 +155,10 @@ body.capacitor-android .q-header
 body.capacitor-android .q-page-container
   padding-top: var(--status-bar-height) !important
 
+// Fix pour éviter que le .top-panel soit caché par le status-bar-spacer
+body.capacitor-android .top-panel
+  margin-top: var(--status-bar-height)
+
 // Support pour les appareils avec encoche
 @supports (height: env(safe-area-inset-top))
   body.capacitor-android
