@@ -21,7 +21,7 @@ kbd
 
 #appMain
   // overflow: hidden
-  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 99%)
+  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 100%)
 
 .fade-enter-active,
 .fade-leave-active
@@ -132,3 +132,34 @@ $axis : 2vh
   background: transparent
   &.active
     background: rgba(0, 0, 0, 0.15)
+
+// Status bar fix - Global pour Android
+body.capacitor-android
+  --status-bar-height: 24px
+
+body.capacitor-android .status-bar-spacer
+  height: var(--status-bar-height)
+  background-color: #000000
+  width: 100%
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 6001
+  display: block
+
+body.capacitor-android .q-header
+  top: var(--status-bar-height) !important
+  z-index: 6000
+
+// Alternative si le header ne bouge pas avec top
+body.capacitor-android .q-page-container
+  padding-top: var(--status-bar-height) !important
+
+// Support pour les appareils avec encoche
+@supports (height: env(safe-area-inset-top))
+  body.capacitor-android
+    --status-bar-height: env(safe-area-inset-top)
+
+// Cacher explicitement sur web
+body:not(.capacitor-android) .status-bar-spacer
+  display: none !important
