@@ -1,74 +1,60 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
+import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { useSessionStore } from 'src/stores/session'
 
 const router = useRouter()
+const { t } = useI18n()
 const sessionStore = useSessionStore()
 
 const {
   enableTrackVisits,
   enableTrackingChosen,
-  toggleTrackVisits,
-  closePrivacyDialog
+  toggleTrackVisits
 } = sessionStore
 
 const {
-  trackingEnabled,
-  privacyDialogOpen
+  trackingEnabled
 } = storeToRefs(sessionStore)
 
 const handleEnableAndClose = () => {
   enableTrackVisits()
   enableTrackingChosen()
-  if (privacyDialogOpen.value) {
-    closePrivacyDialog()
-  } else {
-    router.back()
-  }
+  router.push('/')
 }
 
 const handleClose = () => {
   enableTrackingChosen()
-  if (privacyDialogOpen.value) {
-    closePrivacyDialog()
-  } else {
-    router.back()
-  }
+  router.push('/')
 }
 </script>
 
 <template lang="pug">
 custom-card(:popup="false")
-  template(v-slot:title) Privacy policy
+  template(v-slot:title) {{ $t('doc.privacy.title') }}
   template(v-slot:content)
     .text-center
-      p: b We don't collect any nominative personal data.
-      p.q-mb-sm: b Allow this app to send us some anonymised usage data ?
+      MarkdownRenderer(:content="$t('doc.privacy.allow')").q-mb-sm
       q-toggle(
         :model-value="trackingEnabled",
         @update:model-value="toggleTrackVisits($event)",
         color="primary",
         keep-color
       ).primary
-      p This app uses a tool called "Matomo" to collect anonymised visits analytics data.
-        | If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website), or in the mobile device (for the Android app),
-        | and observe some of your actions in the app
-        | (essentially metronome 'Play' and 'Stop' actions to infer time playing),
-        | anonymising your IP address.
-      p This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
-      p You can enable or disable this feature when you want to.
+      MarkdownRenderer(:content="$t('doc.privacy.content')")
   template(v-slot:actions)
     q-btn(
       unelevated,
       color="primary",
       @click="handleEnableAndClose()",
-    ).q-mr-lg Enable &amp; close
+    ).q-mr-lg {{ $t('doc.privacy.enable') }}
     q-btn(
       unelevated,
       color="secondary",
       v-close-popup,
       @click="handleClose()"
-    ) Close
+    ) {{ $t('doc.privacy.close') }}
 </template>

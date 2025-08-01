@@ -26,6 +26,11 @@ export const useKeepAwake = () => {
       await KeepAwake.keepAwake()
     }
 
+    else if (Platform.is.electron) {
+      window.electronAPI.sendMessage('keep-awake')
+    //   ipcRenderer.send('keep-awake')
+    }
+
     else if ('wakeLock' in navigator) {
       try {
         screenLock.value = await navigator.wakeLock.request('screen')
@@ -38,6 +43,11 @@ export const useKeepAwake = () => {
   const allowSleep = async () => {
     if (Platform.is.capacitor) {
       await KeepAwake.allowSleep()
+    }
+
+    else if (Platform.is.electron) {
+      window.electronAPI.sendMessage('allow-sleep')
+    //   ipcRenderer.send('allow-sleep')
     }
 
     else if ('wakeLock' in navigator) {

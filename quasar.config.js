@@ -8,20 +8,23 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
+// const VueDevTools = require('vite-plugin-vue-devtools');
+
 
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 
+
 module.exports = configure(function (/* ctx */) {
   return {
-    eslint: {
-      // fix: true,
-      // include = [],
-      // exclude = [],
-      // rawOptions = {},
-      warnings: true,
-      errors: true
-    },
+    // eslint: {
+    //   // fix: true,
+    //   // include = [],
+    //   // exclude = [],
+    //   // rawOptions = {},
+    //   warnings: true,
+    //   errors: true
+    // },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -41,7 +44,7 @@ module.exports = configure(function (/* ctx */) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      // 'mdi-v5',
+      'mdi-v7',
       // 'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
@@ -49,7 +52,7 @@ module.exports = configure(function (/* ctx */) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      // 'material-icons' // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -59,17 +62,17 @@ module.exports = configure(function (/* ctx */) {
       },
       target: {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
-        node: 'node16'
+        node: 'node20'
       },
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
-      // vueDevtools,
+      vueDevtools: true,
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: '/',
       // analyze: true,
       // env: {},
       // rawDefine: {}
@@ -89,7 +92,19 @@ module.exports = configure(function (/* ctx */) {
           // you need to set i18n resource including paths !
           include: path.resolve(__dirname, './src/i18n/**')
         }]
-      ]
+      ],
+
+      // Ajouter l'analyse du bundle
+      analyze: process.env.ANALYZE === 'true',
+      // Optimiser les chunks
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'quasar'],
+            audio: ['tone']
+          }
+        }
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
@@ -107,7 +122,7 @@ module.exports = configure(function (/* ctx */) {
         }
       },
 
-      iconSet: 'material-icons', // Quasar icon set
+      iconSet: 'mdi-v7', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
@@ -188,7 +203,7 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: false
+      hideSplashscreen: true
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
@@ -196,7 +211,7 @@ module.exports = configure(function (/* ctx */) {
       // extendElectronMainConf (esbuildConf)
       // extendElectronPreloadConf (esbuildConf)
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
       // electron-packager options
       // https://electron.github.io/electron-packager/main/
@@ -216,7 +231,21 @@ module.exports = configure(function (/* ctx */) {
       // electron-builder options
       // https://www.electron.build/configuration/configuration
       builder: {
-        appId: 'audio.acompas.app'
+        appId: 'audio.acompas.app',
+        productName: 'Acompas',
+        copyright: 'Copyright © 2024 Acompas',
+        mac: {
+          category: 'public.app-category.music',
+          extraResources: [
+            'public'
+          ]
+        },
+        // win: {
+        //   target: ['nsis', 'portable']
+        // },
+        // linux: {
+        //   target: ['AppImage', 'deb']
+        // }
       },
 
       // Specify additional parameters when yarn/npm installing

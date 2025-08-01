@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  import { watch, ref, onMounted, onUpdated } from 'vue'
+  import { ref, onUpdated } from 'vue'
   import { openURL, Platform } from 'quasar'
-  import { storeToRefs } from 'pinia'
-  import { useRouter, useRoute } from 'vue-router'
+  import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import SelectPrivacy from 'src/components/SelectPrivacy.vue'
   import KeyboardShortcuts from 'src/components/KeyboardShortcuts.vue'
   import HelpApp from 'src/components/HelpApp.vue'
   import CustomCard from 'src/components/CustomCard.vue'
-  import { useTuningForkStore } from 'src/stores/tuning-fork'
-  import { useSessionStore } from 'src/stores/session'
   import { isFocusableElement } from 'src/utils/utils'
   import type { QItem } from 'quasar'
 
@@ -21,25 +19,7 @@
   const shortcutsQItem = ref<QItem | null>(null)
 
   const router = useRouter()
-  const route = useRoute()
-  const sessionStore = useSessionStore()
-
-  const {
-    trackingChosen,
-    trackingInitialized,
-    privacyDialogOpen
-  } = storeToRefs(sessionStore)
-
-  const {
-    openPrivacyDialog,
-    toggleDialog
-  } = sessionStore
-
-  const tuningForkStore = useTuningForkStore()
-
-  const {
-    stop
-  } = tuningForkStore
+  const { t } = useI18n()
 
   const launch = (url: string) => {
     // if (Platform.is.cordova) {
@@ -48,12 +28,6 @@
     // }
     openURL(url)
   }
-
-  onMounted(() => {
-    if (!trackingChosen.value && route.path !== '/privacy-policy') {
-      openPrivacyDialog()
-    }
-  })
 
   onUpdated(() => {
     if (isFocusableElement(document.activeElement)) document.activeElement?.blur()
@@ -73,8 +47,8 @@ div
       @click="launch('https://www.paypal.com/donate/?hosted_button_id=NCN4GX9DL3L5W')"
     )
      q-item-section(avatar)
-      q-icon(name="attach_money")
-     q-item-section Donate
+      q-icon(name="mdi-currency-usd")
+     q-item-section {{ $t('donate') }}
 
     q-item(
       id="helpQItem",
@@ -84,13 +58,13 @@ div
       @click="helpDialog = true"
     )
       q-item-section(avatar)
-        q-icon(name="help")
-      q-item-section Help
+        q-icon(name="mdi-help-circle")
+      q-item-section {{ $t('help') }}
 
     q-item(clickable, v-ripple, @click="router.push('/tuning-fork')")
       q-item-section(avatar)
-        q-icon(name="hearing")
-      q-item-section Tuning fork
+        q-icon(name="mdi-ear-hearing")
+      q-item-section {{ $t('tuning') }}
 
     q-item(
       id="shortcutsQItem",
@@ -100,83 +74,82 @@ div
       @click="shortcutsDialog = true"
     )
       q-item-section(avatar)
-        q-icon(name="keyboard")
-      q-item-section Shortcuts
+        q-icon(name="mdi-keyboard")
+      q-item-section {{ $t('shortcuts') }}
 
     q-item(clickable, v-ripple, @click="router.push('/privacy-policy')")
       q-item-section(avatar)
-        q-icon(name="security")
-      q-item-section Privacy policy
+        q-icon(name="mdi-security")
+      q-item-section {{ $t('privacy') }}
 
     q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
       q-item-section(avatar)
-        q-icon(name="android")
-      q-item-section Get the Android app
+        q-icon(name="mdi-android")
+      q-item-section {{ $t('android') }}
 
-    q-expansion-item(icon="public", label="Follow")
+    q-expansion-item(icon="mdi-web", :label="$t('follow')")
       q-list(no-border, link, inset-separator)
 
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/acompas.org/')")
           q-item-section(avatar)
-            q-icon(name="ion-logo-facebook")
+            q-icon(name="mdi-facebook")
           q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://twitter.com/acompas_org')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/acompas_org')")
           q-item-section(avatar)
-            q-icon(name="ion-logo-twitter")
-          q-item-section Twitter
+            q-icon(name="mdi-alpha-x")
+          q-item-section X
 
-    q-expansion-item(icon="share", label="Share")
+        q-item(clickable, v-ripple, @click="launch('https://mastodon.social/@acompas')")
+          q-item-section(avatar)
+            q-icon(name="mdi-mastodon")
+          q-item-section Mastodon
+
+        q-item(clickable, v-ripple, @click="launch('https://bsky.app/profile/acompas.bsky.social')")
+          q-item-section(avatar)
+            q-icon(name="mdi-weather-cloudy")
+          q-item-section Bluesky
+
+    q-expansion-item(icon="mdi-share-variant", :label="$t('share')")
       q-list(no-border, link, inset-separator)
 
         q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="ion-logo-facebook")
-          q-item-section Share on Facebook
+            q-icon(name="mdi-facebook")
+          q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://twitter.com/share?url=https://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://acompas.org')")
           q-item-section(avatar)
-            q-icon(name="ion-logo-twitter")
-          q-item-section Share on Twitter
+            q-icon(name="mdi-alpha-x")
+          q-item-section X
 
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
       q-item-section(avatar)
-        q-icon(name="code")
-      q-item-section Source code
+        q-icon(name="mdi-xml")
+      q-item-section {{ $t('source') }}
 
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
       q-item-section(avatar)
-        q-icon(name="bug_report")
-      q-item-section Issues
+        q-icon(name="mdi-bug")
+      q-item-section {{ $t('issues') }}
 
 
   q-dialog(
     id="helpDialog",
-    v-model="helpDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="helpDialog"
   )
     custom-card
-      template(v-slot:title) Help
+      template(v-slot:title) {{ $t('help') }}
       template(v-slot:content)
         help-app
 
-  q-dialog(
-    id="privacyDialog",
-    v-model="privacyDialogOpen",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
-  )
-    select-privacy
 
   q-dialog(
     id="shortcutsDialog",
-    v-model="shortcutsDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="shortcutsDialog"
   )
     custom-card
-      template(v-slot:title) Shortcuts
+      template(v-slot:title) {{ $t('shortcuts') }}
       template(v-slot:content)
         keyboard-shortcuts
 </template>

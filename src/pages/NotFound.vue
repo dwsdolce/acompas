@@ -1,0 +1,23 @@
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useQuasar, Platform } from 'quasar'
+import { useRouter, useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
+import { usePatternStore } from 'src/stores/patterns'
+
+const { t } = useI18n()
+
+</script>
+
+<template lang="pug">
+q-page.text-grey-1.q-pa-sm.flex.justify-center.items-center
+  .main-panel#page404.column.flex-center.text-center.relative-position
+    .title.col: h1.text-grey-5 404
+    .subtitle.col {{ $t('notFound.header') }}
+    q-btn(
+      color="primary",
+      :label="$t('notFound.btn')",
+      to="/"
+    ).col
+</template>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
+
+const { t } = useI18n()
 
 const patternStore = usePatternStore()
 const { selectedPattern, swing } = storeToRefs(patternStore)
@@ -8,7 +11,7 @@ const { selectedPattern, swing } = storeToRefs(patternStore)
 
 <template lang="pug">
 .text-center.q-mx-md
-  p.caption Swing
+  p.caption {{ $t('doc.swing.title') }}
     span.q-ml-sm
       q-btn(
         dense,
@@ -16,14 +19,14 @@ const { selectedPattern, swing } = storeToRefs(patternStore)
         flat,
         size="10px",
         padding="none",
-        icon="help"
+        icon="mdi-help-circle"
       )
         q-tooltip(
           anchor="top middle",
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 If its value is 0, the eighth note is exactly half a quarter note. When it approaches to 1, a lag is applied, for a "jazz-like" rythm flavour.
+          p.text-body2 {{ $t('doc.swing.caption') }}
   q-slider(
     v-model="swing",
     :min="0",

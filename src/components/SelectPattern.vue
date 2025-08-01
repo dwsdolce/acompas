@@ -3,14 +3,15 @@ import { ref, computed, onUpdated, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
-import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
-import type { QBtn } from 'quasar'
+import { getDefaultPatterns } from 'src/utils/utils'
 
-import type { PatternState } from 'src/utils/types'
+import type { QBtn } from 'quasar'
+import type { PatternState, PatternSetting } from 'src/utils/types'
 
 
 interface PatternOtion {
@@ -22,72 +23,56 @@ const patternBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
 const router = useRouter()
+const { t } = useI18n()
 const patternStore = usePatternStore()
-const sessionStore = useSessionStore()
 
 const {
-  patterns,
-  selectedPattern
+  data,
+  selectedContext,
+  selectedPattern,
+  selectedData,
+  patternsInSelectedContext
 } = storeToRefs(patternStore)
-
-const {
-  toggleDialog
-} = sessionStore
 
 const patternsDialog = ref(false)
 const filter = ref('')
 
-const formatPattern = (pattern: PatternState) => {
-  return {
-    label: pattern.label,
-    value: pattern.name
-  }
-}
-
 const patternsOptions = computed(() => {
-  let selected = patterns.value
   if (filter.value !== '') {
-    console.log('filter.value', filter.value)
     const regex = new RegExp(filter.value, 'g')
-    selected = patterns.value.filter(pattern => {
-      return pattern.linkedPatterns?.some(linkedPattern => {
+    return patternsInSelectedContext.value.filter(pattern => {
+      const patternData = data.value.find(data => data.name === pattern.value)
+      return patternData?.linkedPatterns?.some(linkedPattern => {
         return regex.test(linkedPattern.value)
       })
     })
+  } else {
+    return patternsInSelectedContext.value
   }
-
-  return selected
-    .map(pattern => formatPattern(pattern))
 })
 
-const selectedPatternOption = patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+const selectedPatternOption = computed(() => {
+  return patternsOptions.value.find(pattern => pattern.value === selectedPattern.value?.name)
+})
 
-const stringMatchesRegex = (str: string, regex: RegExp) => {
-  const matches = regex.test(str)
-}
 
 const onSelectedPattern = (v: string) => {
   patternsDialog.value = false
-  router.push(`/${v}`)
+  router.push(`/${selectedContext.value.value}/${v}`)
 }
-
-watch(filter, () => {
-  console.log('filter', filter.value)
-})
-
 </script>
 
 <template lang="pug">
 div
-  p Pattern
-    help-pattern(v-show="selectedPattern?.name !== 'simple-click'")
+  p {{ $t('buttons.pattern') }}
+    help-pattern(v-show="selectedData?.name !== 'simple-click'")
   q-btn(
     id="patternBtn",
     ref="patternBtn",
     outline,
     color="white",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    :label="selectedPattern?.label",
+    :label="selectedData?.label",
     @click="patternsDialog = true"
   )
 
@@ -96,19 +81,19 @@ div
     v-model="patternsDialog"
   )
     custom-card
-      template(v-slot:title) Please select a pattern
+      template(v-slot:title) {{ $t('doc.pattern.title') }}
       template(v-slot:content)
-        .row.items-center.q-mb-md
-          HelpSearchPattern.col-1
+        .flex.no-wrap.items-center.q-mb-md
+          HelpSearchPattern
           q-input(
             v-model="filter",
             outlined,
             dense,
             :debounce="500",
-            :placeholder="$q.screen.lt.md ? 'Search' : 'Search for a pattern'"
-          ).col-11
+            :placeholder="$q.screen.lt.md ? $t('doc.pattern.search') : $t('doc.pattern.search')"
+          ).full-width
             template(v-slot:append)
-              q-icon(name="close", @click="filter = ''").cursor-pointer
+              q-icon(name="mdi-close", @click="filter = ''").cursor-pointer
 
         q-option-group(
           type="radio",

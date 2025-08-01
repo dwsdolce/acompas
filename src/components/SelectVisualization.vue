@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
+
+const { t } = useI18n()
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
@@ -10,16 +13,12 @@ const sessionStore = useSessionStore()
 const {
   visualizationModes,
   visualizationMode
-} = storeToRefs(patternStore)
-
-const {
-  toggleDialog
-} = sessionStore
+} = storeToRefs(sessionStore)
 </script>
 
 <template lang="pug">
 .text-center.q-mx-md
-  .caption View mode
+  .caption {{ $t('doc.options.content.viewMode.title') }}
     span.q-ml-sm
       q-btn(
         dense,
@@ -27,14 +26,14 @@ const {
         flat,
         size="10px",
         padding="none",
-        icon="help"
+        icon="mdi-help-circle"
       )
         q-tooltip(
           anchor="top middle",
           self="bottom middle",
           :offset="[10, 10]"
         )
-          p.text-body2 Choose between dots, counter and clock visualisation.
+          p.text-body2 {{ $t('doc.options.content.viewMode.content') }}
   q-option-group(
     inline,
     left-label,

@@ -1,26 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted, onUpdated } from 'vue'
 import { useQuasar } from 'quasar'
-import { useSessionStore } from 'src/stores/session'
+import { useI18n } from 'vue-i18n'
 import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
 import SelectSwing from 'src/components/SelectSwing.vue'
 import SelectPrestartBeat from 'src/components/SelectPrestartBeat.vue'
-import SelectVisualization from 'src/components/SelectVisualization.vue'
-import ResetButton from 'src/components/ResetButton.vue'
+
 import CustomCard from 'src/components/CustomCard.vue'
 import type { QBtn } from 'quasar'
 
-const sessionStore = useSessionStore()
-
 const $q = useQuasar()
+const { t } = useI18n()
 
 const optDialog = ref(false)
 const optBtn = ref<QBtn | null>(null)
-
-const {
-  toggleDialog
-} = sessionStore
 
 onUpdated(() => {
   if (!optDialog.value && optBtn.value !== null) {
@@ -35,9 +29,9 @@ div
     ref="optBtn",
     outline,
     color="white",
-    icon="settings",
+    icon="mdi-tune-vertical-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Rhythm options",
+    :label="t('buttons.options')",
     @click="optDialog = true"
   )
   q-dialog(
@@ -45,12 +39,11 @@ div
     v-model="optDialog"
   )
     custom-card
-      template(v-slot:title) Rhythm options
+      template(v-slot:title) {{ t('buttons.options') }}
       template(v-slot:content)
         toggle-improvise.q-mb-md
         toggle-humanize.q-mb-md
         select-swing.q-mb-md
         select-prestart-beat.q-mb-md
-        select-visualization.q-mb-md
-        reset-button.q-mb-md
+
 </template>

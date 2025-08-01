@@ -4,6 +4,10 @@ stages:
 variables:
   YARN: "yarn --cache-folder /tmp/yarn-cache"
   DEBIAN_FRONTEND: "noninteractive"
+  ANDROID_SDK_ROOT: "/usr/lib/android-sdk"
+  ANDROID_HOME: "/usr/lib/android-sdk"
+  ANDROID_SDK_HOME: "/root"
+  JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
 # Jobs
 
@@ -13,23 +17,49 @@ test_web_job:
     - apt-get -y -qq update
     - apt-get -y -qq dist-upgrade
     - apt-get -y -qq install curl gnupg
-    - curl -sL https://deb.nodesource.com/setup_20.x | bash -
-    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-    - apt-get update
+    - curl -fsSL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh
+    - bash /tmp/nodesource_setup.sh
+    - apt-get -y -qq update
     # Some deps are for Cypress.
     # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
-    - apt-get install -y -qq nodejs git make g++ gcc rsync yarn xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+    - apt-get install -y -qq nodejs git make g++ gcc rsync xvfb libgtk-3-dev libnotify-dev libnss3 libxss1 ffmpeg python3-venv
+    # Update npm (more up to date than the one from the nodejs deb package)
+    - npm install -g npm
     - npm install -g @quasar/cli
     - npm install -g --unsafe-perm @quasar/icongenie
+    # Generate icons
     - ./icongenie.sh
+    # Generate audio files
+    - python3 -m venv acompasenv
+    - source acompasenv/bin/activate
+    - pip install colorama
+    - python3 format_audio.py convert 2> /dev/null
+    # Enable yarn
+    - corepack enable
     - $YARN install
+    # Build spa app
     - quasar build
-#    - $YARN run test:e2e:CI
+    - (cd dist && tar cvzf spa.tar.gz spa)
+    # Install openjdk 17
+    - apt -y -qq install openjdk-17-jdk openjdk-17-jre
+    # Install required apt-utils package (to avoid 'debconf: delaying package configuration, since apt-utils is not installed' while installing android packages from google)
+    - apt -y -qq install apt-utils
+    # Install android packages from google
+    - apt -y -qq install google-android-cmdline-tools-13.0-installer google-android-build-tools-30.0.3-installer google-android-build-tools-34.0.0-installer google-android-licenses google-android-tools-installer google-android-platform-tools-installer google-android-platform-33-installer google-android-platform-34-installer
+    - (cd src-capacitor && $YARN install)
+    - ((yes | sdkmanager --licenses) || exit 0)
+    - sdkmanager --update
+    - quasar build -m capacitor -T android
+
   stage: build
   tags:
-    - arm64
-  image: ubuntu:jammy
+    - amd64
+  image: ubuntu:noble
+  artifacts:
+    paths:
+      - dist/capacitor/android/apk/release/app-release-unsigned.apk
+      - dist/spa.tar.gz
+    expire_in: 6 mos
 #  artifacts:
 #    paths:
 #      - test/cypress/screenshots

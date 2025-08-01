@@ -1,7 +1,8 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
 import { initialize, enable } from '@electron/remote/main' // <-- add this
-import path from 'path'
 import os from 'os'
+import url from 'url'
+import path from 'path'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -20,40 +21,66 @@ let mainWindow: BrowserWindow | undefined
 //   global.__statics = __dirname
 // }
 
+let isRemoteInitialized = false;
+
+function initializeRemote() {
+  if (!isRemoteInitialized) {
+    initialize();
+    isRemoteInitialized = true;
+  }
+}
+
+
 function createWindow() {
+  let powerSaveBlockerId: number
+
   /**
    * Initial window options
    */
-  initialize() // <-- add this
+  initializeRemote() // <-- add this
 
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
-    width: 1000,
-    height: 600,
+    width: 1500,
+    height: 800,
     frame: false,
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 10, y: 10 },
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
+      sandbox: false,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD),
+      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
     },
   })
 
   enable(mainWindow.webContents) // <-- add this
 
-  mainWindow.loadURL(process.env.APP_URL)
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
+    mainWindow.loadURL(process.env.APP_URL)
     mainWindow.webContents.openDevTools()
   } else {
     // we're on production no access to devtools pls
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file',
+      slashes: true
+    }))
     mainWindow.webContents.on('devtools-opened', () => {
       mainWindow?.webContents.closeDevTools()
     })
   }
+
+  ipcMain.on('keep-awake', () => {
+    powerSaveBlockerId = powerSaveBlocker.start('prevent-display-sleep')
+  })
+
+  ipcMain.on('allow-sleep', () => {
+    powerSaveBlocker.stop(powerSaveBlockerId as number)
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = undefined

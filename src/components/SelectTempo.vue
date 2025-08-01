@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUpdated } from 'vue'
+import { ref, computed, watch, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import type { QBtn } from 'quasar'
@@ -10,22 +11,20 @@ const decreaseTempoBtn = ref<QBtn | null>(null)
 const increaseTempoBtn = ref<QBtn | null>(null)
 
 const $q = useQuasar()
+const { t } = useI18n()
+
 const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const {
   selectedPattern,
+  selectedData,
   tempo
 } = storeToRefs(patternStore)
-
-const sessionStore = useSessionStore()
 
 const {
   visualizationSize
 } = storeToRefs(sessionStore)
-
-const {
-  selectTempo
-} = patternStore
 
 const decrement = () => {
   tempo.value = tempo.value - 1
@@ -33,6 +32,10 @@ const decrement = () => {
 
 const increment = () => {
   tempo.value = tempo.value + 1
+}
+
+const handleTempoChange = (newTempo: number) => {
+  tempo.value = newTempo
 }
 
 onUpdated(() => {
@@ -47,19 +50,21 @@ onUpdated(() => {
 
 <template lang="pug">
 div
-  p Tempo
+  p {{ $t('doc.tempo.title') }}
   .row.justify-center.items-end.content-end
     q-knob(
-      v-if="tempo",
       color="primary",
-      track-color="grey-1",
-      v-model="tempo",
-      :min="selectedPattern?.minTempo",
-      :max="selectedPattern?.maxTempo",
+      track-color="grey-8",
+      :model-value="tempo",
+      @update:model-value="handleTempoChange($event)",
+      :min="selectedData?.minTempo",
+      :max="selectedData?.maxTempo",
       show-value,
       :size="$q.screen.lt.md ? '130px' : '142px'",
       :thickness="0.2"
-    ).text-weight-light
+    )
+      .text-weight-regular {{ tempo }}
+        .text-subtitle2 {{ $t('doc.tempo.bpm') }}
   .row.justify-between
     q-btn(
       id="decreaseTempoBtn",
@@ -70,7 +75,7 @@ div
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="decrement"
     )
-      q-icon(name="remove")
+      q-icon(name="mdi-minus")
     q-btn(
       id="increaseTempoBtn",
       ref="increaseTempoBtn",
@@ -80,5 +85,5 @@ div
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="increment"
     )
-      q-icon(name="add")
+      q-icon(name="mdi-plus")
 </template>

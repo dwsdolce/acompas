@@ -50,3 +50,13 @@
 //     BrowserWindow.getFocusedWindow()?.close()
 //   }
 // })
+
+import { contextBridge, ipcRenderer } from 'electron'
+import path from 'path'
+
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  sendMessage: (channel: string, data?: any) => ipcRenderer.send(channel, data),
+  getAssetPath: (path: string) => ipcRenderer.sendSync('getAssetPath', path),
+  getPublicPath: () => process.env.PROD ? path.join(__dirname, '../public') : ''
+})

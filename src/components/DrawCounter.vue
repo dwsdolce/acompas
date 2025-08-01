@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { getCssVar } from 'quasar'
 import { useSessionStore } from 'src/stores/session'
 import { usePatternStore } from 'src/stores/patterns'
 
@@ -9,40 +10,38 @@ const patternStore = usePatternStore()
 
 const {
   selectedPattern,
+  selectedContext,
+  selectedData,
   metronomeEvent,
   beatLabels
 } = storeToRefs(patternStore)
 
-const counter = ref<number | null>(null)
+const counter = ref<string | number | null>(null)
 const className = ref<string>('')
+
+const getClass = computed(() => {
+  const isAccent = selectedData.value?.accents.includes((metronomeEvent.value as number) as never)
+  return {
+    'text-primary': !isAccent,
+    'text-secondary': isAccent
+  }
+})
 
 watch(metronomeEvent, (v: number | null) => {
   if (v !== null && selectedPattern.value) {
     counter.value = beatLabels.value[(v as number)]
-
-    if (selectedPattern.value?.accents.includes(((v as number) / 2) as never)) {
-      className.value = 'accent'
-    } else {
-      className.value = ''
-    }
   } else {
     counter.value = null
-    className.value = ''
   }
 })
 </script>
 
 <template lang="pug">
 .item-center.full-width
-  h1(:class="className").text-center.q-ma-none
+  h1(
+    :class="getClass"
+  ).text-center.q-ma-none
     div(v-if="metronomeEvent === null")
-      q-icon(name="more_horiz")
+      q-icon(name="mdi-dots-horizontal", size="85px")
     div(v-else).counter {{ counter }}
 </template>
-
-<style lang="sass" scoped>
-.q-icon
-  height: 0.85rem
-.accent
-  color: firebrick
-</style>

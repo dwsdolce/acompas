@@ -6,3 +6,11 @@ declare namespace NodeJS {
     APP_URL: string;
   }
 }
+
+interface Window {
+  electronAPI: {
+    sendMessage: (channel: string, data?: any) => void,
+    getAssetPath: (path: string) => string,
+    getPublicPath: () => string
+  }
+}

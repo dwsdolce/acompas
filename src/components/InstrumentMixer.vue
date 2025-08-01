@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onUpdated } from 'vue'
 import { QCheckbox, QToggle, QSlider, useQuasar } from 'quasar'
-import type { instruOpts } from 'src/utils/types'
 import { usePatternStore } from 'src/stores/patterns'
 import { isFocusableElement } from 'src/utils/utils'
 
@@ -58,7 +57,7 @@ tr
   td
     q-toggle(
       ref="toggleBtn"
-      icon="audiotrack",
+      icon="mdi-music-note-eighth",
       v-if="instru.eighthNotes !== null",
       v-model="instrumentEighthNotesEnabled",
       :disable="!instrumentEnabled",
@@ -79,8 +78,3 @@ tr
       markers
     )
 </template>
-
-<style lang="sass" scoped>
-tr > td
-  padding: 0.5rem 0
-</style>

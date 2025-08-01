@@ -2,13 +2,16 @@
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
 const $q = useQuasar()
+const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
 
@@ -19,28 +22,41 @@ const resetOptions = [
   { value: 'all', label: 'All patterns and settings' }
 ]
 
+const emit = defineEmits(['reset'])
+
 watch(resetDialog, () => {
   selectedResetOption.value = 'pattern'
 })
 
 const {
-  toggleDialog
-} = sessionStore
+  restoreDefault,
+  initAll
+} = patternStore
 
 const {
-  restoreDefault
-} = patternStore
+  selectedContextName,
+  selectedPatternName,
+} = storeToRefs(patternStore)
 
 const onSelectedOption = (v: string) => {
   selectedResetOption.value = v
 }
 
-const handleRestore = () => {
+const handleRestore = async () => {
   if (selectedResetOption.value === 'pattern') {
-    restoreDefault(route.name as string)
+    await restoreDefault(route.name as string)
   } else if (selectedResetOption.value === 'all') {
-    restoreDefault(selectedResetOption.value)
+    await restoreDefault(selectedResetOption.value)
   }
+  // router.go(0)
+  await initAll(selectedContextName.value, selectedPatternName.value)
+  $q.notify({
+    message: t('doc.reset.success'),
+    color: 'positive',
+    icon: 'mdi-check-circle-outline'
+  })
+  resetDialog.value = false
+  emit('reset', true)
 }
 </script>
 
@@ -49,20 +65,19 @@ const handleRestore = () => {
   //- p.caption Reset
   q-btn(
     outline,
-    icon="settings_backup_restore",
+    color="red-9",
+    icon="mdi-restore-alert",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Reset settings",
+    :label="$t('buttons.restore')",
     @click="resetDialog = true"
   )
   q-dialog(
-    v-model="resetDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="resetDialog"
   )
     custom-card
-      template(v-slot:title) Restore default parameters
+      template(v-slot:title) {{ $t('doc.reset.title') }}
       template(v-slot:content)
-        p.text-center Warning! This will delete your metronome settings.
+        p.text-center {{ $t('doc.reset.warning') }}
         q-option-group(
           type="radio",
           color="primary",
@@ -75,11 +90,11 @@ const handleRestore = () => {
           unelevated,
           color="primary",
           v-close-popup
-        ).q-mr-md Close
+        ).q-mr-md {{ $t('doc.reset.close') }}
         q-btn(
           unelevated,
           color="red-10",
           v-close-popup,
           @click="handleRestore"
-        ) Proceed
+        ) {{ $t('doc.reset.proceed') }}
 </template>

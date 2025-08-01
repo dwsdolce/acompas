@@ -2,6 +2,7 @@
 import { ref, onUpdated } from 'vue'
 import { openURL, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
@@ -10,17 +11,9 @@ import type { QBtn } from 'quasar'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
+const { t } = useI18n()
 
-const { selectedPattern } = storeToRefs(patternStore)
-
-const {
-  visualizationMode,
-  selectTempo
-} = patternStore
-
-const {
-  toggleDialog
-} = sessionStore
+const { selectedData } = storeToRefs(patternStore)
 
 const patternHelpDialog = ref(false)
 
@@ -54,20 +47,32 @@ span.q-ml-sm
     flat,
     size="10px",
     padding="none",
-    icon="help",
+    icon="mdi-help-circle",
     @click="patternHelpDialog = true"
   )
   q-dialog(
     id="patternHelpDialog",
-    v-model="patternHelpDialog",
-    @show="toggleDialog(true)",
-    @hide="toggleDialog(false)"
+    v-model="patternHelpDialog"
   )
     custom-card
-      template(v-slot:title) {{ selectedPattern?.longLabel }}
+      template(v-slot:title) {{ selectedData?.longLabel }}
       template(v-slot:content)
-        div(v-html="selectedPattern?.doc")
-        p {{ selectedPattern?.places }}
-        p(v-if="selectedPattern?.wikipediaUrl") Wikipedia article : #[q-btn(round, icon="link", @click="launch(selectedPattern?.wikipediaUrl)")]
-        p(v-if="selectedPattern?.videoExample") Example video : #[q-btn(round, icon="link", @click="launch(selectedPattern?.videoExample)")]
+        div(v-html="selectedData?.doc")
+        p {{ selectedData?.places }}
+        p(v-if="selectedData?.wikipediaUrl") {{ $t('doc.utils.wikipediaUrl') }}
+          q-btn(
+            outline,
+            size="sm",
+            icon="mdi-link-variant",
+            :label="$t('doc.utils.openLink')"
+            @click="launch(selectedData?.wikipediaUrl)"
+          ).q-ml-md
+        p(v-if="selectedData?.videoExample") {{ $t('doc.utils.videoExample') }}
+          q-btn(
+            outline,
+            size="sm",
+            icon="mdi-link-variant",
+            :label="$t('doc.utils.openLink')"
+            @click="launch(selectedData?.videoExample)"
+          ).q-ml-md
 </template>

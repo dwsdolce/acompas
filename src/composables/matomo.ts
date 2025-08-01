@@ -89,9 +89,6 @@ export const useMatomo = () => {
     }
   }
 
-  // onMounted(() => {
-  //   console.log('Matomo mounted')
-  // })
 
   return {
     initMatomo,

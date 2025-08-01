@@ -21,17 +21,12 @@ q-btn(
   id="playBtn",
   ref="playBtn",
   round,
+  unelevated,
   size="xl",
-  :padding="$q.screen.lt.md ? 'md' : 'xl'"
   color="primary",
-  :icon="isPlaying ? 'stop' : 'play_arrow'",
+  :debounce="500",
+  :padding="$q.screen.lt.md ? 'md' : 'xl'",
+  :icon="isPlaying ? 'mdi-stop' : 'mdi-play'",
   @click="isPlaying ? stop() : play()"
 )
 </template>
-
-<style lang="sass" scoped>
-#playBtn
-  box-shadow: 0 0 30px 10px rgb(255 255 255 / 10%)
-  &::before
-    box-shadow: 0 0 5px 5px rgb(10 10 10 / 70%)
-</style>

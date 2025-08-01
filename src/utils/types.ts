@@ -29,27 +29,11 @@ export interface Sound {
 }
 
 export interface Sounds {
-  clara:                    Sound
-  sorda:                    Sound
-  pito:                     Sound
-  nudillo:                  Sound
-  cajon:                    Sound
-  udu:                      Sound
-  jaleo:                    Sound
-  click:                    Sound
+  [x: string]:              Sound
 }
 
 export interface Seq {
-  clara?:                   Sequence
-  sorda?:                   Sequence
-  pito?:                    Sequence
-  nudillo?:                 Sequence
-  cajon?:                   Sequence
-  udu?:                     Sequence
-  jaleo?:                   Sequence
-  click?:                   Sequence
-  event?:                   Sequence
-  prestartBeat?:            Sequence
+  [x: string]:              Sequence | undefined
 }
 
 export interface SeqSubdiv {
@@ -104,20 +88,13 @@ export interface DecayOpts {
 }
 
 export interface InstruSeqs {
-  clara:                  (number | null)[]
-  sorda:                  (number | null)[]
-  pito:                   (number | null)[]
-  cajon:                  (number | null)[]
-  nudillo:                (number | null)[]
-  udu:                    (number | null)[]
-  click:                  (number | null)[]
-  beatLabels:             (number | null)[]
+  [x: string]:            (number | string | null)[]
 }
-
 export interface PatternState {
   id:                       number
   name:                     string
   label:                    string
+  context?:                 string
   linkedPatterns?:          stringOpts[]
   minTempo:                 number
   maxTempo:                 number
@@ -135,26 +112,37 @@ export interface PatternState {
   wikipediaUrl?:            string
   places?:                  string
   videoExample?:            string
-  selectedPrestartBeat?:    numOpts
-  tempo:                    number
-  isTooFast?:               boolean
-  isTooSlow?:               boolean
-  swing:                    number
-  improvisation?:           boolean
-  humanization?:            boolean
-  // visualizationModes:    visuOpts[]
-  instruments?:             instruOpts[]
-  globalDecay:              number
-  visualizationMode?:       string
+}
 
+export interface PatternSetting {
+  name:                     string
+  label:                    string
+  context:                  string
+  globalDecay:              number
+  instruments:              instruOpts[]
+  sequences:                InstruSeqs
+  tempo:                    number
+  swing:                    number
+  improvisation:            boolean
+  humanization:             boolean
+  prestartBeat:             numOpts
 }
 
 export interface SessionState {
   trackingEnabled:          boolean
   trackingInitialized:      boolean
   trackingChosen:           boolean
-  privacyDialogOpen:        boolean
-  dialogOpen:               boolean
   leftDrawerOpen:           boolean
   visualizationSize:        Size
+}
+
+
+export interface ColorOption {
+  primary:                  string
+  secondary:                string
+}
+export interface ContextOption {
+  label:                    string
+  value:                    string
+  colors:                   ColorOption
 }
