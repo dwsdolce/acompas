@@ -2,6 +2,8 @@
 import { ref, onMounted, onUpdated } from 'vue'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+import { useSessionStore } from 'src/stores/session'
 import ToggleImprovise from 'src/components/ToggleImprovise.vue'
 import ToggleHumanize from 'src/components/ToggleHumanize.vue'
 import SelectSwing from 'src/components/SelectSwing.vue'
@@ -12,6 +14,9 @@ import type { QBtn } from 'quasar'
 
 const $q = useQuasar()
 const { t } = useI18n()
+
+const sessionStore = useSessionStore()
+const { isDarkMode } = storeToRefs(sessionStore)
 
 const optDialog = ref(false)
 const optBtn = ref<QBtn | null>(null)
@@ -28,7 +33,7 @@ div
   q-btn(
     ref="optBtn",
     outline,
-    color="white",
+    :color="isDarkMode ? 'white' : 'black'",
     icon="mdi-tune-vertical-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     :label="t('buttons.options')",

@@ -41,7 +41,7 @@ const {
   stop
 } = patternStore
 
-const { visualizationMode } = storeToRefs(sessionStore)
+const { isDarkMode, visualizationMode } = storeToRefs(sessionStore)
 
 const { setVisualizationSize } = sessionStore
 
@@ -86,7 +86,9 @@ watch(() => selectedContext.value, async (context) => {
 </script>
 
 <template lang="pug">
-q-page.text-grey-1.flex
+q-page.flex(
+  :class="isDarkMode ? 'text-white' : 'text-black'"
+)
   global-events
   .main-panel.q-pa-xs.col-grow
     .top-panel(ref="visualization")

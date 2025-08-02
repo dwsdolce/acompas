@@ -3,6 +3,7 @@ import { ref, watch, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
 import InstrumentMixer from 'src/components/InstrumentMixer.vue'
 import SelectDecay from 'src/components/SelectDecay.vue'
 import CustomCard from 'src/components/CustomCard.vue'
@@ -10,6 +11,7 @@ import type { QBtn } from 'quasar'
 
 const $q = useQuasar()
 const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const mixerDialog = ref(false)
 const mixerBtn = ref<QBtn | null>(null)
@@ -17,6 +19,10 @@ const mixerBtn = ref<QBtn | null>(null)
 const {
   selectedPattern,
 } = storeToRefs(patternStore)
+
+const {
+  isDarkMode,
+} = storeToRefs(sessionStore)
 
 onUpdated(() => {
   if (!mixerDialog.value && mixerBtn.value !== null) {
@@ -31,6 +37,7 @@ div
     id="mixerBtn",
     ref="mixerBtn",
     outline,
+    :color="isDarkMode ? 'white' : 'black'",
     icon="mdi-tune-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     label="Mixer",

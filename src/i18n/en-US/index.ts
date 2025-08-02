@@ -38,6 +38,12 @@ If you have any questions or suggestions, please contact us.`
     options: {
       title: 'List of options',
       content: {
+        theme: {
+          title: 'Theme',
+          content: `
+You can choose between light and dark themes.
+The dark theme is more suitable for low-light environments, while the light theme is more suitable for bright environments.`,
+        },
         tempo: {
           title: 'Tempo',
           content: `

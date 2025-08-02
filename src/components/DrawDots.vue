@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
-import { getCssVar } from 'quasar'
+import { getCssVar, is } from 'quasar'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
@@ -24,7 +24,8 @@ const {
 } = storeToRefs(patternStore)
 
 const {
-  visualizationSize
+  visualizationSize,
+  isDarkMode
 } = storeToRefs(sessionStore)
 
 // const dotSize = ref<number>(20)
@@ -81,6 +82,7 @@ const dotStyle = computed(() => (n: number) => {
 const nbStyle = computed(() => {
   return {
     fontSize: fontSize.value + 'px',
+    color: isDarkMode.value ? 'white' : 'black',
     opacity: 0.6
   }
 })

@@ -5,6 +5,7 @@ import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
@@ -25,6 +26,7 @@ const $q = useQuasar()
 const router = useRouter()
 const { t } = useI18n()
 const patternStore = usePatternStore()
+const sessionStore = useSessionStore()
 
 const {
   data,
@@ -33,6 +35,10 @@ const {
   selectedData,
   patternsInSelectedContext
 } = storeToRefs(patternStore)
+
+const {
+  isDarkMode
+} = storeToRefs(sessionStore)
 
 const patternsDialog = ref(false)
 const filter = ref('')
@@ -70,7 +76,7 @@ div
     id="patternBtn",
     ref="patternBtn",
     outline,
-    color="white",
+    :color="isDarkMode ? 'white' : 'black'",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
     :label="selectedData?.label",
     @click="patternsDialog = true"

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useSessionStore } from 'src/stores/session'
 import CustomCard from 'src/components/CustomCard.vue'
+import ThemeToggle from 'src/components/ThemeToggle.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 import PerformancePanel from 'src/components/PerformancePanel.vue'
@@ -48,12 +49,14 @@ div
     CustomCard
       template(v-slot:title) {{ t('buttons.settings') }}
       template(v-slot:content)
+        ThemeToggle
+
         select-visualization.q-mb-md
         reset-button(
           @reset="handleReset"
         ).q-mb-md
 
-        //-- Performance Monitoring (Development Only
+        //-- Performance Monitoring (Development Only)
         //- div(v-if="ENABLE_PERFORMANCE_MONITORING")
           q-separator.q-mb-md
           .text-subtitle1.q-mb-sm 🔧 Developer Tools

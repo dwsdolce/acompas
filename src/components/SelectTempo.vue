@@ -23,6 +23,7 @@ const {
 } = storeToRefs(patternStore)
 
 const {
+  isDarkMode,
   visualizationSize
 } = storeToRefs(sessionStore)
 
@@ -71,7 +72,7 @@ div
       ref="decreaseTempoBtn",
       outline,
       round,
-      color="white",
+      :color="isDarkMode ? 'white' : 'black'",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="decrement"
     )
@@ -81,7 +82,7 @@ div
       ref="increaseTempoBtn",
       outline,
       round,
-      color="white",
+      :color="isDarkMode ? 'white' : 'black'",
       :size="$q.screen.lt.md ? 'sm' : 'md'",
       @click="increment"
     )

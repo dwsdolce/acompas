@@ -15,6 +15,7 @@ export const useSessionStore = defineStore('session', () => {
   const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
+  const isDarkMode = useStorage('is-dark-mode', ref<boolean>(false))
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
   const visualizationModes = ref([
@@ -54,6 +55,10 @@ export const useSessionStore = defineStore('session', () => {
     trackingChosen.value = true
   }
 
+  const toggleDarkMode = () => {
+    isDarkMode.value = !isDarkMode.value
+  }
+
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
@@ -81,6 +86,7 @@ export const useSessionStore = defineStore('session', () => {
     trackingEnabled,
     trackingInitialized,
     trackingChosen,
+    isDarkMode,
     leftDrawerOpen,
     visualizationSize,
     visualizationModes,
@@ -91,6 +97,7 @@ export const useSessionStore = defineStore('session', () => {
     disableTrackVisits,
     initializeTracking,
     enableTrackingChosen,
+    toggleDarkMode,
     toggleLeftDrawer,
     setVisualizationSize
   }

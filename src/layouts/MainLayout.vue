@@ -17,6 +17,7 @@ const sessionStore = useSessionStore()
 const patternStore = usePatternStore()
 
 const { setVisualizationSize } = sessionStore
+const { isDarkMode } = storeToRefs(sessionStore)
 const { contexts } = storeToRefs(patternStore)
 
 const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
@@ -90,7 +91,7 @@ q-layout(view="hhh LpR lFf")
   )
     left-drawer
 
-  q-page-container#appMain.text-info
+  q-page-container#appMain.text-info(:class="{ 'light-mode': !isDarkMode }")
     q-resize-observer(
       debounce="10",
       @resize="onResize"
@@ -99,3 +100,12 @@ q-layout(view="hhh LpR lFf")
       Transition(name="fade", mode="out-in")
         component(:is="Component", :key="route.fullPath")
 </template>
+
+<style lang="scss">
+#appMain {
+  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 100%);
+  &.light-mode {
+    background: linear-gradient(to bottom, rgb(240, 240, 240) 0%, rgb(250, 250, 250) 35%, rgb(250, 250, 250) 65%, rgb(240, 240, 240) 100%);
+  }
+}
+</style>
