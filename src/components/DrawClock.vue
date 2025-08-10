@@ -20,6 +20,10 @@ const {
   tempo
 } = storeToRefs(patternStore)
 
+const {
+  isDarkMode
+} = storeToRefs(sessionStore)
+
 const clockDeg = ref<number>(0)
 const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
@@ -143,8 +147,8 @@ onBeforeUpdate(() => {
 </script>
 
 <template lang="pug">
-#clock.shadow-20
-  .axis.shadow-4
+#clock.shadow-5
+  .axis.shadow-2
   .hand(ref="hand").shadow-2
   ul
     li(

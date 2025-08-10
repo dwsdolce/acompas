@@ -16,6 +16,10 @@ const {
   beatLabels
 } = storeToRefs(patternStore)
 
+const {
+  isDarkMode
+} = storeToRefs(sessionStore)
+
 const counter = ref<string | number | null>(null)
 const className = ref<string>('')
 
@@ -23,7 +27,8 @@ const getClass = computed(() => {
   const isAccent = selectedData.value?.accents.includes((metronomeEvent.value as number) as never)
   return {
     'text-primary': !isAccent,
-    'text-secondary': isAccent
+    'text-secondary': isAccent,
+    'light-mode': !isDarkMode.value,
   }
 })
 
@@ -39,9 +44,20 @@ watch(metronomeEvent, (v: number | null) => {
 <template lang="pug">
 .item-center.full-width
   h1(
+    id="Counter",
     :class="getClass"
   ).text-center.q-ma-none
     div(v-if="metronomeEvent === null")
       q-icon(name="mdi-dots-horizontal", size="85px")
-    div(v-else).counter {{ counter }}
+    div(v-else).text-weight-bold {{ counter }}
 </template>
+
+<style lang="scss" scoped>
+#Counter {
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.6);
+  &.light-mode {
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+  }
+}
+</style>

@@ -103,9 +103,17 @@ q-layout(view="hhh LpR lFf")
 
 <style lang="scss">
 #appMain {
-  background: linear-gradient(to bottom, rgb(25, 25, 25) 0%, rgb(35, 35, 35) 35%, rgb(35, 35, 35) 65%, rgb(25, 25, 25) 100%);
+  background:
+    linear-gradient(
+      to bottom,
+      rgb(25, 25, 25) 0%,
+      rgb(35, 35, 35) 35%,
+      rgb(35, 35, 35) 65%,
+      rgb(25, 25, 25) 100%
+    )
+  ;
   &.light-mode {
-    background: linear-gradient(to bottom, rgb(240, 240, 240) 0%, rgb(250, 250, 250) 35%, rgb(250, 250, 250) 65%, rgb(240, 240, 240) 100%);
+    background: rgb(240, 240, 240);
   }
 }
 </style>
