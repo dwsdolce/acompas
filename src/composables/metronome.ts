@@ -89,9 +89,11 @@ export const useMetronome = () => {
           const url = `${path}${media.src}.${audioFormat.value}`
 
           const quarterPlayer = new Tone.Player(url).connect(quarterChannel)
+          // Appliquer le volume par défaut immédiatement
           quarterPlayer.volume.value = media.volume
 
           const eighthPlayer = new Tone.Player(url).connect(eighthChannel)
+          // Appliquer le volume par défaut immédiatement
           eighthPlayer.volume.value = media.volume
 
           // Create interface compatible with legacy system
@@ -118,7 +120,7 @@ export const useMetronome = () => {
       eighthChannel.connect(reverb)
 
       console.log('Original sound system loaded successfully')
-      console.log('Loaded sounds:', Object.keys(sounds))
+      console.log('Loaded sounds:', sounds)
     } catch (error) {
       console.error('Error in loadSounds:', error)
       throw error
@@ -541,10 +543,14 @@ export const useMetronome = () => {
       if (sound) {
         forEachValue(sound as Sound, (player: Players) => {
           if (player.quarter.volume) {
-            player.quarter.volume.value = payload.volume
+            // Appliquer le volume en combinant defaultVolume + offset demandé
+            const baseVolume = player.quarter.defaultVolume || 0
+            player.quarter.volume.value = baseVolume + payload.volume
           }
           if (player.eighth.volume) {
-            player.eighth.volume.value = payload.volume
+            // Appliquer le volume en combinant defaultVolume + offset demandé
+            const baseVolume = player.eighth.defaultVolume || 0
+            player.eighth.volume.value = baseVolume + payload.volume
           }
         })
       }

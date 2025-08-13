@@ -63,11 +63,11 @@ export default [
     medias: [
       {
         src: 'acompas/nudillo/nudillo_1',
-        volume: 0,
+        volume: -8,
       },
       {
         src: 'acompas/nudillo/nudillo_2',
-        volume: 5,
+        volume: -3,
       }
     ]
   },
@@ -77,15 +77,15 @@ export default [
     medias: [
       {
         src: 'acompas/cajon/cajon_1',
-        volume: -2,
+        volume: -13,
       },
       {
         src: 'acompas/cajon/cajon_2',
-        volume: -2,
+        volume: -13,
       },
       {
         src: 'acompas/cajon/cajon_2',
-        volume: -12,
+        volume: -23,
       }
     ]
   },
@@ -95,15 +95,15 @@ export default [
     medias: [
       {
         src: 'acompas/udu/udu_1',
-        volume: -16,
+        volume: -26,
       },
       {
         src: 'acompas/udu/udu_2',
-        volume: -9,
+        volume: -19,
       },
       {
         src: 'acompas/udu/udu_3',
-        volume: -4,
+        volume: -14,
       }
     ]
   },

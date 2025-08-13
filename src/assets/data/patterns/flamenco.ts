@@ -27,12 +27,12 @@ export default [
     accents: [0, 6, 14, 16, 20],
     sequences: {
       clara: //<[number, ...(number | null)[]]>
-        [ 1,    3,    3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    2,    1,    2,    1,    null, 3,    1,    1,    null, 3,    null ],
+        [ 1,    null, 3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    null, 1,    2,    1,    null, 3,    1,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       sorda:
-        [ 1,    3,    2,    1,    2,    3,    1,    3,    2,    3,    2,    3,    2,    3,    1,    1,    1,    3,    2,    1,    1,    3,    2,    3 ],
+        [ 1,    3,    2,    1,    2,    3,    1,    null, 2,    3,    2,    null, 2,    3,    1,    1,    1,    3,    2,    1,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -117,31 +117,31 @@ export default [
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    1,    3,    null, null, 1,    2,    3,    2,    3 ],
+        [ 3,    null, 2,    1,    2,    3,    1,    2,    2,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    2,    3,    null, 3,    2,    3,    2,    3 ],
+        [ 1,    null, null, 3,    2,    3,    1,    3,    2,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       cajon: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    2,    3,    1,    2,    2,    3,    2,    null, 2,    null ],
+        [ 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       nudillo: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    2,    2,    null, null, 2,    1,    null, 2,    null ],
+        [ 1,    null, 2,    2,    1,    null, null, 2,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       udu: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    3,    2,    null, 2,    3,    2,    null, 2,    null ],
+        [ 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
@@ -192,25 +192,25 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    2,    1,    2,    3,    null, 1,    3,    3,    null, 3,    null ],
+        [ 3,    2,    1,    2,    3,    null, 1,    null, 3,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    1,    2,    3,    1,    2,    3,    2,    3,    2 ],
+        [ 3,    3,    2,    1,    2,    3,    1,    2,    2,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    null, 2,    3 ],
+        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       cajon: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    2,    null, 3,    2,    3,    null, 2,    null ],
+        [ 1,    3,    3,    2,    3,    null, 2,    null, 3,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
@@ -228,7 +228,7 @@ export default [
 
       click: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    null, 1,    null, 2,    null, 1,    null, 2,    null ],
+        [ 1,    null, 2,    null, 2,    null, 1,    null, 2,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
@@ -275,25 +275,25 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    3,    2,    3,    2,    1,    2,    3,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    null, 3,    null ],
+        [ 1,    null, 3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 1,    null, 3,    2,    1,    null, 3,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    2,    3,    null, 2,    null, 3,    null, 3,    null, 1,    3,    2,    2,    1,    3,    2,    2,    1,    null, 3,    null ],
+        [ 1,    3,    2,    2,    3,    3,    2,    null, 3,    null, 3,    null, 1,    3,    2,    2,    1,    3,    2,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    1,    2,    3,    1,    null, 2,    null, 2,    null, 1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3 ],
+        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       cajon: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    3,    2,    null, 3,    null, 2,    null, 2,    null, 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
+        [ 1,    3,    3,    2,    3,    null, 2,    null, 3,    null, 3,    null, 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -361,25 +361,25 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    3,    1,    3,    2,    1,    2,    3,    2,    3,    2,    3,    2,    1,    2,    1,    2,    3,    1,    1,    null, 3,    null ],
+        [ 1,    null, 3,    2,    3,    null, 1,    null, 3,    null, 3,    null, 3,    null, 1,    2,    1,    null, 3,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    3,    1,    2,    3,    null, 1,    null, 3,    null, 3,    null, 2,    3,    1,    2,    1,    3,    3,    2,    1,    null, 3,    null ],
+        [ 1,    3,    2,    2,    3,    3,    1,    null, 3,    null, 3,    null, 3,    3,    1,    2,    1,    3,    2,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    1,    2,    3,    1,    null, 2,    null, 2,    null, 1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3 ],
+        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    2,    3,    1,    3,    1,    3,    2,    3,    1,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       cajon: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    3,    2,    null, 1,    null, 2,    null, 2,    null, 2,    null, 1,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
+        [ 1,    3,    3,    2,    3,    null, 2,    null, 3,    null, 3,    null, 3,    null, 1,    3,    1,    null, 2,    3,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -444,7 +444,7 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    3,    1,    3,    2,    1,    2,    3,    2,    3,    2,    1,    2,    3,    2,    3,    2,    1,    1,    1,    null, 3,    null ],
+        [ 1,    null, 3,    1,    3,    null, 1,    null, 3,    null, 3,    null, 1,    null, 3,    2,    3,    null, 1,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -456,7 +456,7 @@ export default [
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    null, 1,    2,    1,    null, 2,    null ],
+        [ 1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    1,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -472,7 +472,7 @@ export default [
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
       udu:
-        [ 1,    null, 2,    3,    2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    3,    2,    null, 1,    3,    1,    null, 2,    null ],
+        [ 1,    null, 2,    3,    2,    null, 1,    null, 2,    null, 2,    null, 1,    null, 2,    3,    2,    null, 1,    2,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  12          1           2           3           4           5           6           7           8           9           10          11
 
@@ -529,13 +529,13 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    2,    1,    1,    3,    null, 1,    null, 3,    2,    1,    2,    3,    null, 1,    null ],
+        [ 3,    null, 1,    1,    3,    null, 1,    null, 3,    null, 1,    2,    3,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    2,    1,    1,    2,    3,    1,    2,    null, 2,    1,    1,    2,    3,    1,    3 ],
+        [ 2,    3,    1,    2,    3,    2,    1,    null, 2,    3,    1,    1,    2,    3,    1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
@@ -547,7 +547,7 @@ export default [
 
       cajon: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    2,    3,    null, 2,    null, 1,    null, 2,    3,    2,    null, 3,    null ],
+        [ 1,    null, 2,    1,    3,    null, 1,    null, 3,    null, 2,    1,    2,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
@@ -559,7 +559,7 @@ export default [
 
       udu: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, null, 3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
+        [ 1,    null, null, 3,    2,    null, 3,    null, 1,    null, 2,    3,    2,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
@@ -615,13 +615,13 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    3,    1,    3,    null, 1,    2,    1,    null, 3,    null ],
+        [ 1,    null, 3,    1,    3,    null, 1,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    3,    2,    3,    2,    1,    2,    1,    2,    3,    2 ],
+        [ 1,    2,    3,    2,    3,    2,    1,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11
       //  6           1           2           3           4           5
 
@@ -701,7 +701,7 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    1,    3,    2,    1,    2,    3,    1,    3,    2,    1,    null, 3,    null ],
+        [ 1,    null, 3,    2,    1,    null, 3,    2,    1,    null, 3,    1,    3,    2,    1,    null, 3,    1,    3,    2,    1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1                       2                       3                                   4                                   5
 
@@ -713,7 +713,7 @@ export default [
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    null, 2,    null ],
+        [ 1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1                       2                       3                                   4                                   5
 
@@ -729,7 +729,7 @@ export default [
       //  1                       2                       3                                   4                                   5
 
       udu: //<[number, ...(number | null)[]]>
-        [ 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    3,    2,    3,    1,    null, 2,    3,    2,    3,    1,    null, 3,    null ],
+        [ 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    3,    2,    null, 1,    null, 2,    3,    2,    null, 1,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1                       2                       3                                   4                                   5
 
@@ -793,17 +793,17 @@ export default [
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1           2           3           4           5           6           7           8           9           10          11          12
       sorda:
-        [ 3,    2,    3,    2,    1,    2,    3,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2 ],
+        [ 3,    2,    3,    2,    1,    null, 3,    2,    3,    2,    1,    null, 3,    2,    1,    2,    3,    2,    1,    null, 3,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1           2           3           4           5           6           7           8           9           10          11          12
 
       pito:
-      [ 2,    3,    2,    3,    1,    null, 2,    3,    2,    3,    1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 2,    3,    1,    null ],
+      [ 2,    3,    2,    3,    1,    3,    2,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3 ],
     //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
     //  1           2           3           4           5           6           7           8           9           10          11          12
 
       cajon:
-        [ 2,    3,    2,    null, 1,    null, 2,    3,    2,    null, 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 3,    null, 1,    null ],
+        [ 3,    2,    3,    null, 1,    null, 3,    2,    3,    null, 1,    null, 3,    2,    1,    null, 3,    2,    1,    null, 2,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1           2           3           4           5           6           7           8           9           10          11          12
       nudillo:
@@ -811,7 +811,7 @@ export default [
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1           2           3           4           5           6           7           8           9           10          11          12
       udu:
-        [ null, 2,    null, null, 1,    null, null, 2,    null, null, 1,    null, null, 2,    1,    null, null, 2,    1,    null, 2,    null, 1,    null ],
+        [ 2,    3,    2,    null, 1,    null, 2,    3,    2,    null, 1,    null, 2,    3,    1,    null, 2,    3,    1,    null, 3,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15    16    17    18    19    20    21    22    23
       //  1           2           3           4           5           6           7           8           9           10          11          12
       click:
@@ -865,12 +865,12 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //  0     1     2     3     4     5     6     7     8     9     10    11
-        [ 3,    1,    1,    2,    1,    2,    3,    1,    1,    2,    1,    null ],
+        [ 3,    1,    1,    2,    1,    null, 3,    1,    1,    2,    1,    null ],
       //  1           2           3           1           2           3
 
       sorda: //<[number, ...(number | null)[]]>
       //  0     1     2     3     4     5     6     7     8     9     10    11
-        [ 3,    2,    1,    2,    1,    2,    3,    2,    1,    2,    1,    2 ],
+        [ 3,    2,    1,    2,    1,    null, 3,    2,    1,    2,    1,    null ],
       //  1           2           3           1           2           3
 
       pito: //<[number, ...(number | null)[]]>
@@ -946,37 +946,37 @@ export default [
     sequences: {
       clara: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    2,    1,    1,    3,    null, 1,    null, 3,    2,    1,    1,    3,    null, 1,    null ],
+        [ 3,    null, 1,    1,    3,    null, 1,    null, 3,    null, 1,    1,    3,    null, 1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       sorda: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2,    3,    2,    1,    2 ],
+        [ 3,    2,    1,    2,    3,    2,    1,    null, 3,    2,    1,    2,    3,    2,    1,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       pito: //<[number, ...(number | null)[]]>
       //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    null, 1,    null ],
+        [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       cajon: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3,    2,    3,    3,    null, 2,    null, 1,    3,    2,    3,    2,    null, 2,    null ],
+        [ 1,    3,    2,    1,    3,    null, 1,    null, 3,    2,    1,    3,    1,    null, 2,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       nudillo: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    1,    1,    null, 2,    null  ],
+        [ 1,    null, 2,    2,    1,    null, 2,    null, 1,    null, 2,    2,    1,    null, 2,    null  ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       udu: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
+        [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    2,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
@@ -1043,13 +1043,13 @@ export default [
 
       pito: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    null, 1,    null ],
+        [ 2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3,    2,    3,    1,    3 ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
       cajon: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    3, 2, 3, 3, null, 2, null, 1, 3, 2, 3, 2, null, 2, null],
+        [ 1,    3,    2,    3,    1,    null, 2,    null, 1,    3,    2,    3,    1,    null, 2,    null],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
@@ -1061,7 +1061,7 @@ export default [
 
       udu: //<[number, ...(number | null)[]]>
         //[ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
-        [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    3,    null, 3,    null ],
+        [ 1,    null, 2,    3,    2,    null, 3,    null, 1,    null, 2,    3,    2,    null, 3,    null ],
       //  0     1     2     3     4     5     6     7     8     9     10    11    12    13    14    15
       //  1           2           3           4           5           6           7           8
 
