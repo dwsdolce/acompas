@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import { createI18n } from 'vue-i18n'
+import { watch } from 'vue'
 
 import messages from 'src/i18n'
 
@@ -22,10 +23,22 @@ declare module 'vue-i18n' {
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
 export default boot(({ app }) => {
+  const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('acompas-locale') : null
+  const browser = (typeof navigator !== 'undefined' && navigator.language) ? navigator.language : 'en-US'
+  const available = Object.keys(messages)
+  const initial = stored && available.includes(stored)
+    ? stored
+    : (available.includes(browser) ? browser : 'en-US')
+
   const i18n = createI18n({
-    locale: 'en-US',
+    locale: initial,
     legacy: false,
     messages,
+  })
+
+  // Persistance réactive de la locale
+  watch(() => i18n.global.locale.value, (val: string) => {
+    try { localStorage.setItem('acompas-locale', val) } catch {}
   })
 
   // Set i18n instance on app

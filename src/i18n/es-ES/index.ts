@@ -44,6 +44,13 @@ Si tienes alguna pregunta o sugerencia, por favor contáctanos.`
 Puedes elegir entre temas claro y oscuro.
 El tema oscuro es más adecuado para ambientes con poca luz, mientras que el tema claro es más adecuado para ambientes brillantes.`,
         },
+        lang: {
+          title: 'Idioma',
+          content: `
+Elige el idioma de la interfaz de la aplicación.
+El cambio se aplica inmediatamente a todos los textos.
+Tu selección se almacena localmente (navegador / dispositivo) para que se mantenga la próxima vez que abras la app.`,
+        },
         tempo: {
           title: 'Tempo',
           content: `

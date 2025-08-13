@@ -44,6 +44,13 @@ If you have any questions or suggestions, please contact us.`
 You can choose between light and dark themes.
 The dark theme is more suitable for low-light environments, while the light theme is more suitable for bright environments.`,
         },
+        lang: {
+          title: 'Language',
+          content: `
+Choose the interface language of the application.
+The change is applied immediately to all texts.
+Your selection is stored locally (in the browser / device) so it will be kept next time you open the app.`,
+        },
         tempo: {
           title: 'Tempo',
           content: `

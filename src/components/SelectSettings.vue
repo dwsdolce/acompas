@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useSessionStore } from 'src/stores/session'
 import CustomCard from 'src/components/CustomCard.vue'
 import ThemeToggle from 'src/components/ThemeToggle.vue'
+import SelectLang from 'src/components/SelectLang.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 import PerformancePanel from 'src/components/PerformancePanel.vue'
@@ -50,7 +51,7 @@ div
       template(v-slot:title) {{ t('buttons.settings') }}
       template(v-slot:content)
         ThemeToggle
-
+        SelectLang
         select-visualization.q-mb-md
         reset-button(
           @reset="handleReset"

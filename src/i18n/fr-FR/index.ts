@@ -44,6 +44,13 @@ Si vous avez des questions ou des suggestions, veuillez nous contacter.`
 Vous pouvez choisir entre les thèmes clair et sombre.
 Le thème sombre est plus adapté aux environnements faiblement éclairés, tandis que le thème clair est plus adapté aux environnements lumineux.`,
         },
+        lang: {
+          title: 'Langue',
+          content: `
+Choisissez la langue d'interface de l'application.
+Le changement s'applique immédiatement à tous les textes.
+Votre sélection est stockée localement (navigateur / appareil) et sera conservée lors de la prochaine ouverture de l'application.`,
+        },
         tempo: {
           title: 'Tempo',
           content: `
