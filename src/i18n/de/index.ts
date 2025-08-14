@@ -101,6 +101,68 @@ Die Noten zwischen dem Startschlag und dem Beginn des Musters werden als Klick-S
         }
       }
     },
+    appSettings: {
+      title: 'Anwendungseinstellungen',
+      content: {
+        theme: {
+          title: 'Thema-Modus',
+          content: `
+**Helle und dunkle Thema-Optionen**
+
+A Compás bietet sowohl helle als auch dunkle Themen für die beste visuelle Erfahrung:
+
+- **Helles Thema**: Saubere, helle Oberfläche ideal für gut beleuchtete Umgebungen. Bietet weiße Hintergründe mit dunklem Text für maximale Lesbarkeit bei Tageslicht.
+- **Dunkles Thema**: Augenfreundlich mit dunklen Hintergründen und hellem Text. Perfekt für schwache Lichtverhältnisse, reduziert Augenbelastung bei langen Übungseinheiten und spart Batterie bei OLED-Bildschirmen.
+
+**Wie wechseln:**
+- Verwenden Sie die Thema-Umschaltung im linken Navigationsmenü
+- Änderungen werden sofort in der gesamten Anwendung angewendet
+- Ihre Präferenz wird automatisch gespeichert und beim App-Neustart wiederhergestellt`
+        },
+        language: {
+          title: 'Sprachauswahl',
+          content: `
+**Multi-Sprach-Unterstützung**
+
+A Compás ist in 9 Sprachen verfügbar, um der globalen Flamenco-Gemeinschaft zu dienen:
+
+- **Englisch** (en-US) - Standardsprache
+- **Französisch** (Français) - Vollständige Übersetzung
+- **Spanisch** (Español) - Native Flamenco-Terminologie
+- **Deutsch** (Deutsch) - Komplette Lokalisierung
+- **Italienisch** (Italiano) - Vollständige Oberflächenübersetzung
+- **Japanisch** (日本語) - Asiatische Marktunterstützung
+- **Chinesisch** (中文) - Vereinfachtes Chinesisch
+- **Arabisch** (العربية) - Rechts-nach-links Unterstützung
+- **Persisch** (فارسی) - Farsi-Lokalisierung
+
+**Wie Sprache ändern:**
+Verwenden Sie den Sprachauswahl im linken Navigationsmenü, um zwischen verfügbaren Sprachen zu wechseln.`
+        },
+        visualization: {
+          title: 'Visualisierungsmodi',
+          content: `
+**Drei Anzeigeoptionen für Beat-Visualisierung**
+
+Wählen Sie die Visualisierung, die am besten zu Ihrem Übungsstil passt:
+
+**1. Punkte-Modus**
+- Saubere, minimalistische Anzeige mit animierten Punkten
+- Jeder Punkt repräsentiert einen Beat im Pattern
+- Aktive Beats werden mit Farbe und Animation hervorgehoben
+
+**2. Zähler-Modus**
+- Digitaler Beat-Zähler zeigt aktuelle Position
+- Zeigt aktuelle Beat-Nummer und Gesamt-Beats im Pattern
+- Klare numerische Progression durch den Compás
+
+**3. Uhr-Modus**
+- Kreisförmige Uhren-Visualisierung
+- Beats um eine Uhr mit animiertem Zeiger angeordnet
+- Bietet intuitive Wahrnehmung des zyklischen Rhythmus`
+        }
+      }
+    },
     utils: {
       wikipediaUrl: 'Wikipedia-Artikel:',
       videoExample: 'Video-Beispiel:',

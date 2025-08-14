@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 
-const { t } = useI18n()
+const { t, tm } = useI18n()
+
+const appSettingsContent = computed(() => tm('doc.appSettings.content'))
+
 </script>
 
 <template lang="pug">
@@ -16,6 +20,16 @@ div
   div.q-mb-md
     .text-h6.text-center {{ $t('doc.getStarted.title') }}
     MarkdownRenderer(:content="$t('doc.getStarted.content')")
+
+  q-separator.q-mb-md
+  div.q-mb-md
+    .text-h6.text-center {{ $t('doc.appSettings.title') }}
+    .q-mb-md(
+      v-for="(item, index) in appSettingsContent",
+      :key="index"
+    )
+      .text-h6.text-center.text-weight-light {{ item.title }}
+      MarkdownRenderer(:content="item.content")
 
   q-separator.q-mb-md
   div.q-mb-md

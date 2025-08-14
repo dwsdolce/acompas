@@ -101,6 +101,68 @@ Le note tra il battito di inizio e l'inizio del pattern verranno suonate come un
         }
       }
     },
+    appSettings: {
+      title: 'Impostazioni applicazione',
+      content: {
+        theme: {
+          title: 'Modalità tema',
+          content: `
+**Opzioni tema chiaro e scuro**
+
+A Compás offre temi chiari e scuri per fornire la migliore esperienza visiva:
+
+- **Tema chiaro**: Interfaccia pulita e luminosa ideale per ambienti ben illuminati. Presenta sfondi bianchi con testo scuro per massima leggibilità alla luce del giorno.
+- **Tema scuro**: Facile per gli occhi con sfondi scuri e testo chiaro. Perfetto per condizioni di scarsa illuminazione, riduce l'affaticamento degli occhi durante sessioni di pratica prolungate e risparmia batteria su schermi OLED.
+
+**Come cambiare:**
+- Usa il pulsante di cambio tema nel menu di navigazione sinistro
+- I cambiamenti si applicano immediatamente a tutta l'applicazione
+- La tua preferenza è automaticamente salvata e ripristinata al riavvio dell'app`
+        },
+        language: {
+          title: 'Selezione lingua',
+          content: `
+**Supporto multilingue**
+
+A Compás è disponibile in 9 lingue per servire la comunità flamenca globale:
+
+- **Inglese** (en-US) - Lingua predefinita
+- **Francese** (Français) - Traduzione completa
+- **Spagnolo** (Español) - Terminologia flamenca nativa
+- **Tedesco** (Deutsch) - Localizzazione completa
+- **Italiano** (Italiano) - Traduzione completa dell'interfaccia
+- **Giapponese** (日本語) - Supporto mercato asiatico
+- **Cinese** (中文) - Cinese semplificato
+- **Arabo** (العربية) - Supporto da destra a sinistra
+- **Persiano** (فارسی) - Localizzazione farsi
+
+**Come cambiare lingua:**
+Usa il selettore di lingua nel menu di navigazione sinistro per alternare tra lingue disponibili.`
+        },
+        visualization: {
+          title: 'Modalità visualizzazione',
+          content: `
+**Tre opzioni di visualizzazione per i battiti**
+
+Scegli la visualizzazione che si adatta meglio al tuo stile di pratica:
+
+**1. Modalità Punti**
+- Display pulito e minimalista con punti animati
+- Ogni punto rappresenta un battito nel pattern
+- I battiti attivi sono evidenziati con colore e animazione
+
+**2. Modalità Contatore**
+- Contatore digitale che mostra la posizione attuale
+- Mostra il numero del battito attuale e totale battiti nel pattern
+- Progressione numerica chiara attraverso il compás
+
+**3. Modalità Orologio**
+- Visualizzazione circolare tipo quadrante orologio
+- Battiti disposti attorno a un orologio con lancetta animata
+- Fornisce sensazione intuitiva del ritmo ciclico`
+        }
+      }
+    },
     utils: {
       wikipediaUrl: 'Articolo Wikipedia:',
       videoExample: 'Esempio video:',

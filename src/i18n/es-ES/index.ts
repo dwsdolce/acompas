@@ -101,6 +101,92 @@ Las notas entre el golpe de inicio y el comienzo del patrón se reproducirán co
         }
       }
     },
+    appSettings: {
+      title: 'Configuración de la aplicación',
+      content: {
+        theme: {
+          title: 'Modo de tema',
+          content: `
+**Opciones de tema claro y oscuro**
+
+A Compás ofrece temas claro y oscuro para proporcionar la mejor experiencia visual:
+
+- **Tema claro**: Interfaz limpia y brillante ideal para entornos bien iluminados. Presenta fondos blancos con texto oscuro para máxima legibilidad en luz diurna.
+- **Tema oscuro**: Fácil para la vista con fondos oscuros y texto claro. Perfecto para condiciones de poca luz, reduce la fatiga ocular durante sesiones de práctica extendidas y ahorra batería en pantallas OLED.
+
+**Cómo cambiar:**
+- Usa el botón de alternancia de tema en el menú de navegación izquierdo
+- Los cambios se aplican inmediatamente en toda la aplicación
+- Tu preferencia se guarda automáticamente y se restaura al reiniciar la app
+
+**Detección automática:**
+La aplicación respeta la preferencia de tema del sistema de tu dispositivo por defecto, pero puedes anular esta configuración en cualquier momento.`
+        },
+        language: {
+          title: 'Selección de idioma',
+          content: `
+**Soporte multiidioma**
+
+A Compás está disponible en 9 idiomas para servir a la comunidad flamenca mundial:
+
+- **Inglés** (en-US) - Idioma predeterminado
+- **Francés** (Français) - Traducción completa
+- **Español** (Español) - Terminología flamenca nativa
+- **Alemán** (Deutsch) - Localización completa
+- **Italiano** (Italiano) - Traducción completa de la interfaz
+- **Japonés** (日本語) - Soporte del mercado asiático
+- **Chino** (中文) - Chino simplificado
+- **Árabe** (العربية) - Soporte de derecha a izquierda
+- **Persa** (فارسی) - Localización farsi
+
+**Características:**
+- Todos los menús, botones y textos de ayuda están traducidos
+- Los nombres de palos flamencos permanecen en español por autenticidad
+- Los cambios de idioma se aplican instantáneamente sin reiniciar la app
+- La configuración se guarda localmente en tu dispositivo
+
+**Cómo cambiar de idioma:**
+Usa el selector de idioma en el menú de navegación izquierdo para alternar entre idiomas disponibles.`
+        },
+        visualization: {
+          title: 'Modos de visualización',
+          content: `
+**Tres opciones de pantalla para visualización de golpes**
+
+Elige la visualización que mejor se adapte a tu estilo de práctica:
+
+**1. Modo Puntos**
+- Pantalla limpia y minimalista con puntos animados
+- Cada punto representa un golpe en el patrón
+- Los golpes activos se resaltan con color y animación
+- Perfecto para aprendices visuales que prefieren pantallas simples y despejadas
+- Excelente para enfocarse en la estructura del patrón
+
+**2. Modo Contador**
+- Contador digital mostrando la posición actual
+- Muestra el número del golpe actual y total de golpes en el patrón
+- Progresión numérica clara a través del compás
+- Ideal para músicos que piensan en números
+- Útil para aprender estructuras de patrones complejos y timing
+
+**3. Modo Reloj**
+- Visualización circular tipo esfera de reloj
+- Golpes dispuestos alrededor de un reloj con manecilla animada
+- Proporciona sensación intuitiva del ritmo cíclico
+- Excelente para entender la naturaleza circular del compás flamenco
+- Representación visual que coincide con métodos tradicionales de contar flamenco
+
+**Cómo cambiar:**
+Accede a las opciones de visualización a través del menú de configuración. Los cambios se aplican inmediatamente y tu preferencia se guarda automáticamente.
+
+**Consejos:**
+- Prueba diferentes modos durante la práctica para encontrar lo que mejor te funcione
+- El modo reloj es particularmente efectivo para patrones de 12 golpes como la Soleá
+- El modo contador ayuda al aprender ritmos complejos
+- El modo puntos minimiza distracciones para practicantes avanzados`
+        }
+      }
+    },
     utils: {
       wikipediaUrl: 'Artículo de Wikipedia:',
       videoExample: 'Ejemplo de video:',

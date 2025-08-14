@@ -101,6 +101,92 @@ Les notes entre le battement de départ et le début du motif seront jouées com
         }
       }
     },
+    appSettings: {
+      title: 'Paramètres de l\'application',
+      content: {
+        theme: {
+          title: 'Mode de thème',
+          content: `
+**Options de thème clair et sombre**
+
+A Compás propose des thèmes clair et sombre pour offrir la meilleure expérience visuelle :
+
+- **Thème clair** : Interface claire et lumineuse idéale pour les environnements bien éclairés. Présente des arrière-plans blancs avec du texte sombre pour une lisibilité maximale en plein jour.
+- **Thème sombre** : Facile pour les yeux avec des arrière-plans sombres et du texte clair. Parfait pour les conditions de faible éclairage, réduit la fatigue oculaire pendant les longues sessions de pratique et économise la batterie sur les écrans OLED.
+
+**Comment changer :**
+- Utilisez le bouton de basculement de thème dans le menu de navigation de gauche
+- Les changements s'appliquent immédiatement à toute l'application
+- Votre préférence est automatiquement sauvegardée et restaurée au redémarrage de l'app
+
+**Détection automatique :**
+L'application respecte par défaut la préférence de thème système de votre appareil, mais vous pouvez remplacer ce paramètre à tout moment.`
+        },
+        language: {
+          title: 'Sélection de langue',
+          content: `
+**Support multi-langues**
+
+A Compás est disponible en 9 langues pour servir la communauté flamenco mondiale :
+
+- **Anglais** (en-US) - Langue par défaut
+- **Français** (Français) - Traduction complète
+- **Espagnol** (Español) - Terminologie flamenco native
+- **Allemand** (Deutsch) - Localisation complète
+- **Italien** (Italiano) - Traduction complète de l'interface
+- **Japonais** (日本語) - Support du marché asiatique
+- **Chinois** (中文) - Chinois simplifié
+- **Arabe** (العربية) - Support droite-à-gauche
+- **Persan** (فارسی) - Localisation farsi
+
+**Fonctionnalités :**
+- Tous les menus, boutons et textes d'aide sont traduits
+- Les noms de palos flamenco restent en espagnol pour l'authenticité
+- Les changements de langue s'appliquent instantanément sans redémarrage de l'app
+- Les paramètres sont sauvegardés localement sur votre appareil
+
+**Comment changer de langue :**
+Utilisez le sélecteur de langue dans le menu de navigation de gauche pour passer entre les langues disponibles.`
+        },
+        visualization: {
+          title: 'Modes de visualisation',
+          content: `
+**Trois options d'affichage pour la visualisation des battements**
+
+Choisissez la visualisation qui convient le mieux à votre style de pratique :
+
+**1. Mode Points**
+- Affichage épuré et minimaliste avec des points animés
+- Chaque point représente un battement dans le motif
+- Les battements actifs sont mis en évidence avec couleur et animation
+- Parfait pour les apprenants visuels qui préfèrent des affichages simples et épurés
+- Excellent pour se concentrer sur la structure du motif
+
+**2. Mode Compteur**
+- Compteur numérique affichant la position actuelle
+- Affiche le numéro du battement actuel et le total de battements dans le motif
+- Progression numérique claire à travers le compás
+- Idéal pour les musiciens qui pensent en chiffres
+- Utile pour apprendre les structures de motifs complexes et le timing
+
+**3. Mode Horloge**
+- Visualisation circulaire type cadran d'horloge
+- Battements disposés autour d'une horloge avec aiguille animée
+- Fournit une sensation intuitive du rythme cyclique
+- Excellent pour comprendre la nature circulaire du compás flamenco
+- Représentation visuelle correspondant aux méthodes de comptage flamenco traditionnelles
+
+**Comment changer :**
+Accédez aux options de visualisation via le menu des paramètres. Les changements s'appliquent immédiatement et votre préférence est sauvegardée automatiquement.
+
+**Conseils :**
+- Essayez différents modes pendant la pratique pour trouver ce qui vous convient le mieux
+- Le mode horloge est particulièrement efficace pour les motifs à 12 temps comme la Soleá
+- Le mode compteur aide lors de l'apprentissage des rythmes complexes
+- Le mode points minimise les distractions pour les praticiens avancés`
+        }
+      }
+    },
     utils: {
       wikipediaUrl: 'Article Wikipédia :',
       videoExample: 'Exemple vidéo :',

@@ -101,6 +101,92 @@ The notes between the start beat and the begining of the pattern will be played 
         }
       }
     },
+    appSettings: {
+      title: 'Application Settings',
+      content: {
+        theme: {
+          title: 'Theme Mode',
+          content: `
+**Light and Dark Theme Options**
+
+A Compás offers both light and dark themes to provide the best visual experience:
+
+- **Light Theme**: Clean, bright interface ideal for well-lit environments. Features white backgrounds with dark text for maximum readability in daylight.
+- **Dark Theme**: Easy on the eyes with dark backgrounds and light text. Perfect for low-light conditions, reduces eye strain during extended practice sessions, and saves battery on OLED screens.
+
+**How to Switch:**
+- Use the theme toggle button in the left navigation menu
+- Changes apply immediately across the entire application
+- Your preference is automatically saved and restored on app restart
+
+**Automatic Detection:**
+The app respects your device's system theme preference by default, but you can override this setting at any time.`
+        },
+        language: {
+          title: 'Language Selection',
+          content: `
+**Multi-language Support**
+
+A Compás is available in 9 languages to serve the global flamenco community:
+
+- **English** (en-US) - Default language
+- **French** (Français) - Full translation
+- **Spanish** (Español) - Native flamenco terminology
+- **German** (Deutsch) - Complete localization
+- **Italian** (Italiano) - Full interface translation
+- **Japanese** (日本語) - Asian market support
+- **Chinese** (中文) - Simplified Chinese
+- **Arabic** (العربية) - Right-to-left support
+- **Persian** (فارسی) - Farsi localization
+
+**Features:**
+- All menus, buttons, and help text are translated
+- Flamenco pattern names remain in Spanish for authenticity
+- Language changes apply instantly without app restart
+- Settings are saved locally on your device
+
+**How to Change Language:**
+Use the language selector in the left navigation menu to switch between available languages.`
+        },
+        visualization: {
+          title: 'Visualization Modes',
+          content: `
+**Three Display Options for Beat Visualization**
+
+Choose the visualization that best suits your practice style:
+
+**1. Dots Mode**
+- Clean, minimalist display with animated dots
+- Each dot represents a beat in the pattern
+- Active beats are highlighted with color and animation
+- Perfect for visual learners who prefer simple, uncluttered displays
+- Excellent for focusing on pattern structure
+
+**2. Counter Mode**
+- Digital beat counter showing current position
+- Displays current beat number and total beats in pattern
+- Clear numerical progression through the compás
+- Ideal for musicians who think in numbers
+- Helpful for learning complex pattern structures and timing
+
+**3. Clock Mode**
+- Circular clock-face visualization
+- Beats arranged around a clock with animated hand
+- Provides intuitive sense of cyclical rhythm
+- Great for understanding the circular nature of flamenco compás
+- Visual representation matches traditional flamenco counting methods
+
+**How to Switch:**
+Access visualization options through the settings menu. Changes apply immediately, and your preference is saved automatically.
+
+**Tips:**
+- Try different modes during practice to find what works best for you
+- Clock mode is particularly effective for 12-beat patterns like Soleá
+- Counter mode helps when learning to count complex rhythms
+- Dots mode minimizes distractions for advanced practitioners`
+        }
+      }
+    },
     utils: {
       wikipediaUrl: 'Wikipedia article:',
       videoExample: 'Video example:',
