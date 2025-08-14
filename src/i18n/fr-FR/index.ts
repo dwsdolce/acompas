@@ -72,15 +72,15 @@ Cela produit de la "surprise" dans le motif.`,
         },
         humanize: {
           title: 'Humaniser',
-          content: `Si c'est activé, alors le métronome jouera les battements avec une petite déviation aléatoire, simulant le toucher humain.`,
+          content: 'Si c\'est activé, alors le métronome jouera les battements avec une petite déviation aléatoire, simulant le toucher humain.',
         },
         swing: {
           title: 'Swing',
-          content: `Si sa valeur est 0, la croche est exactement la moitié d'une noire. Quand elle approche de 1, un décalage est appliqué, pour une sensation rythmique 'jazz'.`,
+          content: 'Si sa valeur est 0, la croche est exactement la moitié d\'une noire. Quand elle approche de 1, un décalage est appliqué, pour une sensation rythmique \'jazz\'.',
         },
         reverb: {
           title: 'Réverbération',
-          content: `Ajustez la réverbération du son. Elle simule l'effet d'une pièce ou d'une salle.`,
+          content: 'Ajustez la réverbération du son. Elle simule l\'effet d\'une pièce ou d\'une salle.',
         },
         startBeat: {
           title: 'Battement de départ',
@@ -93,11 +93,11 @@ Les notes entre le battement de départ et le début du motif seront jouées com
         },
         viewMode: {
           title: 'Mode d\'affichage',
-          content: `Choisissez entre les visualisations points, compteur et horloge.`,
+          content: 'Choisissez entre les visualisations points, compteur et horloge.',
         },
         reset: {
           title: 'Réinitialiser',
-          content: `Réinitialisez les paramètres du métronome aux valeurs par défaut. Vous pouvez réinitialiser tous les paramètres ou réinitialiser les paramètres pour le motif actuel.`,
+          content: 'Réinitialisez les paramètres du métronome aux valeurs par défaut. Vous pouvez réinitialiser tous les paramètres ou réinitialiser les paramètres pour le motif actuel.',
         }
       }
     },
@@ -216,6 +216,100 @@ Mais c'est le seul moyen d'obtenir les nouvelles fonctionnalités. Si c'est votr
       caption: 'tout',
       play: 'Jouer',
       stop: 'Arrêter'
+    },
+    changelog: {
+      title: 'Journal des modifications',
+      description: 'Derniers changements et mises à jour d\'A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Ajout du store de contexte et sélecteur avec vues colorées',
+            'Ajout de la fonctionnalité de filtre de recherche de motifs',
+            'Ajout de la boîte de dialogue d\'aide pour la recherche de motifs',
+            'Ajout de la fonctionnalité de maintien éveillé pour le bureau',
+            'Mise à jour des packages Quasar',
+            'Correction des avertissements SaSS',
+            'Mise à jour vers Node 20',
+            'Préparation pour la compatibilité Android 34'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'Ajout et mise à jour du sitemap.xml',
+            'Correction des événements Matomo',
+            'Correction de la position de l\'horloge inactive',
+            'Mise à jour des packages Quasar',
+            'Améliorations de performance et corrections de bugs'
+          ]
+        },
+        {
+          version: '3.2.4',
+          date: '2023-07-06',
+          changes: [
+            'Corrections de bugs et améliorations de stabilité',
+            'Améliorations mineures de l\'interface utilisateur'
+          ]
+        },
+        {
+          version: '3.2.3',
+          date: '2023-07-03',
+          changes: [
+            'Optimisations de performance',
+            'Corrections de bugs'
+          ]
+        },
+        {
+          version: '3.2.2',
+          date: '2023-07-03',
+          changes: [
+            'Corrections rapides et améliorations'
+          ]
+        },
+        {
+          version: '3.2.1',
+          date: '2023-06-30',
+          changes: [
+            'Corrections de bugs et mises à jour de maintenance'
+          ]
+        },
+        {
+          version: '2.3.0',
+          date: '2021-01-23',
+          changes: [
+            'Nouvelles fonctionnalités et améliorations',
+            'Interface utilisateur améliorée'
+          ]
+        },
+        {
+          version: '2.2.0',
+          date: '2020-06-25',
+          changes: [
+            'Mises à jour majeures de fonctionnalités',
+            'Performance améliorée'
+          ]
+        },
+        {
+          version: '2.1.4',
+          date: '2019-09-13',
+          changes: [
+            'Corrections de bugs et améliorations de stabilité'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Réécriture complète de l\'application',
+            'Nouvelle conception d\'interface moderne',
+            'Moteur de métronome amélioré',
+            'Ajout de plus de motifs flamenco'
+          ]
+        }
+      ]
     }
   },
   buttons: {

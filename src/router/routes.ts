@@ -62,13 +62,18 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/TuningFork.vue')
       },
       {
+        path: 'changelog',
+        name: 'changelog',
+        component: () => import('pages/ChangelogPage.vue')
+      },
+      {
         path: 'not-found',
         name: 'not-found',
         component: () => import('pages/NotFound.vue')
       },
       {
         path: ':pathMatch(.*)*',
-        redirect: `/not-found`
+        redirect: '/not-found'
       }
     ]
   }

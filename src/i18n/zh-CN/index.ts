@@ -72,15 +72,15 @@ export default {
         },
         humanize: {
           title: '人性化',
-          content: `如果开启，节拍器将用少量随机偏差播放节拍，模拟人的触感。`,
+          content: '如果开启，节拍器将用少量随机偏差播放节拍，模拟人的触感。',
         },
         swing: {
           title: '摇摆',
-          content: `如果值为0，八分音符正好是四分音符的一半。当接近1时，应用延迟，产生"爵士风格"的节奏感。`,
+          content: '如果值为0，八分音符正好是四分音符的一半。当接近1时，应用延迟，产生"爵士风格"的节奏感。',
         },
         reverb: {
           title: '混响',
-          content: `调整声音的混响。它模拟房间或大厅效果。`,
+          content: '调整声音的混响。它模拟房间或大厅效果。',
         },
         startBeat: {
           title: '起始拍',
@@ -93,11 +93,11 @@ export default {
         },
         viewMode: {
           title: '查看模式',
-          content: `在点、计数器和时钟可视化之间选择。`,
+          content: '在点、计数器和时钟可视化之间选择。',
         },
         reset: {
           title: '重置',
-          content: `将节拍器设置重置为默认值。您可以重置所有设置或重置当前模式的设置。`,
+          content: '将节拍器设置重置为默认值。您可以重置所有设置或重置当前模式的设置。',
         }
       }
     },
@@ -216,6 +216,35 @@ export default {
       caption: '全部',
       play: '播放',
       stop: '停止'
+    },
+    changelog: {
+      title: 'Changelog',
+      description: 'Latest changes and updates to A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Added context store and selector with color views',
+            'Added pattern search filter functionality',
+            'Updated Quasar packages'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'Performance improvements and bug fixes'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Complete application rewrite'
+          ]
+        }
+      ]
     }
   },
   buttons: {

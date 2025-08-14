@@ -128,6 +128,11 @@ div
         q-icon(name="mdi-xml")
       q-item-section {{ $t('source') }}
 
+    q-item(clickable, v-ripple, @click="router.push('/changelog')")
+      q-item-section(avatar)
+        q-icon(name="mdi-format-list-bulleted")
+      q-item-section {{ $t('doc.changelog.title') }}
+
     q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
       q-item-section(avatar)
         q-icon(name="mdi-bug")

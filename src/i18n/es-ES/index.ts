@@ -72,15 +72,15 @@ Esto produce algo de "sorpresa" en el patrón.`,
         },
         humanize: {
           title: 'Humanizar',
-          content: `Si está activado, entonces el metrónomo tocará los golpes con una pequeña desviación aleatoria, simulando el toque humano.`,
+          content: 'Si está activado, entonces el metrónomo tocará los golpes con una pequeña desviación aleatoria, simulando el toque humano.',
         },
         swing: {
           title: 'Swing',
-          content: `Si su valor es 0, la corchea es exactamente la mitad de una nota negra. Cuando se acerca a 1, se aplica un retraso, para una sensación rítmica "tipo jazz".`,
+          content: 'Si su valor es 0, la corchea es exactamente la mitad de una nota negra. Cuando se acerca a 1, se aplica un retraso, para una sensación rítmica "tipo jazz".',
         },
         reverb: {
           title: 'Reverb',
-          content: `Ajusta la reverberación del sonido. Simula el efecto de una habitación o un salón.`,
+          content: 'Ajusta la reverberación del sonido. Simula el efecto de una habitación o un salón.',
         },
         startBeat: {
           title: 'Golpe de inicio',
@@ -93,11 +93,11 @@ Las notas entre el golpe de inicio y el comienzo del patrón se reproducirán co
         },
         viewMode: {
           title: 'Modo de vista',
-          content: `Elige entre visualizaciones de puntos, contador y reloj.`,
+          content: 'Elige entre visualizaciones de puntos, contador y reloj.',
         },
         reset: {
           title: 'Restablecer',
-          content: `Restablece la configuración del metrónomo a los valores predeterminados. Puedes restablecer toda la configuración o restablecer la configuración para el patrón actual.`,
+          content: 'Restablece la configuración del metrónomo a los valores predeterminados. Puedes restablecer toda la configuración o restablecer la configuración para el patrón actual.',
         }
       }
     },
@@ -216,6 +216,100 @@ Pero esta es la única forma de obtener las nuevas características. Si es tu pr
       caption: 'todo',
       play: 'Reproducir',
       stop: 'Parar'
+    },
+    changelog: {
+      title: 'Registro de cambios',
+      description: 'Últimos cambios y actualizaciones de A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Añadido almacén de contexto y selector con vistas de colores',
+            'Añadida funcionalidad de filtro de búsqueda de patrones',
+            'Añadido diálogo de ayuda para búsqueda de patrones',
+            'Añadida funcionalidad de mantener despierto para escritorio',
+            'Actualizados paquetes Quasar',
+            'Corregidas advertencias SaSS',
+            'Actualizado a Node 20',
+            'Preparación para compatibilidad con Android 34'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'Añadido y actualizado sitemap.xml',
+            'Corregidos eventos Matomo',
+            'Corregida posición del reloj inactivo',
+            'Actualizados paquetes Quasar',
+            'Mejoras de rendimiento y corrección de errores'
+          ]
+        },
+        {
+          version: '3.2.4',
+          date: '2023-07-06',
+          changes: [
+            'Corrección de errores y mejoras de estabilidad',
+            'Mejoras menores de la interfaz de usuario'
+          ]
+        },
+        {
+          version: '3.2.3',
+          date: '2023-07-03',
+          changes: [
+            'Optimizaciones de rendimiento',
+            'Corrección de errores'
+          ]
+        },
+        {
+          version: '3.2.2',
+          date: '2023-07-03',
+          changes: [
+            'Correcciones rápidas y mejoras'
+          ]
+        },
+        {
+          version: '3.2.1',
+          date: '2023-06-30',
+          changes: [
+            'Corrección de errores y actualizaciones de mantenimiento'
+          ]
+        },
+        {
+          version: '2.3.0',
+          date: '2021-01-23',
+          changes: [
+            'Nuevas características y mejoras',
+            'Interfaz de usuario mejorada'
+          ]
+        },
+        {
+          version: '2.2.0',
+          date: '2020-06-25',
+          changes: [
+            'Actualizaciones importantes de características',
+            'Rendimiento mejorado'
+          ]
+        },
+        {
+          version: '2.1.4',
+          date: '2019-09-13',
+          changes: [
+            'Corrección de errores y mejoras de estabilidad'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Reescritura completa de la aplicación',
+            'Nuevo diseño de interfaz moderno',
+            'Motor de metrónomo mejorado',
+            'Añadidos más patrones flamencos'
+          ]
+        }
+      ]
     }
   },
   buttons: {

@@ -72,15 +72,15 @@ export default {
         },
         humanize: {
           title: 'ヒューマナイズ',
-          content: `オンにすると、メトロノームは人間のタッチをシミュレートして、わずかなランダムな偏差でビートを演奏します。`,
+          content: 'オンにすると、メトロノームは人間のタッチをシミュレートして、わずかなランダムな偏差でビートを演奏します。',
         },
         swing: {
           title: 'スウィング',
-          content: `値が0の場合、八分音符は四分音符のちょうど半分です。1に近づくにつれ、「ジャズのような」リズム感のための遅れが適用されます。`,
+          content: '値が0の場合、八分音符は四分音符のちょうど半分です。1に近づくにつれ、「ジャズのような」リズム感のための遅れが適用されます。',
         },
         reverb: {
           title: 'リバーブ',
-          content: `サウンドのリバーブを調整します。部屋やホールの効果をシミュレートします。`,
+          content: 'サウンドのリバーブを調整します。部屋やホールの効果をシミュレートします。',
         },
         startBeat: {
           title: 'スタートビート',
@@ -93,11 +93,11 @@ export default {
         },
         viewMode: {
           title: 'ビューモード',
-          content: `ドット、カウンター、クロック表示から選択します。`,
+          content: 'ドット、カウンター、クロック表示から選択します。',
         },
         reset: {
           title: 'リセット',
-          content: `メトロノームの設定をデフォルト値にリセットします。すべての設定をリセットするか、現在のパターンの設定をリセットできます。`,
+          content: 'メトロノームの設定をデフォルト値にリセットします。すべての設定をリセットするか、現在のパターンの設定をリセットできます。',
         }
       }
     },
@@ -216,6 +216,40 @@ IPアドレスを匿名化します。
       caption: 'すべて',
       play: '再生',
       stop: '停止'
+    },
+    changelog: {
+      title: 'Changelog',
+      description: 'Latest changes and updates to A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Added context store and selector with color views',
+            'Added pattern search filter functionality',
+            'Updated Quasar packages',
+            'Preparing for Android 34 compatibility'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'Added and updated sitemap.xml',
+            'Fixed Matomo events',
+            'Performance improvements and bug fixes'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Complete application rewrite',
+            'New modern interface design',
+            'Improved metronome engine'
+          ]
+        }
+      ]
     }
   },
   buttons: {

@@ -72,15 +72,15 @@ Dies erzeugt eine "Überraschung" im Rhythmus.`,
         },
         humanize: {
           title: 'Humanisieren',
-          content: `Wenn es aktiviert ist, spielt das Metronom die Schläge mit einer kleinen zufälligen Abweichung und simuliert so die menschliche Note.`,
+          content: 'Wenn es aktiviert ist, spielt das Metronom die Schläge mit einer kleinen zufälligen Abweichung und simuliert so die menschliche Note.',
         },
         swing: {
           title: 'Swing',
-          content: `Wenn der Wert 0 ist, ist die Achtelnote genau die Hälfte einer Viertelnote. Wenn er sich 1 nähert, wird eine Verzögerung angewendet, für ein "Jazz-ähnliches" Rhythmusgefühl.`,
+          content: 'Wenn der Wert 0 ist, ist die Achtelnote genau die Hälfte einer Viertelnote. Wenn er sich 1 nähert, wird eine Verzögerung angewendet, für ein "Jazz-ähnliches" Rhythmusgefühl.',
         },
         reverb: {
           title: 'Hall',
-          content: `Passen Sie den Hall des Klangs an. Es simuliert einen Raum- oder Halleneffekt.`,
+          content: 'Passen Sie den Hall des Klangs an. Es simuliert einen Raum- oder Halleneffekt.',
         },
         startBeat: {
           title: 'Startschlag',
@@ -93,11 +93,11 @@ Die Noten zwischen dem Startschlag und dem Beginn des Musters werden als Klick-S
         },
         viewMode: {
           title: 'Ansichtsmodus',
-          content: `Wählen Sie zwischen Punkten, Zähler und Uhr-Visualisierungen.`,
+          content: 'Wählen Sie zwischen Punkten, Zähler und Uhr-Visualisierungen.',
         },
         reset: {
           title: 'Zurücksetzen',
-          content: `Setzen Sie die Einstellungen des Metronoms auf die Standardwerte zurück. Sie können alle Einstellungen zurücksetzen oder die Einstellungen für das aktuelle Muster zurücksetzen.`,
+          content: 'Setzen Sie die Einstellungen des Metronoms auf die Standardwerte zurück. Sie können alle Einstellungen zurücksetzen oder die Einstellungen für das aktuelle Muster zurücksetzen.',
         }
       }
     },
@@ -216,6 +216,63 @@ Aber das ist der einzige Weg, um die neuen Funktionen zu erhalten. Wenn es Ihre 
       caption: 'alle',
       play: 'Abspielen',
       stop: 'Stoppen'
+    },
+    changelog: {
+      title: 'Changelog',
+      description: 'Neueste Änderungen und Updates zu A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Kontext-Speicher und Auswahl mit Farbansichten hinzugefügt',
+            'Pattern-Suchfilter-Funktionalität hinzugefügt',
+            'Hilfedialog für Pattern-Suche hinzugefügt',
+            'Desktop-Wach-bleiben-Funktionalität hinzugefügt',
+            'Quasar-Pakete aktualisiert',
+            'SaSS-Warnungen behoben',
+            'Auf Node 20 aktualisiert',
+            'Vorbereitung für Android 34-Kompatibilität'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'sitemap.xml hinzugefügt und aktualisiert',
+            'Matomo-Events behoben',
+            'Leerlauf-Uhrenposition behoben',
+            'Quasar-Pakete aktualisiert',
+            'Leistungsverbesserungen und Fehlerbehebungen'
+          ]
+        },
+        {
+          version: '3.2.4',
+          date: '2023-07-06',
+          changes: [
+            'Fehlerbehebungen und Stabilitätsverbesserungen',
+            'Kleinere UI-Verbesserungen'
+          ]
+        },
+        {
+          version: '2.3.0',
+          date: '2021-01-23',
+          changes: [
+            'Neue Funktionen und Verbesserungen',
+            'Verbesserte Benutzeroberfläche'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Vollständige Neuentwicklung der Anwendung',
+            'Neues modernes Interface-Design',
+            'Verbessertes Metronom-Engine',
+            'Mehr Flamenco-Patterns hinzugefügt'
+          ]
+        }
+      ]
     }
   },
   buttons: {

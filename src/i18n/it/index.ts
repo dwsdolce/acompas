@@ -72,15 +72,15 @@ Questo produce una "sorpresa" nel pattern.`,
         },
         humanize: {
           title: 'Umanizza',
-          content: `Se è attivato, il metronomo suonerà i battiti con una piccola deviazione casuale, simulando il tocco umano.`,
+          content: 'Se è attivato, il metronomo suonerà i battiti con una piccola deviazione casuale, simulando il tocco umano.',
         },
         swing: {
           title: 'Swing',
-          content: `Se il suo valore è 0, la nota da un ottavo è esattamente la metà di una nota da un quarto. Quando si avvicina a 1, viene applicato un ritardo, per una sensazione ritmica "jazz-like".`,
+          content: 'Se il suo valore è 0, la nota da un ottavo è esattamente la metà di una nota da un quarto. Quando si avvicina a 1, viene applicato un ritardo, per una sensazione ritmica "jazz-like".',
         },
         reverb: {
           title: 'Riverbero',
-          content: `Regola il riverbero del suono. Simula l'effetto di una stanza o di una sala.`,
+          content: 'Regola il riverbero del suono. Simula l\'effetto di una stanza o di una sala.',
         },
         startBeat: {
           title: 'Battito di inizio',
@@ -93,11 +93,11 @@ Le note tra il battito di inizio e l'inizio del pattern verranno suonate come un
         },
         viewMode: {
           title: 'Modalità visualizzazione',
-          content: `Scegli tra visualizzazioni a punti, contatore e orologio.`,
+          content: 'Scegli tra visualizzazioni a punti, contatore e orologio.',
         },
         reset: {
           title: 'Reset',
-          content: `Ripristina le impostazioni del metronomo ai valori predefiniti. Puoi resettare tutte le impostazioni o resettare le impostazioni per il pattern corrente.`,
+          content: 'Ripristina le impostazioni del metronomo ai valori predefiniti. Puoi resettare tutte le impostazioni o resettare le impostazioni per il pattern corrente.',
         }
       }
     },
@@ -216,6 +216,63 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
       caption: 'tutto',
       play: 'Riproduci',
       stop: 'Ferma'
+    },
+    changelog: {
+      title: 'Registro delle modifiche',
+      description: 'Ultimi cambiamenti e aggiornamenti di A Compás',
+      entries: [
+        {
+          version: '3.2.7',
+          date: '2024-08-23',
+          changes: [
+            'Aggiunto store di contesto e selettore con viste colorate',
+            'Aggiunta funzionalità filtro ricerca pattern',
+            'Aggiunta finestra di aiuto per la ricerca pattern',
+            'Aggiunta funzionalità mantieni sveglio per desktop',
+            'Aggiornati pacchetti Quasar',
+            'Corretti avvisi SaSS',
+            'Aggiornato a Node 20',
+            'Preparazione per compatibilità Android 34'
+          ]
+        },
+        {
+          version: '3.2.5',
+          date: '2023-07-15',
+          changes: [
+            'Aggiunto e aggiornato sitemap.xml',
+            'Corretti eventi Matomo',
+            'Corretta posizione orologio inattivo',
+            'Aggiornati pacchetti Quasar',
+            'Miglioramenti prestazioni e correzioni bug'
+          ]
+        },
+        {
+          version: '3.2.4',
+          date: '2023-07-06',
+          changes: [
+            'Correzioni bug e miglioramenti stabilità',
+            'Miglioramenti minori interfaccia utente'
+          ]
+        },
+        {
+          version: '2.3.0',
+          date: '2021-01-23',
+          changes: [
+            'Nuove funzionalità e miglioramenti',
+            'Interfaccia utente migliorata'
+          ]
+        },
+        {
+          version: '2.0.0',
+          date: '2018-01-04',
+          changes: [
+            'Riscrittura completa dell\'applicazione',
+            'Nuovo design interfaccia moderno',
+            'Motore metronomo migliorato',
+            'Aggiunti più pattern flamenco'
+          ]
+        }
+      ]
     }
   },
   buttons: {
