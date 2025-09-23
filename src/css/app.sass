@@ -1,4 +1,12 @@
 // app global css in Sass form
+
+// Fix for Android status bar overlay
+.capacitor-android .q-header
+  padding-top: env(safe-area-inset-top)
+
+// Alternative approach using CSS variables
+.capacitor-android .q-toolbar
+  padding-top: var(--safe-area-inset-top, 0px)
 p
   margin: 0 0 7px
   &.caption, &.lonely-btn
@@ -120,33 +128,16 @@ $axis : 2vh
   &.active
     background: rgba(0, 0, 0, 0.15)
 
-// Status bar fix - Global pour Android
+// Status bar fix - Minimal approach pour Android
+// Avec overlaysWebView: false, Capacitor gère automatiquement l'espacement
 body.capacitor-android
-  --status-bar-height: 24px
+  --status-bar-height: 30px // Fallback si nécessaire
 
+// Cacher le spacer - on laisse Capacitor gérer
 body.capacitor-android .status-bar-spacer
-  height: var(--status-bar-height)
-  background-color: #000000
-  width: 100%
-  position: fixed
-  top: 0
-  left: 0
-  z-index: 6001
-  display: block
+  display: none !important
 
-body.capacitor-android .q-header
-  top: var(--status-bar-height) !important
-  z-index: 6000
-
-// Alternative si le header ne bouge pas avec top
-body.capacitor-android .q-page-container
-  padding-top: var(--status-bar-height) !important
-
-// Fix pour éviter que le .top-panel soit caché par le status-bar-spacer
-body.capacitor-android .top-panel
-  margin-top: var(--status-bar-height)
-
-// Support pour les appareils avec encoche
+// Support pour les appareils avec encoche si nécessaire
 @supports (height: env(safe-area-inset-top))
   body.capacitor-android
     --status-bar-height: env(safe-area-inset-top)

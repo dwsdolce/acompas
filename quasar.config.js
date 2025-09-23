@@ -33,7 +33,8 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      'i18n'
+      'i18n',
+      'statusbar'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -118,7 +119,10 @@ module.exports = configure(function (/* ctx */) {
       config: {
         capacitor: {
           iosStatusBarPadding: true, // add the dynamic top padding on iOS mobile devices
-          backButtonExit: true // Quasar handles app exit on mobile phone back button
+          backButtonExit: true, // Quasar handles app exit on mobile phone back button
+          androidTouchExplorationEnabled: true, // enable TalkBack on Android
+          splashIconScale: 0.9, // scale the splash icon (1 = 100%) for more control over how it looks on different screen sizes
+          statusBarPadding: true // add the dynamic top padding for iOS and Android mobile devices
         }
       },
 

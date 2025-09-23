@@ -8,10 +8,10 @@ const languages = ref([
   { code: 'en-US', label: 'English',  flag: '🇬🇧' },
   { code: 'es-ES', label: 'Español',  flag: '🇪🇸' },
   { code: 'fr-FR', label: 'Français', flag: '🇫🇷' },
-  { code: 'ja-JP', label: '日本語', flag: '🇯🇵' },
-  { code: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
-  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
-  { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
+  // { code: 'ja-JP', label: '日本語', flag: '🇯🇵' },
+  // { code: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
+  // { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+  // { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
   { code: 'de', label: 'Deutsch',  flag: '🇩🇪' },
   { code: 'it', label: 'Italiano', flag: '🇮🇹' }
 ])

@@ -1,60 +1,42 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { Screen, Platform } from 'quasar'
-import { storeToRefs } from 'pinia'
-import LeftDrawer from 'src/components/LeftDrawer.vue'
-import SelectContext from 'src/components/SelectContext.vue'
-import SelectSettings from 'src/components/SelectSettings.vue'
-import { useSessionStore } from 'src/stores/session'
-import { usePatternStore } from 'src/stores/patterns'
-import type { Ref } from 'vue'
-import type { Size } from 'src/utils/types'
-import { StatusBar, Style } from '@capacitor/status-bar'
-import { Capacitor } from '@capacitor/core'
-import { SplashScreen } from '@capacitor/splash-screen'
+import { ref, computed, onMounted } from "vue";
+import { Screen, Platform } from "quasar";
+import { storeToRefs } from "pinia";
+import LeftDrawer from "src/components/LeftDrawer.vue";
+import SelectContext from "src/components/SelectContext.vue";
+import SelectSettings from "src/components/SelectSettings.vue";
+import { useSessionStore } from "src/stores/session";
+import { usePatternStore } from "src/stores/patterns";
+import type { Ref } from "vue";
+import type { Size } from "src/utils/types";
+import { SplashScreen } from "@capacitor/splash-screen";
 
-const sessionStore = useSessionStore()
-const patternStore = usePatternStore()
+const sessionStore = useSessionStore();
+const patternStore = usePatternStore();
 
-const { setVisualizationSize } = sessionStore
-const { isDarkMode } = storeToRefs(sessionStore)
-const { contexts } = storeToRefs(patternStore)
+const { setVisualizationSize } = sessionStore;
+const { isDarkMode } = storeToRefs(sessionStore);
+const { contexts } = storeToRefs(patternStore);
 
-const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
+const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md);
 
-Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
+Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 });
 
-const appVersion = process.env.APP_VERSION?.valueOf() || '4'
+const appVersion = process.env.APP_VERSION?.valueOf() || "4";
 
 const onResize = (size: Size) => {
-  setVisualizationSize(size)
-}
+  setVisualizationSize(size);
+};
 
-const publicFolder = computed(() => Platform.is.electron ? window.electronAPI.getPublicPath() : '')
+const publicFolder = computed(() =>
+  Platform.is.electron ? window.electronAPI.getPublicPath() : "",
+);
 
-onMounted(async () => {
-  if (Capacitor.getPlatform() === 'android') {
-    document.body.classList.add('capacitor-android')
-  }
-
-  if (Capacitor.isNativePlatform()) {
-    try {
-      await StatusBar.setOverlaysWebView({ overlay: false })
-      await StatusBar.setStyle({ style: Style.Dark })
-      await StatusBar.setBackgroundColor({ color: '#000000' })
-
-      await StatusBar.getInfo()
-    } catch (error) {
-      // Optional: handle the error if needed
-    }
-  }
-})
+// StatusBar configuration is handled in src/boot/statusbar.ts
 </script>
 
 <template lang="pug">
-q-layout(view="hhh LpR lFf")
-  .status-bar-spacer
-
+q-layout(view="hhh LpR lFf" :class="{ 'capacitor-android': Platform.is.capacitor && Platform.is.android }")
   q-header
     q-bar.q-electron-drag(v-if="Platform.is.electron")
     q-toolbar
@@ -103,15 +85,13 @@ q-layout(view="hhh LpR lFf")
 
 <style lang="scss">
 #appMain {
-  background:
-    linear-gradient(
-      to bottom,
-      rgb(25, 25, 25) 0%,
-      rgb(35, 35, 35) 35%,
-      rgb(35, 35, 35) 65%,
-      rgb(25, 25, 25) 100%
-    )
-  ;
+  background: linear-gradient(
+    to bottom,
+    rgb(25, 25, 25) 0%,
+    rgb(35, 35, 35) 35%,
+    rgb(35, 35, 35) 65%,
+    rgb(25, 25, 25) 100%
+  );
   &.light-mode {
     background: rgb(240, 240, 240);
   }
