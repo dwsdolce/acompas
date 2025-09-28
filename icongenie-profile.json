@@ -334,7 +334,7 @@
     },
     {
       "generator": "splashscreen",
-      "name": "splash.png",
+      "name": "launch_splash.png",
       "folder": "src-capacitor/android/app/src/main/res/drawable-land-xxxhdpi",
       "sizes": [[1920, 1280]]
     }

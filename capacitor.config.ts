@@ -1,17 +1,17 @@
-import { CapacitorConfig } from '@capacitor/cli';
-import { use } from 'marked';
+import { CapacitorConfig } from '@capacitor/cli'
+import { use } from 'marked'
 
 const config: CapacitorConfig = {
   appId: 'capacitor.acompas.org',
   appName: 'A Compás',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 0,
-      launchAutoHide: true,
+      launchAutoHide: false,
       launchFadeOutDuration: 500,
       backgroundColor: '#000000',
       androidSplashResourceName: 'launch_splash',
@@ -27,28 +27,28 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: 'dark',
-      backgroundColor: '#000000',
+      // backgroundColor: '#000000',
       overlaysWebView: false,
       // androidTouchExplorationEnabled: true
     },
     KeepAwake: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
   ios: {
     contentInset: 'automatic',
     allowsLinkPreview: false,
     // iOS audio optimizations
     scheme: 'A Compás',
-    preferredContentMode: 'mobile'
+    preferredContentMode: 'mobile',
   },
   android: {
     allowMixedContent: true,
     captureInput: true,
     // Android audio optimizations
     useLegacyBridge: false,
-    backgroundColor: '#000000'
-  }
-};
+    backgroundColor: '#000000',
+  },
+}
 
-export default config;
+export default config

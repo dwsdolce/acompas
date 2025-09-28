@@ -1,38 +1,35 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import { Screen, Platform } from "quasar";
-import { storeToRefs } from "pinia";
-import LeftDrawer from "src/components/LeftDrawer.vue";
-import SelectContext from "src/components/SelectContext.vue";
-import SelectSettings from "src/components/SelectSettings.vue";
-import { useSessionStore } from "src/stores/session";
-import { usePatternStore } from "src/stores/patterns";
-import type { Ref } from "vue";
-import type { Size } from "src/utils/types";
-import { SplashScreen } from "@capacitor/splash-screen";
+import { ref, computed, onMounted } from 'vue'
+import { Screen, Platform } from 'quasar'
+import { storeToRefs } from 'pinia'
+import LeftDrawer from 'src/components/LeftDrawer.vue'
+import SelectContext from 'src/components/SelectContext.vue'
+import SelectSettings from 'src/components/SelectSettings.vue'
+import { useSessionStore } from 'src/stores/session'
+import { usePatternStore } from 'src/stores/patterns'
+import type { Ref } from 'vue'
+import type { Size } from 'src/utils/types'
 
-const sessionStore = useSessionStore();
-const patternStore = usePatternStore();
+const sessionStore = useSessionStore()
+const patternStore = usePatternStore()
 
-const { setVisualizationSize } = sessionStore;
-const { isDarkMode } = storeToRefs(sessionStore);
-const { contexts } = storeToRefs(patternStore);
+const { setVisualizationSize } = sessionStore
+const { isDarkMode } = storeToRefs(sessionStore)
+const { contexts } = storeToRefs(patternStore)
 
-const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md);
+const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
-Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 });
+Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
 
-const appVersion = process.env.APP_VERSION?.valueOf() || "4";
+const appVersion = process.env.APP_VERSION?.valueOf() || '4'
 
 const onResize = (size: Size) => {
-  setVisualizationSize(size);
-};
+  setVisualizationSize(size)
+}
 
 const publicFolder = computed(() =>
-  Platform.is.electron ? window.electronAPI.getPublicPath() : "",
-);
-
-// StatusBar configuration is handled in src/boot/statusbar.ts
+  Platform.is.electron ? window.electronAPI.getPublicPath() : ''
+)
 </script>
 
 <template lang="pug">
