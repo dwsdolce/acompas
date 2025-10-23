@@ -11,8 +11,8 @@
 // const VueDevTools = require('vite-plugin-vue-devtools');
 
 
-const { configure } = require('quasar/wrappers');
-const path = require('path');
+const { configure } = require('quasar/wrappers')
+const path = require('path')
 
 
 module.exports = configure(function (/* ctx */) {
@@ -288,4 +288,4 @@ module.exports = configure(function (/* ctx */) {
       // extendBexManifestJson (json) {}
     }
   }
-});
+})

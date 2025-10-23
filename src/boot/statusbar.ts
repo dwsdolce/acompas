@@ -1,6 +1,11 @@
 import { boot } from 'quasar/wrappers'
 import { Capacitor } from '@capacitor/core'
 import { StatusBar, Style } from '@capacitor/status-bar'
+import type { StatusBarInfo } from '@capacitor/status-bar'
+
+interface Info extends StatusBarInfo {
+  height?: number
+}
 
 export default boot(async () => {
   if (Capacitor.isNativePlatform()) {
@@ -14,7 +19,7 @@ export default boot(async () => {
       if (Capacitor.getPlatform() === 'android') {
         // Try to get actual status bar height, fallback to 40px
         const statusBarHeight = await StatusBar.getInfo()
-          .then((info) => (info.height ? `${info.height}px` : '40px'))
+          .then((info: Info) => (info.height ? `${info.height}px` : '40px'))
           .catch(() => '40px')
 
         document.documentElement.style.setProperty(

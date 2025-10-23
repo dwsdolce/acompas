@@ -18,12 +18,14 @@ const updateDialog = computed(() => {
   return !isUpToDatev4.value
 })
 
-onMounted(() => {
-  SplashScreen.hide()
+onMounted(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 5000))
 
   if (!trackingChosen.value) {
-    return router.push('/privacy-policy')
+    await router.push('/privacy-policy')
   }
+
+  SplashScreen.hide()
 })
 </script>
 
