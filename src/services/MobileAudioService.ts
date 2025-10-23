@@ -82,13 +82,13 @@ export class MobileAudioService {
         resolve()
       }
 
-      // Écouter plusieurs types d'événements
+      // Listen to multiple event types
       document.addEventListener('touchstart', handler, { passive: true })
       document.addEventListener('touchend', handler, { passive: true })
       document.addEventListener('click', handler)
       document.addEventListener('keydown', handler)
 
-      // Timeout de sécurité (au cas où l'interaction n'est pas détectée)
+      // Safety timeout (in case interaction is not detected)
       setTimeout(() => {
         console.log('User interaction timeout - proceeding anyway')
         document.removeEventListener('touchstart', handler, { passive: true } as EventListenerOptions)
@@ -96,26 +96,26 @@ export class MobileAudioService {
         document.removeEventListener('click', handler)
         document.removeEventListener('keydown', handler)
         resolve()
-      }, 10000) // 10 secondes max
+      }, 10000) // 10 seconds max
     })
   }
 
   /**
-   * Configure Tone.js pour des performances optimales sur mobile
+   * Configure Tone.js for optimal mobile performance
    */
   private configureToneForMobile(): void {
     console.log('Configuring Tone.js for mobile...')
 
     try {
-      // Optimisations de latence et performance
+      // Latency and performance optimizations
       if (Tone.context) {
-        // Privilégier la stabilité sur la latence ultra-faible
+        // Favor stability over ultra-low latency
         Tone.context.latencyHint = 'playback'
 
-        // Réduire le look-ahead pour diminuer la latence
+        // Reduce look-ahead to decrease latency
         Tone.context.lookAhead = Platform.is.mobile ? 0.05 : 0.1
 
-        // Optimiser le sample rate si possible
+        // Optimize sample rate if possible
         if (Platform.is.mobile && Tone.context.sampleRate) {
           console.log(`Audio sample rate: ${Tone.context.sampleRate}Hz`)
         }
@@ -124,12 +124,12 @@ export class MobileAudioService {
         console.log(`Audio context look ahead: ${Tone.context.lookAhead}s`)
       }
 
-      // Optimisations spécifiques aux plateformes
+      // Platform-specific optimizations
       if (Platform.is.ios) {
-        // iOS a des particularités pour l'audio
+        // iOS has specific audio peculiarities
         console.log('Applied iOS-specific audio optimizations')
       } else if (Platform.is.android) {
-        // Android peut avoir besoin d'optimisations différentes
+        // Android may need different optimizations
         console.log('Applied Android-specific audio optimizations')
       }
 
@@ -139,7 +139,7 @@ export class MobileAudioService {
   }
 
   /**
-   * Configure les gestionnaires d'événements du cycle de vie de l'app
+   * Configure app lifecycle event handlers
    */
   private setupAppLifecycleHandlers(): void {
     console.log('Setting up app lifecycle handlers...')
@@ -152,11 +152,11 @@ export class MobileAudioService {
   }
 
   /**
-   * Configure les écouteurs pour Capacitor
+   * Configure listeners for Capacitor
    */
   private async setupCapacitorListeners(): Promise<void> {
     try {
-      // Dynamiquement importer et utiliser les plugins Capacitor s'ils sont disponibles
+      // Dynamically import and use Capacitor plugins if available
       const { App } = await import('@capacitor/app')
 
       const stateListener = await App.addListener('appStateChange', ({ isActive }) => {
@@ -186,7 +186,7 @@ export class MobileAudioService {
   }
 
   /**
-   * Configure les écouteurs pour le web
+   * Configure listeners for web
    */
   private setupWebListeners(): void {
     const visibilityHandler = () => {
@@ -212,7 +212,7 @@ export class MobileAudioService {
     window.addEventListener('blur', blurHandler)
     window.addEventListener('focus', focusHandler)
 
-    // Stocker les références pour le nettoyage
+    // Store references for cleanup
     this.appListeners.push({
       remove: () => {
         document.removeEventListener('visibilitychange', visibilityHandler)
@@ -223,22 +223,22 @@ export class MobileAudioService {
   }
 
   /**
-   * Suspend le contexte audio avec un délai
+   * Suspend audio context with a delay
    */
   private suspendWithDelay(): void {
-    // Annuler tout timeout existant
+    // Cancel any existing timeout
     if (this.suspendTimeout) {
       clearTimeout(this.suspendTimeout)
     }
 
-    // Attendre avant de suspendre (au cas où l'utilisateur revient rapidement)
+    // Wait before suspending (in case user returns quickly)
     this.suspendTimeout = setTimeout(() => {
       this.suspend()
     }, this.SUSPEND_DELAY)
   }
 
   /**
-   * Suspend le contexte audio pour économiser la batterie
+   * Suspend audio context to save battery
    */
   suspend(): void {
     if (this.suspendTimeout) {
@@ -249,7 +249,7 @@ export class MobileAudioService {
     try {
       if (Tone.context.state === 'running') {
         console.log('Suspending audio context')
-        // Cast vers AudioContext pour accéder aux méthodes suspend/resume
+        // Cast to AudioContext to access suspend/resume methods
         const audioContext = Tone.context as unknown as AudioContext
         if (audioContext.suspend) {
           audioContext.suspend()
@@ -261,10 +261,10 @@ export class MobileAudioService {
   }
 
   /**
-   * Reprend le contexte audio
+   * Resume audio context
    */
   resume(): void {
-    // Annuler la suspension programmée
+    // Cancel scheduled suspension
     if (this.suspendTimeout) {
       clearTimeout(this.suspendTimeout)
       this.suspendTimeout = null
@@ -273,7 +273,7 @@ export class MobileAudioService {
     try {
       if (Tone.context.state === 'suspended') {
         console.log('Resuming audio context')
-        // Cast vers AudioContext pour accéder aux méthodes suspend/resume
+        // Cast to AudioContext to access suspend/resume methods
         const audioContext = Tone.context as unknown as AudioContext
         if (audioContext.resume) {
           audioContext.resume()
@@ -285,21 +285,21 @@ export class MobileAudioService {
   }
 
   /**
-   * Obtient l'état actuel du contexte audio
+   * Get current audio context state
    */
   getAudioState(): string {
     return Tone.context?.state || 'unknown'
   }
 
   /**
-   * Vérifie si le service est initialisé
+   * Check if service is initialized
    */
   get initialized(): boolean {
     return this.isInitialized
   }
 
   /**
-   * Obtient des informations sur les performances audio
+   * Get audio performance information
    */
   getPerformanceInfo(): {
     state: string
@@ -321,7 +321,7 @@ export class MobileAudioService {
   }
 
   /**
-   * Force une reconnexion du contexte audio (utile en cas de problème)
+   * Force audio context reconnection (useful in case of problems)
    */
   async reconnect(): Promise<void> {
     console.log('Reconnecting audio context...')
@@ -339,18 +339,18 @@ export class MobileAudioService {
   }
 
   /**
-   * Nettoie toutes les ressources
+   * Clean up all resources
    */
   dispose(): void {
     console.log('Disposing MobileAudioService...')
 
-    // Nettoyer les timeouts
+    // Clean up timeouts
     if (this.suspendTimeout) {
       clearTimeout(this.suspendTimeout)
       this.suspendTimeout = null
     }
 
-    // Nettoyer les écouteurs d'événements
+    // Clean up event listeners
     this.appListeners.forEach(listener => {
       try {
         listener.remove()
@@ -360,7 +360,7 @@ export class MobileAudioService {
     })
     this.appListeners = []
 
-    // Suspendre le contexte audio
+    // Suspend audio context
     this.suspend()
 
     this.isInitialized = false

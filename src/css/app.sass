@@ -129,19 +129,16 @@ $axis : 2vh
     background: rgba(0, 0, 0, 0.15)
 
 // Status bar fix - Minimal approach pour Android
-// Avec overlaysWebView: false, Capacitor gère automatiquement l'espacement
+
 body.capacitor-android
   --status-bar-height: 30px // Fallback si nécessaire
 
-// Cacher le spacer - on laisse Capacitor gérer
 body.capacitor-android .status-bar-spacer
   display: none !important
 
-// Support pour les appareils avec encoche si nécessaire
 @supports (height: env(safe-area-inset-top))
   body.capacitor-android
     --status-bar-height: env(safe-area-inset-top)
 
-// Cacher explicitement sur web
 body:not(.capacitor-android) .status-bar-spacer
   display: none !important
