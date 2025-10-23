@@ -361,9 +361,9 @@ export const usePatternStore = defineStore('patterns', () => {
   const initPattern = async (contextName: string, patternName: string) => {
     selectedPatternName.value = patternName
 
-    const existingPattern = patterns.value.find(pattern => pattern.name === patternName);
+    const existingPattern = patterns.value.find(pattern => pattern.name === patternName)
     if (!existingPattern) {
-      patterns.value.push(await buildPattern());
+      patterns.value.push(await buildPattern())
     }
   }
 
