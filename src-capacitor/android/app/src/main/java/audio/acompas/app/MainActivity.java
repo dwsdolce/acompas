@@ -8,7 +8,7 @@ public class MainActivity extends BridgeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Ensure the system insets (status bar) are applied to the content
-		WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+		// Allow status bar to overlay content - we handle padding in CSS
+		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 	}
 }

@@ -134,10 +134,6 @@ A Compás est disponible en 9 langues pour servir la communauté flamenco mondia
 - **Espagnol** (Español) - Terminologie flamenco native
 - **Allemand** (Deutsch) - Localisation complète
 - **Italien** (Italiano) - Traduction complète de l'interface
-- **Japonais** (日本語) - Support du marché asiatique
-- **Chinois** (中文) - Chinois simplifié
-- **Arabe** (العربية) - Support droite-à-gauche
-- **Persan** (فارسی) - Localisation farsi
 
 **Fonctionnalités :**
 - Tous les menus, boutons et textes d'aide sont traduits

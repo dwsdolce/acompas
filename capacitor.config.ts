@@ -1,5 +1,4 @@
 import { CapacitorConfig } from '@capacitor/cli'
-import { use } from 'marked'
 
 const config: CapacitorConfig = {
   appId: 'capacitor.acompas.org',
@@ -28,7 +27,7 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: 'dark',
       // backgroundColor: '#000000',
-      overlaysWebView: false,
+      // overlaysWebView is managed dynamically in boot/statusbar.ts
       // androidTouchExplorationEnabled: true
     },
     KeepAwake: {

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from 'src/stores/session'
-import { usePatternStore } from 'src/stores/patterns'
 import CustomCard from 'src/components/CustomCard.vue'
 import UpdateApp from 'src/components/UpdateApp.vue'
 import { SplashScreen } from '@capacitor/splash-screen'
@@ -34,9 +33,10 @@ div
   router-view
   q-dialog(
       id="updateDialog",
-      v-model="updateDialog"
+      v-model="updateDialog",
+      persistent
     )
-      custom-card(:persistant="true")
+      custom-card
         template(v-slot:title) {{ $t('doc.update.title') }}
         template(v-slot:content)
           UpdateApp

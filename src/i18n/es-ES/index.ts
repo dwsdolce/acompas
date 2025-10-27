@@ -134,10 +134,6 @@ A Compás está disponible en 9 idiomas para servir a la comunidad flamenca mund
 - **Español** (Español) - Terminología flamenca nativa
 - **Alemán** (Deutsch) - Localización completa
 - **Italiano** (Italiano) - Traducción completa de la interfaz
-- **Japonés** (日本語) - Soporte del mercado asiático
-- **Chino** (中文) - Chino simplificado
-- **Árabe** (العربية) - Soporte de derecha a izquierda
-- **Persa** (فارسی) - Localización farsi
 
 **Características:**
 - Todos los menús, botones y textos de ayuda están traducidos
