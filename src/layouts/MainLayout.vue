@@ -33,7 +33,10 @@ const publicFolder = computed(() =>
 </script>
 
 <template lang="pug">
-q-layout(view="hhh LpR lFf" :class="{ 'capacitor-android': Platform.is.capacitor && Platform.is.android }")
+q-layout(
+  view="hhh LpR lFf",
+  :class="{ 'capacitor-android': Platform.is.capacitor && Platform.is.android }"
+)
   q-header
     q-bar.q-electron-drag(v-if="Platform.is.electron")
     q-toolbar
