@@ -45,16 +45,15 @@ custom-card(:popup="false")
         keep-color
       ).primary
       MarkdownRenderer(:content="$t('doc.privacy.content')")
-  template(v-slot:actions)
-    q-btn(
-      unelevated,
-      color="primary",
-      @click="handleEnableAndClose()",
-    ).q-mr-lg {{ $t('doc.privacy.enable') }}
-    q-btn(
-      unelevated,
-      color="secondary",
-      v-close-popup,
-      @click="handleClose()"
-    ) {{ $t('doc.privacy.close') }}
+      q-btn(
+        unelevated,
+        color="primary",
+        @click="handleEnableAndClose()",
+      ).q-mr-lg {{ $t('doc.privacy.enable') }}
+      q-btn(
+        unelevated,
+        color="secondary",
+        v-close-popup,
+        @click="handleClose()"
+      ) {{ $t('doc.privacy.close') }}
 </template>
