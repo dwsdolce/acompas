@@ -30,14 +30,14 @@ onMounted(async () => {
 
 <template lang="pug">
 div
-  router-view
+  RouterView
   q-dialog(
-      id="updateDialog",
-      v-model="updateDialog",
-      persistent
-    )
-      custom-card
-        template(v-slot:title) {{ $t('doc.update.title') }}
-        template(v-slot:content)
-          UpdateApp
+    id="updateDialog",
+    v-model="updateDialog",
+    persistent
+  )
+    CustomCard(:persistant="true")
+      template(v-slot:title) {{ $t('doc.update.title') }}
+      template(v-slot:content)
+        UpdateApp
 </template>

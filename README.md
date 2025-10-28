@@ -1,12 +1,29 @@
 # A Compás
 
-A flamenco metronome available in two versions :
+![Version](https://img.shields.io/badge/version-4.1.3-blue)
+![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
-* Web application (available at [https://acompas.org](https://acompas.org)).
-* Mobile application using [Capacitor](https://capacitorjs.com), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app).
+A flamenco metronome available on multiple platforms:
 
-It can play various flamenco rhythms (palos), and features a visual animation
-and many options.
+* Web application (available at [https://acompas.org](https://acompas.org))
+* Mobile application using [Capacitor](https://capacitorjs.com), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app)
+* Desktop application (Electron) for Mac and Linux
+
+## Key Features
+
+- 🎵 Multiple authentic flamenco rhythms (palos)
+- 🎨 Visual animations with multiple display modes:
+  - Dots visualization (default)
+  - Counter display
+  - Clock display
+- 🌓 Light/Dark theme support
+- 🌐 Multilingual support - Available in 10 languages:
+  - English, Spanish, French, Italian, German
+  - Arabic, Persian (Farsi), Japanese, Chinese (Simplified)
+- 📱 Mobile-optimized with keep-awake functionality
+- 📝 Built-in changelog viewer
+- 🎛️ Customizable tempo, prestart beats, and swing options
+- 🔊 High-quality audio samples with multiple instruments
 
 It is based on the following technologies :
  - [Quasar framework](https://quasar.dev)
@@ -24,8 +41,10 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 
 ## Cloning and building the source code
 
-Before anything, you need Node.js 20.x installed on your machine. See the nodejs.org
-[download page](https://nodejs.org/en/download/). If using Linux, consider
+Before anything, you need Node.js installed on your machine (version 14.19+, 16+, 18+, 20+ or 22+).
+**Recommended: Node.js 20.x or later** for best compatibility.
+
+See the nodejs.org [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
 You also need to enable yarn after installing the nodejs package :
@@ -179,6 +198,10 @@ quasar dev -m capacitor -T android
 # Build android apk in production mode
 cd /path/to/acompas
 quasar build -m capacitor -T android
+
+# Build AAB for production
+cd /path/to/acompas
+quasar build -m capacitor -T android --aab
 ```
 
 ### iOS
@@ -192,19 +215,37 @@ quasar dev -m ios
 quasar build -m ios
 ```
 
-### Electron
+### Electron (Desktop)
+
+The desktop application is fully configured and ready to build for Mac and Linux.
+
 #### Setup
+
+The Electron mode is already configured in this project. If you need to regenerate icons:
+
 ```bash
-quasar mode add electron
 icongenie generate -m electron -i ./app-icon.png
 ```
+
+#### Build commands
 
 ``` bash
 # Build and run electron app in debug mode
 quasar dev -m electron
+
 # Build electron app for production
 quasar build -m electron
+
+# Alternative build commands
+yarn build:electron        # Production build
+yarn build:electron:dev    # Development build
+yarn build:electron:prod   # Production build (explicit)
 ```
+
+The Electron app is configured with electron-builder and supports:
+- Mac (DMG installer configured)
+- Linux (AppImage and other formats)
+- Windows (partially configured, currently commented out)
 
 #### Troubleshooting
 
@@ -330,10 +371,14 @@ Don't forget to run the sh script `./format_audio.sh` to convert the .wav files 
 
 Beware of the licence of the sounds you use. You must have the right to use them in a free software.
 
-## To do
+## Roadmap / To do
 
-- Package the app for iOS
-- Package the app for Electron
-- Package the app for WindoAndroid TV
-- Add more sound samples
-- Add more rhythmic patterns
+### Platform Support
+- Package and publish the iOS app (currently implemented but not published)
+- Complete Windows desktop support (Electron - partially configured)
+- Consider Android TV support
+
+### Features
+- Add more sound samples and drumkits
+- Add more rhythmic patterns (palos)
+- Add more visualization options

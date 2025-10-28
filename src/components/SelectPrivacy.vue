@@ -33,7 +33,7 @@ const handleClose = () => {
 </script>
 
 <template lang="pug">
-custom-card(:popup="false")
+CustomCard(:popup="false")
   template(v-slot:title) {{ $t('doc.privacy.title') }}
   template(v-slot:content)
     .text-center
@@ -45,15 +45,16 @@ custom-card(:popup="false")
         keep-color
       ).primary
       MarkdownRenderer(:content="$t('doc.privacy.content')")
-      q-btn(
-        unelevated,
-        color="primary",
-        @click="handleEnableAndClose()",
-      ).q-mr-lg {{ $t('doc.privacy.enable') }}
-      q-btn(
-        unelevated,
-        color="secondary",
-        v-close-popup,
-        @click="handleClose()"
-      ) {{ $t('doc.privacy.close') }}
+  template(v-slot:actions)
+    q-btn(
+      unelevated,
+      color="primary",
+      @click="handleEnableAndClose()",
+    ).q-mr-lg {{ $t('doc.privacy.enable') }}
+    q-btn(
+      unelevated,
+      color="secondary",
+      v-close-popup,
+      @click="handleClose()"
+    ) {{ $t('doc.privacy.close') }}
 </template>
