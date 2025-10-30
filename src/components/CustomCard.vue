@@ -32,7 +32,7 @@ q-card(style="width: 700px; max-width: 90vw; max-height: 90vh;").text-black
     .text-h6.text-center
       slot(name="title")
   q-separator
-  q-card-section(style="max-height: 70vh;").scroll
+  q-card-section(style="max-height: 60vh;").scroll
     slot(name="content")
   q-separator(v-if="$slots.actions")
   q-card-actions(v-if="$slots.actions", align="center")
