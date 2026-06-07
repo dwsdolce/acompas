@@ -3,6 +3,7 @@ import { Capacitor } from '@capacitor/core'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import type { StatusBarInfo } from '@capacitor/status-bar'
 import { App } from '@capacitor/app'
+import { logger } from 'src/utils/logger'
 
 interface Info extends StatusBarInfo {
   height?: number
@@ -34,7 +35,7 @@ async function configureStatusBar() {
       )
     }
   } catch (e) {
-    console.warn('StatusBar configuration failed:', e)
+    logger.warn('StatusBar configuration failed:', e)
   }
 }
 
@@ -46,7 +47,7 @@ export default boot(async () => {
   if (Capacitor.isNativePlatform()) {
     try {
       await App.addListener('resume', async () => {
-        console.log('App resumed - reconfiguring status bar')
+        logger.log('App resumed - reconfiguring status bar')
         // Small delay to ensure native UI is ready
         setTimeout(async () => {
           await configureStatusBar()
@@ -55,7 +56,7 @@ export default boot(async () => {
 
       await App.addListener('appStateChange', async ({ isActive }) => {
         if (isActive) {
-          console.log('App active - reconfiguring status bar')
+          logger.log('App active - reconfiguring status bar')
           // Small delay to ensure native UI is ready
           setTimeout(async () => {
             await configureStatusBar()
@@ -63,7 +64,7 @@ export default boot(async () => {
         }
       })
     } catch (e) {
-      console.warn('Failed to add app lifecycle listeners:', e)
+      logger.warn('Failed to add app lifecycle listeners:', e)
     }
   }
 })

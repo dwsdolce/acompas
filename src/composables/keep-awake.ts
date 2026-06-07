@@ -1,6 +1,7 @@
 import { ref, watch } from 'vue'
 import { Platform } from 'quasar'
 import { KeepAwake } from '@capacitor-community/keep-awake'
+import { logger } from 'src/utils/logger'
 
 export const useKeepAwake = () => {
   // if (Platform.is.capacitor && await isSupported()) {
@@ -35,7 +36,7 @@ export const useKeepAwake = () => {
       try {
         screenLock.value = await navigator.wakeLock.request('screen')
       } catch (error) {
-        console.error('Unable to acquire screen wake lock:', error)
+        logger.error('Unable to acquire screen wake lock:', error)
       }
     }
   }
@@ -56,7 +57,7 @@ export const useKeepAwake = () => {
           screenLock.value.release()
         }
       } catch (error) {
-        console.error('Unable to release screen wake lock:', error)
+        logger.error('Unable to release screen wake lock:', error)
       }
     }
   }

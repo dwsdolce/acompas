@@ -8,6 +8,7 @@ import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { AppRestart } from 'src/plugins/app-restart'
 import { Capacitor } from '@capacitor/core'
+import { logger } from 'src/utils/logger'
 
 const router = useRouter()
 const patternStore = usePatternStore()
@@ -34,7 +35,7 @@ const handleUpdateApp = async () => {
     try {
       await AppRestart.restart()
     } catch (error) {
-      console.error(error)
+      logger.error(error)
     }
   }
   router.go(0)

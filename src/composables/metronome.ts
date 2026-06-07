@@ -5,6 +5,7 @@ import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/utils/utils'
+import { logger } from 'src/utils/logger'
 import type {
   VolumeOpts,
   DecayOpts,
@@ -61,7 +62,7 @@ const createMetronome = () => {
    */
   const loadSounds = async (): Promise<void> => {
     try {
-      console.log('Starting sound loading process...')
+      logger.log('Starting sound loading process...')
       const publicFolder = Platform.is.electron ? window.electronAPI.getPublicPath() : ''
       const path = `${publicFolder}/audio/`
       const audio = new Audio()
@@ -81,7 +82,7 @@ const createMetronome = () => {
         throw new Error('None of the available audio formats can be played')
       }
 
-      console.log('Detected audio format:', audioFormat.value)
+      logger.log('Detected audio format:', audioFormat.value)
 
       // Dispose players from a previous load before recreating them, so the
       // audio graph doesn't accumulate orphaned nodes across remounts/resets.
@@ -123,10 +124,10 @@ const createMetronome = () => {
       // Wait for all sounds to load
       await Tone.loaded()
 
-      console.log('Original sound system loaded successfully')
-      console.log('Loaded sounds:', sounds)
+      logger.log('Original sound system loaded successfully')
+      logger.log('Loaded sounds:', sounds)
     } catch (error) {
-      console.error('Error in loadSounds:', error)
+      logger.error('Error in loadSounds:', error)
       throw error
     }
   }
@@ -281,7 +282,7 @@ const createMetronome = () => {
                   player.start(time)
                 }
               } catch (error) {
-                console.error('Error calling player.start():', error)
+                logger.error('Error calling player.start():', error)
               }
             } else if (!eighthNotes && (index as number) % 2 == 0 && note == index) {
               const player = sound[eighthNotes ? 'eighth' : 'quarter']
@@ -292,7 +293,7 @@ const createMetronome = () => {
                   player.start(time)
                 }
               } catch (error) {
-                console.error('Error calling player.start():', error)
+                logger.error('Error calling player.start():', error)
               }
             }
           }
@@ -432,15 +433,22 @@ const createMetronome = () => {
   const isSupported = Tone.supported
 
   const reinitialize = async (): Promise<void> => {
-    if (store.selectedPattern) {
-      await initSequences()
-      await changeTempo(store.tempo)
-      await changeSwing(store.swing)
-      forEachValue(sounds as Sounds, async (sound, key) => {
-        await changeVolume({ instrument: key, volume: store.instruments?.find((i => i.value == key))?.volume ?? 0 })
-        await changeDecay(store.globalDecay)
-      })
-    }
+    if (!store.selectedPattern) return
+
+    await initSequences()
+    await changeTempo(store.tempo)
+    await changeSwing(store.swing)
+    // Decay is global, not per-sound: set it once instead of on every iteration.
+    await changeDecay(store.globalDecay)
+
+    // Build the instrument→volume lookup once (O(n+m)) rather than running a
+    // find() per sound inside the loop (O(n*m)).
+    const volumeByInstrument = new Map<string, number>(
+      (store.instruments ?? []).map((i: instruOpts) => [i.value, i.volume])
+    )
+    forEachValue(sounds as Sounds, (_sound, key: string) => {
+      void changeVolume({ instrument: key, volume: volumeByInstrument.get(key) ?? 0 })
+    })
   }
 
   /**
@@ -465,11 +473,11 @@ const createMetronome = () => {
         await loadSounds()
         await reinitialize()
         soundsIsLoaded.value = true
-        console.log('Metronome initialized successfully')
+        logger.log('Metronome initialized successfully')
         return true
       })
       .catch((error) => {
-        console.error(error)
+        logger.error(error)
         soundsIsLoaded.value = false
         Notify.create({
           message: 'Failed to load the audio samples !',
@@ -491,7 +499,7 @@ const createMetronome = () => {
 
     try {
       await Tone.start()
-      console.log('Audio context state:', Tone.context.state)
+      logger.log('Audio context state:', Tone.context.state)
 
       await reinitialize()
 
@@ -522,10 +530,10 @@ const createMetronome = () => {
         }
       }
 
-      console.log('Sequences started successfully')
+      logger.log('Sequences started successfully')
     } catch (error) {
       Loading.hide()
-      console.error('Failed to start sequences:', error)
+      logger.error('Failed to start sequences:', error)
 
       Notify.create({
         message: 'Failed to start audio sequences. Please try again.',
@@ -604,7 +612,7 @@ const createMetronome = () => {
         })
       }
     } catch (error) {
-      console.warn('Error changing volume:', error)
+      logger.warn('Error changing volume:', error)
     }
   }
 
