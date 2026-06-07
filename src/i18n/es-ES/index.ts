@@ -400,5 +400,9 @@ Pero esta es la única forma de obtener las nuevas características. Si es tu pr
     restore: 'Restaurar configuración',
     options: 'Opciones de ritmo',
     settings: 'Configuración de la aplicación'
+  },
+  sync: {
+    title: 'Retardo audio/visual',
+    caption: 'Desplaza la animación para que coincida con el sonido. Auméntalo si el clic se oye después de la animación — normalmente con auriculares Bluetooth.'
   }
 }

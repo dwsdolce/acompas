@@ -7,6 +7,7 @@ import CustomCard from 'src/components/CustomCard.vue'
 import ThemeToggle from 'src/components/ThemeToggle.vue'
 import SelectLang from 'src/components/SelectLang.vue'
 import SelectVisualization from 'src/components/SelectVisualization.vue'
+import SelectAudioOffset from 'src/components/SelectAudioOffset.vue'
 import ResetButton from 'src/components/ResetButton.vue'
 
 const { t } = useI18n()
@@ -49,6 +50,7 @@ div
         ThemeToggle
         SelectLang
         select-visualization.q-mb-md
+        select-audio-offset.q-mb-md
         reset-button(
           @reset="handleReset"
         ).q-mb-md

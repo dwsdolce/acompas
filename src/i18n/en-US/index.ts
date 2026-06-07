@@ -400,5 +400,9 @@ But this is the only way to get the new features. If it is your first use, this 
     restore: 'Restore settings',
     options: 'Rhythm options',
     settings: 'App settings'
+  },
+  sync: {
+    title: 'Audio/visual delay',
+    caption: 'Shift the on-screen beat to match the sound. Increase it if the click is heard after the animation — typically with Bluetooth headphones.'
   }
 }

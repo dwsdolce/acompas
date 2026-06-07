@@ -343,5 +343,9 @@ Aber das ist der einzige Weg, um die neuen Funktionen zu erhalten. Wenn es Ihre 
     restore: 'Einstellungen wiederherstellen',
     options: 'Rhythmus-Optionen',
     settings: 'App-Einstellungen'
+  },
+  sync: {
+    title: 'Audio-/Bild-Verzögerung',
+    caption: 'Verschiebt die Animation, damit sie zum Ton passt. Erhöhen, wenn der Klick nach der Animation zu hören ist — typischerweise bei Bluetooth-Kopfhörern.'
   }
 }

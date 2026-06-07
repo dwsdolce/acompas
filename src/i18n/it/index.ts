@@ -343,5 +343,9 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
     restore: 'Ripristina impostazioni',
     options: 'Opzioni ritmo',
     settings: 'Impostazioni app'
+  },
+  sync: {
+    title: 'Ritardo audio/visivo',
+    caption: 'Sposta l\'animazione per farla coincidere con il suono. Aumenta il valore se il clic si sente dopo l\'animazione — tipicamente con le cuffie Bluetooth.'
   }
 }

@@ -400,5 +400,9 @@ Mais c'est le seul moyen d'obtenir les nouvelles fonctionnalités. Si c'est votr
     restore: 'Restaurer les paramètres',
     options: 'Options de rythme',
     settings: 'Paramètres de l\'application'
+  },
+  sync: {
+    title: 'Décalage audio/visuel',
+    caption: 'Décale l\'animation pour qu\'elle coïncide avec le son. Augmentez la valeur si le clic est entendu après l\'animation — typiquement avec un casque Bluetooth.'
   }
 }

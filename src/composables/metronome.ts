@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { Loading, Notify, Dialog, Platform } from 'quasar'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
+import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/utils/utils'
 import type {
   VolumeOpts,
@@ -28,6 +29,12 @@ const sequences: Seqs = {} as Seqs
 const quarterChannel = new Tone.Channel(-4, 0).toDestination()
 const eighthChannel = new Tone.Channel(0, -0.5).toDestination()
 
+// Underlying Tone.Player instances, tracked so they can be disposed before a
+// reload: loadSounds runs again whenever MainPage remounts (return from another
+// page) or on reset. Without disposal the audio graph accumulates orphaned
+// player nodes (116 per load) that are never garbage-collected.
+const loadedPlayers: Tone.Player[] = []
+
 const createMetronome = () => {
   const store = usePatternStore()
 
@@ -40,6 +47,13 @@ const createMetronome = () => {
     preDelay: 0,
     wet: 0.3
   }).toDestination()
+
+  // Wet path, wired once for the app lifetime (createMetronome is a singleton):
+  // each channel feeds the shared reverb on top of its dry path to the
+  // destination. Previously this lived in loadSounds and was re-run on every
+  // reload, stacking duplicate connections onto the channels.
+  quarterChannel.connect(reverb)
+  eighthChannel.connect(reverb)
 
   /**
    * Loads all sounds with audio pooling optimization.
@@ -69,8 +83,10 @@ const createMetronome = () => {
 
       console.log('Detected audio format:', audioFormat.value)
 
-      // Original sound loading system (simplified for debugging)
-      console.log('Using original sound loading system...')
+      // Dispose players from a previous load before recreating them, so the
+      // audio graph doesn't accumulate orphaned nodes across remounts/resets.
+      loadedPlayers.forEach(player => player.dispose())
+      loadedPlayers.length = 0
 
       soundsData.forEach(({ name, medias }) => {
         sounds[name as keyof Sounds] = {} as Sound
@@ -79,11 +95,11 @@ const createMetronome = () => {
           const url = `${path}${media.src}.${audioFormat.value}`
 
           const quarterPlayer = new Tone.Player(url).connect(quarterChannel)
-          // Appliquer le volume par défaut immédiatement
+          loadedPlayers.push(quarterPlayer)
           quarterPlayer.volume.value = media.volume
 
           const eighthPlayer = new Tone.Player(url).connect(eighthChannel)
-          // Appliquer le volume par défaut immédiatement
+          loadedPlayers.push(eighthPlayer)
           eighthPlayer.volume.value = media.volume
 
           // Create interface compatible with legacy system
@@ -106,8 +122,6 @@ const createMetronome = () => {
 
       // Wait for all sounds to load
       await Tone.loaded()
-      quarterChannel.connect(reverb)
-      eighthChannel.connect(reverb)
 
       console.log('Original sound system loaded successfully')
       console.log('Loaded sounds:', sounds)
@@ -288,6 +302,22 @@ const createMetronome = () => {
   }
 
   /**
+   * Delay (in seconds) between the audio-context clock and the sound actually
+   * leaving the output device. Dominated by Bluetooth latency (often
+   * 150-300ms). We add it to the *visual* scheduling time so the dots light up
+   * in sync with the audible click rather than with the moment the sample is
+   * queued. Returns 0 on browsers that don't report it (no change).
+   */
+  const getOutputLatency = (): number => {
+    const ctx = Tone.getContext().rawContext as unknown as AudioContext
+    const autoLatency = (ctx.baseLatency || 0) + (ctx.outputLatency || 0)
+    // Manual calibration (ms → s). The store is read lazily here (runtime),
+    // never during setup, so it's already initialized by playback time.
+    const manualOffset = (useSessionStore().audioVisualOffset || 0) / 1000
+    return autoLatency + manualOffset
+  }
+
+  /**
    * Builds a compas sequence from a pattern.
    */
   const buildSequence = (
@@ -311,7 +341,9 @@ const createMetronome = () => {
           } else {
             if (note !== null) triggerEvent(note as number | null)
           }
-        }, time) // Use AudioContext time of the event
+          // Offset the visual by the output latency so it matches the *audible*
+          // click (compensates Bluetooth/device output delay).
+        }, time + getOutputLatency())
       } else {
         triggerAudioOnEvent(eighthNotes, type, isLoop, time, note)
       }
@@ -327,9 +359,31 @@ const createMetronome = () => {
   // ========================
 
   /**
+   * Stops and disposes every existing Tone.Sequence, without touching the
+   * transport or UI state. Shared by stopAllSequences (teardown) and
+   * initSequences (rebuild), so old sequences aren't leaked on re-init.
+   */
+  const disposeSequences = () => {
+    forEachValue(sequences as Seqs, (seq: SeqSubdiv) => {
+      forEachValue(seq, (instrus: Seq) => {
+        forEachValue(instrus, (s: Tone.Sequence) => {
+          // Guard on `disposed` so the helper is idempotent: stop() then
+          // reinitialize() both dispose, so this can run twice on the same set.
+          if (s === null || s.disposed) return
+          if (s.state === 'started') s.stop()
+          s.dispose()
+        })
+      })
+    })
+  }
+
+  /**
    * Initializes all sequences for a given pattern.
    */
   const initSequences = async (): Promise<void> => {
+    // Dispose any sequences from a previous init before rebuilding them.
+    disposeSequences()
+
     const introSeq = []
     const loopSeq: number[] = []
 
@@ -390,13 +444,13 @@ const createMetronome = () => {
   }
 
   /**
-   * Tunes the audio context for the current platform: favour stability over
-   * ultra-low latency, and use a shorter look-ahead on mobile to reduce the
-   * perceived delay between a tap and the click.
+   * Tunes the audio context for the current platform: a shorter look-ahead on
+   * mobile reduces the perceived delay between a tap and the click.
+   * Note: `latencyHint` is read-only after the context is created (it can only
+   * be passed to the Context constructor), so lookAhead is the only knob here.
    */
   const configureAudioContext = (): void => {
     if (!Tone.context) return
-    Tone.context.latencyHint = 'playback'
     Tone.context.lookAhead = Platform.is.mobile ? 0.05 : 0.1
   }
 
@@ -488,15 +542,7 @@ const createMetronome = () => {
    * Stops all sequences.
    */
   const stopAllSequences = () => {
-    forEachValue(sequences as Seqs, (seq: SeqSubdiv) => {
-      forEachValue(seq, (instrus: Seq) => {
-        forEachValue(instrus, (s: Tone.Sequence) => {
-          if (s !== null && s.state == 'started') s.stop()
-          if (s !== null) s.dispose()
-        })
-      })
-    })
-
+    disposeSequences()
     getTransport().stop()
     triggerEvent(null)
   }

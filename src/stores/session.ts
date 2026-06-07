@@ -16,6 +16,10 @@ export const useSessionStore = defineStore('session', () => {
   const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
   const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
   const isDarkMode = useStorage('is-dark-mode', ref<boolean>(true))
+  // Manual audio/visual calibration (ms) added on top of the auto-detected
+  // output latency. Lets users compensate Bluetooth delay that the browser
+  // under-reports via AudioContext.outputLatency.
+  const audioVisualOffset = useStorage('audio-visual-offset', ref<number>(0))
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
   const visualizationModes = ref([
@@ -87,6 +91,7 @@ export const useSessionStore = defineStore('session', () => {
     trackingInitialized,
     trackingChosen,
     isDarkMode,
+    audioVisualOffset,
     leftDrawerOpen,
     visualizationSize,
     visualizationModes,
