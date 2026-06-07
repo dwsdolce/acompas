@@ -61,3 +61,14 @@ yarn.lock
 out/
 
 acompasenv
+
+# Secrets & signing material (never commit) — global safety net
+*.jks
+*.keystore
+*.apks
+*.apk
+*.aab
+*.p12
+*.pem
+keystore.properties
+google-services.json
