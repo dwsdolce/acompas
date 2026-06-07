@@ -4,7 +4,6 @@ import { Loading, Notify, Dialog, Platform } from 'quasar'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
 import { forEachValue } from 'src/utils/utils'
-import { AudioPoolService, MobileAudioService, PerformanceMonitor } from 'src/services'
 import type {
   VolumeOpts,
   DecayOpts,
@@ -31,14 +30,6 @@ const eighthChannel = new Tone.Channel(0, -0.5).toDestination()
 
 const createMetronome = () => {
   const store = usePatternStore()
-
-  // Feature flag to enable/disable audio optimizations
-  const USE_AUDIO_OPTIMIZATIONS = true
-
-  // Audio optimization services
-  const audioPoolService = new AudioPoolService()
-  const mobileAudioService = new MobileAudioService()
-  const performanceMonitor = new PerformanceMonitor()
 
   const audioFormat = ref<string>('')
   const reverbDecay = ref<number>(0.3)
@@ -399,10 +390,22 @@ const createMetronome = () => {
   }
 
   /**
+   * Tunes the audio context for the current platform: favour stability over
+   * ultra-low latency, and use a shorter look-ahead on mobile to reduce the
+   * perceived delay between a tap and the click.
+   */
+  const configureAudioContext = (): void => {
+    if (!Tone.context) return
+    Tone.context.latencyHint = 'playback'
+    Tone.context.lookAhead = Platform.is.mobile ? 0.05 : 0.1
+  }
+
+  /**
    * Initializes the metronome.
    */
   const initMetronome = async () => {
     await checkBrowserSupport()
+    configureAudioContext()
     return await Tone.loaded()
       .then(async () => {
         await loadSounds()
@@ -560,37 +563,6 @@ const createMetronome = () => {
   }
 
   /**
-   * Gets performance information from all monitoring services.
-   */
-  const getPerformanceInfo = () => {
-    return {
-      audioState: Tone.context.state,
-      audioPerformance: {
-        latency: Tone.context.lookAhead * 1000, // Convert to ms
-        contextState: Tone.context.state,
-        sampleRate: Tone.context.sampleRate
-      },
-      poolStats: audioPoolService.getStats(),
-      isInitialized: soundsIsLoaded.value,
-      performanceReport: performanceMonitor.getPerformanceReport()
-    }
-  }
-
-  /**
-   * Resets performance monitoring data.
-   */
-  const resetPerformanceData = () => {
-    performanceMonitor.reset()
-  }
-
-  /**
-   * Logs a detailed performance report to console.
-   */
-  const logPerformanceReport = () => {
-    performanceMonitor.logReport()
-  }
-
-  /**
    * Changes the decay of the metronome.
    */
   const changeDecay = async (decay: number): Promise<void> => {
@@ -650,24 +622,13 @@ const createMetronome = () => {
     changeSwing,
     humanize,
     changeVolume,
-    changeDecay,
-
-    // Performance monitoring
-    getPerformanceInfo,
-    resetPerformanceData,
-    logPerformanceReport,
-
-    // Services (for debugging/monitoring)
-    audioPoolService,
-    mobileAudioService,
-    performanceMonitor
+    changeDecay
   }
 }
 
-// Single shared metronome instance. The audio graph (channels, reverb),
-// the optimization services and the reactive state must be unique across the
-// whole app: the Pinia store and any component (e.g. the performance panel)
-// have to drive the *same* metronome, not separate detached copies.
+// Single shared metronome instance. The audio graph (channels, reverb) and the
+// reactive state must be unique across the whole app: the Pinia store and any
+// component have to drive the *same* metronome, not separate detached copies.
 let metronomeInstance: ReturnType<typeof createMetronome> | null = null
 
 /**
