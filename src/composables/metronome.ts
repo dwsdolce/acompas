@@ -1,10 +1,9 @@
 import * as Tone from 'tone'
-import { computed, ComputedRef, Ref, ref, reactive, watch, onMounted, onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { Loading, Notify, Dialog, Platform } from 'quasar'
-import { storeToRefs } from 'pinia'
 import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
-import { forEachValue, timeout } from 'src/utils/utils'
+import { forEachValue } from 'src/utils/utils'
 import { AudioPoolService, MobileAudioService, PerformanceMonitor } from 'src/services'
 import type {
   VolumeOpts,
@@ -30,7 +29,7 @@ const sequences: Seqs = {} as Seqs
 const quarterChannel = new Tone.Channel(-4, 0).toDestination()
 const eighthChannel = new Tone.Channel(0, -0.5).toDestination()
 
-export const useMetronome = () => {
+const createMetronome = () => {
   const store = usePatternStore()
 
   // Feature flag to enable/disable audio optimizations
@@ -403,6 +402,7 @@ export const useMetronome = () => {
    * Initializes the metronome.
    */
   const initMetronome = async () => {
+    await checkBrowserSupport()
     return await Tone.loaded()
       .then(async () => {
         await loadSounds()
@@ -597,16 +597,24 @@ export const useMetronome = () => {
     reverb.decay = decay
   }
 
-  onMounted(() => {
-    isSupported().catch(() => {
+  /**
+   * Warns the user if the browser lacks the Web Audio support required by
+   * the app. `Tone.supported` resolves to `false` (it does not reject) when
+   * unsupported, so we inspect the resolved value rather than catching.
+   * Called from initMetronome() so it runs in a real runtime context, not
+   * during Pinia store setup (where component lifecycle hooks are unavailable).
+   */
+  const checkBrowserSupport = async (): Promise<void> => {
+    const supported = await isSupported().catch(() => false)
+    if (!supported) {
       Dialog.create({
         title: 'Update your browser!',
         message:
           "Your browser doesn't support one or more technologies used by this app. Please come back with another one or another version of this one.",
         persistent: true
       })
-    })
-  })
+    }
+  }
 
   return {
     // Reactive states
@@ -628,6 +636,7 @@ export const useMetronome = () => {
     // Context functions
     getContext,
     isSupported,
+    checkBrowserSupport,
 
     // Initialization functions
     initSequences,
@@ -653,4 +662,25 @@ export const useMetronome = () => {
     mobileAudioService,
     performanceMonitor
   }
+}
+
+// Single shared metronome instance. The audio graph (channels, reverb),
+// the optimization services and the reactive state must be unique across the
+// whole app: the Pinia store and any component (e.g. the performance panel)
+// have to drive the *same* metronome, not separate detached copies.
+let metronomeInstance: ReturnType<typeof createMetronome> | null = null
+
+/**
+ * Returns the shared metronome singleton, creating it on first use.
+ *
+ * The first call happens during the patterns store setup; the re-entrant
+ * `usePatternStore()` inside `createMetronome` resolves to the store proxy
+ * Pinia has already registered, so no recursion occurs. Only call this once
+ * the patterns store can be initialized (i.e. from within Pinia/components).
+ */
+export const useMetronome = () => {
+  if (!metronomeInstance) {
+    metronomeInstance = createMetronome()
+  }
+  return metronomeInstance
 }
