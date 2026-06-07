@@ -1,7 +1,7 @@
 import { ref, reactive, computed, onMounted, onUpdated, watch } from 'vue'
 import { Loading, Notify, Platform, is } from 'quasar'
 import { defineStore, storeToRefs } from 'pinia'
-import { useStorage } from '@vueuse/core'
+import { useStorage, useDebounceFn } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import soundsData from 'src/assets/data/soundsData'
 import { useMetronome } from 'src/composables/metronome'
@@ -162,12 +162,17 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   })
 
+  // Applying the decay regenerates the reverb's impulse response (an offline
+  // render), so debounce it: dragging the slider updates the stored value
+  // immediately but only triggers the costly regeneration once movement settles.
+  const debouncedChangeDecay = useDebounceFn((value: number) => changeDecay(value), 150)
+
   const globalDecay = computed({
     get: () => selectedPattern.value?.globalDecay ?? 0.5,
     set: (value: number) => {
       if (selectedPattern.value) {
         selectedPattern.value.globalDecay = value
-        changeDecay(value)
+        debouncedChangeDecay(value)
       }
     }
   })

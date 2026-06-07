@@ -617,10 +617,16 @@ const createMetronome = () => {
   }
 
   /**
-   * Changes the decay of the metronome.
+   * Changes the decay of the metronome's reverb.
+   *
+   * Setting `reverb.decay` triggers an *asynchronous* regeneration of the
+   * impulse response; `reverb.ready` is reassigned synchronously to the new
+   * generation's promise. We await it so callers know the new decay is actually
+   * applied (and audible) before continuing.
    */
   const changeDecay = async (decay: number): Promise<void> => {
     reverb.decay = decay
+    await reverb.ready
   }
 
   /**
