@@ -167,6 +167,8 @@ A Compás در 9 زبان برای خدمت به جامعه جهانی فلام�
       wikipediaUrl: 'مقاله ویکی‌پدیا:',
       videoExample: 'نمونه ویدیو:',
       openLink: 'باز کردن لینک',
+      source: 'منبع: ویکی‌پدیا',
+      beats: '{count} ضرب',
       disabled: 'این گزینه برای این الگو غیرفعال است.'
     },
     searchPattern: {
@@ -307,6 +309,29 @@ A Compás در 9 زبان برای خدمت به جامعه جهانی فلام�
     restore: 'بازگردانی تنظیمات',
     options: 'گزینه‌های ریتم',
     settings: 'تنظیمات اپ'
+  },
+  notify: {
+    loading: 'در حال بارگذاری…',
+    audioInit: 'در حال راه‌اندازی صدا…',
+    loadSamplesFailed: 'بارگذاری نمونه‌های صوتی ناموفق بود!',
+    startSequencesFailed: 'شروع توالی‌های صوتی ناموفق بود. لطفاً دوباره تلاش کنید.',
+    fetchDataError: 'خطا در دریافت داده‌ها',
+    oneInstrumentRequired: 'حداقل یک ساز باید انتخاب شود!',
+    tempo: {
+      verySlow: 'تمپوی شما خیلی کند است',
+      veryFast: 'تمپوی شما خیلی تند است',
+      rhythmVerySlow: 'ریتم شما خیلی کند است',
+      porTientos: 'تمپوی شما por tientos است',
+      verySlowTientos: 'تمپوی شما خیلی کند است، حتی برای tientos',
+      tangosRumbas: 'تمپوی شما بیشتر شبیه tangos یا rumbas است',
+      porBuleria: 'تمپوی شما por bulería است',
+      porRumba: 'تمپوی شما por rumba است',
+      soleaBuleriaAlegria: 'تمپوی شما soleá por bulería یا alegría است'
+    },
+    browserUnsupported: {
+      title: 'مرورگر خود را به‌روزرسانی کنید!',
+      message: 'مرورگر شما از یک یا چند فناوری مورد استفاده در این برنامه پشتیبانی نمی‌کند. لطفاً با مرورگر دیگری یا نسخه دیگری از آن بازگردید.'
+    }
   },
   sync: {
     title: 'تأخیر صدا/تصویر',

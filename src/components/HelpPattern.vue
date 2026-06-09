@@ -1,21 +1,43 @@
 <script setup lang="ts">
-import { ref, onUpdated } from 'vue'
+import { ref, computed, watch, onUpdated } from 'vue'
 import { openURL, Platform } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
+import { useWikipediaExtract } from 'src/composables/wikipedia'
 import { isFocusableElement } from 'src/utils/utils'
 import type { QBtn } from 'quasar'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const { selectedData } = storeToRefs(patternStore)
 
 const patternHelpDialog = ref(false)
+
+const { extract: wikiExtract, articleUrl: wikiUrl, loading: wikiLoading, load: loadWiki } = useWikipediaExtract()
+
+// Prefer the localized Wikipedia article when we resolved one, else the
+// English URL from the pattern data.
+const wikipediaLink = computed(() => wikiUrl.value || selectedData.value?.wikipediaUrl)
+
+// Beats per compás. `nbBeatsInPattern` counts subdivisions (2 per beat).
+const beatCount = computed(() =>
+  selectedData.value ? Math.round(selectedData.value.nbBeatsInPattern / 2) : 0
+)
+
+// Fetch the localized Wikipedia intro whenever the dialog is open and the
+// pattern or locale changes. Refetches on locale switch so the text follows
+// the chosen language.
+watch(
+  [patternHelpDialog, locale, () => selectedData.value?.wikipediaUrl],
+  ([open, , url]) => {
+    if (open) void loadWiki(url)
+  }
+)
 
 const patternHelpBtn = ref<QBtn | null>(null)
 const closeBtn = ref<QBtn | null>(null)
@@ -57,22 +79,37 @@ span.q-ml-sm
     custom-card
       template(v-slot:title) {{ selectedData?.longLabel }}
       template(v-slot:content)
-        div(v-html="selectedData?.doc")
+        .row.justify-center.q-py-md(v-if="wikiLoading")
+          q-spinner-dots(size="2em", color="primary")
+        template(v-else-if="wikiExtract")
+          div(v-html="wikiExtract")
+          p.text-caption.text-grey
+            | {{ $t('doc.utils.source') }}
+            span(v-if="wikipediaLink")
+              q-btn(
+                flat,
+                round,
+                size="sm",
+                icon="mdi-open-in-new",
+                @click="launch(wikipediaLink)"
+              ).q-ml-sm
+        div(v-else, v-html="selectedData?.doc")
+        h6.text-h6 {{ $t('doc.utils.beats', { count: beatCount }) }}
         p {{ selectedData?.places }}
-        p(v-if="selectedData?.wikipediaUrl") {{ $t('doc.utils.wikipediaUrl') }}
-          q-btn(
-            outline,
-            size="sm",
-            icon="mdi-link-variant",
-            :label="$t('doc.utils.openLink')"
-            @click="launch(selectedData?.wikipediaUrl)"
-          ).q-ml-md
-        p(v-if="selectedData?.videoExample") {{ $t('doc.utils.videoExample') }}
-          q-btn(
-            outline,
-            size="sm",
-            icon="mdi-link-variant",
-            :label="$t('doc.utils.openLink')"
-            @click="launch(selectedData?.videoExample)"
-          ).q-ml-md
+        //- p(v-if="wikipediaLink") {{ $t('doc.utils.wikipediaUrl') }}
+        //-   q-btn(
+        //-     outline,
+        //-     size="sm",
+        //-     icon="mdi-link-variant",
+        //-     :label="$t('doc.utils.openLink')"
+        //-     @click="launch(wikipediaLink)"
+        //-   ).q-ml-md
+        q-btn(
+          v-if="selectedData?.videoExample",
+          outline,
+          size="sm",
+          icon="mdi-link-variant",
+          :label="$t('doc.utils.videoExample')"
+          @click="launch(selectedData?.videoExample)"
+        )
 </template>

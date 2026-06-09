@@ -187,6 +187,8 @@ Access visualization options through the settings menu. Changes apply immediatel
       wikipediaUrl: 'Wikipedia article:',
       videoExample: 'Video example:',
       openLink: 'Open link',
+      source: 'Source: Wikipedia',
+      beats: '{count} beats',
       disabled: 'This option is disabled for this pattern.'
     },
     searchPattern: {
@@ -400,6 +402,29 @@ But this is the only way to get the new features. If it is your first use, this 
     restore: 'Restore settings',
     options: 'Rhythm options',
     settings: 'App settings'
+  },
+  notify: {
+    loading: 'Loading…',
+    audioInit: 'Initializing audio…',
+    loadSamplesFailed: 'Failed to load the audio samples!',
+    startSequencesFailed: 'Failed to start audio sequences. Please try again.',
+    fetchDataError: 'Error fetching data',
+    oneInstrumentRequired: 'At least one instrument must be selected!',
+    tempo: {
+      verySlow: 'Your tempo is very slow',
+      veryFast: 'Your tempo is very fast',
+      rhythmVerySlow: 'Your rhythm is very slow',
+      porTientos: 'Your tempo is por tientos',
+      verySlowTientos: 'Your tempo is very slow, even for tientos',
+      tangosRumbas: 'Your tempo is more like tangos or rumbas',
+      porBuleria: 'Your tempo is por bulería',
+      porRumba: 'Your tempo is por rumba',
+      soleaBuleriaAlegria: 'Your tempo is solea por bulería or alegría'
+    },
+    browserUnsupported: {
+      title: 'Update your browser!',
+      message: 'Your browser doesn\'t support one or more technologies used by this app. Please come back with another one or another version of this one.'
+    }
   },
   sync: {
     title: 'Audio/visual delay',

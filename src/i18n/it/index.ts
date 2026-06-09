@@ -167,6 +167,8 @@ Scegli la visualizzazione che si adatta meglio al tuo stile di pratica:
       wikipediaUrl: 'Articolo Wikipedia:',
       videoExample: 'Esempio video:',
       openLink: 'Apri link',
+      source: 'Fonte: Wikipedia',
+      beats: '{count} tempi',
       disabled: 'Questa opzione è disabilitata per questo pattern.'
     },
     searchPattern: {
@@ -343,6 +345,29 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
     restore: 'Ripristina impostazioni',
     options: 'Opzioni ritmo',
     settings: 'Impostazioni app'
+  },
+  notify: {
+    loading: 'Caricamento…',
+    audioInit: 'Inizializzazione dell\'audio…',
+    loadSamplesFailed: 'Impossibile caricare i campioni audio!',
+    startSequencesFailed: 'Impossibile avviare le sequenze audio. Riprova.',
+    fetchDataError: 'Errore nel recupero dei dati',
+    oneInstrumentRequired: 'Deve essere selezionato almeno uno strumento!',
+    tempo: {
+      verySlow: 'Il tuo tempo è molto lento',
+      veryFast: 'Il tuo tempo è molto veloce',
+      rhythmVerySlow: 'Il tuo ritmo è molto lento',
+      porTientos: 'Il tuo tempo è por tientos',
+      verySlowTientos: 'Il tuo tempo è molto lento, anche per i tientos',
+      tangosRumbas: 'Il tuo tempo è piuttosto da tangos o rumbas',
+      porBuleria: 'Il tuo tempo è por bulería',
+      porRumba: 'Il tuo tempo è por rumba',
+      soleaBuleriaAlegria: 'Il tuo tempo è soleá por bulería o alegría'
+    },
+    browserUnsupported: {
+      title: 'Aggiorna il tuo browser!',
+      message: 'Il tuo browser non supporta una o più tecnologie utilizzate da questa app. Torna con un altro browser o un\'altra versione di questo.'
+    }
   },
   sync: {
     title: 'Ritardo audio/visivo',

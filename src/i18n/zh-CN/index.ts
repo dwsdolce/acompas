@@ -167,6 +167,8 @@ A Compás提供9种语言服务全球弗拉门戈社区：
       wikipediaUrl: '维基百科文章：',
       videoExample: '视频示例：',
       openLink: '打开链接',
+      source: '来源：维基百科',
+      beats: '{count} 拍',
       disabled: '此选项对此模式已禁用。'
     },
     searchPattern: {
@@ -315,6 +317,29 @@ A Compás提供9种语言服务全球弗拉门戈社区：
     restore: '恢复设置',
     options: '节奏选项',
     settings: '应用设置'
+  },
+  notify: {
+    loading: '加载中…',
+    audioInit: '正在初始化音频…',
+    loadSamplesFailed: '加载音频样本失败！',
+    startSequencesFailed: '启动音频序列失败。请重试。',
+    fetchDataError: '获取数据时出错',
+    oneInstrumentRequired: '必须至少选择一种乐器！',
+    tempo: {
+      verySlow: '你的速度非常慢',
+      veryFast: '你的速度非常快',
+      rhythmVerySlow: '你的节奏非常慢',
+      porTientos: '你的速度是 por tientos',
+      verySlowTientos: '你的速度非常慢，即使对 tientos 来说也是',
+      tangosRumbas: '你的速度更像 tangos 或 rumbas',
+      porBuleria: '你的速度是 por bulería',
+      porRumba: '你的速度是 por rumba',
+      soleaBuleriaAlegria: '你的速度是 soleá por bulería 或 alegría'
+    },
+    browserUnsupported: {
+      title: '请更新您的浏览器！',
+      message: '您的浏览器不支持本应用使用的一项或多项技术。请使用其他浏览器或其他版本重新访问。'
+    }
   },
   sync: {
     title: '音画延迟',

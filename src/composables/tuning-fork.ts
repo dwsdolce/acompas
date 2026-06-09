@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import { ref, onMounted, onUpdated, onUnmounted, onBeforeUnmount } from 'vue'
 import { Loading } from 'quasar'
 import { useTuningForkStore } from 'src/stores/tuning-fork'
+import { t } from 'src/boot/i18n'
 import type { Synth, Reverb, Volume, Sequence } from 'tone'
 import { on } from 'events'
 
@@ -71,7 +72,7 @@ export const useTuningFork = () => {
   const startSequence = async () => {
     Loading.show({
       delay: 50,
-      message: 'Loading…',
+      message: t('notify.loading'),
     })
     await Tone.start()
     initTuningFork()

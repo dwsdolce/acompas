@@ -6,6 +6,7 @@ import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/utils/utils'
 import { logger } from 'src/utils/logger'
+import { t } from 'src/boot/i18n'
 import type {
   VolumeOpts,
   DecayOpts,
@@ -20,8 +21,7 @@ import type {
   PatternState,
   instruOpts,
   Players,
-  ExtendedPlayer,
-  InstruSeqs
+  ExtendedPlayer
 } from 'src/utils/types'
 
 // Private variables that can only be used within this file
@@ -90,7 +90,7 @@ const createMetronome = () => {
       loadedPlayers.length = 0
 
       soundsData.forEach(({ name, medias }) => {
-        sounds[name as keyof Sounds] = {} as Sound
+        sounds[name] = {} as Sound
 
         medias.forEach((media, index) => {
           const url = `${path}${media.src}.${audioFormat.value}`
@@ -104,7 +104,7 @@ const createMetronome = () => {
           eighthPlayer.volume.value = media.volume
 
           // Create interface compatible with legacy system
-          sounds[name as keyof Sounds][index] = {
+          sounds[name][index] = {
             quarter: {
               start: (time?: number) => quarterPlayer.start(time),
               connect: (destination: Tone.Channel) => quarterPlayer.connect(destination),
@@ -154,7 +154,7 @@ const createMetronome = () => {
     }
 
     // Don't mess with accents
-    if (store.selectedData?.accents.includes((key) as never)) {
+    if (store.selectedData?.accents.includes(key)) {
       sound?.start(time)
       return
     }
@@ -194,7 +194,7 @@ const createMetronome = () => {
     }
     let playThreshold = 0.98 // 98% chances that the the sound is not played
     // Check if time is a strong beat
-    if (store.selectedData?.accents.includes((note) as never)) {
+    if (store.selectedData?.accents.includes(note)) {
       // if the event is a strong beat, sound occurence will be more probable
       playThreshold = 0.94 // 94% chances that the sound is not played
     }
@@ -220,7 +220,7 @@ const createMetronome = () => {
       store.prestartBeat > 0 &&
       note % 2 == 0
     ) {
-      if (store.selectedData?.accents.includes((note) as never)) {
+      if (store.selectedData?.accents.includes(note)) {
         sounds.click[0].quarter.start(time)
       } else {
         sounds.click[1].quarter.start(time)
@@ -251,7 +251,7 @@ const createMetronome = () => {
         return
       }
 
-      const instru = store.instrument((type as string))
+      const instru = store.instrument(type)
 
       if (type == 'jaleos') {
         if (instru?.enabled) improviseJaleo(note, time, eighthNotes)
@@ -260,18 +260,18 @@ const createMetronome = () => {
 
       // index is a pulsation number, value is the sound number
       if (instru?.enabled && store.selectedPattern && type) {
-        const sequences = store.selectedData.sequences[type as keyof InstruSeqs] as (number | null)[]
+        const sequences = store.selectedData.sequences[type]
 
         sequences.forEach(
           (value: number | null, index: number) => {
             if (!value) return
 
-            const sound: Players = sounds[type as keyof Sounds][value - 1] as Players
+            const sound: Players = sounds[type][value - 1]
 
             if (
               eighthNotes &&
               instru?.eighthNotes &&
-              (index as number) % 2 != 0 &&
+              index % 2 != 0 &&
               note == index
             ) {
               const player = sound[eighthNotes ? 'eighth' : 'quarter']
@@ -284,7 +284,7 @@ const createMetronome = () => {
               } catch (error) {
                 logger.error('Error calling player.start():', error)
               }
-            } else if (!eighthNotes && (index as number) % 2 == 0 && note == index) {
+            } else if (!eighthNotes && index % 2 == 0 && note == index) {
               const player = sound[eighthNotes ? 'eighth' : 'quarter']
               try {
                 if (store.selectedPattern?.improvisation) {
@@ -340,7 +340,7 @@ const createMetronome = () => {
           if (name === 'simple-click') {
             triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
           } else {
-            if (note !== null) triggerEvent(note as number | null)
+            if (note !== null) triggerEvent(note)
           }
           // Offset the visual by the output latency so it matches the *audible*
           // click (compensates Bluetooth/device output delay).
@@ -365,7 +365,7 @@ const createMetronome = () => {
    * initSequences (rebuild), so old sequences aren't leaked on re-init.
    */
   const disposeSequences = () => {
-    forEachValue(sequences as Seqs, (seq: SeqSubdiv) => {
+    forEachValue(sequences, (seq: SeqSubdiv) => {
       forEachValue(seq, (instrus: Seq) => {
         forEachValue(instrus, (s: Tone.Sequence) => {
           // Guard on `disposed` so the helper is idempotent: stop() then
@@ -410,11 +410,11 @@ const createMetronome = () => {
     // Build all sequences
     sequences.quarterNotes = {
       introduction: {
-        prestartBeat: buildSequence(store.selectedData?.name, false, ('prestartBeat' as keyof InstruSeqs) as string, introSeq, false),
-        event: buildSequence(store.selectedPattern?.name, false, ('event' as keyof InstruSeqs) as string, introSeq, false),
+        prestartBeat: buildSequence(store.selectedData?.name, false, 'prestartBeat', introSeq, false),
+        event: buildSequence(store.selectedPattern?.name, false, 'event', introSeq, false),
       },
       loop: instruKeys.reduce((acc: Seq, instru: string) => {
-        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, false, (instru as keyof InstruSeqs) as string, loopSeq, true)
+        acc[instru] = buildSequence(store.selectedPattern?.name, false, instru, loopSeq, true)
         return acc
       }, {})
     }
@@ -422,7 +422,7 @@ const createMetronome = () => {
     sequences.eighthNotes = {
       loop: instruKeys.reduce((acc: Seq, instru: string) => {
         if (instru === 'event') return acc
-        acc[instru as keyof Seq] = buildSequence(store.selectedPattern?.name, true, (instru as keyof InstruSeqs) as string, loopSeq, true)
+        acc[instru] = buildSequence(store.selectedPattern?.name, true, instru, loopSeq, true)
         return acc
       }, {})
     }
@@ -446,7 +446,7 @@ const createMetronome = () => {
     const volumeByInstrument = new Map<string, number>(
       (store.instruments ?? []).map((i: instruOpts) => [i.value, i.volume])
     )
-    forEachValue(sounds as Sounds, (_sound, key: string) => {
+    forEachValue(sounds, (_sound, key: string) => {
       void changeVolume({ instrument: key, volume: volumeByInstrument.get(key) ?? 0 })
     })
   }
@@ -480,7 +480,7 @@ const createMetronome = () => {
         logger.error(error)
         soundsIsLoaded.value = false
         Notify.create({
-          message: 'Failed to load the audio samples !',
+          message: t('notify.loadSamplesFailed'),
           color: 'secondary',
           icon: 'mdi-alert-circle-outline',
         })
@@ -494,7 +494,7 @@ const createMetronome = () => {
   const startSequences = async (): Promise<void> => {
     Loading.show({
       delay: 0,
-      message: 'Initializing audio…',
+      message: t('notify.audioInit'),
     })
 
     try {
@@ -514,17 +514,17 @@ const createMetronome = () => {
           sequences.quarterNotes.introduction?.event?.start(0).stop(offset)
           sequences.quarterNotes.introduction?.prestartBeat?.start(0).stop(offset)
 
-          forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
+          forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
             seq.start(loopStart)
           })
-          forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
+          forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
             seq.start(loopStart)
           })
         } else {
-          forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence) => {
+          forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence) => {
             seq.start(0)
           })
-          forEachValue(sequences.eighthNotes.loop as Seq, (seq: Tone.Sequence) => {
+          forEachValue(sequences.eighthNotes.loop, (seq: Tone.Sequence) => {
             seq.start(0)
           })
         }
@@ -536,7 +536,7 @@ const createMetronome = () => {
       logger.error('Failed to start sequences:', error)
 
       Notify.create({
-        message: 'Failed to start audio sequences. Please try again.',
+        message: t('notify.startSequencesFailed'),
         color: 'negative',
         icon: 'mdi-alert-circle-outline',
         timeout: 3000
@@ -576,14 +576,14 @@ const createMetronome = () => {
     // Do nothing if sequences have not been initialized
     if (typeof sequences.quarterNotes === 'undefined') return
 
-    forEachValue(sequences.quarterNotes.loop as Seq, (seq: Tone.Sequence, type: string) => {
+    forEachValue(sequences.quarterNotes.loop, (seq: Tone.Sequence, type: string) => {
       if (type === 'event' || type === 'prestartBeat' || type === 'click') {
         seq.humanize = false
       } else {
         seq.humanize = humanization
       }
     })
-    forEachValue(sequences.eighthNotes as SeqSubdiv, (seq: SeqSubdiv) => {
+    forEachValue(sequences.eighthNotes, (seq: SeqSubdiv) => {
       forEachValue(seq, (s: Tone.Sequence) => {
         s.humanize = humanization
       })
@@ -596,9 +596,9 @@ const createMetronome = () => {
   const changeVolume = async (payload: VolumeOpts): Promise<void> => {
     try {
       // Update legacy system for compatibility
-      const sound = sounds[payload.instrument as keyof Sounds]
+      const sound = sounds[payload.instrument]
       if (sound) {
-        forEachValue(sound as Sound, (player: Players) => {
+        forEachValue(sound, (player: Players) => {
           if (player.quarter.volume) {
             // Appliquer le volume en combinant defaultVolume + offset demandé
             const baseVolume = player.quarter.defaultVolume || 0
@@ -640,9 +640,8 @@ const createMetronome = () => {
     const supported = await isSupported().catch(() => false)
     if (!supported) {
       Dialog.create({
-        title: 'Update your browser!',
-        message:
-          "Your browser doesn't support one or more technologies used by this app. Please come back with another one or another version of this one.",
+        title: t('notify.browserUnsupported.title'),
+        message: t('notify.browserUnsupported.message'),
         persistent: true
       })
     }

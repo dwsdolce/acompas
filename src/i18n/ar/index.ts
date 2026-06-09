@@ -167,6 +167,8 @@ A Compás متاح بـ 9 لغات لخدمة مجتمع الفلامنكو ال
       wikipediaUrl: 'مقال ويكيبيديا:',
       videoExample: 'مثال فيديو:',
       openLink: 'فتح الرابط',
+      source: 'المصدر: ويكيبيديا',
+      beats: '{count} نبضات',
       disabled: 'هذا الخيار معطل لهذا النمط.'
     },
     searchPattern: {
@@ -307,6 +309,29 @@ A Compás متاح بـ 9 لغات لخدمة مجتمع الفلامنكو ال
     restore: 'استعادة الإعدادات',
     options: 'خيارات الإيقاع',
     settings: 'إعدادات التطبيق'
+  },
+  notify: {
+    loading: 'جارٍ التحميل…',
+    audioInit: 'جارٍ تهيئة الصوت…',
+    loadSamplesFailed: 'فشل تحميل عينات الصوت!',
+    startSequencesFailed: 'فشل بدء تسلسلات الصوت. يرجى المحاولة مرة أخرى.',
+    fetchDataError: 'خطأ في جلب البيانات',
+    oneInstrumentRequired: 'يجب اختيار أداة واحدة على الأقل!',
+    tempo: {
+      verySlow: 'إيقاعك بطيء جدًا',
+      veryFast: 'إيقاعك سريع جدًا',
+      rhythmVerySlow: 'إيقاعك بطيء جدًا',
+      porTientos: 'إيقاعك por tientos',
+      verySlowTientos: 'إيقاعك بطيء جدًا، حتى بالنسبة لـ tientos',
+      tangosRumbas: 'إيقاعك أقرب إلى tangos أو rumbas',
+      porBuleria: 'إيقاعك por bulería',
+      porRumba: 'إيقاعك por rumba',
+      soleaBuleriaAlegria: 'إيقاعك soleá por bulería أو alegría'
+    },
+    browserUnsupported: {
+      title: 'حدّث متصفحك!',
+      message: 'متصفحك لا يدعم واحدة أو أكثر من التقنيات التي يستخدمها هذا التطبيق. يرجى العودة بمتصفح آخر أو بإصدار آخر منه.'
+    }
   },
   sync: {
     title: 'تأخير الصوت/الصورة',

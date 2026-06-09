@@ -187,6 +187,8 @@ Accédez aux options de visualisation via le menu des paramètres. Les changemen
       wikipediaUrl: 'Article Wikipédia :',
       videoExample: 'Exemple vidéo :',
       openLink: 'Ouvrir le lien',
+      source: 'Source : Wikipédia',
+      beats: '{count} temps',
       disabled: 'Cette option est désactivée pour ce motif.'
     },
     searchPattern: {
@@ -400,6 +402,29 @@ Mais c'est le seul moyen d'obtenir les nouvelles fonctionnalités. Si c'est votr
     restore: 'Restaurer les paramètres',
     options: 'Options de rythme',
     settings: 'Paramètres de l\'application'
+  },
+  notify: {
+    loading: 'Chargement…',
+    audioInit: 'Initialisation de l\'audio…',
+    loadSamplesFailed: 'Échec du chargement des échantillons audio !',
+    startSequencesFailed: 'Échec du démarrage des séquences audio. Veuillez réessayer.',
+    fetchDataError: 'Erreur lors de la récupération des données',
+    oneInstrumentRequired: 'Au moins un instrument doit être sélectionné !',
+    tempo: {
+      verySlow: 'Votre tempo est très lent',
+      veryFast: 'Votre tempo est très rapide',
+      rhythmVerySlow: 'Votre rythme est très lent',
+      porTientos: 'Votre tempo est por tientos',
+      verySlowTientos: 'Votre tempo est très lent, même pour des tientos',
+      tangosRumbas: 'Votre tempo est plutôt celui de tangos ou rumbas',
+      porBuleria: 'Votre tempo est por bulería',
+      porRumba: 'Votre tempo est por rumba',
+      soleaBuleriaAlegria: 'Votre tempo est solea por bulería ou alegría'
+    },
+    browserUnsupported: {
+      title: 'Mettez votre navigateur à jour !',
+      message: 'Votre navigateur ne prend pas en charge une ou plusieurs technologies utilisées par cette application. Revenez avec un autre navigateur ou une autre version de celui-ci.'
+    }
   },
   sync: {
     title: 'Décalage audio/visuel',

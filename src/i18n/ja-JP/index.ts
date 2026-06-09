@@ -167,6 +167,8 @@ A Compásは世界のフラメンココミュニティにサービスを提供�
       wikipediaUrl: 'Wikipedia記事：',
       videoExample: 'ビデオ例：',
       openLink: 'リンクを開く',
+      source: '出典：Wikipedia',
+      beats: '{count} 拍',
       disabled: 'このオプションはこのパターンでは無効です。'
     },
     searchPattern: {
@@ -320,6 +322,29 @@ IPアドレスを匿名化します。
     restore: '設定を復元',
     options: 'リズムオプション',
     settings: 'アプリ設定'
+  },
+  notify: {
+    loading: '読み込み中…',
+    audioInit: 'オーディオを初期化中…',
+    loadSamplesFailed: 'オーディオサンプルの読み込みに失敗しました！',
+    startSequencesFailed: 'オーディオシーケンスの開始に失敗しました。もう一度お試しください。',
+    fetchDataError: 'データの取得中にエラーが発生しました',
+    oneInstrumentRequired: '少なくとも1つの楽器を選択する必要があります！',
+    tempo: {
+      verySlow: 'テンポが非常に遅いです',
+      veryFast: 'テンポが非常に速いです',
+      rhythmVerySlow: 'リズムが非常に遅いです',
+      porTientos: 'テンポは por tientos です',
+      verySlowTientos: 'テンポが非常に遅いです（tientos としても遅すぎます）',
+      tangosRumbas: 'テンポはむしろ tangos か rumbas です',
+      porBuleria: 'テンポは por bulería です',
+      porRumba: 'テンポは por rumba です',
+      soleaBuleriaAlegria: 'テンポは soleá por bulería または alegría です'
+    },
+    browserUnsupported: {
+      title: 'ブラウザを更新してください！',
+      message: 'お使いのブラウザは、このアプリで使用されている1つ以上の技術に対応していません。別のブラウザまたは別のバージョンで再度アクセスしてください。'
+    }
   },
   sync: {
     title: '音声と表示のずれ',

@@ -60,7 +60,7 @@ const getNumStyle = (i: number) => {
 }
 
 const getNumClass = computed(() => (i: number) => {
-  const isAccent = selectedData.value.accents.includes(i as never)
+  const isAccent = selectedData.value.accents.includes(i)
   return {
     'text-secondary': isAccent,
     'text-primary': !isAccent

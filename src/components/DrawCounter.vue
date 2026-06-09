@@ -24,7 +24,7 @@ const counter = ref<string | number | null>(null)
 const className = ref<string>('')
 
 const getClass = computed(() => {
-  const isAccent = selectedData.value?.accents.includes((metronomeEvent.value as number) as never)
+  const isAccent = selectedData.value?.accents.includes(metronomeEvent.value as number)
   return {
     'text-primary': !isAccent,
     'text-secondary': isAccent,

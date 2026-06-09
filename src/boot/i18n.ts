@@ -22,21 +22,29 @@ declare module 'vue-i18n' {
 }
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
+const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('acompas-locale') : null
+const browser = (typeof navigator !== 'undefined' && navigator.language) ? navigator.language : 'en-US'
+const available = Object.keys(messages)
+const initial = stored && available.includes(stored)
+  ? stored
+  : (available.includes(browser) ? browser : 'en-US')
+
+export const i18n = createI18n({
+  locale: initial,
+  fallbackLocale: 'en-US',
+  legacy: false,
+  messages,
+})
+
+/**
+ * Global translate helper usable outside of components (Pinia stores,
+ * composables) where `useI18n()` is unavailable. Resolves against the current
+ * locale at call time. For simple key → string lookups only.
+ */
+export const t = (key: string): string =>
+  (i18n.global.t as (k: string) => string)(key)
+
 export default boot(({ app }) => {
-  const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('acompas-locale') : null
-  const browser = (typeof navigator !== 'undefined' && navigator.language) ? navigator.language : 'en-US'
-  const available = Object.keys(messages)
-  const initial = stored && available.includes(stored)
-    ? stored
-    : (available.includes(browser) ? browser : 'en-US')
-
-  const i18n = createI18n({
-    locale: initial,
-    fallbackLocale: 'en-US',
-    legacy: false,
-    messages,
-  })
-
   // Persistance réactive de la locale
   watch(() => i18n.global.locale.value, (val: string) => {
     try { localStorage.setItem('acompas-locale', val) } catch {}

@@ -7,6 +7,7 @@ import soundsData from 'src/assets/data/soundsData'
 import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
+import { t } from 'src/boot/i18n'
 import type {
   numOpts,
   instruOpts,
@@ -102,17 +103,18 @@ export const usePatternStore = defineStore('patterns', () => {
         selectedPattern.value.tempo = value
         changeTempo(value)
 
-        if (selectedData.value && value > selectedData.value.fastTempo) {
+        // fastMessage/slowMessage hold an i18n key (or '' for no warning).
+        if (selectedData.value && value > selectedData.value.fastTempo && selectedData.value.fastMessage) {
           Notify.create({
-            message: selectedData.value.fastMessage,
+            message: t(`notify.tempo.${selectedData.value.fastMessage}`),
             color: 'secondary',
             icon: 'mdi-alert-circle-outline'
           })
         }
 
-        if (selectedData.value && value < selectedData.value.slowTempo) {
+        if (selectedData.value && value < selectedData.value.slowTempo && selectedData.value.slowMessage) {
           Notify.create({
-            message: selectedData.value.slowMessage,
+            message: t(`notify.tempo.${selectedData.value.slowMessage}`),
             color: 'secondary',
             icon: 'mdi-alert-circle-outline'
           })
@@ -341,7 +343,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
     if (!data.value.length) {
       Notify.create({
-        message: 'Error fetching data',
+        message: t('notify.fetchDataError'),
         color: 'negative',
         icon: 'mdi-alert-circle-outline'
       })
@@ -374,7 +376,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
   const initAll = async (contextName: string, patternName: string) => {
     Loading.show({
-      message: 'Loading…',
+      message: t('notify.loading'),
     })
     await initStore()
     await initContext(contextName)
@@ -396,7 +398,7 @@ export const usePatternStore = defineStore('patterns', () => {
   watch(selectedInstruments, (value) => {
     if (value?.length === 0) {
       Notify.create({
-        message: 'At least one instrument must be selected !',
+        message: t('notify.oneInstrumentRequired'),
         color: 'secondary',
         icon: 'mdi-alert-circle-outline'
       })

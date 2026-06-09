@@ -80,8 +80,8 @@ export default [
       { value: 10, label: '2' },
       { value: 11, label: '1' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is por buleria',
+    slowMessage: 'verySlow',
+    fastMessage: 'porBuleria',
     longLabel: 'Alegría',
     doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
       '<p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p>' +
@@ -165,8 +165,8 @@ export default [
       { value: 4, label: '2' },
       { value: 5, label: '1' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: '6 beats Abandolaos',
     doc: '<p>A kind oh 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.</p>',
     places: 'Málaga, Huelva, Extremadura'
@@ -246,8 +246,8 @@ export default [
       { value: 4, label: '2' },
       { value: 5, label: '1' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: '6 beats Bulería',
     doc: 'One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary.</p>' +
       '<p>It can be seen as the first half of a 12 beats bulería.</p>',
@@ -331,8 +331,8 @@ export default [
       { value: 10, label: '2' },
       { value: 11, label: '1' }
     ],
-    slowMessage: 'Your rhythm is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'rhythmVerySlow',
+    fastMessage: 'veryFast',
     longLabel: '12 beats Bulería',
     doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p>' +
       '<p>It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".</p>',
@@ -417,8 +417,8 @@ export default [
       { value: 10, label: '2' },
       { value: 11, label: '1' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: '12 beats Bulería (variation)',
     doc: '<p>In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Buler%C3%ADas',
@@ -500,8 +500,8 @@ export default [
       { value: 10, label: '2' },
       { value: 11, label: '1' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'Fandangos',
     doc: '<p>This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Fandango',
@@ -585,8 +585,8 @@ export default [
       { value: 6, label: '3' },
       { value: 7, label: '2' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'Rumba',
     doc: '<p>Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4.</p>' +
       '<p>There is an accent on the first beat. Remark : our example pattern is made of 2 bars.</p>',
@@ -669,8 +669,8 @@ export default [
       { value: 4, label: '3' },
       { value: 5, label: '2' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'Sevillanas',
     doc: '<p>Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz.</p>' +
       '<p>Remark : our example pattern is made of 2 bars.</p>',
@@ -757,8 +757,8 @@ export default [
       { value: 10, label: '2' },
       { value: 11, label: '·' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'Siguiriya',
     doc: '<p>Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Siguiriyas',
@@ -837,8 +837,8 @@ export default [
       { value: 10, label: '3' },
       { value: 11, label: '2' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is solea por bulería or alegría',
+    slowMessage: 'verySlow',
+    fastMessage: 'soleaBuleriaAlegria',
     longLabel: 'Soleá',
     doc: '<p>Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.</p>',
     wikipediaUrl: 'https://en.wikipedia.org/wiki/Sole%C3%A1',
@@ -911,8 +911,8 @@ export default [
       { value: 4, label: '3' },
       { value: 5, label: '2' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'Tanguillos de Cádiz',
     doc: '<p>Tanguillos are a kind of hybrid rhythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p>' +
       '<p>There is an accent on the first beat and sometimes… on the 2 and a half.</p>' +
@@ -1002,8 +1002,8 @@ export default [
       { value: 6, label: '3' },
       { value: 7, label: '2' }
     ],
-    slowMessage: 'Your tempo is por tientos',
-    fastMessage: 'Your tempo is por rumba',
+    slowMessage: 'porTientos',
+    fastMessage: 'porRumba',
     longLabel: 'Tangos',
     doc: '<p>Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
       '<p>Remark : our example pattern is made of 2 bars.</p>',
@@ -1087,8 +1087,8 @@ export default [
       { value: 6, label: '3' },
       { value: 7, label: '2' }
     ],
-    slowMessage: 'Your tempo is very slow, even for tientos',
-    fastMessage: 'Your tempo is more like tangos or rumbas',
+    slowMessage: 'verySlowTientos',
+    fastMessage: 'tangosRumbas',
     longLabel: 'Tientos',
     doc: '<p>Tientos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p>' +
       '<p>It often ends "por tangos".</p>' +
@@ -1136,8 +1136,8 @@ export default [
     prestartBeats: [
       { value: 0, label: 'Off' }
     ],
-    slowMessage: 'Your tempo is very slow',
-    fastMessage: 'Your tempo is very fast',
+    slowMessage: 'verySlow',
+    fastMessage: 'veryFast',
     longLabel: 'A simple metronome click'
   }
 ] as PatternState[]

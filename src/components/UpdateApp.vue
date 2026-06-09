@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { Loading, Platform } from 'quasar'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
@@ -10,6 +11,7 @@ import { AppRestart } from 'src/plugins/app-restart'
 import { Capacitor } from '@capacitor/core'
 import { logger } from 'src/utils/logger'
 
+const { t } = useI18n()
 const router = useRouter()
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
@@ -24,7 +26,7 @@ const {
 
 const handleUpdateApp = async () => {
   Loading.show({
-    message: 'Loading…',
+    message: t('notify.loading'),
   })
   localStorage.clear()
   isUpToDatev4.value = true

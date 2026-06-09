@@ -187,6 +187,8 @@ Accede a las opciones de visualización a través del menú de configuración. L
       wikipediaUrl: 'Artículo de Wikipedia:',
       videoExample: 'Ejemplo de video:',
       openLink: 'Abrir enlace',
+      source: 'Fuente: Wikipedia',
+      beats: '{count} tiempos',
       disabled: 'Esta opción está deshabilitada para este patrón.'
     },
     searchPattern: {
@@ -400,6 +402,29 @@ Pero esta es la única forma de obtener las nuevas características. Si es tu pr
     restore: 'Restaurar configuración',
     options: 'Opciones de ritmo',
     settings: 'Configuración de la aplicación'
+  },
+  notify: {
+    loading: 'Cargando…',
+    audioInit: 'Inicializando el audio…',
+    loadSamplesFailed: '¡Error al cargar las muestras de audio!',
+    startSequencesFailed: 'Error al iniciar las secuencias de audio. Inténtalo de nuevo.',
+    fetchDataError: 'Error al obtener los datos',
+    oneInstrumentRequired: '¡Debe seleccionarse al menos un instrumento!',
+    tempo: {
+      verySlow: 'Tu tempo es muy lento',
+      veryFast: 'Tu tempo es muy rápido',
+      rhythmVerySlow: 'Tu ritmo es muy lento',
+      porTientos: 'Tu tempo es por tientos',
+      verySlowTientos: 'Tu tempo es muy lento, incluso para tientos',
+      tangosRumbas: 'Tu tempo es más bien de tangos o rumbas',
+      porBuleria: 'Tu tempo es por bulería',
+      porRumba: 'Tu tempo es por rumba',
+      soleaBuleriaAlegria: 'Tu tempo es soleá por bulería o alegría'
+    },
+    browserUnsupported: {
+      title: '¡Actualiza tu navegador!',
+      message: 'Tu navegador no es compatible con una o más tecnologías utilizadas por esta aplicación. Vuelve con otro navegador u otra versión de este.'
+    }
   },
   sync: {
     title: 'Retardo audio/visual',

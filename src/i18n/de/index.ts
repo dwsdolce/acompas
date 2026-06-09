@@ -167,6 +167,8 @@ Wählen Sie die Visualisierung, die am besten zu Ihrem Übungsstil passt:
       wikipediaUrl: 'Wikipedia-Artikel:',
       videoExample: 'Video-Beispiel:',
       openLink: 'Link öffnen',
+      source: 'Quelle: Wikipedia',
+      beats: '{count} Schläge',
       disabled: 'Diese Option ist für dieses Muster deaktiviert.'
     },
     searchPattern: {
@@ -343,6 +345,29 @@ Aber das ist der einzige Weg, um die neuen Funktionen zu erhalten. Wenn es Ihre 
     restore: 'Einstellungen wiederherstellen',
     options: 'Rhythmus-Optionen',
     settings: 'App-Einstellungen'
+  },
+  notify: {
+    loading: 'Wird geladen…',
+    audioInit: 'Audio wird initialisiert…',
+    loadSamplesFailed: 'Audio-Samples konnten nicht geladen werden!',
+    startSequencesFailed: 'Audiosequenzen konnten nicht gestartet werden. Bitte erneut versuchen.',
+    fetchDataError: 'Fehler beim Abrufen der Daten',
+    oneInstrumentRequired: 'Es muss mindestens ein Instrument ausgewählt sein!',
+    tempo: {
+      verySlow: 'Dein Tempo ist sehr langsam',
+      veryFast: 'Dein Tempo ist sehr schnell',
+      rhythmVerySlow: 'Dein Rhythmus ist sehr langsam',
+      porTientos: 'Dein Tempo ist por tientos',
+      verySlowTientos: 'Dein Tempo ist sehr langsam, sogar für tientos',
+      tangosRumbas: 'Dein Tempo ist eher das von tangos oder rumbas',
+      porBuleria: 'Dein Tempo ist por bulería',
+      porRumba: 'Dein Tempo ist por rumba',
+      soleaBuleriaAlegria: 'Dein Tempo ist soleá por bulería oder alegría'
+    },
+    browserUnsupported: {
+      title: 'Aktualisiere deinen Browser!',
+      message: 'Dein Browser unterstützt eine oder mehrere von dieser App verwendete Technologien nicht. Bitte komm mit einem anderen Browser oder einer anderen Version davon zurück.'
+    }
   },
   sync: {
     title: 'Audio-/Bild-Verzögerung',
