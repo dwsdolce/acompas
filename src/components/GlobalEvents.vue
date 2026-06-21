@@ -47,9 +47,9 @@ GlobalEvents(
   @keyup.space.prevent.exact="handleSpace",
   @keydown.up.prevent.exact="handleUp",
   @keydown.down.prevent.exact="handleDown",
-  @keyup.prevent.shift.up.exact="tempo.value = tempo.value + 2",
-  @keyup.prevent.shift.down.exact="tempo.value = tempo.value - 2",
-  @keyup.prevent.alt.shift.up.exact="tempo.value = tempo.value + 5",
-  @keyup.prevent.alt.shift.down.exact="tempo.value = tempo.value - 5"
+  @keyup.prevent.shift.up.exact="tempo = tempo + 2",
+  @keyup.prevent.shift.down.exact="tempo = tempo - 2",
+  @keyup.prevent.alt.shift.up.exact="tempo = tempo + 5",
+  @keyup.prevent.alt.shift.down.exact="tempo = tempo - 5"
 )
 </template>
