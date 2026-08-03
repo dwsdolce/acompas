@@ -21,12 +21,12 @@ let mainWindow: BrowserWindow | undefined
 //   global.__statics = __dirname
 // }
 
-let isRemoteInitialized = false;
+let isRemoteInitialized = false
 
 function initializeRemote() {
   if (!isRemoteInitialized) {
-    initialize();
-    isRemoteInitialized = true;
+    initialize()
+    isRemoteInitialized = true
   }
 }
 

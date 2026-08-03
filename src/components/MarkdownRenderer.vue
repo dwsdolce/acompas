@@ -10,7 +10,7 @@ const props = defineProps<{
 const html = computed(() => {
   const parsedContent = Array.isArray(props.content)
     ? props.content.join('\n')
-    : props.content;
+    : props.content
   return DOMPurify.sanitize(marked.parse(parsedContent) as string)
 })
 </script>

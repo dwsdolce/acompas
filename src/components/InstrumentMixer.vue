@@ -14,7 +14,7 @@ const {
   selectInstruments
 } = patternStore
 
-const props = defineProps(['slug'])
+const props = defineProps<{ slug: string }>()
 
 const toggleBtn = ref<QToggle | null>(null)
 const sliderBtn = ref<QSlider | null>(null)
