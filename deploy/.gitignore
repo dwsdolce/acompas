@@ -1,0 +1,4 @@
+# Secrets and runtime data — never commit these.
+.env
+spa/
+backups/

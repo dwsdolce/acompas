@@ -1,0 +1,135 @@
+# A Compás — production stack
+#
+# Services:
+#   traefik           reverse proxy + automatic Let's Encrypt TLS
+#   app               nginx serving the static SPA (dist/spa) at acompas.org
+#   matomo            analytics (matomo.acompas.org)
+#   matomo-db         MariaDB for Matomo (internal only)
+#   matomo-db-backup  daily gzipped mysqldump with retention
+#
+# Copy .env.example to .env and fill in the secrets before `docker compose up -d`.
+# See README.md in this folder for the full deployment procedure.
+
+networks:
+  # Public-facing network: only Traefik and the things it routes to.
+  proxy:
+  # Private network: Matomo <-> its database <-> backup. No internet exposure.
+  matomo_internal:
+
+volumes:
+  traefik_acme:
+  matomo_app:
+  matomo_db:
+
+services:
+  traefik:
+    image: traefik:v3.3
+    restart: unless-stopped
+    command:
+      # Entry points
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Redirect all HTTP to HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      # Docker provider — only expose containers that opt in with a label
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=proxy"
+      # Let's Encrypt (HTTP-01 challenge)
+      - "--certificatesresolvers.le.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.le.acme.storage=/acme/acme.json"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      # Dashboard/API stays OFF (no --api.insecure). Logs.
+      - "--log.level=INFO"
+      - "--accesslog=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik_acme:/acme"
+    networks:
+      - proxy
+
+  app:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      # The built SPA (rsync dist/spa here as ./spa). Read-only.
+      - "./spa:/usr/share/nginx/html:ro"
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      # Serve both apex and www, on HTTPS with a Let's Encrypt cert
+      - "traefik.http.routers.acompas.rule=Host(`${APP_DOMAIN}`) || Host(`www.${APP_DOMAIN}`)"
+      - "traefik.http.routers.acompas.entrypoints=websecure"
+      - "traefik.http.routers.acompas.tls.certresolver=le"
+      # Redirect www.acompas.org -> acompas.org
+      - "traefik.http.routers.acompas.middlewares=www-redirect"
+      - "traefik.http.middlewares.www-redirect.redirectregex.regex=^https://www\\.(.*)"
+      - "traefik.http.middlewares.www-redirect.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.www-redirect.redirectregex.permanent=true"
+      - "traefik.http.services.acompas.loadbalancer.server.port=80"
+
+  matomo:
+    image: matomo:apache
+    restart: unless-stopped
+    environment:
+      MATOMO_DATABASE_HOST: matomo-db
+      MATOMO_DATABASE_ADAPTER: mysql
+      MATOMO_DATABASE_TABLES_PREFIX: matomo_
+      MATOMO_DATABASE_DBNAME: ${MATOMO_DB_NAME}
+      MATOMO_DATABASE_USERNAME: ${MATOMO_DB_USER}
+      MATOMO_DATABASE_PASSWORD: ${MATOMO_DB_PASSWORD}
+    volumes:
+      - "matomo_app:/var/www/html"
+    networks:
+      - proxy
+      - matomo_internal
+    depends_on:
+      - matomo-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.matomo.rule=Host(`${MATOMO_DOMAIN}`)"
+      - "traefik.http.routers.matomo.entrypoints=websecure"
+      - "traefik.http.routers.matomo.tls.certresolver=le"
+      - "traefik.http.services.matomo.loadbalancer.server.port=80"
+
+  matomo-db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    command:
+      - "--max-allowed-packet=64MB"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    environment:
+      MARIADB_DATABASE: ${MATOMO_DB_NAME}
+      MARIADB_USER: ${MATOMO_DB_USER}
+      MARIADB_PASSWORD: ${MATOMO_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MATOMO_DB_ROOT_PASSWORD}
+    volumes:
+      - "matomo_db:/var/lib/mysql"
+    networks:
+      - matomo_internal
+
+  matomo-db-backup:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      DB_HOST: matomo-db
+      DB_NAME: ${MATOMO_DB_NAME}
+      DB_USER: ${MATOMO_DB_USER}
+      DB_PASSWORD: ${MATOMO_DB_PASSWORD}
+      BACKUP_INTERVAL: ${BACKUP_INTERVAL:-86400}   # seconds between dumps (default 24h)
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}     # retention in days
+    entrypoint: ["/bin/sh", "/usr/local/bin/backup.sh"]
+    volumes:
+      - "./backup/backup.sh:/usr/local/bin/backup.sh:ro"
+      - "./backups:/backups"
+    networks:
+      - matomo_internal
+    depends_on:
+      - matomo-db

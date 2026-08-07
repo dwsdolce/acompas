@@ -1,6 +1,6 @@
 # A Compás
 
-![Version](https://img.shields.io/badge/version-4.1.3-blue)
+![Version](https://img.shields.io/badge/version-4.2.2-blue)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
 A flamenco metronome available on multiple platforms:
@@ -188,6 +188,8 @@ export JAVA_HOME=/usr/lib/jvm/jdk-17.0.xxx-oracle-x64
 export PATH=$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$JAVA_HOME/bin:$PATH
 ```
 
+#### Building the app
+
 Here are the commands for building / running the Android app :
 
 ``` bash
@@ -195,14 +197,82 @@ Here are the commands for building / running the Android app :
 cd /path/to/acompas
 quasar dev -m capacitor -T android
 
-# Build android apk in production mode
+# Build android apk in production mode (signed release APK)
+cd /path/to/acompas
+quasar build -m capacitor -T android
+```
+
+The signed release **APK** is written to:
+
+```
+dist/capacitor/android/apk/release/app-release.apk
+```
+
+Signing uses `src-capacitor/android/keystore.properties` (keystore path,
+alias and passwords). If that file is missing, the build produces an
+*unsigned* APK instead.
+
+#### Generating the AAB for the Play Store
+
+Google Play requires an **AAB** (Android App Bundle), not an APK.
+
+> ⚠️ The `--aab` flag of `quasar build` is **not honored** by the version of
+> `@quasar/app-vite` used here (it silently runs `assembleRelease` and produces
+> an APK). Generate the bundle directly with Gradle instead:
+
+``` bash
+# First sync the freshly built web assets into the Android project
 cd /path/to/acompas
 quasar build -m capacitor -T android
 
-# Build AAB for production
-cd /path/to/acompas
-quasar build -m capacitor -T android --aab
+# Then build the signed release bundle
+cd src-capacitor/android
+./gradlew bundleRelease
 ```
+
+The signed release **AAB** is written to:
+
+```
+src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
+```
+
+`versionName` and `versionCode` are derived automatically from the root
+`package.json` `version` (see `src-capacitor/android/app/build.gradle`), so bump
+the version there once and both platforms follow. Google Play rejects a
+`versionCode` that has already been published, so always increase the version
+before building a release you intend to upload.
+
+#### Installing / testing on a device or emulator (adb)
+
+An **AAB cannot be installed directly** on a device — use the **APK** above for
+on-device testing.
+
+``` bash
+# List connected devices/emulators (each with its serial)
+adb devices
+
+# Install (or reinstall, keeping data) the release APK
+adb install -r dist/capacitor/android/apk/release/app-release.apk
+
+# If several devices are connected, target one explicitly with -s <serial>
+adb -s <serial> install -r dist/capacitor/android/apk/release/app-release.apk
+```
+
+Common issues:
+
+- **`INSTALL_FAILED_UPDATE_INCOMPATIBLE`** — a copy signed with a different key
+  (e.g. the Play Store build) is already installed. Uninstall it first (this
+  wipes the app's local data), then install again:
+  ```bash
+  adb uninstall audio.acompas.app
+  ```
+- **Device not listed** — enable *Developer options › USB debugging* on the
+  phone, accept the "Allow USB debugging?" prompt, set the USB mode to *File
+  transfer (MTP)*, and use a data-capable cable. A quick `adb kill-server &&
+  adb start-server` also helps.
+
+Alternatively, from Android Studio you can drag-and-drop the `.apk` onto a
+running emulator, or open `src-capacitor/android` as a Gradle project and run it.
 
 ### iOS
 #### Setup

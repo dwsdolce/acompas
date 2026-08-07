@@ -1,10 +1,8 @@
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { Platform } from 'quasar'
-import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from 'src/stores/session'
 import { usePatternStore } from 'src/stores/patterns'
-import { on } from 'events'
 
 declare global {
   interface Window {

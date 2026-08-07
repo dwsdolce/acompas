@@ -15,7 +15,7 @@ const { configure } = require('quasar/wrappers')
 const path = require('path')
 
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     // eslint: {
     //   // fix: true,
@@ -66,7 +66,11 @@ module.exports = configure(function (/* ctx */) {
         node: 'node20'
       },
 
-      vueRouterMode: 'history', // available values: 'hash', 'history'
+      // Web (acompas.org) uses history mode with server rewrites.
+      // Capacitor/Electron serve from a local root (capacitor://localhost, file://),
+      // where a non-root history route breaks relative asset resolution (white
+      // screen on 404 of index.*.js/css). Hash mode keeps the base at root there.
+      vueRouterMode: (ctx.mode.capacitor || ctx.mode.electron) ? 'hash' : 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       vueDevtools: true,
       // vueOptionsAPI: false,
