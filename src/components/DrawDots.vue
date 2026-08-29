@@ -84,10 +84,13 @@ const accentScale = 1.5
 const pulseScale = 0.65
 const subScale = 0.4
 
-// Accents keep the app's brand red; everything else is blue. The blue is
-// darkened in light mode, where the lighter shade washes out on white.
+// Accents take the context's own colour, everything else a neutral grey.
+// Grey rather than a second hue because --q-primary changes per rhythm
+// context — red for flamenco, but light-blue for Fundamental Global and teal
+// for Ternary African, either of which would collide with a coloured second
+// tier and leave size as the only cue. Grey contrasts with all five.
 const accentColor = 'var(--q-primary)'
-const beatColor = computed(() => (isDarkMode.value ? '#42a5f5' : '#1565c0'))
+const beatColor = computed(() => (isDarkMode.value ? '#bdbdbd' : '#616161'))
 
 const isAccent = (i: number) => selectedData.value?.accents?.includes(i) ?? false
 const isBeat = (i: number) => (beatLabels.value?.[i] ?? null) !== null
