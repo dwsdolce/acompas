@@ -28,6 +28,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
   const {
     metronomeEvent,
+    metronomeSubEvent,
     getContext,
     reinitialize,
     initSequences,
@@ -198,6 +199,17 @@ export const usePatternStore = defineStore('patterns', () => {
 
   const beatLabels = computed(() =>
     selectedData.value?.sequences?.beatLabels
+  )
+
+  /**
+   * True when at least one enabled instrument is playing the off-beat
+   * subdivisions. Visualizations use it to decide whether to draw the
+   * subdivision layer, which is noise when nothing is playing it.
+   */
+  const hasEighthNotes = computed(() =>
+    selectedPattern.value?.instruments?.some(
+      (i: instruOpts) => (i?.enabled ?? false) && (i?.eighthNotes ?? false)
+    ) ?? false
   )
 
   // *****************************************
@@ -423,6 +435,8 @@ export const usePatternStore = defineStore('patterns', () => {
   return {
     data,
     metronomeEvent,
+    metronomeSubEvent,
+    hasEighthNotes,
     isPlaying,
     patterns,
     contexts,

@@ -20,6 +20,8 @@ const {
   selectedContext,
   selectedData,
   metronomeEvent,
+  metronomeSubEvent,
+  hasEighthNotes,
   beatLabels
 } = storeToRefs(patternStore)
 
@@ -70,12 +72,56 @@ const fontSize = computed(() => {
   }
 })
 
-const dotStyle = computed(() => (n: number) => {
+// A slot is one of three things, and each reads differently:
+//   accent — a stressed beat, listed in the pattern's `accents`
+//   beat   — a counted beat, i.e. one carrying a label
+//   sub    — an off-beat subdivision, whose label is null
+// Accents were originally distinguished by colour alone (primary vs
+// secondary), but those are two shades of the same red and are
+// indistinguishable at this size. Hue, size and opacity now all carry the
+// distinction, so it survives a viewer who can't separate red from blue.
+const accentScale = 1.5
+const pulseScale = 0.65
+const subScale = 0.4
+
+// Accents keep the app's brand red; everything else is blue. The blue is
+// darkened in light mode, where the lighter shade washes out on white.
+const accentColor = 'var(--q-primary)'
+const beatColor = computed(() => (isDarkMode.value ? '#42a5f5' : '#1565c0'))
+
+const isAccent = (i: number) => selectedData.value?.accents?.includes(i) ?? false
+const isBeat = (i: number) => (beatLabels.value?.[i] ?? null) !== null
+
+// An even slot carrying no label is still part of the pulse grid the
+// instruments play — the compás just doesn't count it. Siguiriya is the case
+// that matters: its 12 pulses are counted as 5 uneven beats (2+2+3+3+2), so
+// seven of the twelve strokes you hear have no label. Draw them, or those
+// strokes sound with nothing happening on screen. For every other pattern
+// each even slot is labelled, so this tier is empty and nothing changes.
+const isPulse = (i: number) => !isBeat(i) && i % 2 === 0
+
+// Odd slots are off-beat subdivisions: reserved-but-hidden unless something
+// is actually playing them, so the beat spacing never shifts.
+const isHidden = (i: number) => !isBeat(i) && !isPulse(i) && !hasEighthNotes.value
+
+const dotStyle = computed(() => (i: number) => {
+  const base = dotSize.value / 2
+  const max = base * accentScale
+  const size = isAccent(i)
+    ? max
+    : isBeat(i)
+      ? base
+      : isPulse(i)
+        ? base * pulseScale
+        : base * subScale
   return {
-    width: dotSize.value / 2 + 'px',
-    height: dotSize.value / 2 + 'px',
+    width: size + 'px',
+    height: size + 'px',
     borderRadius: borderRadius.value + '%',
-    marginTop: dotSize.value / 2 + 'px'
+    // Keep every dot on one centre line despite the differing diameters.
+    marginTop: dotSize.value / 2 + (max - size) / 2 + 'px',
+    backgroundColor: isAccent(i) ? accentColor : beatColor.value,
+    opacity: isAccent(i) ? 1 : isBeat(i) ? 0.9 : isPulse(i) ? 0.6 : 0.4
   }
 })
 
@@ -88,16 +134,17 @@ const nbStyle = computed(() => {
   }
 })
 
-const animateDot = (index: number) => {
+const animateDot = (index: number, scale: number, withLabel: boolean) => {
   anime({
     targets: dots.value[index],
     scale: [
       { value: 1, duration: 0 },
-      { value: 3, duration: 1000 }
+      { value: scale, duration: 1000 }
     ],
     direction: 'reverse',
     easing: 'easeInSine'
   })
+  if (!withLabel) return
   anime({
     targets: nbs.value[index],
     opacity: [
@@ -110,7 +157,12 @@ const animateDot = (index: number) => {
 }
 
 watch(metronomeEvent, (v) => {
-  if (v !== null) animateDot(v)
+  if (v !== null) animateDot(v, 3, true)
+})
+
+// Subdivisions pulse smaller than counted beats, and carry no label to fade.
+watch(metronomeSubEvent, (v) => {
+  if (v !== null && hasEighthNotes.value) animateDot(v, 2, false)
 })
 
 // make sure to reset the refs before each update
@@ -128,10 +180,9 @@ onBeforeUpdate(() => {
     :key="i"
   )
     span(
-      :style="dotStyle(beat)",
-      color="primary",
+      :style="dotStyle(i)",
       :ref="el => { dots[i] = el }",
-      :class="['shadow-1', `dot-${i}`, `${beat === null ? 'invisible' : ''}`, `bg-${selectedData?.accents.includes(i) ? 'secondary' : 'primary'}`]"
+      :class="['shadow-1', `dot-${i}`, isHidden(i) ? 'invisible' : '']"
     ).item-center.q-mb-md
     span(
       v-if="selectedPattern && selectedPattern.name !== 'simple-click'",

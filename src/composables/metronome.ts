@@ -43,6 +43,11 @@ const createMetronome = () => {
   const reverbDecay = ref<number>(0.3)
   const soundsIsLoaded = ref<boolean>(false)
   const metronomeEvent = ref<number | null>(null)
+  // Subdivision (off-beat) hits are published separately from the counted
+  // beats above: the counter and clock visualizations track only counted
+  // beats, so folding subdivisions into `metronomeEvent` would drive them
+  // to positions that have no label.
+  const metronomeSubEvent = ref<number | null>(null)
   const reverb = new Tone.Reverb({
     decay: reverbDecay.value,
     preDelay: 0,
@@ -164,6 +169,10 @@ const createMetronome = () => {
 
   const triggerEvent = (payload: number | null) => {
     metronomeEvent.value = payload
+  }
+
+  const triggerSubEvent = (payload: number | null) => {
+    metronomeSubEvent.value = payload
   }
 
   /**
@@ -364,13 +373,20 @@ const createMetronome = () => {
 
       // Call animation on event time.
       // The 'event' sequence is used to trigger events which will trigger UI modifications
-      if (type === ('event') && !eighthNotes && note % 2 === 0) {
+      // The quarter-note 'event' sequence marks the counted beats (even slots);
+      // the eighth-note one marks the subdivisions between them (odd slots).
+      const isBeat = type === 'event' && !eighthNotes && note % 2 === 0
+      const isSubdivision = type === 'event' && eighthNotes && note % 2 !== 0
+
+      if (isBeat || isSubdivision) {
         Tone.Draw.schedule(async() => {
           // Animation triggered from store mutation, invoked close to AudioContext time
           if (name === 'simple-click') {
-            triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
-          } else {
-            if (note !== null) triggerEvent(note)
+            // simple-click alternates a single dot and has no subdivisions
+            if (isBeat) triggerEvent(metronomeEvent.value === 0 ? 2 : 0)
+          } else if (note !== null) {
+            if (isSubdivision) triggerSubEvent(note)
+            else triggerEvent(note)
           }
           // Offset the visual by the output latency so it matches the *audible*
           // click (compensates Bluetooth/device output delay).
@@ -451,7 +467,6 @@ const createMetronome = () => {
 
     sequences.eighthNotes = {
       loop: instruKeys.reduce((acc: Seq, instru: string) => {
-        if (instru === 'event') return acc
         acc[instru] = buildSequence(store.selectedPattern?.name, true, instru, loopSeq, true)
         return acc
       }, {})
@@ -583,6 +598,7 @@ const createMetronome = () => {
     disposeSequences()
     getTransport().stop()
     triggerEvent(null)
+    triggerSubEvent(null)
   }
 
   /**
@@ -688,6 +704,8 @@ const createMetronome = () => {
     // Basic audio functions
     loadSounds,
     triggerEvent,
+    triggerSubEvent,
+    metronomeSubEvent,
     improvise,
     improviseJaleo,
     triggerPrestartBeatClick,
