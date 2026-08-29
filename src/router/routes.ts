@@ -79,12 +79,4 @@ const routes: RouteRecordRaw[] = [
   }
 ]
 
-// patternsData.forEach((pattern: PatternState) => {
-//   routes[0].children?.push({
-//     path: pattern.name,
-//     name: pattern.name,
-//     component: () => import('pages/MainPage.vue'),
-//   })
-// })
-
 export default routes
