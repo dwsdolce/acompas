@@ -5,7 +5,7 @@ import soundsData from 'src/assets/data/soundsData'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 import { forEachValue } from 'src/utils/utils'
-import { logger } from 'src/utils/logger'
+import { logger, describeError } from 'src/utils/logger'
 import { t } from 'src/boot/i18n'
 import type {
   VolumeOpts,
@@ -89,17 +89,47 @@ const createMetronome = () => {
       loadedPlayers.forEach(player => player.dispose())
       loadedPlayers.length = 0
 
+      // Decode every distinct sample up front, then build players from the
+      // resulting AudioBuffers instead of letting each Tone.Player fetch its
+      // own URL.
+      //
+      // Two reasons. First, Capacitor's iOS scheme handler answers a request
+      // for a media extension (flac, mp3, mp4, wav, ...) with a bare
+      // URLResponse rather than an HTTPURLResponse, so fetch() reports status
+      // 0, `response.ok` is false, and Tone's loader fails with "could not
+      // load url". Requesting an explicit byte range takes the handler's range
+      // branch, which does answer with a proper 206 HTTPURLResponse. Ordinary
+      // HTTP servers answer `bytes=0-` with a 206 too, so the same path works
+      // on the web and in Electron.
+      //
+      // Second, each media is used by both a quarter- and an eighth-note
+      // player; decoding once and sharing the buffer halves the work.
+      const decoded = new Map<string, AudioBuffer>()
+      const urls = [...new Set(
+        soundsData.flatMap(({ medias }) =>
+          medias.map(media => `${path}${media.src}.${audioFormat.value}`))
+      )]
+
+      await Promise.all(urls.map(async (url) => {
+        const response = await fetch(url, { headers: { Range: 'bytes=0-' } })
+        if (!response.ok) {
+          throw new Error(`could not load ${url}: HTTP ${response.status}`)
+        }
+        decoded.set(url, await Tone.getContext().decodeAudioData(await response.arrayBuffer()))
+      }))
+
       soundsData.forEach(({ name, medias }) => {
         sounds[name] = {} as Sound
 
         medias.forEach((media, index) => {
           const url = `${path}${media.src}.${audioFormat.value}`
+          const buffer = decoded.get(url) as AudioBuffer
 
-          const quarterPlayer = new Tone.Player(url).connect(quarterChannel)
+          const quarterPlayer = new Tone.Player(buffer).connect(quarterChannel)
           loadedPlayers.push(quarterPlayer)
           quarterPlayer.volume.value = media.volume
 
-          const eighthPlayer = new Tone.Player(url).connect(eighthChannel)
+          const eighthPlayer = new Tone.Player(buffer).connect(eighthChannel)
           loadedPlayers.push(eighthPlayer)
           eighthPlayer.volume.value = media.volume
 
@@ -127,7 +157,7 @@ const createMetronome = () => {
       logger.log('Original sound system loaded successfully')
       logger.log('Loaded sounds:', sounds)
     } catch (error) {
-      logger.error('Error in loadSounds:', error)
+      logger.error('Error in loadSounds:', describeError(error))
       throw error
     }
   }
@@ -282,7 +312,7 @@ const createMetronome = () => {
                   player.start(time)
                 }
               } catch (error) {
-                logger.error('Error calling player.start():', error)
+                logger.error('Error calling player.start():', describeError(error))
               }
             } else if (!eighthNotes && index % 2 == 0 && note == index) {
               const player = sound[eighthNotes ? 'eighth' : 'quarter']
@@ -293,7 +323,7 @@ const createMetronome = () => {
                   player.start(time)
                 }
               } catch (error) {
-                logger.error('Error calling player.start():', error)
+                logger.error('Error calling player.start():', describeError(error))
               }
             }
           }
@@ -477,7 +507,7 @@ const createMetronome = () => {
         return true
       })
       .catch((error) => {
-        logger.error(error)
+        logger.error('Failed to load samples:', describeError(error))
         soundsIsLoaded.value = false
         Notify.create({
           message: t('notify.loadSamplesFailed'),
@@ -533,7 +563,7 @@ const createMetronome = () => {
       logger.log('Sequences started successfully')
     } catch (error) {
       Loading.hide()
-      logger.error('Failed to start sequences:', error)
+      logger.error('Failed to start sequences:', describeError(error))
 
       Notify.create({
         message: t('notify.startSequencesFailed'),

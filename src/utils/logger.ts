@@ -20,3 +20,14 @@ export const logger = {
   warn: devOnly(console.warn.bind(console)),
   error: console.error.bind(console)
 }
+
+/**
+ * Render an unknown thrown value as something a JSON-serializing log sink can
+ * actually show. Capacitor's native console bridge stringifies its arguments,
+ * and `Error`'s `name`/`message`/`stack` are non-enumerable, so passing an
+ * Error straight to `logger.error` arrives in the Xcode/Android log as `{}`.
+ */
+export const describeError = (e: unknown): unknown =>
+  e instanceof Error
+    ? { name: e.name, message: e.message, ...(e.stack ? { stack: e.stack } : {}) }
+    : e
