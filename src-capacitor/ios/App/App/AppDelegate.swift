@@ -1,5 +1,6 @@
 import UIKit
 import Capacitor
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,8 +8,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        configureAudioSession()
         return true
+    }
+
+    /// A WKWebView with no audio session configured inherits the *ambient*
+    /// category, which iOS silences whenever the device is in silent mode.
+    /// That is reasonable for incidental sounds and wrong for a metronome:
+    /// the app goes quiet with nothing on screen to explain why, while music
+    /// keeps playing because media apps declare `.playback` and are exempt.
+    ///
+    /// `.mixWithOthers` keeps whatever the user is already listening to
+    /// audible, so the metronome can be played over a track rather than
+    /// stopping it.
+    private func configureAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try session.setActive(true)
+        } catch {
+            // Not fatal: audio still works with the default session on a
+            // device that is not muted.
+            CAPLog.print("Could not configure the audio session: \(error)")
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
