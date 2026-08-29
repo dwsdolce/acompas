@@ -3,11 +3,21 @@ require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
 platform :ios, '14.0'
 use_frameworks!
 
-# workaround to avoid Xcode caching of Pods that requires
-# Product -> Clean Build Folder after new Cordova plugins installed
-# Requires CocoaPods 1.6 or newer
-install! 'cocoapods', :disable_input_output_paths => true
+# The upstream Capacitor template sets
+#   install! 'cocoapods', :disable_input_output_paths => true
+# as a workaround for stale Pods caching after installing new *Cordova*
+# plugins. This project uses none, and the setting strips the input/output
+# file lists off the "[CP] Embed Pods Frameworks" phase, which makes Xcode
+# re-run it on every build and warn about it. Left at the CocoaPods default.
 
+# CapacitorCordova's CDVWebViewProcessPoolFactory.h uses WKProcessPool, which
+# Apple deprecated in iOS 15, so every build reports two deprecation warnings.
+# It is upstream Capacitor code we do not call. Neither :inhibit_warnings nor
+# inhibit_all_warnings! silences it: the warning is emitted while precompiling
+# the Cordova Clang module for its *consumers*, which CocoaPods' warning
+# settings do not reach. Suppressing it would mean -Wno-deprecated-declarations
+# on the App target, which would also hide deprecations in our own code. Left
+# visible on purpose; harmless, and it goes away when upstream fixes the header.
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
