@@ -41,26 +41,67 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 
 ## Cloning and building the source code
 
-Before anything, you need Node.js installed on your machine (version 14.19+, 16+, 18+, 20+ or 22+).
-**Recommended: Node.js 20.x or later** for best compatibility.
+Before anything, you need Node.js installed on your machine (version 14.19 or
+later). **Recommended: Node.js 22.x LTS**, which is the newest version the
+toolchain has been exercised against in anger. Newer releases (24, 26) build
+the web target fine, but the Electron and Capacitor targets are less well
+tested there.
 
 See the nodejs.org [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
 
-You also need to enable yarn after installing the nodejs package :
+This project uses **yarn 1.22.22**, pinned in the `packageManager` field of
+`package.json`. Node.js does not ship a `yarn` command, so you have to add one
+before you can run `yarn install`. Pick either option below — you only need to do
+this once, after which `yarn` is available in your shell.
+
+**Option A — Corepack (recommended).** Corepack is a shim that reads the
+`packageManager` field and automatically runs the exact yarn version this
+project expects, so you cannot end up on a mismatched one:
+
 ```bash
 corepack enable
 ```
 
-You only need to run the previous command once and the "yarn" command will
-be added to your shell.
+Node.js 16.9 through 24 bundle Corepack, so that command just works. It was
+unbundled in Node.js 25, so on newer versions install it first:
+
+```bash
+npm install -g corepack
+corepack enable
+```
+
+If `corepack enable` reports a permission error, it is trying to write the
+shims into Node's install directory — rerun it with `sudo`, or use Option B.
+
+**Option B — install yarn directly.** Simpler, but nothing keeps you in sync
+with the pinned version:
+
+```bash
+npm install -g yarn
+```
+
+Either way, check it worked before continuing:
+
+```bash
+yarn --version   # 1.22.22
+```
 
 ### Install requirements
 
 ``` bash
 sudo npm install -g @quasar/cli
-sudo npm install -g --unsafe-perm @quasar/icongenie
+sudo npm install -g @quasar/icongenie
 ```
+
+Note: older versions of these instructions passed `--unsafe-perm` to the
+icongenie install. That flag has been a no-op since npm 7 and was removed
+in npm 12, which now fails with `EUNKNOWNCONFIG: Unknown cli flag`. Just
+leave it out.
+
+If you would rather not install globally with `sudo`, you can skip these two
+commands and run the tools on demand with `npx @quasar/cli` and
+`npx @quasar/icongenie` instead.
 
 ### Cloning the git repository
 
@@ -275,15 +316,85 @@ Alternatively, from Android Studio you can drag-and-drop the `.apk` onto a
 running emulator, or open `src-capacitor/android` as a Gradle project and run it.
 
 ### iOS
-#### Setup
+
+iOS is a **Capacitor target**, not a Quasar mode, so it is built the same way as
+Android: `-m capacitor -T ios`. There is no `-m ios` mode — passing one falls
+through to Cordova and prompts for a Cordova app id, which this project does not
+use.
+
+#### Prerequisites
+
+* Xcode and CocoaPods (`pod --version`).
+* The Capacitor native dependencies. The `Podfile` resolves each plugin out of
+  `src-capacitor/node_modules`, which is a **separate** install from the root
+  one:
+
+``` bash
+cd src-capacitor && yarn install
+```
+
+* A signing team. `DEVELOPMENT_TEAM` is set in
+  `src-capacitor/ios/App/App.xcodeproj/project.pbxproj`; with a different Apple
+  account, change it there or pick the team in Xcode under the App target →
+  Signing & Capabilities.
+
+#### Building the app
+
+**To install it on your own iPhone or iPad and actually use it**, build the
+production bundle and hand the project to Xcode:
+
 ``` bash
 cd /path/to/acompas
-# Build and run iOS archive in debug mode
-quasar dev -m ios
-
-# Build iOS archive for production
-quasar build -m ios
+quasar build -m capacitor -T ios --ide
 ```
+
+Xcode opens on `src-capacitor/ios/App/App.xcworkspace`. Pick your device in the
+run destination menu and press Run. The app installed this way is
+self-contained: it carries its own copy of the web assets and all the audio, and
+keeps working with the Mac switched off.
+
+**To iterate on the UI with live reload**, use `dev` instead:
+
+``` bash
+cd /path/to/acompas
+quasar dev -m capacitor -T ios --ide
+```
+
+> ⚠️ The `dev` variant does *not* bundle the web assets. It points the app's
+> webview at a dev server running on your Mac over the LAN
+> (`http://<your-ip>:9500`), so edits appear on the device instantly — but the
+> app shows a **blank screen** whenever that server is not running, including
+> every time you pick the app up later without the Mac. That is expected, not a
+> broken build. Use `quasar build` for anything you want to keep using.
+
+**Without opening Xcode at all**, drop `--ide`:
+
+``` bash
+quasar build -m capacitor -T ios
+```
+
+which writes the built app to:
+
+```
+dist/capacitor/ios/Build/Products/Release-iphoneos/App.app
+```
+
+This form needs the signing team to already be set (it is), since there is no
+IDE to prompt for one.
+
+#### Version numbering
+
+`CFBundleShortVersionString` and `CFBundleVersion` are stamped from the root
+`package.json` by `src-capacitor/ios/App/set-version.sh`, which runs as an Xcode
+build phase — the same single source of truth Android uses. Bump the version in
+`package.json` only.
+
+#### If Xcode offers "Update to recommended settings"
+
+Accepting it sets `ENABLE_USER_SCRIPT_SANDBOXING = YES`, which breaks the
+CocoaPods "[CP] Embed Pods Frameworks" phase — it uses `rsync`, and the build
+fails with `Sandbox: rsync(...) deny(1) file-write-unlink`. Set that one setting
+back to `NO`; the rest of the migration is fine to keep.
 
 ### Electron (Desktop)
 
