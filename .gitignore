@@ -56,8 +56,6 @@ yarn-error.log*
 *.sln
 .claude
 
-yarn.lock
-
 out/
 
 acompasenv
