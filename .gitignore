@@ -13,14 +13,21 @@ node_modules
 /src-cordova/www
 
 # A Compas specific ignores
-/src/statics/icons/favicon.ico
-/src/statics/icons/favicon-*.png
-/src-cordova/res
-/test/cypress/screenshots
-/test/cypress/videos
+# Generated icons. `yarn icons` produces these from app-icon.png, and the
+# postinstall hook runs it, so a fresh clone is build-ready with no manual
+# step. Do not commit them.
+#
+# `yarn icons:all` (./icongenie.sh) is a different, occasional job: it runs the
+# full profile, which also rewrites the Capacitor Android and iOS assets that
+# ARE committed. Run it only when app-icon.png changes, and review the diff.
+#
+# src-electron/icons is the path icongenie-profile.json still writes Electron
+# icons to; app-vite v3 reads them from src-electron/electron-assets/icons.
+# Both are ignored until the profile is updated.
 /public/favicon.ico
-/public/icons/*.png
-/public/icons/*.svg
+/public/icons
+/src-electron/electron-assets
+/src-electron/icons
 /public/audio/*.mp3
 /public/audio/*.wav
 /public/audio/*.ogg
@@ -36,7 +43,7 @@ node_modules
 /src-capacitor/node_modules
 
 # Electron related directories and files
-/src-electron/icons
+# (Electron's generated icons are covered by the icon rules further up.)
 
 # BEX related directories and files
 /src-bex/www

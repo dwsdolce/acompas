@@ -52,11 +52,13 @@
 // })
 
 import { contextBridge, ipcRenderer } from 'electron'
-import path from 'path'
+import { resolvePublicPath } from '@quasar/app-vite/electron/preload'
 
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendMessage: (channel: string, data?: unknown) => ipcRenderer.send(channel, data),
   getAssetPath: (path: string) => ipcRenderer.sendSync('getAssetPath', path),
-  getPublicPath: () => process.env.PROD ? path.join(__dirname, '../public') : ''
+  // v3 resolves this in the main process and serves it over ipc, which works
+  // the same in dev and in a packaged app. process.env.PROD no longer exists.
+  getPublicPath: () => resolvePublicPath()
 })

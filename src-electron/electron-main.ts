@@ -1,15 +1,23 @@
 import { app, BrowserWindow, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
+import { registerQuasarRuntime } from '@quasar/app-vite/electron/main'
+import fs from 'node:fs'
 import { initialize, enable } from '@electron/remote/main' // <-- add this
 import os from 'os'
 import url from 'url'
 import path from 'path'
+import { fileURLToPath } from 'node:url'
+
+// @quasar/app-vite v3 bundles the main process as an ES module, where
+// __dirname does not exist — the packaged app died at launch with
+// "ReferenceError: __dirname is not defined".
+const currentDir = path.dirname(fileURLToPath(import.meta.url))
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
 
 try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
-    require('fs').unlinkSync(
+    fs.unlinkSync(
       path.join(app.getPath('userData'), 'DevTools Extensions')
     )
   }
@@ -17,8 +25,8 @@ try {
 
 let mainWindow: BrowserWindow | undefined
 
-// if (process.env.PROD) {
-//   global.__statics = __dirname
+// if (import.meta.env.QUASAR_PROD) {
+//   global.__statics = currentDir
 // }
 
 let isRemoteInitialized = false
@@ -40,7 +48,7 @@ function createWindow() {
   initializeRemote() // <-- add this
 
   mainWindow = new BrowserWindow({
-    icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+    icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
     width: 1500,
     height: 800,
     frame: false,
@@ -51,21 +59,24 @@ function createWindow() {
       contextIsolation: true,
       sandbox: false,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
+      // v3 dropped QUASAR_ELECTRON_PRELOAD. Preload scripts are named by
+      // quasar.config > electron.preloadScripts (default ['electron-preload'])
+      // and are emitted as .cjs beside the main bundle.
+      preload: path.resolve(currentDir, 'electron-preload.cjs')
     },
   })
 
   enable(mainWindow.webContents) // <-- add this
 
 
-  if (process.env.DEBUGGING) {
+  if (import.meta.env.QUASAR_DEBUG) {
     // if on DEV or Production with debug enabled
-    mainWindow.loadURL(process.env.APP_URL)
+    mainWindow.loadURL(import.meta.env.QUASAR_APP_URL)
     mainWindow.webContents.openDevTools()
   } else {
     // we're on production no access to devtools pls
     mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.join(currentDir, 'index.html'),
       protocol: 'file',
       slashes: true
     }))

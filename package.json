@@ -17,7 +17,10 @@
     "build": "quasar build",
     "build:electron": "quasar build -m electron",
     "build:electron:dev": "quasar build -m electron --dev",
-    "build:electron:prod": "quasar build -m electron --prod"
+    "build:electron:prod": "quasar build -m electron --prod",
+    "icons": "icongenie generate -p icongenie-generated.json",
+    "postinstall": "yarn icons",
+    "icons:all": "icongenie generate -p icongenie-profile.json"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^7.1.0",
@@ -44,12 +47,13 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^3",
+    "@quasar/icongenie": "^6",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "autoprefixer": "^10.4.21",
-    "electron": "^31.1.0",
-    "electron-builder": "^24.13.3",
+    "electron": "^44",
+    "electron-builder": "^26",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.27.0",
