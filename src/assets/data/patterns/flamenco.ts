@@ -11,8 +11,6 @@ export default [
       { label: 'Polo', value: 'polo' },
       { label: 'Caracoles', value: 'caracoles' },
       { label: 'Mirabras', value: 'mirabras' },
-      { label: 'Caña', value: 'cana' },
-      { label: 'Polo', value: 'polo' },
       { label: 'Bambera', value: 'bambera' },
       { label: 'Guajira', value: 'guajira' },
       { label: 'Cantiñas', value: 'cantinas' },
