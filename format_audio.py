@@ -1,69 +1,83 @@
+#!/usr/bin/env python3
+"""Convert the .wav masters in public/audio into the formats the app plays.
+
+Only the .wav files are committed; the rest are generated and gitignored.
+`yarn audio` runs this, and `yarn install` runs that, so a fresh clone gets
+playable audio without a manual step.
+"""
+
 import os
-import sys
+import shutil
 import subprocess
-from colorama import init, Fore, Style
+import sys
 
-# Initialize colorama for cross-platform colored output
-init()
+BASEDIR = "./public/audio"
+EXTENSIONS = ["mp3", "mp4", "ogg", "flac"]
 
-basedir = "./public/audio"
-extensions = ["mp3", "mp4", "ogg", "flac"]
 
-def show_help():
-    print("Usage: python format_audio.py [convert|unconvert] [directory]")
-    print("Options:")
-    print("  convert         Convert WAV files to other formats")
-    print("  unconvert       Remove converted audio files")
-    print("  directory       Specify the directory to process (optional)")
-    print("  --help          Display this help message")
+def wav_files(directory=None):
+    root_dir = os.path.join(BASEDIR, directory) if directory else BASEDIR
+    for root, _, files in os.walk(root_dir):
+        for name in sorted(files):
+            if name.endswith(".wav"):
+                yield os.path.join(root, name)
+
 
 def convert(directory=None):
-    dir_path = os.path.join(basedir, directory) if directory else basedir
-    print(f"Processing directory: {dir_path}")
+    if shutil.which("ffmpeg") is None:
+        print("ERROR: ffmpeg not found, so the audio cannot be generated.")
+        print("The app will not play anything without it.")
+        print("Install it (macOS: brew install ffmpeg) and run `yarn install`")
+        print("again, or `yarn audio` on its own.")
+        return 1
 
-    for root, _, files in os.walk(dir_path):
-        for file in files:
-            if file.endswith(".wav"):
-                file_path = os.path.join(root, file)
-                print(f"{'#' * 20}")
-                print(f"Processing {file_path}")
-                base = os.path.splitext(file_path)[0]
-                for ext in extensions:
-                    output_file = f"{base}.{ext}"
-                    print(f"Converting to {output_file}")
-                    subprocess.run(["ffmpeg", "-i", file_path, output_file], check=True)
-                    print(f"{Fore.GREEN}File {output_file} successfully converted{Style.RESET_ALL}")
+    converted = skipped = 0
+    for wav in wav_files(directory):
+        base = os.path.splitext(wav)[0]
+        for ext in EXTENSIONS:
+            out = f"{base}.{ext}"
+            # Already generated and no older than its source: nothing to do.
+            if os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(wav):
+                skipped += 1
+                continue
+            subprocess.run(
+                ["ffmpeg", "-y", "-loglevel", "error", "-i", wav, out],
+                check=True,
+            )
+            converted += 1
 
-    print(f"{Fore.GREEN}All files converted successfully{Style.RESET_ALL}")
+    print(f"Audio: {converted} converted, {skipped} already up to date.")
+    return 0
+
 
 def unconvert(directory=None):
-    print("Starting files unconverting script")
-    dir_path = os.path.join(basedir, directory) if directory else basedir
-    print(f"Processing directory: {dir_path}")
+    removed = 0
+    for wav in wav_files(directory):
+        base = os.path.splitext(wav)[0]
+        for ext in EXTENSIONS:
+            out = f"{base}.{ext}"
+            if os.path.exists(out):
+                os.remove(out)
+                removed += 1
+    print(f"Audio: removed {removed} generated files.")
+    return 0
 
-    for ext in extensions:
-        for root, _, files in os.walk(dir_path):
-            for file in files:
-                if file.endswith(f".{ext}"):
-                    file_path = os.path.join(root, file)
-                    os.remove(file_path)
-                    print(f"Removed: {file_path}")
 
-    print(f"{Fore.GREEN}All specified files removed successfully{Style.RESET_ALL}")
+def show_help():
+    print("Usage: python3 format_audio.py [convert|unconvert] [directory]")
+    print("  convert     Generate the playable formats from the .wav masters")
+    print("  unconvert   Delete the generated formats")
+    print("  directory   Limit to a subdirectory of public/audio (optional)")
+
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2 or sys.argv[1] == "--help":
-        show_help()
-        sys.exit(0)
-
-    action = sys.argv[1]
+    action = sys.argv[1] if len(sys.argv) > 1 else "--help"
     directory = sys.argv[2] if len(sys.argv) > 2 else None
 
-    if action not in ["convert", "unconvert"]:
-        print(f"{Fore.RED}Invalid action argument. Please specify either 'convert' or 'unconvert'.{Style.RESET_ALL}")
-        sys.exit(1)
-
     if action == "convert":
-        convert(directory)
+        sys.exit(convert(directory))
+    elif action == "unconvert":
+        sys.exit(unconvert(directory))
     else:
-        unconvert(directory)
+        show_help()
+        sys.exit(0 if action == "--help" else 1)

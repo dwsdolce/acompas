@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "electron": "latest",
+    "electron": "^44",
     "electron-builder": "^26.0.12"
   }
 }

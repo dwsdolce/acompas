@@ -19,8 +19,9 @@
     "build:electron:dev": "quasar build -m electron --dev",
     "build:electron:prod": "quasar build -m electron --prod",
     "icons": "icongenie generate -p icongenie-generated.json",
-    "postinstall": "yarn icons",
-    "icons:all": "icongenie generate -p icongenie-profile.json"
+    "postinstall": "yarn icons && yarn audio",
+    "icons:all": "icongenie generate -p icongenie-profile.json",
+    "audio": "python3 format_audio.py convert"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^7.1.0",

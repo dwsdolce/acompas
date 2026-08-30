@@ -100,19 +100,13 @@ yarn --version   # 1.22.22
 
 ### Install requirements
 
-``` bash
-sudo npm install -g @quasar/cli
-sudo npm install -g @quasar/icongenie
-```
+Only one thing has to be installed by hand: **ffmpeg**, used to generate the
+audio. See "Generate the audio files" below for how to install it on your
+platform.
 
-Note: older versions of these instructions passed `--unsafe-perm` to the
-icongenie install. That flag has been a no-op since npm 7 and was removed
-in npm 12, which now fails with `EUNKNOWNCONFIG: Unknown cli flag`. Just
-leave it out.
-
-If you would rather not install globally with `sudo`, you can skip these two
-commands and run the tools on demand with `npx @quasar/cli` and
-`npx @quasar/icongenie` instead.
+Everything else is a project dependency. The Quasar CLI and Icon Genie do not
+need a global `npm install -g` — `yarn install` provides them, and `npx quasar`
+runs the CLI.
 
 ### Cloning the git repository
 
@@ -127,63 +121,45 @@ cd acompas
 yarn install
 ```
 
-### Build the icons
-Run this command after generating the src-capacitor/android and /ios
+### Icons
+
+`yarn install` generates them, so there is nothing to do. If you change
+`app-icon.png` and want to refresh them:
 
 ``` bash
-./icongenie.sh
+yarn icons      # the generated, gitignored icons (web + Electron)
+yarn icons:all  # everything, including the committed Capacitor Android/iOS
+                # assets — rewrites ~30 tracked files, so review the diff
 ```
 
 ### Generate the audio files
-The script uses `ffmpeg` to convert the files, so make sure you have it installed on your machine.
 
-1. For Windows:
+Only the `.wav` masters are committed; the formats the app actually plays are
+generated. `yarn install` does this for you, so a fresh clone needs no manual
+step — but it needs **ffmpeg**, and `yarn install` fails with a clear message
+if ffmpeg is missing, because the app cannot play anything without it.
 
-  * Download the ffmpeg build from https://ffmpeg.org/download.html
-  * Extract the zip file
-  * Add the bin folder to your system PATH
-
-2. For macOS (using Homebrew):
+Installing ffmpeg:
 
 ``` bash
-brew install ffmpeg
+brew install ffmpeg                      # macOS
+sudo apt update && sudo apt install ffmpeg   # Ubuntu/Debian
+sudo yum install epel-release && sudo yum install ffmpeg   # CentOS/RHEL
 ```
 
-3. For Ubuntu/Debian:
+On Windows, download a build from https://ffmpeg.org/download.html, extract it,
+and add its `bin` folder to your PATH.
+
+To regenerate the audio on its own — after adding a `.wav`, say:
 
 ``` bash
-sudo apt update
-sudo apt install ffmpeg
+yarn audio                               # all of public/audio
+python3 format_audio.py convert acompas  # or one subdirectory
+python3 format_audio.py unconvert        # delete the generated formats
 ```
 
-4. For CentOS/RHEL:
-
-``` bash
-sudo yum install epel-release
-sudo yum install ffmpeg
-```
-
-By default, the format_audio.sh script converts all wav files inside the ./public/audio folder
-
-``` bash
-bash ./format_audio.sh --help
-bash ./format_audio.sh convert # Optionnaly you can specify a subdirectory to convert only a subset
-```
-
-Alternatively, you can do it with Python
-
-To do so you also have to install some Python dependencies
-``` bash
-python -m venv acompasenv
-source acompasenv/bin/activate
-pip install colorama
-```
-
-Then, you can run the Python script :
-
-``` bash
-python format_audio.py convert
-```
+Files that already exist and are newer than their `.wav` are skipped, so
+re-running is cheap.
 
 ### Run the app
 Then you should be ready to launch the app:
@@ -561,7 +537,7 @@ To add a sound, you must provide a clean .wav file inside the public/audio folde
 
 There, we load two times the same sound with a different volume. The volume is a number in decibels. The volume is optional, and if not provided, it will be set to 0.
 
-Don't forget to run the sh script `./format_audio.sh` to convert the .wav files to .mp3, .mp4, .ogg and .flac files. This is necessary for the mobile app.
+Don't forget to run `yarn audio` to convert the new .wav file into .mp3, .mp4, .ogg and .flac. `yarn install` does this too, but only for files that are not already converted.
 
 Beware of the licence of the sounds you use. You must have the right to use them in a free software.
 

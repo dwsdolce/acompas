@@ -704,7 +704,7 @@ electron-publish@26.15.3:
     lazy-val "^1.0.5"
     mime "^2.5.2"
 
-electron@latest:
+electron@^44:
   version "44.0.0"
   resolved "https://registry.yarnpkg.com/electron/-/electron-44.0.0.tgz#fdb4e911833d47252a716699a0766aca1efc4711"
   integrity sha512-FkTqPrFPZYljdPI5b7KORGsJTd6FgUQDefl5MrU3Xz9R87pAj9JLreIjDqcRN8hJIkFHIou0o8kKzvcpT9qiRQ==
