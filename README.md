@@ -31,6 +31,9 @@ It is based on the following technologies :
  - [Pinia](https://pinia.vuejs.org)
  - [Tonejs](https://tonejs.github.io)
 
+For what every dependency is actually for, and which layer of the app it belongs
+to, see [docs/stack.md](docs/stack.md).
+
 ## Team
 
 You can [talk with the team on Slack](https://acompas-org.slack.com).
