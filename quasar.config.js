@@ -11,7 +11,7 @@
 // const VueDevTools = require('vite-plugin-vue-devtools');
 
 
-import { defineConfig } from '@quasar/app-vite/wrappers'
+import { defineConfig } from '@quasar/app-vite'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
@@ -65,8 +65,23 @@ export default defineConfig(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
-      env: {
-        APP_VERSION: pkg.version
+      // @quasar/app-vite v3 ships only two default aliases, '@' and '#q-app'.
+      // The framework aliases v1/v2 provided (src, components, stores, ...)
+      // were dropped; this project imports via 'src/...' in 140 places, so
+      // that one is restored here rather than rewriting every import.
+      alias: {
+        src: path.resolve(__dirname, './src'),
+        layouts: path.resolve(__dirname, './src/layouts'),
+        pages: path.resolve(__dirname, './src/pages')
+      },
+
+      // In v3 build.env configures env-FILE loading (clientPrefix, folder,
+      // file, filter) — it is no longer a map of variables to inject, as it
+      // was in v1/v2. Build-time constants go through define instead.
+      // Without this, process.env.APP_VERSION is undefined at runtime and the
+      // header falls back to showing "v4".
+      define: {
+        'process.env.APP_VERSION': JSON.stringify(pkg.version)
       },
       target: {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
@@ -96,15 +111,12 @@ export default defineConfig(function (ctx) {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
 
-      vitePlugins: [
-        ['@intlify/vite-plugin-vue-i18n', {
-          // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
-          // compositionOnly: false,
-
-          // you need to set i18n resource including paths !
-          include: path.resolve(__dirname, './src/i18n/**')
-        }]
-      ],
+      // No i18n Vite plugin. The messages in src/i18n are .ts modules, not the
+      // JSON/YAML resource files these plugins exist to precompile, and
+      // @intlify/unplugin-vue-i18n defaults to runtimeOnly — which aliases
+      // vue-i18n to its runtime-only build and leaves raw object messages with
+      // no compiler, silently emptying every translated control in the UI.
+      vitePlugins: [],
 
       // Ajouter l'analyse du bundle
       analyze: process.env.ANALYZE === 'true',
