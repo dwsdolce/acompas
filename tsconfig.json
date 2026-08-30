@@ -1,11 +1,9 @@
 {
-  "extends": "@quasar/app-vite/tsconfig-preset",
+  // @quasar/app-vite v2 generates .quasar/tsconfig.json on each build, with
+  // the path aliases (src/, components/, layouts/, ...) and compiler defaults.
+  // Extend it rather than the package preset, which v2 no longer exports.
+  "extends": "./.quasar/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "ES2022",
-    "moduleResolution": "node",
-    "strict": true,
-
-  },
-
+    "strict": true
+  }
 }

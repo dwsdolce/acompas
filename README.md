@@ -44,11 +44,19 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 
 ## Cloning and building the source code
 
-Before anything, you need Node.js installed on your machine (version 14.19 or
-later). **Recommended: Node.js 22.x LTS**, which is the newest version the
-toolchain has been exercised against in anger. Newer releases (24, 26) build
-the web target fine, but the Electron and Capacitor targets are less well
-tested there.
+Before anything, you need Node.js installed on your machine. **Use Node.js
+24.x LTS**: `.nvmrc` pins it, and the build tooling declares support only up
+to 24 — yarn enforces that, so `yarn install` and `yarn upgrade` refuse to run
+on Node 25 or 26.
+
+Node's newest release is not the one you want here. Even-numbered majors spend
+their first six months as "Current" before becoming LTS, and tooling does not
+declare support for a line that is not LTS yet.
+
+A version manager makes this painless. With [fnm](https://github.com/Schniz/fnm)
+(`brew install fnm`) plus `eval "$(fnm env --use-on-cd --shell zsh)"` in your
+shell profile, entering the project directory switches to 24 automatically.
+`nvm` reads the same `.nvmrc`.
 
 See the nodejs.org [download page](https://nodejs.org/en/download/). If using Linux, consider
 [installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
@@ -344,23 +352,34 @@ cd src-capacitor && yarn install
 #### Building the app
 
 **To install it on your own iPhone or iPad and actually use it**, build the
-production bundle and hand the project to Xcode:
+production bundle, then open the Xcode *workspace*:
 
 ``` bash
 cd /path/to/acompas
-quasar build -m capacitor -T ios --ide
+quasar build -m capacitor -T ios
+open src-capacitor/ios/App/App.xcworkspace
 ```
 
-Xcode opens on `src-capacitor/ios/App/App.xcworkspace`. Pick your device in the
-run destination menu and press Run. The app installed this way is
-self-contained: it carries its own copy of the web assets and all the audio, and
-keeps working with the Mac switched off.
+Pick your device in the run destination menu and press Run. The app installed
+this way is self-contained: it carries its own copy of the web assets and all
+the audio, and keeps working with the Mac switched off.
+
+> ⚠️ **Do not use `--ide`, and do not open `App.xcodeproj`.** As of
+> `@quasar/app-vite` 2.6.2 the `--ide` flag opens the wrong container. Its
+> `findXcodeWorkspace()` helper returns the first directory entry ending in
+> either `.xcworkspace` or `.xcodeproj`, and `App.xcodeproj` sorts first
+> alphabetically — so it always wins. The bare project knows nothing about
+> CocoaPods, and the build fails with `Unable to resolve module dependency:
+> 'Capacitor'` and half a dozen missing search paths. v1 matched `.xcworkspace`
+> only, so `--ide` used to work. `npx cap open ios` also opens the workspace
+> correctly.
 
 **To iterate on the UI with live reload**, use `dev` instead:
 
 ``` bash
 cd /path/to/acompas
-quasar dev -m capacitor -T ios --ide
+quasar dev -m capacitor -T ios
+open src-capacitor/ios/App/App.xcworkspace
 ```
 
 > ⚠️ The `dev` variant does *not* bundle the web assets. It points the app's
@@ -370,13 +389,8 @@ quasar dev -m capacitor -T ios --ide
 > every time you pick the app up later without the Mac. That is expected, not a
 > broken build. Use `quasar build` for anything you want to keep using.
 
-**Without opening Xcode at all**, drop `--ide`:
-
-``` bash
-quasar build -m capacitor -T ios
-```
-
-which writes the built app to:
+**Without opening Xcode at all**, the same build command writes the app
+straight to:
 
 ```
 dist/capacitor/ios/Build/Products/Release-iphoneos/App.app

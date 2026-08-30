@@ -11,11 +11,18 @@
 // const VueDevTools = require('vite-plugin-vue-devtools');
 
 
-const { configure } = require('quasar/wrappers')
-const path = require('path')
+import { defineConfig } from '@quasar/app-vite/wrappers'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+import { readFileSync } from 'node:fs'
+
+// quasar.config is loaded as ESM by @quasar/app-vite v2, so __dirname and
+// require() are not available.
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const pkg = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
 
 
-module.exports = configure(function (ctx) {
+export default defineConfig(function (ctx) {
   return {
     // eslint: {
     //   // fix: true,
@@ -59,7 +66,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       env: {
-        APP_VERSION: require('./package.json').version
+        APP_VERSION: pkg.version
       },
       target: {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],

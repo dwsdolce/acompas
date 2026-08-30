@@ -217,8 +217,9 @@ export const usePatternStore = defineStore('patterns', () => {
   // *****************************************
 
   const getAllData = async () => {
-    // const patternsModules = import.meta.glob('/src/assets/data/patterns/*.ts')
-    const patternsModules = import.meta.globEager('/src/assets/data/patterns/*.ts')
+    // import.meta.globEager() was removed in Vite 5; the eager option on
+    // import.meta.glob() replaces it and returns the same shape.
+    const patternsModules = import.meta.glob('/src/assets/data/patterns/*.ts', { eager: true })
 
     const patternsData = Object.entries(patternsModules).map(([path, patternsModule]) => {
       const context = path.match(/\/src\/assets\/data\/patterns\/(.*)\.ts$/)![1] // eslint-disable-line @typescript-eslint/no-non-null-assertion
