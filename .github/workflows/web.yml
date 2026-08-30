@@ -38,10 +38,16 @@ jobs:
           pip install --quiet colorama
           python3 format_audio.py convert
 
+      # src-capacitor has its own package.json and lockfile. Even the plain SPA
+      # build needs it: the Capacitor imports in src/boot/statusbar.ts,
+      # src/composables/keep-awake.ts and src/App.vue resolve into
+      # src-capacitor/node_modules, and the build fails with
+      # UNLOADABLE_DEPENDENCY without it.
       - name: Install dependencies
         run: |
           corepack enable
           yarn install --frozen-lockfile
+          (cd src-capacitor && yarn install --frozen-lockfile)
 
       - name: Lint
         run: npx eslint --ext .js,.ts,.vue ./src
