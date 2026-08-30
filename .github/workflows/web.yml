@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: yarn
@@ -23,7 +23,7 @@ jobs:
       # against the masters and the converter script.
       - name: Cache generated audio
         id: audio-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: public/audio
           key: audio-${{ hashFiles('public/audio/**/*.wav', 'format_audio.py') }}
@@ -96,7 +96,7 @@ jobs:
       - name: Package the SPA
         run: tar -czf spa.tar.gz -C dist spa
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: spa
           path: spa.tar.gz
