@@ -17,12 +17,17 @@ test_web_job:
     - apt-get -y -qq update
     - apt-get -y -qq dist-upgrade
     - apt-get -y -qq install curl gnupg
-    - curl -fsSL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh
+    # Node 24 LTS, matching .nvmrc. @quasar/app-vite v3 declares
+    # node ^30 || ^28 || ^26 || ^24 || ^22.22.0 and yarn enforces engines,
+    # so the older Node 20 makes `yarn install` refuse to run at all.
+    - curl -fsSL https://deb.nodesource.com/setup_24.x -o /tmp/nodesource_setup.sh
     - bash /tmp/nodesource_setup.sh
     - apt-get -y -qq update
-    # Some deps are for Cypress.
-    # See https://docs.cypress.io/guides/guides/continuous-integration.html#Advanced-setup
-    - apt-get install -y -qq nodejs git make g++ gcc rsync xvfb libgtk-3-dev libnotify-dev libnss3 libxss1 ffmpeg python3-venv
+    # xvfb, libgtk-3-dev, libnotify-dev, libnss3 and libxss1 used to be here
+    # for Cypress; those tests were removed in b9f948f (2022) and nothing has
+    # needed a display server since. ffmpeg is for format_audio.py, python3-venv
+    # for the virtualenv it runs in.
+    - apt-get install -y -qq nodejs git make g++ gcc rsync ffmpeg python3-venv
     # Update npm (more up to date than the one from the nodejs deb package)
     - npm install -g npm
     - npm install -g @quasar/cli

@@ -45,13 +45,13 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 ## Cloning and building the source code
 
 Before anything, you need Node.js installed on your machine. **Use Node.js
-24.x LTS**: `.nvmrc` pins it, and the build tooling declares support only up
-to 24 — yarn enforces that, so `yarn install` and `yarn upgrade` refuse to run
-on Node 25 or 26.
+24.x LTS**, which `.nvmrc` pins.
 
-Node's newest release is not the one you want here. Even-numbered majors spend
-their first six months as "Current" before becoming LTS, and tooling does not
-declare support for a line that is not LTS yet.
+`@quasar/app-vite` v3 declares `node: ^30 || ^28 || ^26 || ^24 || ^22.22.0`,
+and yarn enforces engines strictly — `yarn install` refuses outright on a
+version outside that range, so Node 20 and earlier will not work at all. Node
+24 is the current LTS and the version CI builds with, which makes it the one
+to match.
 
 A version manager makes this painless. With [fnm](https://github.com/Schniz/fnm)
 (`brew install fnm`) plus `eval "$(fnm env --use-on-cd --shell zsh)"` in your
@@ -268,9 +268,10 @@ alias and passwords). If that file is missing, the build produces an
 
 Google Play requires an **AAB** (Android App Bundle), not an APK.
 
-> ⚠️ The `--aab` flag of `quasar build` is **not honored** by the version of
-> `@quasar/app-vite` used here (it silently runs `assembleRelease` and produces
-> an APK). Generate the bundle directly with Gradle instead:
+> ⚠️ The `--aab` flag of `quasar build` is **not honored** — still true as of
+> `@quasar/app-vite` 3.8.1, whose Capacitor mode has no handling for it at all;
+> it silently runs `assembleRelease` and produces an APK. Generate the bundle
+> directly with Gradle instead:
 
 ``` bash
 # First sync the freshly built web assets into the Android project
@@ -352,34 +353,29 @@ cd src-capacitor && yarn install
 #### Building the app
 
 **To install it on your own iPhone or iPad and actually use it**, build the
-production bundle, then open the Xcode *workspace*:
+production bundle and hand the project to Xcode:
 
 ``` bash
 cd /path/to/acompas
-quasar build -m capacitor -T ios
-open src-capacitor/ios/App/App.xcworkspace
+quasar build -m capacitor -T ios --ide
 ```
 
-Pick your device in the run destination menu and press Run. The app installed
-this way is self-contained: it carries its own copy of the web assets and all
-the audio, and keeps working with the Mac switched off.
+Xcode opens on `src-capacitor/ios/App/App.xcworkspace`. Pick your device in the
+run destination menu and press Run. The app installed this way is
+self-contained: it carries its own copy of the web assets and all the audio, and
+keeps working with the Mac switched off.
 
-> ⚠️ **Do not use `--ide`, and do not open `App.xcodeproj`.** As of
-> `@quasar/app-vite` 2.6.2 the `--ide` flag opens the wrong container. Its
-> `findXcodeWorkspace()` helper returns the first directory entry ending in
-> either `.xcworkspace` or `.xcodeproj`, and `App.xcodeproj` sorts first
-> alphabetically — so it always wins. The bare project knows nothing about
-> CocoaPods, and the build fails with `Unable to resolve module dependency:
-> 'Capacitor'` and half a dozen missing search paths. v1 matched `.xcworkspace`
-> only, so `--ide` used to work. `npx cap open ios` also opens the workspace
-> correctly.
+> ⚠️ Always open the **workspace**, never `App.xcodeproj`. The bare project
+> knows nothing about CocoaPods, and building it fails with `Unable to resolve
+> module dependency: 'Capacitor'` plus a series of missing search paths.
+> `@quasar/app-vite` 2.6.2 opened the wrong one for exactly this reason; 3.8.1
+> fixed it, and `npx cap open ios` has always opened the workspace correctly.
 
 **To iterate on the UI with live reload**, use `dev` instead:
 
 ``` bash
 cd /path/to/acompas
-quasar dev -m capacitor -T ios
-open src-capacitor/ios/App/App.xcworkspace
+quasar dev -m capacitor -T ios --ide
 ```
 
 > ⚠️ The `dev` variant does *not* bundle the web assets. It points the app's

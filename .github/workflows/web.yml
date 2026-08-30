@@ -1,0 +1,97 @@
+name: Web build
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      # Only the .wav masters are committed; every playable format is
+      # generated. 321 files x 4 formats is minutes of ffmpeg, so it is cached
+      # against the masters and the converter script.
+      - name: Cache generated audio
+        id: audio-cache
+        uses: actions/cache@v4
+        with:
+          path: public/audio
+          key: audio-${{ hashFiles('public/audio/**/*.wav', 'format_audio.py') }}
+
+      - name: Generate audio
+        if: steps.audio-cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          python3 -m venv .audioenv
+          . .audioenv/bin/activate
+          pip install --quiet colorama
+          python3 format_audio.py convert
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn install --frozen-lockfile
+
+      - name: Lint
+        run: npx eslint --ext .js,.ts,.vue ./src
+
+      - name: Build
+        run: npx quasar build
+
+      # A build that succeeds is not evidence the app runs: import.meta.globEager
+      # survived the v2 upgrade's build and left a blank page. This catches that
+      # class of failure — a bundle that compiles but throws on load, or a file
+      # that was never committed. It does NOT catch everything: when the i18n
+      # plugin was misconfigured the app still mounted and only the translated
+      # controls vanished, which these assertions would have passed.
+      - name: Smoke test
+        run: |
+          python3 -m http.server 4173 --directory dist/spa &
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null http://127.0.0.1:4173/ && break
+            sleep 1
+          done
+
+          google-chrome --headless --no-sandbox --disable-gpu \
+            --virtual-time-budget=15000 --enable-logging=stderr --log-level=0 \
+            --dump-dom http://127.0.0.1:4173/ > dom.html 2> chrome.log || true
+
+          echo "DOM size: $(wc -c < dom.html) bytes"
+
+          if ! grep -q 'id="q-app"' dom.html; then
+            echo "::error::#q-app not found - the app did not mount"
+            exit 1
+          fi
+
+          if ! grep -q 'class="q-layout' dom.html; then
+            echo "::error::no Quasar layout rendered - the app mounted but produced nothing"
+            exit 1
+          fi
+
+          if grep -qE 'CONSOLE.*(Uncaught|TypeError|ReferenceError|SyntaxError)' chrome.log; then
+            echo "::error::JavaScript errors on load:"
+            grep -E 'CONSOLE.*(Uncaught|TypeError|ReferenceError|SyntaxError)' chrome.log
+            exit 1
+          fi
+
+          echo "App mounted and rendered with no console errors."
+
+      - name: Package the SPA
+        run: tar -czf spa.tar.gz -C dist spa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spa
+          path: spa.tar.gz
+          retention-days: 30
