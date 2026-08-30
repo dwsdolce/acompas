@@ -121,14 +121,12 @@ export default defineConfig(function (ctx) {
       // Ajouter l'analyse du bundle
       analyze: process.env.ANALYZE === 'true',
       // Optimiser les chunks
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['vue', 'quasar'],
-            audio: ['tone']
-          }
-        }
-      }
+      // No manual chunking. A rollupOptions.output.manualChunks block used to
+      // sit here splitting vue/quasar into a "vendor" chunk and tone into an
+      // "audio" one, but Vite 8 builds with rolldown and never produced either
+      // chunk — verified by inspecting the build output. Rolldown's equivalent
+      // is build.rolldownOptions.output.advancedChunks; splitting is worth
+      // revisiting deliberately rather than leaving config that does nothing.
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
