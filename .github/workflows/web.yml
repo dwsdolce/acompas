@@ -33,9 +33,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
-          python3 -m venv .audioenv
-          . .audioenv/bin/activate
-          pip install --quiet colorama
           python3 format_audio.py convert
 
       # src-capacitor has its own package.json and lockfile. Even the plain SPA
