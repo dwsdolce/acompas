@@ -261,6 +261,25 @@ export default defineConfig(function (ctx) {
         copyright: 'Copyright © 2024 Acompas',
         mac: {
           category: 'public.app-category.music',
+          // Signing is opt-in and off by default. Left to itself
+          // electron-builder finds the Developer ID in the keychain and signs
+          // with the hardened runtime; macOS then kills the app on launch
+          // because it is not notarized, with no dialog and no output. An
+          // explicit null keeps local builds unsigned and launchable.
+          //
+          // packaging/build_mac exports CSC_NAME from the settings file
+          // outside the repository, which turns both of these on. Notarizing
+          // needs credentials as well, and electron-builder throws if it is
+          // asked to notarize without them, so that is checked here too - it
+          // reads whichever of the three sets is present.
+          identity: process.env.CSC_NAME ?? null,
+          notarize: Boolean(
+            process.env.CSC_NAME && (
+              process.env.APPLE_KEYCHAIN_PROFILE ||
+              process.env.APPLE_API_KEY ||
+              process.env.APPLE_ID
+            )
+          ),
           extraResources: [
             'public'
           ]
