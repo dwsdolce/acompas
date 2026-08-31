@@ -475,6 +475,11 @@ yarn test:watch    # the same, re-running on change
 yarn test:e2e      # Electron smoke tests (Playwright)
 ```
 
+The project has to be prepared before any of these run: `tsconfig.json`
+extends `.quasar/tsconfig.json`, which Quasar generates. `yarn install` does it
+via `quasar prepare`, so a fresh clone can lint and test without a build; run
+`npx quasar prepare` by hand if you ever delete `.quasar`.
+
 `yarn test` runs in CI on every push. It covers four things:
 
 - **Pattern data** - every sequence is as long as `nbBeatsInPattern`, accents
