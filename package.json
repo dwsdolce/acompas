@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -47,20 +49,26 @@
     "vue-router": "^5"
   },
   "devDependencies": {
+    "@pinia/testing": "^2.0.1",
+    "@playwright/test": "^1.62.1",
     "@quasar/app-vite": "^3",
     "@quasar/icongenie": "^6",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.5.0",
     "autoprefixer": "^10.4.21",
     "electron": "^44",
     "electron-builder": "^26",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.27.0",
+    "happy-dom": "^20.12.0",
     "prettier": "^3.3.2",
     "pug": "^3.0.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": "^26 || ^24 || ^22 || ^20 || ^18 || ^16 || ^14.19",

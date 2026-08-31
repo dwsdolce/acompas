@@ -47,7 +47,10 @@ jobs:
           (cd src-capacitor && yarn install --frozen-lockfile)
 
       - name: Lint
-        run: npx eslint --ext .js,.ts,.vue ./src
+        run: npx eslint --ext .js,.ts,.vue ./src ./test
+
+      - name: Test
+        run: yarn test
 
       - name: Build
         run: npx quasar build

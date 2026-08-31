@@ -77,3 +77,7 @@ acompasenv
 *.pem
 keystore.properties
 google-services.json
+
+# Playwright output
+/test-results
+/playwright-report

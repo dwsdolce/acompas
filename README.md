@@ -467,6 +467,47 @@ though no dotfile does. `packaging/build_mac` unsets it; otherwise run the
 command through `env -u ELECTRON_RUN_AS_NODE`.
 
 
+## Tests
+
+``` bash
+yarn test          # unit and component tests (Vitest), ~1s
+yarn test:watch    # the same, re-running on change
+yarn test:e2e      # Electron smoke tests (Playwright)
+```
+
+`yarn test` runs in CI on every push. It covers four things:
+
+- **Pattern data** - every sequence is as long as `nbBeatsInPattern`, accents
+  fall inside the pattern and ascend, tempos are ordered, names are unique.
+  These lock in properties that are easy to break by hand-editing the data.
+- **Translations** - every locale defines exactly the interface keys `en-US`
+  does. `doc.changelog.*` is excluded: it is release-note history, written in
+  English and translated when someone gets to it.
+- **The store** - patterns load with their context, instrument lookup works,
+  and selecting a pattern produces a playable instrument list.
+- **Audio/visual sync** - the dots and the samples are driven from the same
+  slot index, and the visual is offset from the audible event by exactly the
+  output latency. See below.
+
+`yarn test:e2e` needs a build first (`quasar build -m electron`); it skips
+itself with a message if there is none. It launches the app and checks that a
+window opens with a populated `#q-app`, that every image loads, that a sample
+decodes, and that nothing logs an error - the white-page class of failure.
+
+### The sync tests
+
+The metronome schedules audio at the transport time and the dots at that time
+*plus* the output latency, so the visual matches the click you hear rather than
+the moment the sample is queued. The compensation is `baseLatency +
+outputLatency` plus the manual offset slider, which allows 500ms with no clamp
+against the beat grid.
+
+A slot is an eighth note: 231ms at 130 BPM. So an offset above ~230ms lights the
+dot while the *next* slot is sounding, which looks like a strong beat shown
+against a weak one. `test/metronome-sync.spec.ts` documents that with a
+deliberately failing case (`it.fails`); once the offset is clamped to one slot,
+turn it into a plain `it`.
+
 ## Licensing
 The source code is published under the terms of the GNU [AGPL license](https://www.gnu.org/licenses/agpl-3.0.html) (see the LICENSE file at the
 root of the git repository).
