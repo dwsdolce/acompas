@@ -280,9 +280,6 @@ export default defineConfig(function (ctx) {
               process.env.APPLE_ID
             )
           ),
-          extraResources: [
-            'public'
-          ]
         },
         // win: {
         //   target: ['nsis', 'portable']
