@@ -1,0 +1,46 @@
+#!/bin/zsh
+#
+# Flatten the iOS app icon onto an opaque background.
+#
+# Icon Genie writes the icon with an alpha channel, which App Store Connect
+# rejects: "Invalid Image - the app icon can't contain an alpha channel or
+# transparency". A device build installs happily either way, so the failure
+# surfaces only at upload, long after the icon was generated. Flattening it
+# here keeps `yarn icons:all` from reintroducing the problem.
+#
+# White because the mark is a red disc drawn to sit on a light ground, matching
+# how it renders on the desktop and the web.
+
+cd "$(dirname "$0")/.."
+
+icon="src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png"
+
+if [[ ! -f "$icon" ]]; then
+    echo "No iOS app icon at ${icon} - run: yarn icons:all"
+    exit 1
+fi
+
+if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "ffmpeg is not on PATH, so the iOS icon keeps its alpha channel."
+    echo "It will install on a device but App Store Connect will refuse it."
+    echo "Install it (macOS: brew install ffmpeg) and run this again."
+    exit 1
+fi
+
+size=$(/usr/bin/sips -g pixelWidth "$icon" 2>/dev/null | awk '/pixelWidth/{print $2}')
+size=${size:-1024}
+
+tmp=$(mktemp -t appicon).png
+ffmpeg -y -loglevel error \
+    -f lavfi -i "color=white:s=${size}x${size}" \
+    -i "$icon" \
+    -filter_complex "[0][1]overlay,format=rgb24" \
+    -frames:v 1 "$tmp"
+if [ $? -ne 0 ]; then
+    echo "Flattening the iOS icon failed"
+    rm -f "$tmp"
+    exit 1
+fi
+
+mv "$tmp" "$icon"
+echo "Flattened ${icon} (${size}x${size}, no alpha)"

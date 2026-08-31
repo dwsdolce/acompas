@@ -42,3 +42,23 @@ export async function getDefaultPatterns() {
   // flatten the array
   return Promise.all(patternsData).then((patterns) => patterns.flat())
 }
+
+/**
+ * The audio/visual offset, in milliseconds and in beats at the tempo in play.
+ *
+ * Milliseconds alone say nothing about whether a value is plausible: 250ms is
+ * an ordinary Bluetooth delay and also, at 190 BPM, four fifths of a beat. The
+ * compensation is deliberately not clamped — when it matches the real output
+ * delay it is correct however large it is, and on a slow link it genuinely can
+ * exceed a beat. What goes wrong is setting it to something the hardware is not
+ * doing, and a figure in beats makes that plain: a physical delay of four
+ * fifths of a beat is a claim about the hardware worth doubting.
+ *
+ * The note glyph carries the unit, so this needs no translating.
+ */
+export function formatAudioOffset(ms: number, tempo: number): string {
+  const offset = ms || 0
+  if (!offset || !tempo) return `${offset} ms`
+  const beats = offset / (60000 / tempo)
+  return `${offset} ms · ${beats.toFixed(1)} ♩`
+}

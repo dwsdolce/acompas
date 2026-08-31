@@ -521,6 +521,14 @@
           1280
         ]
       ]
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-512@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        1024
+      ]
     }
   ]
 }

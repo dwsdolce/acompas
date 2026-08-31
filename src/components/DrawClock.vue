@@ -9,7 +9,10 @@ import { useSessionStore } from 'src/stores/session'
 import type { CSSProperties } from 'vue'
 
 const patternStore = usePatternStore()
-const { roleOf, palmasWeight, compasColor, inkColor, showsEighthNotes } = useCompasVisual()
+// The dial is $blue-grey-1 in both themes, so its marks are chosen against a
+// light surface whatever the app theme is.
+const { roleOf, palmasWeight, compasColor, inkColor, showsEighthNotes } =
+  useCompasVisual({ onLightSurface: true })
 const sessionStore = useSessionStore()
 
 const {
@@ -17,6 +20,7 @@ const {
   selectedPattern,
   selectedData,
   metronomeEvent,
+  metronomeSubEvent,
   prestartBeat,
   beatLabels,
   tempo
@@ -40,6 +44,11 @@ const clockStep = computed(
 const clockVelocity = computed(() =>
     60000 / tempo.value
   )
+
+// How long the hand takes to cross one step. clockVelocity is a quarter note,
+// which is two slots, so an eighth-note step takes half of it. Without this the
+// hand moved an eighth's worth over a quarter's duration and fell behind.
+const stepDuration = computed(() => clockVelocity.value * slotsPerStep.value / 2)
 const startingPoint = computed(() =>
   prestartBeat.value
     ? (selectedData.value.nbBeatsInPattern - prestartBeat.value * 2) / 2
@@ -111,7 +120,7 @@ const animateClock = (v: number | null) => {
   const animation = anime({
     targets: '.hand',
     rotate: [ clockDeg.value, clockDeg.value + clockStep.value ],
-    duration: clockVelocity.value,
+    duration: stepDuration.value,
     easing: 'linear',
     complete: () => {
       if (v !== null) {
@@ -156,6 +165,15 @@ watch(metronomeEvent, (v) => {
   animateClock(v)
   animateNum(v)
   if (v === null) idleClockPosition()
+})
+
+// Off-beats reach the dial too, but only when the instrument being drawn is
+// playing them - otherwise the hand would step through subdivisions that
+// nothing is sounding.
+watch(metronomeSubEvent, (v) => {
+  if (v === null || !showsEighthNotes.value) return
+  animateClock(v)
+  animateNum(v)
 })
 
 watch(startingPoint, (oldValue, newValue) => {

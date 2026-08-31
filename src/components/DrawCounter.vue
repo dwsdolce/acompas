@@ -15,6 +15,7 @@ const {
   selectedContext,
   selectedData,
   metronomeEvent,
+  metronomeSubEvent,
   beatLabels
 } = storeToRefs(patternStore)
 
@@ -24,6 +25,12 @@ const {
 
 const counter = ref<string | number | null>(null)
 
+// The slot on screen. Counted beats arrive on metronomeEvent and off-beats on
+// metronomeSubEvent, and the counter has to follow both: watching only the
+// first meant an eighth-note pattern looked identical to a straight one here,
+// while the dots showed every subdivision.
+const currentSlot = ref<number | null>(null)
+
 const getClass = computed(() => ({ 'light-mode': !isDarkMode.value }))
 
 // Colour says what the slot is in the compás, exactly as it does on the dots:
@@ -31,7 +38,7 @@ const getClass = computed(() => ({ 'light-mode': !isDarkMode.value }))
 // used to be primary against secondary, which are two shades of the same red
 // and told these apart in name only.
 const getStyle = computed(() => {
-  const slot = metronomeEvent.value as number | null
+  const slot = currentSlot.value
   if (slot === null) return {}
   return { color: compasColor(slot), opacity: roleOf(slot) === 'accent' ? 1 : 0.9 }
 })
@@ -39,7 +46,7 @@ const getStyle = computed(() => {
 // The palmas layer, in the same language as the dots' ring: present when the
 // instrument being drawn strikes here, thicker the harder it strikes.
 const palmasStyle = computed(() => {
-  const slot = metronomeEvent.value as number | null
+  const slot = currentSlot.value
   const weight = slot === null ? 0 : palmasWeight(slot)
   return {
     height: weight ? `${weight * 2}px` : '2px',
@@ -48,15 +55,25 @@ const palmasStyle = computed(() => {
   }
 })
 
-watch(metronomeEvent, (v: number | null) => {
-  if (v !== null && selectedPattern.value) {
-    const label = beatLabels.value[(v as number)]
-    // An unlabelled slot is a beat the compás does not count. It shows a dot
-    // rather than a number: present, but not asking to be read as a count.
-    counter.value = label ?? (showsEighthNotes.value ? '·' : null)
-  } else {
+const show = (v: number | null) => {
+  if (v === null || !selectedPattern.value) {
+    currentSlot.value = null
     counter.value = null
+    return
   }
+  currentSlot.value = v
+  // An unlabelled slot is one the compás does not count. It reads as a dot
+  // rather than a number: present, but not asking to be counted.
+  counter.value = beatLabels.value[v] ?? '·'
+}
+
+watch(metronomeEvent, show)
+
+// Off-beats only when the instrument being drawn is playing them, so the
+// counter never counts a subdivision nothing is sounding.
+watch(metronomeSubEvent, (v: number | null) => {
+  if (v !== null && !showsEighthNotes.value) return
+  show(v)
 })
 </script>
 
@@ -67,10 +84,10 @@ watch(metronomeEvent, (v: number | null) => {
     :class="getClass",
     :style="getStyle"
   ).text-center.q-ma-none
-    div(v-if="metronomeEvent === null")
+    div(v-if="currentSlot === null")
       q-icon(name="mdi-dots-horizontal", size="85px")
     div(v-else).text-weight-bold {{ counter }}
-  .palmas-bar(v-if="metronomeEvent !== null", :style="palmasStyle")
+  .palmas-bar(v-if="currentSlot !== null", :style="palmasStyle")
 </template>
 
 <style lang="scss" scoped>

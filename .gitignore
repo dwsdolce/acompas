@@ -17,9 +17,11 @@ node_modules
 # postinstall hook runs it, so a fresh clone is build-ready with no manual
 # step. Do not commit them.
 #
-# `yarn icons:all` (./icongenie.sh) is a different, occasional job: it runs the
-# full profile, which also rewrites the Capacitor Android and iOS assets that
-# ARE committed. Run it only when app-icon.png changes, and review the diff.
+# `yarn icons:all` is a different, occasional job: it runs the full profile,
+# which also rewrites the Capacitor Android and iOS assets that ARE committed,
+# and flattens the iOS icon, which Icon Genie writes with an alpha channel that
+# App Store Connect refuses. Run it only when the source icon changes, and
+# review the diff.
 #
 # src-electron/icons is the path icongenie-profile.json still writes Electron
 # icons to; app-vite v3 reads them from src-electron/electron-assets/icons.

@@ -176,34 +176,47 @@ describe('metronome audio/visual sync', () => {
     }
   })
 
-  it('keeps the visual inside its own slot at the default tempo', () => {
+  it('applies the same compensation whatever the tempo', () => {
     rec.ctx.outputLatency = 0.02
-    const { visualBySlot, audioBySlot } = runCompas(pattern.defaultTempo)
-    const slot = slotDuration(pattern.defaultTempo)
-    expect(audioBySlot.size, 'no audio scheduled - the test would pass vacuously').toBeGreaterThan(0)
+    rec.offsetMs = 60
 
-    for (const [n, audioTime] of audioBySlot) {
-      const visualTime = visualBySlot.get(n)
-      if (visualTime === undefined) continue
-      // Past this, the dot lights while a later slot is sounding, which reads
-      // as a strong beat shown against a weak one.
-      expect(visualTime - audioTime, `slot ${n}`).toBeLessThan(slot)
+    for (const bpm of [pattern.minTempo, pattern.defaultTempo, pattern.maxTempo]) {
+      const { visualBySlot, audioBySlot } = runCompas(bpm)
+      expect(audioBySlot.size, `no audio at ${bpm} BPM`).toBeGreaterThan(0)
+
+      for (const [slot, audioTime] of audioBySlot) {
+        const visualTime = visualBySlot.get(slot)
+        if (visualTime === undefined) continue
+        // Latency is a fixed number of seconds, not a fraction of a beat, so
+        // the offset must not scale with the tempo.
+        expect(visualTime - audioTime, `${bpm} BPM, slot ${slot}`).toBeCloseTo(0.08, 6)
+      }
     }
   })
 
-  // Documents a defect rather than a guarantee: the offset slider allows up to
-  // 500ms on top of the device latency, with no clamp against the beat grid.
-  // At 130 BPM a slot is 231ms, so 250ms pushes the dot past the next slot.
-  // Turn this into a plain `it` once the offset is clamped to one slot.
-  it.fails('over-compensates when the manual offset exceeds one slot', () => {
+  // There is deliberately no assertion that the visual lands inside its own
+  // slot. Tone.Draw fires when the context clock reaches the scheduled time,
+  // so a visual scheduled at T + L appears exactly as the audio queued at T
+  // reaches the speakers - and that is right however large L is. On a
+  // Bluetooth output at 300 BPM the true latency spans three slots, and
+  // compensating by three slots is correct, not broken.
+  //
+  // What can be wrong is the offset not matching the real latency, which no
+  // test can detect: the app is never told what the true delay is. The slider
+  // is the only place that knows, and it reports milliseconds, which say
+  // nothing about how many beats they amount to at the tempo in play.
+  it('offsets the visual by the configured latency and nothing else', () => {
+    rec.ctx.baseLatency = 0.005
+    rec.ctx.outputLatency = 0.015
     rec.offsetMs = 250
-    const { visualBySlot, audioBySlot } = runCompas(pattern.defaultTempo)
-    const slot = slotDuration(pattern.defaultTempo)
 
-    for (const [n, audioTime] of audioBySlot) {
-      const visualTime = visualBySlot.get(n)
+    const { visualBySlot, audioBySlot } = runCompas(pattern.defaultTempo)
+    expect(audioBySlot.size).toBeGreaterThan(0)
+
+    for (const [slot, audioTime] of audioBySlot) {
+      const visualTime = visualBySlot.get(slot)
       if (visualTime === undefined) continue
-      expect(visualTime - audioTime, `slot ${n}`).toBeLessThan(slot)
+      expect(visualTime - audioTime, `slot ${slot}`).toBeCloseTo(0.27, 6)
     }
   })
 })

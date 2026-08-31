@@ -31,7 +31,7 @@ export type CompasRole = 'accent' | 'beat' | 'pulse' | 'sub'
  * foreground colour reads against all five, and against a greyscale screen or
  * a viewer who cannot separate two hues.
  */
-export const useCompasVisual = () => {
+export const useCompasVisual = (options: { onLightSurface?: boolean } = {}) => {
   const patternStore = usePatternStore()
   const sessionStore = useSessionStore()
 
@@ -68,8 +68,15 @@ export const useCompasVisual = () => {
 
   // Grey rather than a second hue, for the same reason the palmas layer has no
   // hue: it has to sit beside all five context colours without competing.
-  const neutralColor = computed(() => (isDarkMode.value ? '#bdbdbd' : '#616161'))
-  const inkColor = computed(() => (isDarkMode.value ? '#f5f5f5' : '#212121'))
+  //
+  // `onLightSurface` is for a view that does not follow the theme. The clock
+  // face is $blue-grey-1 whether the app is light or dark, so reading the
+  // theme there paints a near-white tick on a near-white dial and a #bdbdbd
+  // numeral that can barely be read.
+  const onDark = computed(() => (options.onLightSurface ? false : isDarkMode.value))
+
+  const neutralColor = computed(() => (onDark.value ? '#bdbdbd' : '#616161'))
+  const inkColor = computed(() => (onDark.value ? '#f5f5f5' : '#212121'))
 
   const compasColor = (i: number) => (isAccent(i) ? 'var(--q-primary)' : neutralColor.value)
 
