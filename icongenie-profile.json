@@ -529,6 +529,17 @@
       "sizes": [
         1024
       ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-2732x2732.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset",
+      "sizes": [
+        [
+          2732,
+          2732
+        ]
+      ]
     }
   ]
 }

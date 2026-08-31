@@ -9,7 +9,7 @@ import { useSessionStore } from 'src/stores/session'
 import HelpPattern from 'src/components/HelpPattern.vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import HelpSearchPattern from 'src/components/HelpSearchPattern.vue'
-import { getDefaultPatterns } from 'src/utils/utils'
+import { getDefaultPatterns, patternMatchesSearch } from 'src/utils/utils'
 
 import type { QBtn } from 'quasar'
 import type { PatternState, PatternSetting } from 'src/utils/types'
@@ -44,17 +44,12 @@ const patternsDialog = ref(false)
 const filter = ref('')
 
 const patternsOptions = computed(() => {
-  if (filter.value !== '') {
-    const regex = new RegExp(filter.value, 'g')
-    return patternsInSelectedContext.value.filter(pattern => {
-      const patternData = data.value.find(data => data.name === pattern.value)
-      return patternData?.linkedPatterns?.some(linkedPattern => {
-        return regex.test(linkedPattern.value)
-      })
-    })
-  } else {
-    return patternsInSelectedContext.value
-  }
+  if (!filter.value.trim()) return patternsInSelectedContext.value
+
+  return patternsInSelectedContext.value.filter(option => {
+    const pattern = data.value.find((entry: PatternState) => entry.name === option.value)
+    return pattern ? patternMatchesSearch(pattern, filter.value) : false
+  })
 })
 
 const selectedPatternOption = computed(() => {

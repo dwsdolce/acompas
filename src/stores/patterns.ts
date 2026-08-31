@@ -193,23 +193,8 @@ export const usePatternStore = defineStore('patterns', () => {
     selectedPattern.value?.instruments?.filter((i: instruOpts) => i?.enabled ?? false)
   )
 
-  const unselectedInstruments = computed(() =>
-    selectedPattern.value?.instruments?.filter((i: instruOpts) => !(i?.enabled ?? false))
-  )
-
   const beatLabels = computed(() =>
     selectedData.value?.sequences?.beatLabels
-  )
-
-  /**
-   * True when at least one enabled instrument is playing the off-beat
-   * subdivisions. Visualizations use it to decide whether to draw the
-   * subdivision layer, which is noise when nothing is playing it.
-   */
-  const hasEighthNotes = computed(() =>
-    selectedPattern.value?.instruments?.some(
-      (i: instruOpts) => (i?.enabled ?? false) && (i?.eighthNotes ?? false)
-    ) ?? false
   )
 
   /**
@@ -253,8 +238,8 @@ export const usePatternStore = defineStore('patterns', () => {
 
   /**
    * Whether the drawn instrument is playing the off-beats. The views follow
-   * this rather than `hasEighthNotes`, so the subdivisions they show belong to
-   * the instrument they are drawing and not to some other one in the mixer.
+   * this, so the subdivisions a view shows belong to the instrument it is
+   * drawing and not to some other one that happens to be on in the mixer.
    */
   const visualizedHasEighthNotes = computed(() =>
     visualizedInstrument.value?.eighthNotes ?? false
@@ -485,7 +470,6 @@ export const usePatternStore = defineStore('patterns', () => {
     data,
     metronomeEvent,
     metronomeSubEvent,
-    hasEighthNotes,
     visualizedInstrument,
     visualizedInstrumentName,
     visualizedSequence,
@@ -507,7 +491,6 @@ export const usePatternStore = defineStore('patterns', () => {
     swing,
     prestartBeat,
     selectedInstruments,
-    unselectedInstruments,
     instruments,
     globalDecay,
     // numLabels,

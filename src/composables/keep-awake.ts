@@ -17,11 +17,6 @@ export const useKeepAwake = () => {
     return screenWakeLockSupported || keepAwakeSupported
   }
 
-  const isKeptAwake = async () => {
-    const result = await KeepAwake.isKeptAwake()
-    return result.isKeptAwake
-  }
-
   const keepAwake = async () => {
     if (Platform.is.capacitor) {
       await KeepAwake.keepAwake()
@@ -64,7 +59,6 @@ export const useKeepAwake = () => {
 
   return {
     isSupported,
-    isKeptAwake,
     keepAwake,
     allowSleep
   }

@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
-# Flatten the iOS app icon onto an opaque background.
+# Finish the iOS assets Icon Genie leaves half-done.
 #
 # Icon Genie writes the icon with an alpha channel, which App Store Connect
 # rejects: "Invalid Image - the app icon can't contain an alpha channel or
@@ -44,3 +44,23 @@ fi
 
 mv "$tmp" "$icon"
 echo "Flattened ${icon} (${size}x${size}, no alpha)"
+
+# The splash is one image referenced three times, at 1x, 2x and 3x. Icon Genie
+# writes a single file, so the other two names are copies of it - the asset
+# catalogue names them, and Xcode will not build with any of them missing.
+splash_dir="src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset"
+splash="${splash_dir}/splash-2732x2732.png"
+
+if [[ ! -f "$splash" ]]; then
+    echo "No iOS splash at ${splash} - run: yarn icons:all"
+    exit 1
+fi
+
+for scale in 1 2; do
+    cp "$splash" "${splash_dir}/splash-2732x2732-${scale}.png"
+    if [ $? -ne 0 ]; then
+        echo "Copying the splash to scale ${scale} failed"
+        exit 1
+    fi
+done
+echo "Copied ${splash} to its 1x and 2x names"

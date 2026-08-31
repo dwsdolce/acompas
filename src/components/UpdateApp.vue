@@ -7,9 +7,6 @@ import { Loading, Platform } from 'quasar'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
 import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
-import { AppRestart } from 'src/plugins/app-restart'
-import { Capacitor } from '@capacitor/core'
-import { logger } from 'src/utils/logger'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -33,14 +30,14 @@ const handleUpdateApp = async () => {
   await restoreDefault('all')
   Loading.hide()
 
-  if (Capacitor.isNativePlatform()) {
-    try {
-      await AppRestart.restart()
-    } catch (error) {
-      logger.error(error)
-    }
-  }
-  router.go(0)
+  // Reload rather than restart. An iOS app cannot relaunch itself - there is
+  // no API for it, and terminating yourself is grounds for rejection - so the
+  // AppRestart plugin this used to call had no implementation on either
+  // platform. Every native run threw "AppRestart does not have an
+  // implementation", the catch swallowed it, and the reload on the next line
+  // did the work regardless. Reloading the webview re-runs the app, which is
+  // all a restart meant here now that the settings have been cleared above.
+  window.location.reload()
 }
 
 </script>

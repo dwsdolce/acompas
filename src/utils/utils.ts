@@ -62,3 +62,41 @@ export function formatAudioOffset(ms: number, tempo: number): string {
   const beats = offset / (60000 / tempo)
   return `${offset} ms · ${beats.toFixed(1)} ♩`
 }
+
+/**
+ * Lower-cased and stripped of accents, so "solea" finds Soleá and "Soleá"
+ * finds it too. Flamenco names carry accents a keyboard often will not.
+ */
+export function foldForSearch(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+}
+
+/**
+ * Everything a pattern can be found by: its own names, and the palos that
+ * share its compás, which `linkedPatterns` lists as search aliases rather than
+ * as references to other patterns.
+ */
+export function patternSearchTerms(pattern: PatternState): string[] {
+  return [
+    pattern.name,
+    pattern.label,
+    pattern.longLabel,
+    ...(pattern.linkedPatterns ?? []).flatMap(alias => [alias.label, alias.value])
+  ].filter((term): term is string => Boolean(term))
+}
+
+/**
+ * Whether a pattern answers to what was typed. Plain substring matching,
+ * deliberately.
+ *
+ * The picker used to build `new RegExp(query, 'g')` out of raw keystrokes and
+ * test it against `linkedPatterns` alone. Three things went wrong: an unclosed
+ * bracket threw, the `g` flag made `test()` stateful so matches alternated
+ * between calls on the same regex, and seventeen of the thirty patterns carry
+ * no aliases at all, so they vanished the moment anything was typed.
+ */
+export function patternMatchesSearch(pattern: PatternState, query: string): boolean {
+  const needle = foldForSearch(query.trim())
+  if (!needle) return true
+  return patternSearchTerms(pattern).some(term => foldForSearch(term).includes(needle))
+}

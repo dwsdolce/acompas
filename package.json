@@ -22,7 +22,7 @@
     "build:electron:prod": "quasar build -m electron --prod",
     "icons": "icongenie generate -p icongenie-generated.json",
     "postinstall": "quasar prepare && yarn icons && python3 format_audio.py convert --optional",
-    "icons:all": "icongenie generate -p icongenie-profile.json && packaging/flatten_ios_icon",
+    "icons:all": "icongenie generate -p icongenie-profile.json && packaging/prepare_ios_assets",
     "audio": "python3 format_audio.py convert"
   },
   "dependencies": {

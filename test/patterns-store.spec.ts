@@ -115,10 +115,12 @@ describe('patterns store', () => {
 
       expect(store.visualizedHasEighthNotes).toBe(true)
 
-      store.visualizeInstrument(store.selectedInstruments.find(i => i.value !== 'cajon')!.value)
+      const other = store.selectedInstruments.find(i => i.value !== 'cajon')!
+      store.visualizeInstrument(other.value)
       expect(store.visualizedHasEighthNotes).toBe(false)
-      // The mixer as a whole still has eighths on, which is the distinction.
-      expect(store.hasEighthNotes).toBe(true)
+      // The cajón still has eighths on. That is the whole distinction: the
+      // views follow the instrument being drawn, not the mixer at large.
+      expect(store.instrument('cajon')!.eighthNotes).toBe(true)
     })
   })
 })

@@ -8,10 +8,5 @@ export default defineCapacitorConfig({
   appId: 'audio.acompas.app',
   appName: 'A Compás',
   npmClient: 'yarn',
-  webDir: 'www',
-  plugins: {
-    AppRestart: {
-      android: 'audio.acompas.app.AppRestartPlugin'
-    }
-  }
+  webDir: 'www'
 })

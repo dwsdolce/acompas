@@ -39,7 +39,6 @@ export const matomoMock = () => ({
 export const keepAwakeMock = () => ({
   useKeepAwake: () => ({
     isSupported: ref(false),
-    isKeptAwake: ref(false),
     keepAwake: vi.fn(),
     allowSleep: vi.fn()
   })
