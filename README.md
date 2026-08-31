@@ -486,8 +486,11 @@ via `quasar prepare`, so a fresh clone can lint and test without a build; run
   fall inside the pattern and ascend, tempos are ordered, names are unique.
   These lock in properties that are easy to break by hand-editing the data.
 - **Translations** - every locale defines exactly the interface keys `en-US`
-  does. `doc.changelog.*` is excluded: it is release-note history, written in
-  English and translated when someone gets to it.
+  does, with nothing excluded. The release history is not interface text and
+  lives in `src/assets/data/changelog.ts`, untranslated on purpose: six of the
+  nine locales had fallen five to eight releases behind, so their readers saw a
+  changelog that simply stopped. One English list beats a truncated translated
+  one, and the drift cannot come back.
 - **The store** - patterns load with their context, instrument lookup works,
   and selecting a pattern produces a playable instrument list.
 - **Audio/visual sync** - the dots and the samples are driven from the same

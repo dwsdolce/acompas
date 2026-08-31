@@ -284,36 +284,6 @@ IPアドレスを匿名化します。
     changelog: {
       title: 'Changelog',
       description: 'Latest changes and updates to A Compás',
-      entries: [
-        {
-          version: '3.2.7',
-          date: '2024-08-23',
-          changes: [
-            'Added context store and selector with color views',
-            'Added pattern search filter functionality',
-            'Updated Quasar packages',
-            'Preparing for Android 34 compatibility'
-          ]
-        },
-        {
-          version: '3.2.5',
-          date: '2023-07-15',
-          changes: [
-            'Added and updated sitemap.xml',
-            'Fixed Matomo events',
-            'Performance improvements and bug fixes'
-          ]
-        },
-        {
-          version: '2.0.0',
-          date: '2018-01-04',
-          changes: [
-            'Complete application rewrite',
-            'New modern interface design',
-            'Improved metronome engine'
-          ]
-        }
-      ]
     }
   },
   buttons: {

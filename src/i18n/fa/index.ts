@@ -284,23 +284,6 @@ A Compás در 9 زبان برای خدمت به جامعه جهانی فلام�
     changelog: {
       title: 'Changelog',
       description: 'Latest changes and updates to A Compás',
-      entries: [
-        {
-          version: '3.2.7',
-          date: '2024-08-23',
-          changes: [
-            'Added context store and selector',
-            'Updated Quasar packages'
-          ]
-        },
-        {
-          version: '2.0.0',
-          date: '2018-01-04',
-          changes: [
-            'Complete application rewrite'
-          ]
-        }
-      ]
     }
   },
   buttons: {

@@ -284,59 +284,6 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
     changelog: {
       title: 'Registro delle modifiche',
       description: 'Ultimi cambiamenti e aggiornamenti di A Compás',
-      entries: [
-        {
-          version: '3.2.7',
-          date: '2024-08-23',
-          changes: [
-            'Aggiunto store di contesto e selettore con viste colorate',
-            'Aggiunta funzionalità filtro ricerca pattern',
-            'Aggiunta finestra di aiuto per la ricerca pattern',
-            'Aggiunta funzionalità mantieni sveglio per desktop',
-            'Aggiornati pacchetti Quasar',
-            'Corretti avvisi SaSS',
-            'Aggiornato a Node 20',
-            'Preparazione per compatibilità Android 34'
-          ]
-        },
-        {
-          version: '3.2.5',
-          date: '2023-07-15',
-          changes: [
-            'Aggiunto e aggiornato sitemap.xml',
-            'Corretti eventi Matomo',
-            'Corretta posizione orologio inattivo',
-            'Aggiornati pacchetti Quasar',
-            'Miglioramenti prestazioni e correzioni bug'
-          ]
-        },
-        {
-          version: '3.2.4',
-          date: '2023-07-06',
-          changes: [
-            'Correzioni bug e miglioramenti stabilità',
-            'Miglioramenti minori interfaccia utente'
-          ]
-        },
-        {
-          version: '2.3.0',
-          date: '2021-01-23',
-          changes: [
-            'Nuove funzionalità e miglioramenti',
-            'Interfaccia utente migliorata'
-          ]
-        },
-        {
-          version: '2.0.0',
-          date: '2018-01-04',
-          changes: [
-            'Riscrittura completa dell\'applicazione',
-            'Nuovo design interfaccia moderno',
-            'Motore metronomo migliorato',
-            'Aggiunti più pattern flamenco'
-          ]
-        }
-      ]
     }
   },
   buttons: {

@@ -1,21 +1,9 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import CustomCard from 'src/components/CustomCard.vue'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
-
-const { tm } = useI18n()
-
-interface ChangelogEntry {
-  version: string
-  date: string
-  changes: string[]
-}
-
-const changelogEntries = computed(() => {
-  const entries = tm('doc.changelog.entries')
-  return Array.isArray(entries) ? entries as ChangelogEntry[] : []
-})
+// The release history is deliberately not translated; see the data file for
+// why. Only the title and description on this page come from i18n.
+import changelogEntries from 'src/assets/data/changelog'
 
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString(undefined, {

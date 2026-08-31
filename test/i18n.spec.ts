@@ -18,12 +18,10 @@ const locales = Object.keys(messages) as (keyof typeof messages)[]
 // en-US is the source locale: it is the one the app falls back to.
 const REFERENCE = 'en-US'
 
-// Release-note history, not interface text. Older entries are written in
-// English and translated when someone gets to them, so holding every locale to
-// the full changelog would fail permanently and say nothing about the UI.
-const IGNORED = (key: string) => key.startsWith('doc.changelog.')
-
-const uiKeys = (tree: Tree) => keysOf(tree).filter(k => !IGNORED(k))
+// Nothing is excluded any more: the release history moved out of i18n into
+// src/assets/data/changelog.ts, so every key left here is interface text that
+// every locale is expected to carry.
+const uiKeys = (tree: Tree) => keysOf(tree)
 const referenceKeys = uiKeys(messages[REFERENCE] as Tree)
 
 describe('i18n', () => {
