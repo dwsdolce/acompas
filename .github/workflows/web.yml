@@ -35,6 +35,15 @@ jobs:
           sudo apt-get install -y --no-install-recommends ffmpeg
           python3 format_audio.py convert
 
+      # yarn install downloads the ~100MB Electron binary through electron's
+      # own postinstall, into a cache directory of its own. Keyed on the
+      # version so a bump fetches the new one.
+      - name: Cache the Electron binary
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/electron
+          key: electron-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       # src-capacitor has its own package.json and lockfile. Even the plain SPA
       # build needs it: the Capacitor imports in src/boot/statusbar.ts,
       # src/composables/keep-awake.ts and src/App.vue resolve into
@@ -92,6 +101,22 @@ jobs:
           fi
 
           echo "App mounted and rendered with no console errors."
+
+      # The desktop app, built and actually launched. Two of the bugs that
+      # reached a device this month - a blank window, and marks drawn in a
+      # colour that could not be seen - compiled cleanly and passed every unit
+      # test. Opening the window is the only check that would have caught the
+      # first of them.
+      #
+      # -s stops after the unpackaged folder, which is what the tests launch:
+      # building the installers as well costs half a minute and 800MB to
+      # produce something nothing here opens.
+      - name: Build the desktop app
+        run: npx quasar build -m electron -s
+
+      # Electron needs a display, and a runner has none.
+      - name: Test the desktop app
+        run: xvfb-run -a npx playwright test
 
       - name: Package the SPA
         run: tar -czf spa.tar.gz -C dist spa

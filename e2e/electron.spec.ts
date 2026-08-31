@@ -11,6 +11,10 @@ const appDir = path.resolve(process.cwd(), 'dist/electron/UnPackaged')
 // failure that reads like a broken build rather than a broken environment.
 const { ELECTRON_RUN_AS_NODE: _ignored, ...cleanEnv } = process.env
 
+// A CI runner has no display and no usable sandbox. Harmless everywhere else,
+// so it is unconditional rather than a branch nobody exercises locally.
+const launchArgs = ['--no-sandbox', '--disable-gpu']
+
 test.describe('Electron desktop app', () => {
   test.skip(
     !existsSync(appDir),
@@ -18,7 +22,7 @@ test.describe('Electron desktop app', () => {
   )
 
   test('opens a window that renders the app with its assets', async () => {
-    const app = await electron.launch({ args: [appDir], env: cleanEnv as Record<string, string> })
+    const app = await electron.launch({ args: [appDir, ...launchArgs], env: cleanEnv as Record<string, string> })
 
     const errors: string[] = []
     const window = await app.firstWindow()
@@ -50,7 +54,7 @@ test.describe('Electron desktop app', () => {
   })
 
   test('serves a decodable audio sample to the renderer', async () => {
-    const app = await electron.launch({ args: [appDir], env: cleanEnv as Record<string, string> })
+    const app = await electron.launch({ args: [appDir, ...launchArgs], env: cleanEnv as Record<string, string> })
     const window = await app.firstWindow()
     await window.waitForLoadState('domcontentloaded')
 
