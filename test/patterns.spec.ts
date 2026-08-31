@@ -65,3 +65,36 @@ describe('pattern data', () => {
     expect(names.filter((n, i) => names.indexOf(n) !== i)).toEqual([])
   })
 })
+
+// The compas and its realization are different things: `accents` is the
+// theoretical pulse and carries no sound (the README is explicit that it is
+// "just a visual help"), while each instrument sequence is one way of playing
+// against that pulse. The click is the exception - it is the audible form of
+// the pulse itself, so it is the one instrument whose strongest hits must land
+// exactly on the accents. That is what makes it a trustworthy reference when
+// the dots and the palmas disagree, as they do in abandolaos, where the pulse
+// falls on 6/2/4 and the palmas claras on 1/3.
+//
+// It holds for the flamenco family only. Elsewhere the click marks the bar
+// start and `accents` carries the whole rhythmic cell.
+describe('flamenco click matches the compas', () => {
+  const flamenco = patterns.filter(p => p.__file === 'flamenco.ts' && p.name !== 'simple-click')
+
+  it('covers the flamenco patterns', () => {
+    expect(flamenco.length).toBeGreaterThan(10)
+  })
+
+  it.each(flamenco.map(p => [p.name, p] as const))(
+    "%s: the click's strongest hits are exactly the accents",
+    (_name, pattern) => {
+      const click = pattern.sequences.click as (number | null)[] | undefined
+      expect(click, `${pattern.name} has no click sequence`).toBeDefined()
+
+      const strongest = click!
+        .map((value, slot) => (value === 1 ? slot : null))
+        .filter((slot): slot is number => slot !== null)
+
+      expect(strongest).toEqual([...pattern.accents])
+    }
+  )
+})

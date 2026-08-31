@@ -4,10 +4,12 @@ import { getCssVar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
+import { useCompasVisual } from 'src/composables/visualization'
 import { useSessionStore } from 'src/stores/session'
 import type { CSSProperties } from 'vue'
 
 const patternStore = usePatternStore()
+const { roleOf, palmasWeight, compasColor, inkColor, showsEighthNotes } = useCompasVisual()
 const sessionStore = useSessionStore()
 
 const {
@@ -27,7 +29,14 @@ const {
 const clockDeg = ref<number>(0)
 const hand = ref<HTMLDivElement | null>(null)
 const nums = ref<HTMLDivElement[] | null[]>([])
-const clockStep = computed(() => 360 / (beatLabels.value?.length / 2))
+// One turn of the dial is one compás. The hand moves by whatever the drawn
+// instrument is playing: an eighth when it plays the off-beats, a quarter when
+// it does not. Stepping by quarters while eighths sound leaves half the compás
+// with nothing on the dial to mark it.
+const slotsPerStep = computed(() => (showsEighthNotes.value ? 1 : 2))
+const clockStep = computed(
+  () => 360 / (beatLabels.value?.length / slotsPerStep.value)
+)
 const clockVelocity = computed(() =>
     60000 / tempo.value
   )
@@ -59,11 +68,32 @@ const getNumStyle = (i: number) => {
   }
 }
 
-const getNumClass = computed(() => (i: number) => {
-  const isAccent = selectedData.value.accents.includes(i)
+// Colour and size say what the slot is in the compás, as they do on the dots
+// and the counter. This was primary against secondary — two shades of one red.
+const getCompasStyle = computed(() => (i: number) => {
+  const role = roleOf(i)
   return {
-    'text-secondary': isAccent,
-    'text-primary': !isAccent
+    color: compasColor(i),
+    opacity: role === 'accent' ? 1 : role === 'beat' ? 0.9 : 0.6,
+    fontWeight: role === 'accent' ? 700 : 400
+  }
+})
+
+/**
+ * The palmas layer: a tick outside the dial wherever the drawn instrument
+ * strikes, its length the weight of the strike. No hue, for the same reason
+ * the dots' ring has none — the dial sits in five different context colours.
+ */
+const getTickStyle = computed(() => (i: number) => {
+  const weight = palmasWeight(i)
+  if (!weight) return { display: 'none' }
+  return {
+    position: 'absolute',
+    height: `${weight * 4 + 2}px`,
+    width: `${weight}px`,
+    backgroundColor: inkColor.value,
+    opacity: 0.85,
+    borderRadius: '1px'
   }
 })
 
@@ -77,7 +107,7 @@ const idleClockPosition = () => {
 }
 
 const animateClock = (v: number | null) => {
-  if (v) clockDeg.value = v / 2 * clockStep.value
+  if (v) clockDeg.value = v / slotsPerStep.value * clockStep.value
   const animation = anime({
     targets: '.hand',
     rotate: [ clockDeg.value, clockDeg.value + clockStep.value ],
@@ -155,9 +185,9 @@ onBeforeUpdate(() => {
       v-for="(n, i) in beatLabels",
       :style="getLiStyle(i)"
     )
+      .tick(:style="getTickStyle(i)")
       .num(
         :ref="el => { nums[i] = el }",
-        :style="getNumStyle(i)",
-        :class="getNumClass(i)"
+        :style="[getNumStyle(i), getCompasStyle(i)]"
       ) {{ n }}
 </template>

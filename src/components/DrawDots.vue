@@ -4,11 +4,24 @@ import { getCssVar, is } from 'quasar'
 import { storeToRefs } from 'pinia'
 import anime from 'animejs'
 import { usePatternStore } from 'src/stores/patterns'
+import { useCompasVisual } from 'src/composables/visualization'
 import { useSessionStore } from 'src/stores/session'
 import type { CSSProperties } from 'vue'
 import type { Size } from 'src/utils/types'
 
 const patternStore = usePatternStore()
+// Compas and palmas are drawn the same way here, in the counter and in the
+// clock; the encoding lives in one place so the three cannot drift apart.
+const {
+  roleOf,
+  palmasWeight,
+  compasColor,
+  compasScale,
+  compasOpacity,
+  inkColor,
+  isHidden,
+  showsEighthNotes
+} = useCompasVisual()
 const sessionStore = useSessionStore()
 
 // how to get the browser viewport size in a vue environment?
@@ -21,7 +34,6 @@ const {
   selectedData,
   metronomeEvent,
   metronomeSubEvent,
-  hasEighthNotes,
   beatLabels
 } = storeToRefs(patternStore)
 
@@ -72,59 +84,27 @@ const fontSize = computed(() => {
   }
 })
 
-// A slot is one of three things, and each reads differently:
-//   accent — a stressed beat, listed in the pattern's `accents`
-//   beat   — a counted beat, i.e. one carrying a label
-//   sub    — an off-beat subdivision, whose label is null
-// Accents were originally distinguished by colour alone (primary vs
-// secondary), but those are two shades of the same red and are
-// indistinguishable at this size. Hue, size and opacity now all carry the
-// distinction, so it survives a viewer who can't separate red from blue.
-const accentScale = 1.5
-const pulseScale = 0.65
-const subScale = 0.4
-
-// Accents take the context's own colour, everything else a neutral grey.
-// Grey rather than a second hue because --q-primary changes per rhythm
-// context — red for flamenco, but light-blue for Fundamental Global and teal
-// for Ternary African, either of which would collide with a coloured second
-// tier and leave size as the only cue. Grey contrasts with all five.
-const accentColor = 'var(--q-primary)'
-const beatColor = computed(() => (isDarkMode.value ? '#bdbdbd' : '#616161'))
-
-const isAccent = (i: number) => selectedData.value?.accents?.includes(i) ?? false
-const isBeat = (i: number) => (beatLabels.value?.[i] ?? null) !== null
-
-// An even slot carrying no label is still part of the pulse grid the
-// instruments play — the compás just doesn't count it. Siguiriya is the case
-// that matters: its 12 pulses are counted as 5 uneven beats (2+2+3+3+2), so
-// seven of the twelve strokes you hear have no label. Draw them, or those
-// strokes sound with nothing happening on screen. For every other pattern
-// each even slot is labelled, so this tier is empty and nothing changes.
-const isPulse = (i: number) => !isBeat(i) && i % 2 === 0
-
-// Odd slots are off-beat subdivisions: reserved-but-hidden unless something
-// is actually playing them, so the beat spacing never shifts.
-const isHidden = (i: number) => !isBeat(i) && !isPulse(i) && !hasEighthNotes.value
-
 const dotStyle = computed(() => (i: number) => {
   const base = dotSize.value / 2
-  const max = base * accentScale
-  const size = isAccent(i)
-    ? max
-    : isBeat(i)
-      ? base
-      : isPulse(i)
-        ? base * pulseScale
-        : base * subScale
+  const max = base * compasScale.accent
+  const role = roleOf(i)
+  const size = base * compasScale[role]
+  const weight = palmasWeight(i)
+
   return {
     width: size + 'px',
     height: size + 'px',
     borderRadius: borderRadius.value + '%',
     // Keep every dot on one centre line despite the differing diameters.
     marginTop: dotSize.value / 2 + (max - size) / 2 + 'px',
-    backgroundColor: isAccent(i) ? accentColor : beatColor.value,
-    opacity: isAccent(i) ? 1 : isBeat(i) ? 0.9 : isPulse(i) ? 0.6 : 0.4
+    backgroundColor: compasColor(i),
+    opacity: compasOpacity[role],
+    // The palmas layer: an outline set off the dot so it reads as a ring
+    // rather than a fatter dot, its thickness the weight of the strike.
+    // outline-offset leaves a real gap showing whatever is behind, so no
+    // background colour has to be guessed here.
+    outline: weight ? `${weight}px solid ${inkColor.value}` : 'none',
+    outlineOffset: weight ? '2px' : '0'
   }
 })
 
@@ -165,7 +145,7 @@ watch(metronomeEvent, (v) => {
 
 // Subdivisions pulse smaller than counted beats, and carry no label to fade.
 watch(metronomeSubEvent, (v) => {
-  if (v !== null && hasEighthNotes.value) animateDot(v, 2, false)
+  if (v !== null && showsEighthNotes.value) animateDot(v, 2, false)
 })
 
 // make sure to reset the refs before each update

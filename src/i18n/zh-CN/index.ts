@@ -222,6 +222,10 @@ A Compás提供9种语言服务全球弗拉门戈社区：
         title: '活跃',
         content: '播放此乐器'
       },
+      shown: {
+        title: '显示',
+        content: '在可视化中显示此乐器'
+      },
       eighth: {
         title: '8分',
         content: '切换八分音符'

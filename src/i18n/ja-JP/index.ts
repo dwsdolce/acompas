@@ -222,6 +222,10 @@ A Compásは世界のフラメンココミュニティにサービスを提供�
         title: 'アクティブ',
         content: 'この楽器を演奏'
       },
+      shown: {
+        title: '表示',
+        content: 'この楽器をビジュアライゼーションに表示します'
+      },
       eighth: {
         title: '8分',
         content: '八分音符を切り替え'

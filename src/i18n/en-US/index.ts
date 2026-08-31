@@ -242,6 +242,10 @@ Here you can input the name of any "palo" you ever heard of and A Compás will s
         title: 'Active',
         content: 'Play this instrument'
       },
+      shown: {
+        title: 'Shown',
+        content: 'Draw this instrument in the visualization'
+      },
       eighth: {
         title: '8th',
         content: 'Toggle eighth notes'

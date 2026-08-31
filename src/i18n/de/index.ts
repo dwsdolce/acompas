@@ -222,6 +222,10 @@ Hier k√∂nnen Sie den Namen eines beliebigen "Palo" eingeben, von dem Sie je geh√
         title: 'Aktiv',
         content: 'Dieses Instrument spielen'
       },
+      shown: {
+        title: 'Angezeigt',
+        content: 'Dieses Instrument in der Visualisierung darstellen'
+      },
       eighth: {
         title: '8tel',
         content: 'Achtelnoten umschalten'

@@ -212,6 +212,54 @@ export const usePatternStore = defineStore('patterns', () => {
     ) ?? false
   )
 
+  /**
+   * The instrument the visualizations draw.
+   *
+   * The compas and its realization are different things: `accents` is the
+   * theoretical pulse, and each instrument plays its own figure against it.
+   * Abandolaos is the case that makes it obvious - the pulse falls on 6, 2 and
+   * 4, and the palmas claras strike on 1 and 3 - so a view that draws only the
+   * compas contradicts whatever you are listening to.
+   *
+   * There is always exactly one, and it is never one you cannot hear: an
+   * explicit choice holds while that instrument stays enabled, and otherwise
+   * the first enabled instrument answers for it. Turning everything off is not
+   * a state the mixer allows, so the fallback cannot come up empty.
+   */
+  const visualizedInstrumentName = useStorage('visualized-instrument', ref<string>(''))
+
+  const visualizedInstrument = computed(() => {
+    const enabled = selectedInstruments.value ?? []
+    if (!enabled.length) return undefined
+    return enabled.find((i: instruOpts) => i.value === visualizedInstrumentName.value) ?? enabled[0]
+  })
+
+  /** Draw this instrument. Ignored when it is not one you can hear. */
+  const visualizeInstrument = (key: string) => {
+    const target = (selectedInstruments.value ?? []).find((i: instruOpts) => i.value === key)
+    if (target) visualizedInstrumentName.value = key
+  }
+
+  /**
+   * The sequence the visualizations read: which sample the drawn instrument
+   * plays on each slot, or null where it is silent.
+   */
+  const visualizedSequence = computed<(number | null)[]>(() => {
+    const name = visualizedInstrument.value?.value
+    if (!name) return []
+    const sequence = selectedData.value?.sequences?.[name]
+    return Array.isArray(sequence) ? sequence : []
+  })
+
+  /**
+   * Whether the drawn instrument is playing the off-beats. The views follow
+   * this rather than `hasEighthNotes`, so the subdivisions they show belong to
+   * the instrument they are drawing and not to some other one in the mixer.
+   */
+  const visualizedHasEighthNotes = computed(() =>
+    visualizedInstrument.value?.eighthNotes ?? false
+  )
+
   // *****************************************
   // Utility methods
   // *****************************************
@@ -438,6 +486,11 @@ export const usePatternStore = defineStore('patterns', () => {
     metronomeEvent,
     metronomeSubEvent,
     hasEighthNotes,
+    visualizedInstrument,
+    visualizedInstrumentName,
+    visualizedSequence,
+    visualizedHasEighthNotes,
+    visualizeInstrument,
     isPlaying,
     patterns,
     contexts,

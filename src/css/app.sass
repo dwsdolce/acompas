@@ -115,6 +115,13 @@ $axis : 2vh
       left: 0
       height: 100%
       transform-origin: 0% 100%
+      // The palmas tick sits just outside the numerals, on the same radius as
+      // the beat it belongs to. Its height and colour come from the component,
+      // which is where the shared compás/palmas encoding lives.
+      .tick
+        top: calc($size / -28)
+        left: 0
+        transform: translateX(-50%)
       .num
         color: $primary
         font-size: calc($size / 12)

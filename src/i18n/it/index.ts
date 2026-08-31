@@ -222,6 +222,10 @@ Qui puoi inserire il nome di qualsiasi "palo" di cui hai mai sentito parlare e A
         title: 'Attivo',
         content: 'Suona questo strumento'
       },
+      shown: {
+        title: 'Mostrato',
+        content: 'Rappresenta questo strumento nella visualizzazione'
+      },
       eighth: {
         title: '8°',
         content: 'Attiva/disattiva note da un ottavo'

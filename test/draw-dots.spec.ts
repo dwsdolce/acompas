@@ -68,4 +68,88 @@ describe('DrawDots', () => {
     const largestOther = Math.max(...others.map(widthOf))
     expect(smallestAccent).toBeGreaterThan(largestOther)
   })
+
+  describe('the palmas layer', () => {
+    // The DOM expands the `outline` shorthand, so the width is what to read.
+    const outlineWidth = (dot: { attributes: (name: string) => string | undefined }) =>
+      parseFloat((dot.attributes('style') ?? '').match(/outline-width:\s*([\d.]+)px/)?.[1] ?? '0')
+
+    const outlinedSlots = (wrapper: ReturnType<typeof mount>) =>
+      wrapper.findAll('span[class*="dot-"]')
+        .map((dot, i) => (outlineWidth(dot) > 0 ? i : null))
+        .filter((i): i is number => i !== null)
+
+    it('outlines exactly the slots the drawn instrument strikes', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      const wrapper = mount(DrawDots)
+      await wrapper.vm.$nextTick()
+
+      const played = store.visualizedSequence
+        .map((value, i) => (value ? i : null))
+        .filter((i): i is number => i !== null)
+
+      expect(played.length).toBeGreaterThan(0)
+      expect(outlinedSlots(wrapper)).toEqual(played)
+    })
+
+    it('follows the instrument you choose to draw', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      store.selectInstruments('click', true)
+      store.visualizeInstrument('click')
+
+      const wrapper = mount(DrawDots)
+      await wrapper.vm.$nextTick()
+
+      const clickSlots = (store.selectedData.sequences.click as (number | null)[])
+        .map((value, i) => (value ? i : null))
+        .filter((i): i is number => i !== null)
+
+      expect(outlinedSlots(wrapper)).toEqual(clickSlots)
+      // The click is the audible compas, so its strikes are the accents plus
+      // the plain beats between them - never the palmas figure.
+      expect(clickSlots).not.toEqual(
+        (store.selectedData.sequences.clara as (number | null)[])
+          .map((value, i) => (value ? i : null))
+          .filter((i): i is number => i !== null)
+      )
+    })
+
+    it('draws the compas and the palmas as separate channels', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      const wrapper = mount(DrawDots)
+      await wrapper.vm.$nextTick()
+      const dots = wrapper.findAll('span[class*="dot-"]')
+
+      // Abandolaos is the case that motivated all of this: the pulse falls on
+      // slots 0, 4 and 8 while the palmas claras strike 2, 3, 6, 7 and 10. If
+      // one channel could be mistaken for the other, this pattern shows it.
+      for (const accent of store.selectedData.accents) {
+        expect(dots[accent]!.attributes('style')).toContain('--q-primary')
+      }
+      const palmas = outlinedSlots(wrapper)
+      expect(palmas).not.toEqual([...store.selectedData.accents])
+      expect(palmas.some(slot => !store.selectedData.accents.includes(slot))).toBe(true)
+    })
+
+    it('draws a harder strike as a heavier ring', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      const wrapper = mount(DrawDots)
+      await wrapper.vm.$nextTick()
+      const dots = wrapper.findAll('span[class*="dot-"]')
+
+      // Media 1 is the accented sound and 3 the softest - the count-in proves
+      // the ordering, playing click[0] on accents and click[1] elsewhere.
+      const widthForSample = new Map<number, number>()
+      store.visualizedSequence.forEach((sample, i) => {
+        if (sample) widthForSample.set(sample, outlineWidth(dots[i]!))
+      })
+
+      expect(widthForSample.get(1)).toBeGreaterThan(widthForSample.get(3)!)
+      expect([...widthForSample.values()].every(w => w > 0)).toBe(true)
+    })
+  })
 })

@@ -242,6 +242,10 @@ Ici vous pouvez saisir le nom de n'importe quel "palo" que vous avez entendu et 
         title: 'Actif',
         content: 'Jouer cet instrument'
       },
+      shown: {
+        title: 'Affiché',
+        content: 'Représenter cet instrument dans la visualisation'
+      },
       eighth: {
         title: '8e',
         content: 'Basculer les croches'

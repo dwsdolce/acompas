@@ -61,6 +61,13 @@ div
                   :offset="[10, 10]"
                 )
                   p.text-body2 {{ $t('doc.mixer.active.content') }}
+              th.text-center {{ $t('doc.mixer.shown.title') }}
+                q-tooltip(
+                  anchor="center middle",
+                  self="bottom middle",
+                  :offset="[10, 10]"
+                )
+                  p.text-body2 {{ $t('doc.mixer.shown.content') }}
               th.text-center {{ $t('doc.mixer.eighth.title') }}
                 q-tooltip(
                   anchor="center middle",

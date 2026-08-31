@@ -51,4 +51,74 @@ describe('patterns store', () => {
     // Something has to be audible when a pattern is first loaded.
     expect(store.instruments.filter(i => i.enabled).length).toBeGreaterThan(0)
   })
+
+  describe('the visualized instrument', () => {
+    it('is always one you can hear', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'siguiriya')
+
+      expect(store.visualizedInstrument).toBeDefined()
+      expect(store.selectedInstruments.map(i => i.value))
+        .toContain(store.visualizedInstrument!.value)
+    })
+
+    it('answers with the only enabled instrument without being told', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+
+      expect(store.selectedInstruments.length).toBe(1)
+      expect(store.visualizedInstrument!.value).toBe(store.selectedInstruments[0]!.value)
+    })
+
+    it('honours a deliberate choice', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      store.selectInstruments('click', true)
+
+      store.visualizeInstrument('click')
+
+      expect(store.visualizedInstrument!.value).toBe('click')
+      expect(store.visualizedSequence).toEqual(store.selectedData.sequences.click)
+    })
+
+    it('ignores a choice you cannot hear', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      const enabled = store.selectedInstruments[0]!.value
+
+      store.visualizeInstrument('cajon')
+
+      expect(store.selectedInstruments.map(i => i.value)).not.toContain('cajon')
+      expect(store.visualizedInstrument!.value).toBe(enabled)
+    })
+
+    it('falls back when the chosen instrument is switched off', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      store.selectInstruments('click', true)
+      store.visualizeInstrument('click')
+      expect(store.visualizedInstrument!.value).toBe('click')
+
+      store.selectInstruments('click', false)
+
+      expect(store.visualizedInstrument!.value).not.toBe('click')
+      expect(store.selectedInstruments.map(i => i.value))
+        .toContain(store.visualizedInstrument!.value)
+    })
+
+    it('reports eighth notes for the drawn instrument, not the mixer at large', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+      store.selectInstruments('cajon', true)
+      store.visualizeInstrument('cajon')
+      store.toggleEighthNotes('cajon')
+
+      expect(store.visualizedHasEighthNotes).toBe(true)
+
+      store.visualizeInstrument(store.selectedInstruments.find(i => i.value !== 'cajon')!.value)
+      expect(store.visualizedHasEighthNotes).toBe(false)
+      // The mixer as a whole still has eighths on, which is the distinction.
+      expect(store.hasEighthNotes).toBe(true)
+    })
+  })
 })

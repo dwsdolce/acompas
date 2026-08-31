@@ -242,6 +242,10 @@ Aquí puedes ingresar el nombre de cualquier "palo" que hayas escuchado y A Comp
         title: 'Activo',
         content: 'Tocar este instrumento'
       },
+      shown: {
+        title: 'Mostrado',
+        content: 'Representar este instrumento en la visualización'
+      },
       eighth: {
         title: '8ª',
         content: 'Alternar corcheas'
