@@ -19,9 +19,16 @@ def (verMajor, verMinor, verPatch) = appVersion.tokenize('-')[0].tokenize('.').c
 // manually-published versionCode (701000468). Assumes minor/patch < 100.
 def computedVersionCode = 701000000 + verMajor * 10000 + verMinor * 100 + verPatch
 
+// Properties are assigned with '=' rather than the space-separated form
+// Capacitor scaffolds. Gradle 8 deprecates that form and Gradle 9 removes it;
+// only the four lines Gradle actually flagged are changed, because the other
+// space-separated calls here are DSL methods rather than property assignments.
+// The remaining warnings in a build come from the @capacitor packages
+// themselves and from the generated cordova-plugins module, neither of which
+// is editable from here.
 android {
-    namespace "audio.acompas.app"
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace = "audio.acompas.app"
+    compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "audio.acompas.app"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -32,7 +39,7 @@ android {
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
-            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
 
@@ -49,7 +56,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
