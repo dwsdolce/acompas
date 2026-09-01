@@ -61,14 +61,13 @@ onUpdated(() => {
 
 <template lang="pug">
 span.q-ml-sm
-  q-btn(
+  q-btn.help-btn(
     id="patternHelpBtn",
     ref="patternHelpBtn",
     dense,
     round,
     flat,
     size="10px",
-    padding="none",
     icon="mdi-help-circle",
     @click="patternHelpDialog = true"
   )

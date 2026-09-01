@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const { t } = useI18n()
 const patternStore = usePatternStore()
@@ -26,20 +27,7 @@ const decaySteps = {
 .row.items-center
   .col-3 {{ $t('doc.reverb.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('doc.reverb.content') }}
+      help-tooltip(:text="$t('doc.reverb.content')")
   q-slider(
     v-model="globalDecay",
     :min="0.1",

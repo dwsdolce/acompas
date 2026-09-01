@@ -135,3 +135,15 @@ $axis : 2vh
   &.active
     background: rgba(0, 0, 0, 0.15)
 
+
+// Every "?" in the app, whether it opens a caption or a documentation dialog.
+// A "?" is a click target on all three platforms - iOS has no hover at all,
+// and macOS documents a help button as click-to-open - so it has to be big
+// enough to hit: 44px is what Apple asks for and what WCAG 2.5.5 asks for.
+//
+// The glyph stays small. Do not add QBtn's padding="none" back: it writes
+// min-width and min-height of 0 inline, which no stylesheet rule can outrank,
+// and these buttons rendered at 17px for exactly that reason.
+.help-btn.q-btn
+  min-width: 44px
+  min-height: 44px

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const { locale } = useI18n()
 
@@ -55,20 +56,7 @@ function selectLanguage(lang) {
 .text-center.q-mx-md
   .caption {{ $t('doc.options.content.lang.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('doc.options.content.lang.content') }}
+      help-tooltip(:text="$t('doc.options.content.lang.content')")
 
   q-select.select-lang__select(
     ref="selectRef",

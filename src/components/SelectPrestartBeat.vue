@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
 import type { numOpts } from 'src/utils/types'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const $q = useQuasar()
 const { t } = useI18n()
@@ -41,20 +42,7 @@ const index = computed(
 .text-center.q-mx-md
   .caption {{ $t('doc.prestart.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('doc.prestart.content') }}
+      help-tooltip(:text="$t('doc.prestart.content')")
   q-slider(
     v-model="prestartBeat",
     :min="arrayOfIndexes[0]",

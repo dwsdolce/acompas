@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { useSessionStore } from 'src/stores/session'
 import { usePatternStore } from 'src/stores/patterns'
 import { formatAudioOffset } from 'src/utils/utils'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const { t } = useI18n()
 
@@ -23,20 +24,7 @@ const offsetLabel = computed(() =>
 .text-center.q-mx-md
   p.caption {{ $t('sync.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('sync.caption') }}
+      help-tooltip(:text="$t('sync.caption')")
   q-slider(
     v-model="audioVisualOffset",
     :min="0",

@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { usePatternStore } from 'src/stores/patterns'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const { t } = useI18n()
 
@@ -13,20 +14,7 @@ const { selectedPattern, swing } = storeToRefs(patternStore)
 .text-center.q-mx-md
   p.caption {{ $t('doc.swing.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('doc.swing.caption') }}
+      help-tooltip(:text="$t('doc.swing.caption')")
   q-slider(
     v-model="swing",
     :min="0",

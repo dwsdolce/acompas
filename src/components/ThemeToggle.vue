@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSessionStore } from 'src/stores/session'
+import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const sessionStore = useSessionStore()
 const { isDarkMode } = storeToRefs(sessionStore)
@@ -11,20 +12,7 @@ const { isDarkMode } = storeToRefs(sessionStore)
 .text-center.q-mx-md
   .caption {{ $t('doc.options.content.theme.title') }}
     span.q-ml-sm
-      q-btn(
-        dense,
-        round,
-        flat,
-        size="10px",
-        padding="none",
-        icon="mdi-help-circle"
-      )
-        q-tooltip(
-          anchor="top middle",
-          self="bottom middle",
-          :offset="[10, 10]"
-        )
-          p.text-body2 {{ $t('doc.options.content.theme.content') }}
+      help-tooltip(:text="$t('doc.options.content.theme.content')")
   q-toggle(
     v-model="isDarkMode",
     size="lg",
