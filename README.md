@@ -189,31 +189,76 @@ icongenie generate -m capacitor -i ./app-icon.png
 
 #### Setup
 
-You must first install Oracle's Java 17 JDK and set the JAVA_HOME environment
-variable in your shell. Instructions for Ubuntu [here](https://www.rosehosting.com/blog/how-to-install-java-21-on-ubuntu-24-04/)
-(read the "Install Oracle Java" section and replace version 21 with version 17).
+Verified on macOS (Apple Silicon). Linux differs mainly in where the SDK and
+the JDK land.
 
-Furthermore, you need to install Google's Android Studio (get it
-[here](https://developer.android.com/studio)). Install the SDK from Android
-Studio. You must set the ANDROID_SDK_ROOT and ANDROID_SDK_HOME environment
-variables in your shell and extend the your PATH environment variable.
-
-- Remark : if the Android Studio IDE asks you to update the Android Gradle
-plugin. The
-[Quasar documentation](https://quasar.dev/quasar-cli-webpack/developing-capacitor-apps/preparation#3-start-developing)
-says : don't do this proposed upgrade !
-
-- Remark 2 : in the Android Studio IDE, you can install SDK's by cliking
-Tools > SDK Manager and manage your AVDs in Tools > AVD Manager.
-
-Here is an example ~/.bashrc configuration :
+The Android Gradle Plugin needs **JDK 17 or newer**, and Capacitor's Android
+project compiles against Java 21. A JDK that came with an older toolchain is
+likely both too old and, on Apple Silicon, the wrong architecture:
 
 ``` bash
-export ANDROID_SDK_ROOT=/path/to/android-sdk
-export ANDROID_SDK_HOME=/home/username
-# Here, replace the path with the location of your JDK in the /usr/lib/jvm folder.
-export JAVA_HOME=/usr/lib/jvm/jdk-17.0.xxx-oracle-x64
-export PATH=$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$JAVA_HOME/bin:$PATH
+brew install openjdk@21
+brew install --cask android-studio
+```
+
+Homebrew keeps `openjdk@21` keg-only, so it does not disturb any other JDK on
+the machine and has to be named explicitly.
+
+The SDK can come from Android Studio's first-run wizard, but the wizard picks
+its own API level. Installing it from the command line pins the versions this
+project actually needs — `compileSdkVersion` and `targetSdkVersion` are both 36
+in `src-capacitor/android/variables.gradle`:
+
+``` bash
+brew install --cask android-commandlinetools
+
+export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+
+# Accepts Google's SDK licences.
+yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
+
+sdkmanager --sdk_root="$ANDROID_HOME" \
+  "cmdline-tools;latest" \
+  "platform-tools" \
+  "platforms;android-36" \
+  "build-tools;36.0.0" \
+  "emulator" \
+  "system-images;android-36;google_apis;arm64-v8a"
+```
+
+About 6 GB, plus 3 GB for Android Studio. Install `cmdline-tools;latest` **into
+the SDK** as above and use that copy: `avdmanager` works out its SDK root from
+its own location rather than from `ANDROID_HOME`, so the one Homebrew puts in
+`/opt/homebrew` cannot see any of the system images.
+
+Then in `~/.zshrc` (or `~/.bashrc`):
+
+``` bash
+export JAVA_HOME="/opt/homebrew/opt/openjdk@21"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+```
+
+Open a new shell afterwards — `adb` and `emulator` will not appear in one that
+was already running.
+
+#### An emulator
+
+Android Studio's *Device Manager* is the comfortable way. From the command
+line, note that `avdmanager create avd` takes no `--sdk-root`, unlike
+`sdkmanager`, and reports an unhelpful usage error if given one:
+
+``` bash
+$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
+  -n acompas-api36 \
+  -k "system-images;android-36;google_apis;arm64-v8a" \
+  -d pixel_7
+
+emulator -avd acompas-api36 &
+adb devices          # emulator-5554  device
 ```
 
 #### Building the app
@@ -239,6 +284,25 @@ dist/capacitor/android/apk/release/app-release.apk
 Signing uses `src-capacitor/android/keystore.properties` (keystore path,
 alias and passwords). If that file is missing, the build produces an
 *unsigned* APK instead.
+
+For testing on an emulator, a debug build straight through Gradle is quicker
+and needs no keystore:
+
+``` bash
+quasar build -m capacitor -T android --skip-pkg   # web assets + cap sync
+cd src-capacitor/android && ./gradlew assembleDebug
+```
+
+``` 
+src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+The first Gradle run fetches the Gradle distribution and the whole dependency
+tree and takes several minutes; after that an incremental build is seconds.
+
+`versionCode` and `versionName` come from the root `package.json` — see the
+`JsonSlurper` block at the top of `src-capacitor/android/app/build.gradle` —
+so 4.2.5 becomes versionName `4.2.5` and versionCode `701040205`.
 
 #### Generating the AAB for the Play Store
 
