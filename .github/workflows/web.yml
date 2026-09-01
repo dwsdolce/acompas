@@ -44,6 +44,14 @@ jobs:
           path: ~/.cache/electron
           key: electron-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
+      # The web specs drive a real Chromium. The Electron ones do not need it -
+      # they launch the app's own binary - so this is the only browser fetched.
+      - name: Cache the Playwright browser
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       # src-capacitor has its own package.json and lockfile. Even the plain SPA
       # build needs it: the Capacitor imports in src/boot/statusbar.ts,
       # src/composables/keep-awake.ts and src/App.vue resolve into
@@ -114,9 +122,14 @@ jobs:
       - name: Build the desktop app
         run: npx quasar build -m electron -s
 
-      # Electron needs a display, and a runner has none.
-      - name: Test the desktop app
-        run: xvfb-run -a npx playwright test
+      # Electron needs a display, and a runner has none. The web specs run in
+      # the same command: they cover the help control, which is a pointer and
+      # touch interaction against a real renderer that no unit test can reach.
+      # They serve dist/spa themselves, so the SPA build above is their input.
+      - name: Test the desktop and web apps
+        run: |
+          npx playwright install chromium
+          xvfb-run -a npx playwright test
 
       - name: Package the SPA
         run: tar -czf spa.tar.gz -C dist spa
