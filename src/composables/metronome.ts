@@ -68,8 +68,18 @@ const createMetronome = () => {
   const loadSounds = async (): Promise<void> => {
     try {
       logger.log('Starting sound loading process...')
-      const publicFolder = Platform.is.electron ? window.electronAPI.getPublicPath() : ''
-      const path = `${publicFolder}/audio/`
+      // These URLs are built at runtime - the sample is chosen by pattern and
+      // by whichever format the device can decode - so the bundler never sees
+      // them and cannot rewrite them the way it rewrites an imported asset.
+      // That makes this the one place in the app that has to know where it is
+      // deployed. BASE_URL carries the build's base, so a web build living in
+      // a subfolder asks for its audio there rather than at the domain root.
+      // Electron keeps its own bridge: it loads index.html over file:// and
+      // the main process hands back a usable prefix.
+      const publicFolder = Platform.is.electron
+        ? `${window.electronAPI.getPublicPath()}/`
+        : import.meta.env.BASE_URL
+      const path = `${publicFolder}audio/`
       const audio = new Audio()
 
       // Detect supported audio format

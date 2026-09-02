@@ -88,11 +88,20 @@ export default defineConfig(function (ctx) {
         node: 'node20'
       },
 
-      // Web (acompas.org) uses history mode with server rewrites.
-      // Capacitor/Electron serve from a local root (capacitor://localhost, file://),
-      // where a non-root history route breaks relative asset resolution (white
-      // screen on 404 of index.*.js/css). Hash mode keeps the base at root there.
-      vueRouterMode: (ctx.mode.capacitor || ctx.mode.electron) ? 'hash' : 'history', // available values: 'hash', 'history'
+      // Hash mode everywhere, so one build runs from anywhere.
+      //
+      // Capacitor and Electron always needed it: they serve from a local root
+      // (capacitor://localhost, file://) where a non-root history route breaks
+      // relative asset resolution and gives a white screen.
+      //
+      // The web build now shares it because the site is deployed into a
+      // subfolder rather than at a domain root. History mode would mean baking
+      // that folder into the build and adding a server rewrite so that
+      // /flamenco/solea returns index.html; hash mode asks nothing of the
+      // server and lets the same files be copied to any path. The cost is the
+      // "#" in the URL and search engines treating every route as one page,
+      // which is a trade worth making for a metronome.
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       vueDevtools: true,
       // vueOptionsAPI: false,
@@ -108,7 +117,29 @@ export default defineConfig(function (ctx) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      // Emit relative asset URLs for the production web build, so the same
+      // dist/spa runs from any directory: the live site, a test folder beside
+      // it, or a domain root. Copy the files and it works — no rebuild, no
+      // server configuration.
+      //
+      // This has to go through Vite rather than publicPath above, because
+      // Quasar formats publicPath to an absolute path for spa/pwa/ssr and
+      // would turn './' into '/./'. It is not a hack around the framework
+      // though: Quasar already forces publicPath to '' for capacitor, cordova,
+      // electron and bex, which produces exactly these relative URLs. This
+      // gives the web build the same treatment.
+      //
+      // Dev keeps '/' because the dev server serves from the root, and
+      // relative URLs there break Vite's module graph.
+      //
+      // Note that relative URLs resolve against the *document* URL, so the app
+      // must be served with a trailing slash - .../acompas_web/ rather than
+      // .../acompas_web. Servers normally redirect to add it.
+      extendViteConf (viteConf) {
+        if (ctx.mode.spa && ctx.prod) {
+          viteConf.base = './'
+        }
+      },
       // viteVuePluginOptions: {},
 
       // No i18n Vite plugin. The messages in src/i18n are .ts modules, not the

@@ -27,8 +27,14 @@ const onResize = (size: Size) => {
   setVisualizationSize(size)
 }
 
+// Built at runtime rather than imported, so the bundler never sees these URLs
+// and cannot rewrite them for the deployment path - the same reason the audio
+// paths in src/composables/metronome.ts need BASE_URL. Without it the header
+// images are fetched from the domain root and 404 anywhere but a root install.
 const publicFolder = computed(() =>
-  Platform.is.electron ? window.electronAPI.getPublicPath() : ''
+  Platform.is.electron
+    ? `${window.electronAPI.getPublicPath()}/`
+    : import.meta.env.BASE_URL
 )
 </script>
 
@@ -55,8 +61,8 @@ q-layout(
         to="/"
       ).row.items-center.no-wrap.q-px-sm
         q-avatar.shadow-1
-          img(:src="`${publicFolder}/ACompas-4-logo.png`" alt="A Compás icon", width="40")
-        img(:src="`${publicFolder}/ACompas-4-name.png`" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
+          img(:src="`${publicFolder}ACompas-4-logo.png`" alt="A Compás icon", width="40")
+        img(:src="`${publicFolder}ACompas-4-name.png`" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
       SelectContext(v-if="contexts.length > 1")
