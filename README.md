@@ -192,12 +192,18 @@ is why every command in these docs uses `yarn` or `npx`.
 
 ## Building for a specific platform
 
-| Target | Build from | Guide |
-|---|---|---|
-| Web (SPA) | macOS, Windows, Linux | `yarn build` — see above |
-| Desktop (Electron) | macOS, Windows, Linux | [docs/desktop.md](docs/desktop.md) |
-| Android | macOS, Windows, Linux | [docs/android.md](docs/android.md) |
-| iOS | macOS only | [docs/ios.md](docs/ios.md) |
+| Target | Build from | Command | Guide |
+|---|---|---|---|
+| Web (SPA) | macOS, Windows, Linux | `yarn build` | see [Run the app](#run-the-app) above |
+| Desktop (Electron) | macOS, Windows, Linux | `yarn build:desktop` | [docs/desktop.md](docs/desktop.md) |
+| Android | macOS, Windows, Linux | `npx quasar build -m capacitor -T android` | [docs/android.md](docs/android.md) |
+| iOS | macOS only | `npx quasar build -m capacitor -T ios` | [docs/ios.md](docs/ios.md) |
+
+Each build runs on the platform it targets — electron-builder does not
+cross-compile, and the mobile toolchains are the vendors' own.
+`yarn build:desktop` checks its prerequisites, picks up signing credentials if
+you have any, and describes what it produced; on macOS it hands over to
+`packaging/build_mac`, which also notarises.
 
 ## Tests
 
