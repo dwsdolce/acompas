@@ -158,9 +158,19 @@ with `node_modules` deleted.
 ## Run the app
 
 ```bash
-yarn dev      # serve with hot reload at localhost:9000
-yarn build    # build for production with minification
+yarn dev        # serve with hot reload at localhost:9000
+yarn build      # build for production into dist/spa
+yarn preview    # serve that production build at localhost:4173
 ```
+
+`yarn preview` is how you run the *built* app. You cannot simply open
+`dist/spa/index.html`: the browser blocks module scripts over `file://`, and the
+app would not load. A plain file server is not enough either — the web build
+uses **history** routing, so `/flamenco/solea` is a route rather than a file and
+has to be answered with `index.html`. `yarn preview` does that fallback, while
+still returning a real 404 for a missing asset, so a broken build still looks
+broken. It is the same server the end-to-end tests and the CI smoke test use:
+[scripts/serve-static.mjs](scripts/serve-static.mjs).
 
 The Quasar CLI is a project dependency rather than a global install, so run it
 through yarn as above, or with `npx quasar dev` / `npx quasar build`. A bare

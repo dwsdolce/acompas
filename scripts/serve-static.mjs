@@ -9,8 +9,12 @@
 // toolchain needing a Python interpreter - a command Windows does not supply
 // under that name. Node already has to be present to run the tests at all.
 //
-// The SPA uses hash routing, so every request is for "/" or for a real file on
-// disk: there is no history fallback to implement, and none is implemented.
+// The web build uses history routing (quasar.config.js picks hash only for
+// Capacitor and Electron), so a deep link like /flamenco/solea is a route
+// rather than a file and has to be answered with index.html. That fallback
+// applies only to paths without a file extension: a missing .js or .png is an
+// asset that genuinely is not there, and should 404 loudly rather than quietly
+// return HTML and fail later as a syntax error.
 
 import { createReadStream, existsSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
@@ -97,7 +101,7 @@ const server = createServer((request, response) => {
   }
 
   let file = target
-  let info
+  let info = null
   try {
     info = statSync(file)
     if (info.isDirectory()) {
@@ -105,7 +109,20 @@ const server = createServer((request, response) => {
       info = statSync(file)
     }
   } catch {
-    return send(response, 404, 'Not found')
+    info = null
+  }
+
+  if (info === null) {
+    // Something with an extension was asked for and is not there: a real 404.
+    if (path.extname(file) !== '') return send(response, 404, 'Not found')
+
+    // Otherwise treat it as a client-side route and hand back the app.
+    file = path.join(root, 'index.html')
+    try {
+      info = statSync(file)
+    } catch {
+      return send(response, 404, 'Not found')
+    }
   }
 
   response.writeHead(200, {

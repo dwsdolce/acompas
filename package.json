@@ -19,6 +19,7 @@
     "make": "electron-forge make",
     "dev": "quasar dev",
     "build": "quasar build",
+    "preview": "node scripts/serve-static.mjs 4173 --directory dist/spa",
     "build:electron": "quasar build -m electron",
     "build:electron:dev": "quasar build -m electron --dev",
     "build:electron:prod": "quasar build -m electron --prod",

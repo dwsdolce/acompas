@@ -10,8 +10,9 @@ export default defineConfig({
   workers: 1,
   fullyParallel: false,
 
-  // The SPA is served exactly as CI's smoke test serves it. Hash routing means
-  // every request is for "/" or an asset, so a plain static server is enough.
+  // The SPA is served exactly as CI's smoke test serves it. The server does the
+  // history-mode fallback the web build needs, so a spec may navigate to a real
+  // route and not just to "/".
   webServer: {
     command: 'node scripts/serve-static.mjs 4173 --directory dist/spa',
     url: 'http://127.0.0.1:4173/',
