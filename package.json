@@ -21,9 +21,10 @@
     "build:electron:dev": "quasar build -m electron --dev",
     "build:electron:prod": "quasar build -m electron --prod",
     "icons": "icongenie generate -p icongenie-generated.json",
-    "postinstall": "quasar prepare && yarn icons && python3 format_audio.py convert --optional",
+    "postinstall": "quasar prepare && yarn icons && node scripts/format-audio.mjs convert --optional",
     "icons:all": "icongenie generate -p icongenie-profile.json && packaging/prepare_ios_assets",
-    "audio": "python3 format_audio.py convert"
+    "audio": "node scripts/format-audio.mjs convert",
+    "audio:clean": "node scripts/format-audio.mjs unconvert"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^7.1.0",
@@ -71,7 +72,7 @@
     "vitest": "^4.1.11"
   },
   "engines": {
-    "node": "^26 || ^24 || ^22 || ^20 || ^18 || ^16 || ^14.19",
+    "node": "^30 || ^28 || ^26 || ^24 || ^22.22.0",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   },

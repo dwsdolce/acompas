@@ -13,7 +13,7 @@ export default defineConfig({
   // The SPA is served exactly as CI's smoke test serves it. Hash routing means
   // every request is for "/" or an asset, so a plain static server is enough.
   webServer: {
-    command: 'python3 -m http.server 4173 --directory dist/spa',
+    command: 'node scripts/serve-static.mjs 4173 --directory dist/spa',
     url: 'http://127.0.0.1:4173/',
     reuseExistingServer: true,
     timeout: 60_000

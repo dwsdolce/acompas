@@ -7,7 +7,7 @@ A flamenco metronome available on multiple platforms:
 
 * Web application (available at [https://acompas.org](https://acompas.org))
 * Mobile application using [Capacitor](https://capacitorjs.com), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app)
-* Desktop application (Electron) for Mac and Linux
+* Desktop application (Electron)
 
 ## Key Features
 
@@ -42,29 +42,50 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 
  - The jaleo sounds are recordings of Aziz Andry.
 
-## Cloning and building the source code
+---
 
-Before anything, you need Node.js installed on your machine. **Use Node.js
-24.x LTS**, which `.nvmrc` pins.
+# Getting started
 
-`@quasar/app-vite` v3 declares `node: ^30 || ^28 || ^26 || ^24 || ^22.22.0`,
-and yarn enforces engines strictly — `yarn install` refuses outright on a
-version outside that range, so Node 20 and earlier will not work at all. Node
-24 is the current LTS and the version CI builds with, which makes it the one
-to match.
+Everything in this section is the same on macOS, Windows and Linux. Only the
+three prerequisites differ, and only in how you install them.
 
-A version manager makes this painless. With [fnm](https://github.com/Schniz/fnm)
-(`brew install fnm`) plus `eval "$(fnm env --use-on-cd --shell zsh)"` in your
-shell profile, entering the project directory switches to 24 automatically.
-`nvm` reads the same `.nvmrc`.
+## Prerequisites
 
-See the nodejs.org [download page](https://nodejs.org/en/download/). If using Linux, consider
-[installing Node.js via packet manager](https://nodejs.org/en/download/package-manager/).
+|  | macOS | Windows | Linux (Debian/Ubuntu) |
+|---|---|---|---|
+| **Node.js 24** | `brew install fnm` | `winget install Schniz.fnm` | [nodesource / fnm](https://nodejs.org/en/download/package-manager/) |
+| **Yarn 1.22.22** | `corepack enable` | `corepack enable` *(admin terminal)* | `corepack enable` |
+| **ffmpeg** | `brew install ffmpeg` | `winget install Gyan.FFmpeg` | `sudo apt install ffmpeg` |
+
+That is the whole list. There is no Python requirement, no global Quasar CLI and
+no global Icon Genie: `yarn install` provides them, and `npx quasar` runs the
+CLI.
+
+### Node.js
+
+**Use Node.js 24.x LTS**, which `.nvmrc` pins. `@quasar/app-vite` v3 declares
+`node: ^30 || ^28 || ^26 || ^24 || ^22.22.0`, and yarn enforces engines
+strictly — `yarn install` refuses outright on a version outside that range, so
+Node 20 and earlier will not work at all. Node 24 is the current LTS and the
+version CI builds with, which makes it the one to match.
+
+A version manager makes this painless, and both of the common ones read
+`.nvmrc`:
+
+* **fnm** — add its shell hook to your profile (`fnm env --use-on-cd --shell
+  zsh` for zsh, `--shell bash` for bash, `--shell power-shell` for PowerShell).
+  Entering the project directory then switches to 24 automatically.
+* **nvm** on macOS/Linux, or **nvm-windows** — `nvm use` in the project
+  directory.
+
+Otherwise see the nodejs.org [download page](https://nodejs.org/en/download/).
+On Linux, consider [installing Node.js via package manager](https://nodejs.org/en/download/package-manager/).
+
+### Yarn
 
 This project uses **yarn 1.22.22**, pinned in the `packageManager` field of
 `package.json`. Node.js does not ship a `yarn` command, so you have to add one
-before you can run `yarn install`. Pick either option below — you only need to do
-this once, after which `yarn` is available in your shell.
+before you can run `yarn install`. You only need to do this once.
 
 **Option A — Corepack (recommended).** Corepack is a shim that reads the
 `packageManager` field and automatically runs the exact yarn version this
@@ -82,8 +103,12 @@ npm install -g corepack
 corepack enable
 ```
 
-If `corepack enable` reports a permission error, it is trying to write the
-shims into Node's install directory — rerun it with `sudo`, or use Option B.
+`corepack enable` writes its shims into Node's own install directory, so a
+permission error means it cannot write there:
+
+* **macOS / Linux** — rerun it with `sudo`.
+* **Windows** — Node lives under `C:\Program Files\nodejs`, so run it from a
+  terminal started with *Run as administrator*. There is no `sudo`.
 
 **Option B — install yarn directly.** Simpler, but nothing keeps you in sync
 with the pinned version:
@@ -98,451 +123,118 @@ Either way, check it worked before continuing:
 yarn --version   # 1.22.22
 ```
 
-### Install requirements
+### ffmpeg
 
-Only one thing has to be installed by hand: **ffmpeg**, used to generate the
-audio. See "Generate the audio files" below for how to install it on your
-platform.
+ffmpeg is the one thing that is not a project dependency. It generates the audio
+the app plays, and `yarn install` warns clearly if it is missing, because the app
+cannot play anything without it.
 
-Everything else is a project dependency. The Quasar CLI and Icon Genie do not
-need a global `npm install -g` — `yarn install` provides them, and `npx quasar`
-runs the CLI.
-
-### Cloning the git repository
-
-``` bash
-git clone https://gitlab.com/acompas/acompas.git
-cd acompas
+```bash
+brew install ffmpeg                                        # macOS
+winget install Gyan.FFmpeg                                 # Windows
+sudo apt update && sudo apt install ffmpeg                 # Ubuntu/Debian
+sudo yum install epel-release && sudo yum install ffmpeg   # CentOS/RHEL
 ```
 
-### Install dependencies
+On Windows you can also use `choco install ffmpeg`, or download a build from
+<https://ffmpeg.org/download.html>, extract it, and add its `bin` folder to your
+PATH. Whichever route you take, `ffmpeg -version` has to work in a **new**
+terminal before `yarn install` will find it.
 
-``` bash
+### A note on Windows shells
+
+The build works from PowerShell, from Git Bash and from Cygwin. Two things are
+worth knowing whichever you pick:
+
+* **yarn runs its own scripts through `cmd.exe`**, not through the shell you
+  typed the command in. Anything a lifecycle script needs — `node`, `ffmpeg` —
+  has to be on the *Windows* PATH, not only on a Cygwin or MSYS one.
+* **Native tools do not understand `/cygdrive/...` paths.** Cygwin sets the real
+  Windows working directory, so relative paths and `node` itself are fine, but a
+  Cygwin-style path passed as an *argument* to `adb`, `sdkmanager` or Gradle will
+  not resolve. Convert it with `cygpath -w`, or run those steps from PowerShell.
+
+## Clone and install
+
+```bash
+git clone https://gitlab.com/acompas/acompas.git
+cd acompas
 yarn install
 ```
 
+`yarn install` also runs three generation steps for you, so a fresh clone is
+immediately ready to build:
+
+1. `quasar prepare` — writes `.quasar/tsconfig.json`, which the root
+   `tsconfig.json` extends. Without it, lint and tests cannot resolve types.
+2. `yarn icons` — generates the web and Electron icons.
+3. `yarn audio` — converts the `.wav` masters into the formats the app plays.
+
+## Run the app
+
+```bash
+yarn dev      # serve with hot reload at localhost:9000
+yarn build    # build for production with minification
+```
+
+The Quasar CLI is a project dependency rather than a global install, so run it
+through yarn as above, or with `npx quasar dev` / `npx quasar build`. A bare
+`quasar` command only works if you happen to have one installed globally, which
+is why every command in these docs uses `yarn` or `npx`.
+
+## Building for a specific platform
+
+| Target | Build from | Guide |
+|---|---|---|
+| Web (SPA) | macOS, Windows, Linux | `yarn build` — see above |
+| Desktop (Electron) | macOS, Windows, Linux | [docs/desktop.md](docs/desktop.md) |
+| Android | macOS, Windows, Linux | [docs/android.md](docs/android.md) |
+| iOS | macOS only | [docs/ios.md](docs/ios.md) |
+
+## Regenerating icons and audio
+
+Both are generated by `yarn install`, so there is normally nothing to do.
+
 ### Icons
 
-`yarn install` generates them, so there is nothing to do. If you change
-`app-icon.png` and want to refresh them:
+If you change `app-icon.png` and want to refresh them:
 
-``` bash
+```bash
 yarn icons      # the generated, gitignored icons (web + Electron)
 yarn icons:all  # everything, including the committed Capacitor Android/iOS
                 # assets — rewrites ~30 tracked files, so review the diff
 ```
 
-### Generate the audio files
+`yarn icons:all` also runs `packaging/prepare_ios_assets`, which is a zsh script
+and **macOS only**.
 
-Only the `.wav` masters are committed; the formats the app actually plays are
-generated. `yarn install` does this for you, so a fresh clone needs no manual
-step — but it needs **ffmpeg**, and `yarn install` fails with a clear message
-if ffmpeg is missing, because the app cannot play anything without it.
+### Audio
 
-Installing ffmpeg:
+Only the `.wav` masters are committed; the formats the app actually plays
+(`.mp3`, `.mp4`, `.ogg`, `.flac`) are generated and gitignored.
 
-``` bash
-brew install ffmpeg                      # macOS
-sudo apt update && sudo apt install ffmpeg   # Ubuntu/Debian
-sudo yum install epel-release && sudo yum install ffmpeg   # CentOS/RHEL
-```
-
-On Windows, download a build from https://ffmpeg.org/download.html, extract it,
-and add its `bin` folder to your PATH.
-
-To regenerate the audio on its own — after adding a `.wav`, say:
-
-``` bash
-yarn audio                               # all of public/audio
-python3 format_audio.py convert acompas  # or one subdirectory
-python3 format_audio.py unconvert        # delete the generated formats
+```bash
+yarn audio                                      # all of public/audio
+yarn audio:clean                                # delete the generated formats
+node scripts/format-audio.mjs convert acompas   # or just one subdirectory
 ```
 
 Files that already exist and are newer than their `.wav` are skipped, so
-re-running is cheap.
-
-### Run the app
-Then you should be ready to launch the app:
-
-``` bash
-# Serve with hot reload at localhost:9000
-quasar dev
-
-# Build for production with minification
-quasar build
-```
-
-## Mobile app
-
-Here are a few commands that might help:
-
-```bash
-# Go to the Capacitor project folder
-cd ./src-capacitor
-# Install the Capacitor project's dependencies
-yarn install
-# Generate all icons for Capacitor
-icongenie generate -m capacitor -i ./app-icon.png
-```
-
-### Android
-
-#### Setup
-
-Verified on macOS (Apple Silicon). Linux differs mainly in where the SDK and
-the JDK land.
-
-The Android Gradle Plugin needs **JDK 17 or newer**, and Capacitor's Android
-project compiles against Java 21. A JDK that came with an older toolchain is
-likely both too old and, on Apple Silicon, the wrong architecture:
-
-``` bash
-brew install openjdk@21
-brew install --cask android-studio
-```
-
-Homebrew keeps `openjdk@21` keg-only, so it does not disturb any other JDK on
-the machine and has to be named explicitly.
-
-The SDK can come from Android Studio's first-run wizard, but the wizard picks
-its own API level. Installing it from the command line pins the versions this
-project actually needs — `compileSdkVersion` and `targetSdkVersion` are both 36
-in `src-capacitor/android/variables.gradle`:
-
-``` bash
-brew install --cask android-commandlinetools
-
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-
-# Accepts Google's SDK licences.
-yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
-
-sdkmanager --sdk_root="$ANDROID_HOME" \
-  "cmdline-tools;latest" \
-  "platform-tools" \
-  "platforms;android-36" \
-  "build-tools;36.0.0" \
-  "emulator" \
-  "system-images;android-36;google_apis;arm64-v8a"
-```
-
-About 6 GB, plus 3 GB for Android Studio. Install `cmdline-tools;latest` **into
-the SDK** as above and use that copy: `avdmanager` works out its SDK root from
-its own location rather than from `ANDROID_HOME`, so the one Homebrew puts in
-`/opt/homebrew` cannot see any of the system images.
-
-Then in `~/.zshrc` (or `~/.bashrc`):
-
-``` bash
-export JAVA_HOME="/opt/homebrew/opt/openjdk@21"
-export PATH="$JAVA_HOME/bin:$PATH"
-
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
-```
-
-Open a new shell afterwards — `adb` and `emulator` will not appear in one that
-was already running.
-
-#### An emulator
-
-Android Studio's *Device Manager* is the comfortable way. From the command
-line, note that `avdmanager create avd` takes no `--sdk-root`, unlike
-`sdkmanager`, and reports an unhelpful usage error if given one:
-
-``` bash
-$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
-  -n acompas-api36 \
-  -k "system-images;android-36;google_apis;arm64-v8a" \
-  -d pixel_7
-
-emulator -avd acompas-api36 &
-adb devices          # emulator-5554  device
-```
-
-#### Building the app
-
-Here are the commands for building / running the Android app :
-
-``` bash
-# Build and run android apk in debug mode
-cd /path/to/acompas
-quasar dev -m capacitor -T android
-
-# Build android apk in production mode (signed release APK)
-cd /path/to/acompas
-quasar build -m capacitor -T android
-```
-
-The signed release **APK** is written to:
-
-```
-dist/capacitor/android/apk/release/app-release.apk
-```
-
-Signing uses `src-capacitor/android/keystore.properties` (keystore path,
-alias and passwords). If that file is missing, the build produces an
-*unsigned* APK instead.
-
-For testing on an emulator, a debug build straight through Gradle is quicker
-and needs no keystore:
-
-``` bash
-quasar build -m capacitor -T android --skip-pkg   # web assets + cap sync
-cd src-capacitor/android && ./gradlew assembleDebug
-```
-
-``` 
-src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-The first Gradle run fetches the Gradle distribution and the whole dependency
-tree and takes several minutes; after that an incremental build is seconds.
-
-`versionCode` and `versionName` come from the root `package.json` — see the
-`JsonSlurper` block at the top of `src-capacitor/android/app/build.gradle` —
-so 4.2.5 becomes versionName `4.2.5` and versionCode `701040205`.
-
-#### Generating the AAB for the Play Store
-
-Google Play requires an **AAB** (Android App Bundle), not an APK.
-
-> ⚠️ The `--aab` flag of `quasar build` is **not honored** — still true as of
-> `@quasar/app-vite` 3.8.1, whose Capacitor mode has no handling for it at all;
-> it silently runs `assembleRelease` and produces an APK. Generate the bundle
-> directly with Gradle instead:
-
-``` bash
-# First sync the freshly built web assets into the Android project
-cd /path/to/acompas
-quasar build -m capacitor -T android
-
-# Then build the signed release bundle
-cd src-capacitor/android
-./gradlew bundleRelease
-```
-
-The signed release **AAB** is written to:
-
-```
-src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
-```
-
-`versionName` and `versionCode` are derived automatically from the root
-`package.json` `version` (see `src-capacitor/android/app/build.gradle`), so bump
-the version there once and both platforms follow. Google Play rejects a
-`versionCode` that has already been published, so always increase the version
-before building a release you intend to upload.
-
-#### Installing / testing on a device or emulator (adb)
-
-An **AAB cannot be installed directly** on a device — use the **APK** above for
-on-device testing.
-
-``` bash
-# List connected devices/emulators (each with its serial)
-adb devices
-
-# Install (or reinstall, keeping data) the release APK
-adb install -r dist/capacitor/android/apk/release/app-release.apk
-
-# If several devices are connected, target one explicitly with -s <serial>
-adb -s <serial> install -r dist/capacitor/android/apk/release/app-release.apk
-```
-
-Common issues:
-
-- **`INSTALL_FAILED_UPDATE_INCOMPATIBLE`** — a copy signed with a different key
-  (e.g. the Play Store build) is already installed. Uninstall it first (this
-  wipes the app's local data), then install again:
-  ```bash
-  adb uninstall audio.acompas.app
-  ```
-- **Device not listed** — enable *Developer options › USB debugging* on the
-  phone, accept the "Allow USB debugging?" prompt, set the USB mode to *File
-  transfer (MTP)*, and use a data-capable cable. A quick `adb kill-server &&
-  adb start-server` also helps.
-
-Alternatively, from Android Studio you can drag-and-drop the `.apk` onto a
-running emulator, or open `src-capacitor/android` as a Gradle project and run it.
-
-### iOS
-
-iOS is a **Capacitor target**, not a Quasar mode, so it is built the same way as
-Android: `-m capacitor -T ios`. There is no `-m ios` mode — passing one falls
-through to Cordova and prompts for a Cordova app id, which this project does not
-use.
-
-#### Prerequisites
-
-* Xcode and CocoaPods (`pod --version`).
-* The Capacitor native dependencies. The `Podfile` resolves each plugin out of
-  `src-capacitor/node_modules`, which is a **separate** install from the root
-  one:
-
-``` bash
-cd src-capacitor && yarn install
-```
-
-* A signing team. `DEVELOPMENT_TEAM` is set in
-  `src-capacitor/ios/App/App.xcodeproj/project.pbxproj`; with a different Apple
-  account, change it there or pick the team in Xcode under the App target →
-  Signing & Capabilities.
-
-#### Building the app
-
-**To install it on your own iPhone or iPad and actually use it**, build the
-production bundle and hand the project to Xcode:
-
-``` bash
-cd /path/to/acompas
-quasar build -m capacitor -T ios --ide
-```
-
-Xcode opens on `src-capacitor/ios/App/App.xcworkspace`. Pick your device in the
-run destination menu and press Run. The app installed this way is
-self-contained: it carries its own copy of the web assets and all the audio, and
-keeps working with the Mac switched off.
-
-> ⚠️ Always open the **workspace**, never `App.xcodeproj`. The bare project
-> knows nothing about CocoaPods, and building it fails with `Unable to resolve
-> module dependency: 'Capacitor'` plus a series of missing search paths.
-> `@quasar/app-vite` 2.6.2 opened the wrong one for exactly this reason; 3.8.1
-> fixed it, and `npx cap open ios` has always opened the workspace correctly.
-
-**To iterate on the UI with live reload**, use `dev` instead:
-
-``` bash
-cd /path/to/acompas
-quasar dev -m capacitor -T ios --ide
-```
-
-> ⚠️ The `dev` variant does *not* bundle the web assets. It points the app's
-> webview at a dev server running on your Mac over the LAN
-> (`http://<your-ip>:9500`), so edits appear on the device instantly — but the
-> app shows a **blank screen** whenever that server is not running, including
-> every time you pick the app up later without the Mac. That is expected, not a
-> broken build. Use `quasar build` for anything you want to keep using.
-
-**Without opening Xcode at all**, the same build command writes the app
-straight to:
-
-```
-dist/capacitor/ios/Build/Products/Release-iphoneos/App.app
-```
-
-This form needs the signing team to already be set (it is), since there is no
-IDE to prompt for one.
-
-#### Version numbering
-
-`CFBundleShortVersionString` and `CFBundleVersion` are stamped from the root
-`package.json` by `src-capacitor/ios/App/set-version.sh`, which runs as an Xcode
-build phase — the same single source of truth Android uses. Bump the version in
-`package.json` only.
-
-#### If Xcode offers "Update to recommended settings"
-
-Accepting it sets `ENABLE_USER_SCRIPT_SANDBOXING = YES`, which breaks the
-CocoaPods "[CP] Embed Pods Frameworks" phase — it uses `rsync`, and the build
-fails with `Sandbox: rsync(...) deny(1) file-write-unlink`. Set that one setting
-back to `NO`; the rest of the migration is fine to keep.
-
-### Electron (Desktop)
-
-The desktop application is fully configured and ready to build for Mac and Linux.
-
-#### Setup
-
-The Electron mode is already configured in this project. The icons are
-generated by `yarn install`; see [Icons](#icons) to regenerate them by hand.
-
-#### Build commands
-
-``` bash
-# Build and run electron app in debug mode
-quasar dev -m electron
-
-# Build electron app for production
-quasar build -m electron
-
-# Alternative build commands
-yarn build:electron        # Production build
-yarn build:electron:dev    # Development build
-yarn build:electron:prod   # Production build (explicit)
-```
-
-The Electron app is configured with electron-builder and supports:
-- Mac (DMG installer configured)
-- Linux (AppImage and other formats)
-- Windows (partially configured, currently commented out)
-
-#### Signed and notarized macOS builds
-
-`quasar build -m electron` produces an unsigned application, which is what you
-want locally: it launches without Gatekeeper interfering. Distributing one to
-another Mac needs it signed with a Developer ID, notarized by Apple and
-stapled, which `packaging/build_mac` does:
-
-``` bash
-packaging/build_mac        # signs, notarizes and staples the .dmg
-packaging/build_mac app    # stop after the .app, no disk image
-```
-
-The Developer ID and the notarytool keychain profile are read from
-`~/.config/macsign.env`, outside the repository, so nothing secret is committed
-and there is one place to edit them:
-
-``` bash
-export APPLE_SIGNING_IDENTITY="Developer ID Application: Your Name (TEAMID)"
-export APPLE_KEYCHAIN_PROFILE="notarytool-profile"
-export CODESIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"
-export NOTARY_PROFILE="notarytool-profile"
-```
-
-Store the notary profile once with
-`xcrun notarytool store-credentials`. Without the file the script says so and
-builds unsigned, so it works for anyone who is not the maintainer.
-
-Both the application and the disk image make the trip to Apple: electron-builder
-notarizes and staples the `.app`, and the script then notarizes and staples the
-image around it. The image is what someone downloads, and a stapled ticket is
-what lets Gatekeeper clear it without a round trip to Apple.
-
-#### Troubleshooting
-
-In case cocoapods is missing in your environment, [go here](https://guides.cocoapods.org/using/getting-started.html).
-
-Tip: Delete local storage in the browser after app update.
-
-If Electron exits immediately with no window, or the main process fails with
-`The requested module 'electron' does not provide an export named
-'BrowserWindow'`, check for `ELECTRON_RUN_AS_NODE` in the environment:
-
-``` bash
-echo $ELECTRON_RUN_AS_NODE     # anything but empty is the problem
-```
-
-It makes the Electron binary run as plain Node, so there is no `app`, no
-`BrowserWindow` and no window. VS Code's plugin host exports it and every shell
-it spawns inherits it, so a terminal inside an editor can have it set even
-though no dotfile does. `packaging/build_mac` unsets it; otherwise run the
-command through `env -u ELECTRON_RUN_AS_NODE`.
-
+re-running is cheap. The converter is
+[scripts/format-audio.mjs](scripts/format-audio.mjs) and needs nothing but Node
+and ffmpeg.
 
 ## Tests
 
-``` bash
+```bash
 yarn test          # unit and component tests (Vitest), ~1s
 yarn test:watch    # the same, re-running on change
-yarn test:e2e      # Electron smoke tests (Playwright)
+yarn test:e2e      # Electron and web end-to-end tests (Playwright)
 ```
 
-The project has to be prepared before any of these run: `tsconfig.json`
-extends `.quasar/tsconfig.json`, which Quasar generates. `yarn install` does it
-via `quasar prepare`, so a fresh clone can lint and test without a build; run
-`npx quasar prepare` by hand if you ever delete `.quasar`.
+`yarn install` prepares the project via `quasar prepare`, so a fresh clone can
+lint and test without a build; run `npx quasar prepare` by hand if you ever
+delete `.quasar`.
 
 `yarn test` runs in CI on every push. It covers four things:
 
@@ -561,10 +253,15 @@ via `quasar prepare`, so a fresh clone can lint and test without a build; run
   slot index, and the visual is offset from the audible event by exactly the
   output latency. See below.
 
-`yarn test:e2e` needs a build first (`quasar build -m electron`); it skips
-itself with a message if there is none. It launches the app and checks that a
-window opens with a populated `#q-app`, that every image loads, that a sample
-decodes, and that nothing logs an error - the white-page class of failure.
+`yarn test:e2e` needs a build first — `yarn build` for the web specs and
+`npx quasar build -m electron` for the Electron ones. Each group skips itself
+with a message if its build is missing.
+
+The Electron specs launch the app and check that a window opens with a populated
+`#q-app`, that every image loads, that a sample decodes, and that nothing logs an
+error - the white-page class of failure. The web specs serve `dist/spa` with
+[scripts/serve-static.mjs](scripts/serve-static.mjs) and drive the help controls
+under both touch and pointer input.
 
 ### The sync tests
 
@@ -581,127 +278,24 @@ deliberately failing case (`it.fails`); once the offset is clamped to one slot,
 turn it into a plain `it`.
 
 ## Licensing
+
 The source code is published under the terms of the GNU [AGPL license](https://www.gnu.org/licenses/agpl-3.0.html) (see the LICENSE file at the
 root of the git repository).
 There is an exception to this : the drumkits. All the .wav files located in public/audio are licensed under the terms of the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0).
 
 ## Contributing to the project
 
-### Adding a new rhythm (pattern)
-
-If you're a musician and would like to contribute to the project, you can submit some new patterns. Ultimately, A Compas project is getting generalistic and will be able to play any kind of rhythm. You can also contribute to the code, by submitting a merge request.
-
-To submit a new rythm, you can create a new file in the `src/assets/patterns` folder. The file should be named `your-context-name.ts`.
-
-The file should contain an array of objects, each object representing a pattern.
-
-A pattern object is defined by the `PatternState` interface, which is defined in the `src/utils/types.ts` file.
-
-```typescript
-export interface PatternState {
-  id:                       number // Unique identifier
-  name:                     string // Unique name of the pattern. Should be in lowercase and without spaces.
-  label:                    string // Displayed name of the pattern. Could contain spaces and uppercase letters.
-  context?:                 string // The musical context name. As 'name', it should be in lowercase and without spaces.
-  linkedPatterns?:          stringOpts[] // In case this style is a variation of another style, or has other names, you can link it here.
-  minTempo:                 number // Minimum absolute tempo
-  maxTempo:                 number // Maximum absolute tempo
-  defaultTempo:             number // Default tempo. Is the tempo that will be set when the user selects this pattern for the first time. After that, the tempo will be the last one set by the user.
-  slowTempo:                number // Slow tempo. If the tempo is below this value, a message will be displayed to the user.
-  fastTempo:                number // Fast tempo. If the tempo is above this value, a message will be displayed to the user.
-  nbBeatsInPattern:         number // Number of beats in the pattern. It is the number of eighth notes in the pattern. For example, a 4/4 pattern has 8 beats.
-  accents:                  number[] // Array of the accentuated eighth notes. Max elements and max value for each element are equal to nbBeatsInPattern. The accents are displayed in a different color.
-  sequences:                InstruSeqs
-  prestartBeats:            numOpts[] // Array of possible prestart beats.
-  slowMessage?:             string // Message displayed to the user when the tempo is too slow.
-  fastMessage?:             string // Message displayed to the user when the tempo is too fast.
-  longLabel?:               string // Long label of the pattern. Could contain spaces and uppercase letters.
-  doc?:                     string // Documentation of the pattern. Could contain spaces and uppercase letters.
-  wikipediaUrl?:            string // Wikipedia URL of the pattern.
-  places?:                  string // Places where the pattern is played. Could contain spaces and uppercase letters.
-  videoExample?:            string // Video example of the pattern.
-}
-```
-
-About the `InstruSeqs` type, it is defined in the `src/utils/types.ts` file as follows :
-
-```typescript
-export type InstruSeqs = {
-  [instru: string]: number[] // The key is the name of the instrument, and the value is an array of numbers. Each number is the index of the beat in the pattern.
-}
-```
-
-### Writing a sequence
-
-You can think of a sequence as an instrument line pattern.
-
-A sequence in A Compas has a key, which is the name of the instrument, and a value, which is an array of numbers or nulls.
-The index of the array is the beat number, and the value is the index of the sound as shown in the 'Adding a sound' section.
-Notice that there must be a link between the `nbBeatsInPattern` property, the values in `accents` and the length of the `sequences` arrays.
-The array must contain the same number of elements as the `nbBeatsInPattern` property of the `PatternState` object.
-
-For example, the following sequence :
-
-```typescript
-...
-nbBeatsInPattern: 8, // 8 beats, that is 4/4
-accents: [0, 2], // The first and third beats are displayed in a different color (no incidence on the sound, just a visual help for the user)
-sequences: {
-  // The array must contain 8 elements
-  // The number 1 is the sound 1 of the cajon sounds. Null means no sound.
-  cajon: [ 1,    2,    2,    null, 1,    2,    3,    2 ],
-        // 0     1     2     3     4     5     6     7 // This is just a helper for the index number
-        // 1     &     2     &     3     &     4     & // This is just a helper for the rhythm (like beatLabels)
-
-  // As a convenience, we can write a bonus sequence called beatLabels.
-  // It is still an array of numbers, strings or nulls, but this time the values are printed on the screen, like time labels.
-  // It is useful for the user to understand the rhythm.
-  beatLabels: [ 1,    null, 2,    null, 3,    null, 4,    null ],
-             // 0     1     2     3     4     5     6     7
-             // 1     &     2     &     3     &     4     &
-}
-```
-
-This means that the app will display 4 dots, first one and third one will be of a different color. Each dot (and hole between sdots) will be associated with the corresponding value in the beatLabels sequence.
-Notice that you write the whole sequence, with fourth and eighth notes. But keep in mind that the user can turn on and off the eighths notes and even the whole instrument for this pattern.
-For now, it is not possible to set other note subdivisions than the fourth and eighth notes. But if you need ternary, you could try to turn on the `swing` option.
-
-### Adding a sound
-
-To add a sound, you must provide a clean .wav file inside the public/audio folder. Then, you must update the `src/assets/data/soundsData.ts` file. Sounds can be grouped by instrument, and each sound must have a unique identifier. Here is an example :
-
-```typescript
-  {
-    name: 'myinstrument',
-    label: 'My instrument',
-    medias: [
-      {
-        src: 'somefolder/myinstrument/myinstrument_1',
-        volume: -2,
-      },
-      {
-        src: 'somefolder/myinstrument/myinstrument_2',
-        volume: -2,
-      },
-      {
-        src: 'somefolder/myinstrument/myinstrument_2',
-        volume: -12,
-      }
-    ]
-  },
-```
-
-There, we load two times the same sound with a different volume. The volume is a number in decibels. The volume is optional, and if not provided, it will be set to 0.
-
-Don't forget to run `yarn audio` to convert the new .wav file into .mp3, .mp4, .ogg and .flac. `yarn install` does this too, but only for files that are not already converted.
-
-Beware of the licence of the sounds you use. You must have the right to use them in a free software.
+If you're a musician and would like to contribute, you can submit new rhythms.
+A Compás is getting more generalistic and will ultimately be able to play any
+kind of rhythm. See [docs/contributing.md](docs/contributing.md) for the pattern,
+sequence and sound formats with worked examples. You can also contribute to the
+code by submitting a merge request.
 
 ## Roadmap / To do
 
 ### Platform Support
 - Package and publish the iOS app (currently implemented but not published)
-- Complete Windows desktop support (Electron - partially configured)
+- Complete Windows desktop support (Electron - see [docs/desktop.md](docs/desktop.md))
 - Consider Android TV support
 
 ### Features
