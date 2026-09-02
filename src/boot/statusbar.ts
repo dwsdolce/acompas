@@ -1,16 +1,8 @@
 import { boot } from 'quasar/wrappers'
 import { Capacitor } from '@capacitor/core'
 import { StatusBar, Style } from '@capacitor/status-bar'
-import type { StatusBarInfo } from '@capacitor/status-bar'
 import { App } from '@capacitor/app'
 import { logger } from 'src/utils/logger'
-
-interface Info extends StatusBarInfo {
-  height?: number
-}
-
-// Store the initial height to prevent re-setting it
-let initialHeight: string | null = null
 
 async function configureStatusBar() {
   if (!Capacitor.isNativePlatform()) return
@@ -21,19 +13,15 @@ async function configureStatusBar() {
     await StatusBar.setStyle({ style: Style.Dark })
     await StatusBar.setBackgroundColor({ color: '#000000' })
 
-    // Set CSS variable only once on initial load
-    if (Capacitor.getPlatform() === 'android' && !initialHeight) {
-      // Try to get actual status bar height, fallback to 40px
-      const statusBarHeight = await StatusBar.getInfo()
-        .then((info: Info) => (info.height ? `${info.height}px` : '40px'))
-        .catch(() => '40px')
-
-      initialHeight = statusBarHeight
-      document.documentElement.style.setProperty(
-        '--safe-area-inset-top',
-        statusBarHeight
-      )
-    }
+    // Capacitor 8 injects --safe-area-inset-top/right/bottom/left itself:
+    // that is the SystemBars plugin's `insetsHandling: 'css'` default, and the
+    // value it injects accounts for whether the web view actually extends
+    // under the status bar.
+    //
+    // This used to compute the variable from StatusBar.getInfo().height and
+    // set it by hand. Under Capacitor 8 that overwrote a correct 0px with
+    // 51px, padding the header by the height of a status bar that was no
+    // longer behind it.
   } catch (e) {
     logger.warn('StatusBar configuration failed:', e)
   }

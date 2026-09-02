@@ -4,14 +4,14 @@
   "author": "A Compás Team",
   "private": true,
   "dependencies": {
-    "@capacitor-community/keep-awake": "^7.1.0",
-    "@capacitor/android": "^7.4.3",
-    "@capacitor/app": "^7.1.0",
-    "@capacitor/cli": "^7.4.3",
-    "@capacitor/core": "^7.4.3",
-    "@capacitor/ios": "^7.4.3",
-    "@capacitor/splash-screen": "^7.0.3",
-    "@capacitor/status-bar": "^7.0.3"
+    "@capacitor-community/keep-awake": "^8.0.1",
+    "@capacitor/android": "^8.5.1",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.1",
+    "@capacitor/core": "^8.5.1",
+    "@capacitor/ios": "^8.5.1",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5"
