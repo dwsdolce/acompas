@@ -49,8 +49,15 @@ const label = {
   todo: '[ -- ]'
 }
 
-const say = (status, title, detail) =>
+// Counted so the closing summary cannot claim everything is in place while a
+// warning is still on screen - which is how a missing Electron runtime went
+// unnoticed in the first place.
+let warnings = 0
+
+const say = (status, title, detail) => {
+  if (status === 'warn') warnings++
   console.log(`  ${label[status]}  ${title.padEnd(14)}${detail ?? ''}`)
+}
 
 const heading = title => console.log(`\n${title}\n${'-'.repeat(title.length)}`)
 
@@ -336,7 +343,12 @@ async function checkNode () {
   const range = engineRange()
   const version = process.versions.node
   const good = satisfies(version, range)
-  const fnmActive = typeof process.env.FNM_MULTISHELL_PATH === 'string'
+  // Two signals, because either alone gives a wrong answer. The variable is
+  // what fnm's hook exports, but it does not always survive into a subprocess -
+  // and a Node running out of fnm's own multishell directory is proof enough
+  // that fnm is in charge, whatever the environment says.
+  const fnmActive = typeof process.env.FNM_MULTISHELL_PATH === 'string' ||
+    process.execPath.includes('fnm_multishells')
   let fnm = which('fnm')
 
   say(good ? 'ok' : 'fail', 'Node.js', good
@@ -602,6 +614,46 @@ async function checkDependencies () {
     say('warn', '.quasar', 'missing - run: npx quasar prepare')
   }
 
+  // Electron delivers its ~250MB binary through its own postinstall rather than
+  // as files inside the package, and that step can be skipped without failing
+  // `yarn install`. The package then looks perfectly installed while the
+  // desktop build and the Electron end-to-end specs have nothing to launch. It
+  // is only a warning: everything web works without it.
+  const electronDir = path.join(ROOT, 'node_modules', 'electron')
+  const electronReady = existsSync(path.join(electronDir, 'path.txt'))
+  if (rootInstalled && existsSync(electronDir) && !electronReady) {
+    // "Installed" would be misleading: the npm package is here, and only the
+    // runtime it fetches separately is absent. Naming both halves is the
+    // difference between a puzzling message and an obvious one.
+    say('warn', 'electron', 'npm package present, but the Electron runtime is missing')
+    console.log('         the desktop build and its tests have nothing to launch')
+    const installer = path.join(electronDir, 'install.js')
+
+    if (CHECK_ONLY) {
+      console.log('         fix: node node_modules/electron/install.js')
+      console.log('              ~150MB to download, ~370MB once unpacked')
+    } else if (await confirm('Fetch the Electron runtime now? Desktop builds and their tests need it.')) {
+      // install.js says nothing at all when it succeeds, so check the artefact
+      // rather than trusting the exit status, and say so either way - an echoed
+      // command followed by silence tells you nothing about what happened.
+      const ok = run(process.execPath, [installer]) &&
+        existsSync(path.join(electronDir, 'path.txt'))
+
+      if (ok) {
+        say('ok', 'electron', 'runtime fetched')
+        // It was counted as a warning moments ago and has just been resolved;
+        // leaving it counted would make the closing summary contradict the
+        // screen directly above it.
+        warnings--
+      } else {
+        console.log('\n  That did not work. Run it by hand and read the error:')
+        console.log('\n      node node_modules/electron/install.js\n')
+      }
+    }
+  } else if (rootInstalled && electronReady) {
+    say('ok', 'electron', 'runtime present')
+  }
+
   if (rootInstalled && capacitorInstalled && prepared) return 'ok'
 
   if (CHECK_ONLY) {
@@ -667,6 +719,10 @@ async function main () {
   console.log()
   if (failed) {
     console.log('Some prerequisites are still missing. Fix the items above and run this again.\n')
+  } else if (warnings > 0) {
+    const plural = warnings === 1 ? '' : 's'
+    console.log(`Ready to build, with ${warnings} warning${plural} above worth reading.`)
+    console.log('Next:  yarn dev\n')
   } else {
     console.log('Everything is in place. Next:  yarn dev\n')
   }

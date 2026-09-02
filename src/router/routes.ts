@@ -18,7 +18,11 @@ const routes: RouteRecordRaw[] = [
        {
         path: ':context',
         name: 'context',
-        beforeEnter: async (to, from, next) => {
+        // Returns a value rather than calling next(). The callback form is
+        // deprecated in vue-router 5 (VUE_ROUTER_R0025) and warns on every
+        // navigation: returning nothing or true lets the navigation through,
+        // and returning a location redirects to it.
+        beforeEnter: async (to) => {
           const patternStore = usePatternStore()
 
           const { data } = storeToRefs(patternStore)
@@ -30,13 +34,7 @@ const routes: RouteRecordRaw[] = [
 
           const pattern = data.value.find(p => to.params.pattern === p.name)
 
-          if (pattern) {
-            next()
-          } else {
-            next({
-              name: 'not-found'
-            })
-          }
+          return pattern ? true : { name: 'not-found' }
         },
         children: [
           {

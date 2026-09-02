@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
+import { app, BrowserWindow, Menu, nativeTheme, powerSaveBlocker, ipcMain } from 'electron'
 import { initialize, enable } from '@electron/remote/main'
 import { registerQuasarRuntime, resolveElectronAssetsPath, resolvePublicPath } from '#q-app/electron/main'
 import fs from 'node:fs'
@@ -33,9 +33,19 @@ async function createWindow() {
     icon: resolveElectronAssetsPath('icons/icon.png'), // Windows and Linux
     width: 1500,
     height: 800,
-    frame: false,
-    titleBarStyle: 'hidden',
-    trafficLightPosition: { x: 10, y: 10 },
+    // Frameless is a macOS arrangement, not a cross-platform one. There,
+    // titleBarStyle 'hidden' removes the bar but keeps the traffic lights, so
+    // the window still has controls and the q-toolbar sits where the title bar
+    // used to be - which is what trafficLightPosition is placing them against.
+    //
+    // Windows and Linux have no equivalent. frame:false on those leaves a
+    // window with no close button, nothing to minimise it, and - since nothing
+    // in the renderer sets -webkit-app-region: drag - no way to move it either.
+    // The app draws no controls of its own, so the only way out is Alt+F4 or
+    // the task manager. They get an ordinary frame instead.
+    ...(platform === 'darwin'
+      ? { frame: false, titleBarStyle: 'hidden' as const, trafficLightPosition: { x: 10, y: 10 } }
+      : {}),
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
@@ -85,6 +95,22 @@ async function createWindow() {
 
 void app.whenReady().then(() => {
   registerQuasarRuntime()
+
+  // Electron installs a default File/Edit/View/Window menu when an application
+  // sets none. On macOS that is the system menu bar and it carries Quit, so it
+  // has to stay. On Windows and Linux it is drawn inside the window, and none
+  // of it applies here: the app opens no files, has no text to cut or paste,
+  // and its View entries are reload, zoom and devtools. It was invisible until
+  // this window stopped being frameless, which is the only reason it went
+  // unnoticed.
+  //
+  // This also retires the shortcuts that menu registered - Ctrl+R and
+  // Ctrl+Shift+I. Dev builds open devtools on their own and production blocks
+  // them, so neither is missed.
+  if (platform !== 'darwin') {
+    Menu.setApplicationMenu(null)
+  }
+
   void createWindow()
 
   app.on('activate', () => {
