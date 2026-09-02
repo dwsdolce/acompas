@@ -99,13 +99,18 @@ test.describe('the help buttons', () => {
 
   test('presents a target big enough to hit', async ({ page }) => {
     const help = await open(page)
-    const box = await help.boundingBox()
 
     // 44px is what Apple asks for and what WCAG 2.5.5 asks for. These rendered
     // at 17px until QBtn's padding="none" was removed — it writes min-width and
     // min-height of 0 inline, which no stylesheet rule can outrank.
-    expect(box!.width).toBeGreaterThanOrEqual(44)
-    expect(box!.height).toBeGreaterThanOrEqual(44)
+    //
+    // Polled rather than measured once: boundingBox() does not wait for
+    // animations, and on a loaded machine a single reading can land while the
+    // dialog is still scaling in, reporting a fraction of the real size.
+    await expect.poll(async () => {
+      const box = await help.boundingBox()
+      return Math.min(box?.width ?? 0, box?.height ?? 0)
+    }).toBeGreaterThanOrEqual(44)
   })
 
   test('describes itself to a screen reader', async ({ page }) => {
