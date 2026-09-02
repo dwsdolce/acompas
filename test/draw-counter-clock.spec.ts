@@ -1,5 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { mount, config } from '@vue/test-utils'
+
+// These specs mount one component at a time rather than installing the Quasar
+// plugin, so its components are unknown to Vue and every render logged
+// "Failed to resolve component: q-icon". Nothing here asserts on an icon - the
+// assertions are about bar heights, tick positions and colours - so stub it
+// rather than pulling the framework into a unit test. Set here rather than in
+// test/setup.ts: importing @vue/test-utils globally makes Vitest transform it
+// for every spec, and the two that dynamically import pattern files then race
+// on Vite's temp cache and fail with EPERM on Windows.
+config.global.stubs = { QIcon: true }
 import { setActivePinia, createPinia } from 'pinia'
 
 vi.mock('animejs', () => ({ default: Object.assign(() => ({ finished: Promise.resolve(), pause: () => {} }), { remove: () => {} }) }))

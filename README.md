@@ -202,7 +202,7 @@ is why every command in these docs uses `yarn` or `npx`.
 ## Tests
 
 ```bash
-yarn test          # unit and component tests (Vitest), ~1s
+yarn test          # unit and component tests (Vitest), ~6s
 yarn test:watch    # the same, re-running on change
 yarn test:e2e      # Electron and web end-to-end tests (Playwright)
 ```

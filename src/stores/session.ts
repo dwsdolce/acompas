@@ -1,4 +1,4 @@
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { Screen, Dialog, is } from 'quasar'
 import { useStorage } from '@vueuse/core'
@@ -71,12 +71,13 @@ export const useSessionStore = defineStore('session', () => {
     visualizationSize.value = payload
   }
 
-  onMounted(() => {
-    if (trackingEnabled.value) {
-      initializeTracking()
-    }
-  })
-
+  // No onMounted here. The watcher below is immediate, so it already runs
+  // initializeTracking() when the store is created and tracking is on - an
+  // onMounted doing the same thing fired a second time once the component
+  // mounted, initialising Matomo twice. It also tied initialisation to the
+  // store first being used inside a component: created anywhere else, from a
+  // test or a boot file, the hook never ran and Vue warned that there was no
+  // instance to attach it to.
   watch(trackingEnabled, (value) => {
     if (value) {
       initializeTracking()
