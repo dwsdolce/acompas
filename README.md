@@ -46,129 +46,114 @@ You can [talk with the team on Slack](https://acompas-org.slack.com).
 
 # Getting started
 
-Everything in this section is the same on macOS, Windows and Linux. Only the
-three prerequisites differ, and only in how you install them.
+## Quick start
 
-## Prerequisites
+Three steps. The setup script handles the rest — including installing Node.js if
+this machine does not already have it.
 
-|  | macOS | Windows | Linux (Debian/Ubuntu) |
-|---|---|---|---|
-| **Node.js 24** | `brew install fnm` | `winget install Schniz.fnm` | [nodesource / fnm](https://nodejs.org/en/download/package-manager/) |
-| **Yarn 1.22.22** | `corepack enable` | `corepack enable` *(admin terminal)* | `corepack enable` |
-| **ffmpeg** | `brew install ffmpeg` | `winget install Gyan.FFmpeg` | `sudo apt install ffmpeg` |
-
-That is the whole list. There is no Python requirement, no global Quasar CLI and
-no global Icon Genie: `yarn install` provides them, and `npx quasar` runs the
-CLI.
-
-### Node.js
-
-**Use Node.js 24.x LTS**, which `.nvmrc` pins. `@quasar/app-vite` v3 declares
-`node: ^30 || ^28 || ^26 || ^24 || ^22.22.0`, and yarn enforces engines
-strictly — `yarn install` refuses outright on a version outside that range, so
-Node 20 and earlier will not work at all. Node 24 is the current LTS and the
-version CI builds with, which makes it the one to match.
-
-A version manager makes this painless, and both of the common ones read
-`.nvmrc`:
-
-* **fnm** — add its shell hook to your profile (`fnm env --use-on-cd --shell
-  zsh` for zsh, `--shell bash` for bash, `--shell power-shell` for PowerShell).
-  Entering the project directory then switches to 24 automatically.
-* **nvm** on macOS/Linux, or **nvm-windows** — `nvm use` in the project
-  directory.
-
-Otherwise see the nodejs.org [download page](https://nodejs.org/en/download/).
-On Linux, consider [installing Node.js via package manager](https://nodejs.org/en/download/package-manager/).
-
-### Yarn
-
-This project uses **yarn 1.22.22**, pinned in the `packageManager` field of
-`package.json`. Node.js does not ship a `yarn` command, so you have to add one
-before you can run `yarn install`. You only need to do this once.
-
-**Option A — Corepack (recommended).** Corepack is a shim that reads the
-`packageManager` field and automatically runs the exact yarn version this
-project expects, so you cannot end up on a mismatched one:
-
-```bash
-corepack enable
-```
-
-Node.js 16.9 through 24 bundle Corepack, so that command just works. It was
-unbundled in Node.js 25, so on newer versions install it first:
-
-```bash
-npm install -g corepack
-corepack enable
-```
-
-`corepack enable` writes its shims into Node's own install directory, so a
-permission error means it cannot write there:
-
-* **macOS / Linux** — rerun it with `sudo`.
-* **Windows** — Node lives under `C:\Program Files\nodejs`, so run it from a
-  terminal started with *Run as administrator*. There is no `sudo`.
-
-**Option B — install yarn directly.** Simpler, but nothing keeps you in sync
-with the pinned version:
-
-```bash
-npm install -g yarn
-```
-
-Either way, check it worked before continuing:
-
-```bash
-yarn --version   # 1.22.22
-```
-
-### ffmpeg
-
-ffmpeg is the one thing that is not a project dependency. It generates the audio
-the app plays, and `yarn install` warns clearly if it is missing, because the app
-cannot play anything without it.
-
-```bash
-brew install ffmpeg                                        # macOS
-winget install Gyan.FFmpeg                                 # Windows
-sudo apt update && sudo apt install ffmpeg                 # Ubuntu/Debian
-sudo yum install epel-release && sudo yum install ffmpeg   # CentOS/RHEL
-```
-
-On Windows you can also use `choco install ffmpeg`, or download a build from
-<https://ffmpeg.org/download.html>, extract it, and add its `bin` folder to your
-PATH. Whichever route you take, `ffmpeg -version` has to work in a **new**
-terminal before `yarn install` will find it.
-
-### A note on Windows shells
-
-The build works from PowerShell, from Git Bash and from Cygwin. Two things are
-worth knowing whichever you pick:
-
-* **yarn runs its own scripts through `cmd.exe`**, not through the shell you
-  typed the command in. Anything a lifecycle script needs — `node`, `ffmpeg` —
-  has to be on the *Windows* PATH, not only on a Cygwin or MSYS one.
-* **Native tools do not understand `/cygdrive/...` paths.** Cygwin sets the real
-  Windows working directory, so relative paths and `node` itself are fine, but a
-  Cygwin-style path passed as an *argument* to `adb`, `sdkmanager` or Gradle will
-  not resolve. Convert it with `cygpath -w`, or run those steps from PowerShell.
-
-## Clone and install
+**1. Clone the project.**
 
 ```bash
 git clone https://gitlab.com/acompas/acompas.git
 cd acompas
-yarn install
 ```
 
-`yarn install` also runs three generation steps for you, so a fresh clone is
-immediately ready to build:
+**2. Run the setup script.** Choose by **the shell you are typing into**, not by
+your operating system:
 
-1. `quasar prepare` — writes `.quasar/tsconfig.json`, which the root
-   `tsconfig.json` extends. Without it, lint and tests cannot resolve types.
-2. `yarn icons` — generates the web and Electron icons.
-3. `yarn audio` — converts the `.wav` masters into the formats the app plays.
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+```bash
+./setup.sh
+```
+
+**3. Start the app.**
+
+```bash
+yarn dev
+```
+
+It opens at <http://localhost:9000/>.
+
+### Which script, and why the long Windows command
+
+Pick by shell, because on Windows both are common:
+
+* At a `PS>` or `C:\>` prompt — **`setup.ps1`**.
+* At a `$` prompt — **`setup.sh`**. That includes Git Bash, Cygwin and WSL *on
+  Windows*, and it includes those terminals inside VS Code. Running
+  `./setup.ps1` there makes bash try to parse PowerShell and produces a screen
+  of `command not found` and `syntax error near unexpected token`.
+
+Both scripts do the same job; only the language differs.
+
+The Windows command is spelled out in full because Windows refuses to run local
+scripts by default, with:
+
+```
+.\setup.ps1 : File ...\setup.ps1 cannot be loaded because running scripts is
+disabled on this system.
+```
+
+`-ExecutionPolicy Bypass -File` applies to that one invocation and changes
+nothing about the machine. If you would rather allow local scripts generally —
+read [setup.ps1](setup.ps1) first, it is short — then
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` lets you use the shorter
+`.\setup.ps1` from then on.
+
+### What the setup script does
+
+You do not need to work out first whether Node.js is on the machine. The script
+determines that, which is not something you could reasonably be expected to know
+anyway — plenty of applications install Node without ever mentioning it.
+
+1. **`setup.ps1` / `setup.sh`** check for a usable Node and install one if there
+   is none. That is *all* they do. They exist only because the main script is
+   written in Node, and so cannot be the thing that discovers Node is missing.
+2. **`scripts/setup.mjs`** takes over: the Node version this project needs,
+   Yarn, ffmpeg, and the project's dependencies — both of them, since
+   `src-capacitor` is a second install that even the web build requires.
+
+It changes **nothing** without asking, asks only where there is a real decision
+to make, and is safe to run repeatedly — re-running it is how you resume after a
+step that needs a new terminal.
+
+To see what it would do without changing anything, add `--check`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1 --check
+```
+
+```bash
+./setup.sh --check
+```
+
+### Doing it by hand
+
+[docs/setup.md](docs/setup.md) is the same work done manually, with the
+reasoning behind every step: what each prerequisite is for, the Node version
+manager question, the Windows shell and PATH traps, and what `yarn install`
+generates. Read it if the script fails, if you would rather not run a script
+that installs things, or if you want to know what is being checked and why.
+
+### Starting over
+
+Everything the setup produces is gitignored, so deleting it never touches a
+tracked file. To return to an earlier state:
+
+```bash
+rm -rf src-capacitor/node_modules          # redo just the Capacitor install
+rm -rf node_modules .quasar                # redo the dependency install
+node scripts/format-audio.mjs unconvert    # redo the audio generation
+```
+
+`rm -rf node_modules src-capacitor/node_modules .quasar dist` plus that
+`unconvert` puts you back to a freshly cloned tree. Re-running the setup script
+then rebuilds all of it; budget a few minutes, most of it ffmpeg converting the
+audio masters. The `unconvert` command needs no dependencies, so it still works
+with `node_modules` deleted.
 
 ## Run the app
 
@@ -182,6 +167,19 @@ through yarn as above, or with `npx quasar dev` / `npx quasar build`. A bare
 `quasar` command only works if you happen to have one installed globally, which
 is why every command in these docs uses `yarn` or `npx`.
 
+> ⚠️ **On Windows, `yarn dev` in Windows PowerShell may fail** with *"cannot be
+> loaded because running scripts is disabled on this system"*. That is not this
+> project: npm installs a `yarn.ps1` shim, PowerShell prefers it over
+> `yarn.cmd`, and `Restricted` — Microsoft's default for Windows PowerShell —
+> forbids running it. Fix it once, per-user and without elevation:
+>
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+> ```
+>
+> Or use cmd, PowerShell 7, or any POSIX shell, none of which are affected. See
+> [docs/setup.md](docs/setup.md#a-note-on-windows-shells) for the detail.
+
 ## Building for a specific platform
 
 | Target | Build from | Guide |
@@ -190,39 +188,6 @@ is why every command in these docs uses `yarn` or `npx`.
 | Desktop (Electron) | macOS, Windows, Linux | [docs/desktop.md](docs/desktop.md) |
 | Android | macOS, Windows, Linux | [docs/android.md](docs/android.md) |
 | iOS | macOS only | [docs/ios.md](docs/ios.md) |
-
-## Regenerating icons and audio
-
-Both are generated by `yarn install`, so there is normally nothing to do.
-
-### Icons
-
-If you change `app-icon.png` and want to refresh them:
-
-```bash
-yarn icons      # the generated, gitignored icons (web + Electron)
-yarn icons:all  # everything, including the committed Capacitor Android/iOS
-                # assets — rewrites ~30 tracked files, so review the diff
-```
-
-`yarn icons:all` also runs `packaging/prepare_ios_assets`, which is a zsh script
-and **macOS only**.
-
-### Audio
-
-Only the `.wav` masters are committed; the formats the app actually plays
-(`.mp3`, `.mp4`, `.ogg`, `.flac`) are generated and gitignored.
-
-```bash
-yarn audio                                      # all of public/audio
-yarn audio:clean                                # delete the generated formats
-node scripts/format-audio.mjs convert acompas   # or just one subdirectory
-```
-
-Files that already exist and are newer than their `.wav` are skipped, so
-re-running is cheap. The converter is
-[scripts/format-audio.mjs](scripts/format-audio.mjs) and needs nothing but Node
-and ffmpeg.
 
 ## Tests
 

@@ -7,6 +7,8 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "setup:check": "node scripts/setup.mjs --check",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,html,md,json}\" --ignore-path .gitignore",
     "test": "vitest run",
