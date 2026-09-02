@@ -8,8 +8,12 @@ import { ref } from 'vue'
  * in one spec, so the specs cannot drift apart.
  */
 
-export const metronomeMock = () => ({
-  useMetronome: () => ({
+export const metronomeMock = () => {
+  // One instance, not one per call. The real useMetronome is a singleton, and
+  // the store captures its members at setup - so a mock that builds a fresh
+  // object each time hands the test different functions from the ones the
+  // store is holding, and mocking a return value has no effect.
+  const instance = {
     metronomeEvent: ref(0),
     metronomeSubEvent: ref(0),
     getContext: vi.fn(() => ({ currentTime: 0 })),
@@ -23,8 +27,9 @@ export const metronomeMock = () => ({
     humanize: vi.fn(),
     changeVolume: vi.fn(),
     changeDecay: vi.fn()
-  })
-})
+  }
+  return { useMetronome: () => instance }
+}
 
 export const matomoMock = () => ({
   useMatomo: () => ({
@@ -36,13 +41,16 @@ export const matomoMock = () => ({
   })
 })
 
-export const keepAwakeMock = () => ({
-  useKeepAwake: () => ({
-    isSupported: ref(false),
+export const keepAwakeMock = () => {
+  // isSupported is an async function in the real composable, not a ref: the
+  // store calls `await isSupported()`.
+  const instance = {
+    isSupported: vi.fn(async () => true),
     keepAwake: vi.fn(),
     allowSleep: vi.fn()
-  })
-})
+  }
+  return { useKeepAwake: () => instance }
+}
 
 export const routerMock = () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),

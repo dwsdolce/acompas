@@ -123,4 +123,30 @@ describe('patterns store', () => {
       expect(store.instrument('cajon')!.eighthNotes).toBe(true)
     })
   })
+
+  describe('play', () => {
+    it('puts isPlaying back if the start fails', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+
+      const { useMetronome } = await import('src/composables/metronome')
+      const metronome = useMetronome()
+      vi.mocked(metronome.startSequences).mockRejectedValueOnce(new Error('no audio'))
+
+      await store.play()
+
+      // Left true, the button reads as "stop" and the next tap stops a
+      // silence instead of starting - which looks like a dead button.
+      expect(store.isPlaying).toBe(false)
+    })
+
+    it('stays playing when the start succeeds', async () => {
+      const store = usePatternStore()
+      await store.initAll('flamenco', 'abandolaos')
+
+      await store.play()
+
+      expect(store.isPlaying).toBe(true)
+    })
+  })
 })

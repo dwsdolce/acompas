@@ -319,12 +319,26 @@ export const usePatternStore = defineStore('patterns', () => {
   // *****************************************
 
   const play = async () => {
-    if (selectedPattern.value) {
-      isPlaying.value = true
-      startSequences()
-      if (matomoExists()) trackPlay()
-      if (await isSupported()) keepAwake()
+    if (!selectedPattern.value) return
+
+    // isPlaying flips first so the button reads as "playing" immediately, but
+    // it has to be put back if the start fails. startSequences() rethrows, and
+    // this used to call it without awaiting: the rejection went unhandled and
+    // isPlaying stayed true with nothing playing, which turns the button into
+    // a stop button. The next tap then stopped a silence instead of starting,
+    // so it took two taps to play and looked like the button had been ignored.
+    isPlaying.value = true
+
+    try {
+      await startSequences()
+    } catch {
+      // startSequences has already logged it and shown the user a message.
+      isPlaying.value = false
+      return
     }
+
+    if (matomoExists()) trackPlay()
+    if (await isSupported()) keepAwake()
   }
 
   const stop = async () => {

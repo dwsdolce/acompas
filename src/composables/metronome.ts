@@ -544,6 +544,25 @@ const createMetronome = () => {
 
     try {
       await Tone.start()
+
+      // Tone.start() resolves whether or not the context actually reached
+      // "running". iOS has a state the other platforms do not - "interrupted",
+      // entered when the audio session is taken away and not always left on its
+      // own - and a context sitting in it advances no transport: no sound, no
+      // dots moving, and no error anywhere. The button simply looks dead.
+      //
+      // Ask for it back, then insist on knowing. A start that cannot produce
+      // audio is a failure, and saying so puts a message on screen, a reason in
+      // the log, and the play button back the way it was.
+      const rawContext = Tone.getContext().rawContext as unknown as AudioContext
+      if (rawContext.state !== 'running') {
+        logger.warn('Audio context is', rawContext.state, '- asking it to resume')
+        await rawContext.resume().catch(() => undefined)
+      }
+      if (rawContext.state !== 'running') {
+        throw new Error(`audio context is ${rawContext.state}, not running`)
+      }
+
       logger.log('Audio context state:', Tone.context.state)
 
       await reinitialize()
