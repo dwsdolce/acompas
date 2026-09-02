@@ -54,7 +54,7 @@ this machine does not already have it.
 **1. Clone the project.**
 
 ```bash
-git clone https://gitlab.com/acompas/acompas.git
+git clone https://github.com/dwsdolce/acompas.git
 cd acompas
 ```
 

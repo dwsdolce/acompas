@@ -68,7 +68,6 @@ things are worth knowing whichever you pick:
   setting in separate registry keys, so `pwsh` being permissive tells you
   nothing about `powershell`.
 
-
 * **A new terminal inside VS Code is not a new environment.** Every install step
   below (fnm, Node, ffmpeg, Corepack) changes PATH, and an integrated terminal
   inherits its environment from the VS Code process as it was when VS Code
@@ -295,7 +294,7 @@ VS Code before running it (see [the note above](#a-note-on-windows-shells)).
 ## Clone and install
 
 ```bash
-git clone https://gitlab.com/acompas/acompas.git
+git clone https://github.com/dwsdolce/acompas.git
 cd acompas
 yarn install
 cd src-capacitor && yarn install && cd ..
