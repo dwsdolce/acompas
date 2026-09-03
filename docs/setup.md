@@ -340,8 +340,12 @@ The header logo is *not* part of this. `public/ACompas-4-logo.png` and
 `public/ACompas-4-name.png` are hand-made images referenced directly from
 `src/layouts/MainLayout.vue`, and regenerating icons does not touch them.
 
-`yarn icons:all` also runs `packaging/prepare_ios_assets`, which is a zsh script
-and **macOS only**.
+`yarn icons:all` also runs `packaging/prepare-ios-assets.mjs`, which flattens the
+alpha channel out of the iOS app icon (App Store Connect rejects an icon that has
+one) and copies the splash to the 1x and 2x names Xcode expects. It runs on
+macOS, Windows and Linux, and needs ffmpeg — the same ffmpeg the audio uses. It
+checks the result rather than trusting the exit status, because this is the step
+whose failure would otherwise only surface at upload.
 
 ### Audio
 

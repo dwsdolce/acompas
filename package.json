@@ -23,7 +23,7 @@
     "build:electron:prod": "quasar build -m electron --prod",
     "icons": "icongenie generate -p icongenie-generated.json",
     "postinstall": "quasar prepare && yarn icons && node scripts/format-audio.mjs convert --optional",
-    "icons:all": "icongenie generate -p icongenie-profile.json && packaging/prepare_ios_assets",
+    "icons:all": "icongenie generate -p icongenie-profile.json && node packaging/prepare-ios-assets.mjs",
     "audio": "node scripts/format-audio.mjs convert",
     "audio:clean": "node scripts/format-audio.mjs unconvert"
   },

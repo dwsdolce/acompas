@@ -80,10 +80,14 @@ build phase — the same single source of truth Android uses. Bump the version i
 ## Icons
 
 `yarn icons:all` regenerates the committed iOS assets and then runs
-`packaging/prepare_ios_assets`, which flattens the app icon's alpha channel.
+`packaging/prepare-ios-assets.mjs`, which flattens the app icon's alpha channel.
 App Store Connect rejects an icon with transparency ("Invalid Image - the app
 icon can't contain an alpha channel"), and a device build installs happily
 either way, so the failure would otherwise surface only at upload.
+
+Unlike the rest of this page, that step is not macOS-only: it is a Node script
+and runs anywhere ffmpeg does, so the icons can be regenerated on whatever
+machine is to hand. Only the Xcode build below needs a Mac.
 
 ## If Xcode offers "Update to recommended settings"
 

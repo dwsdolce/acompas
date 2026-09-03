@@ -22,14 +22,9 @@ node_modules
 # and flattens the iOS icon, which Icon Genie writes with an alpha channel that
 # App Store Connect refuses. Run it only when the source icon changes, and
 # review the diff.
-#
-# src-electron/icons is the path icongenie-profile.json still writes Electron
-# icons to; app-vite v3 reads them from src-electron/electron-assets/icons.
-# Both are ignored until the profile is updated.
 /public/favicon.ico
 /public/icons
 /src-electron/electron-assets
-/src-electron/icons
 /public/audio/*.mp3
 /public/audio/*.wav
 /public/audio/*.ogg
