@@ -11,7 +11,7 @@ import type { CSSProperties } from 'vue'
 const patternStore = usePatternStore()
 // The dial is $blue-grey-1 in both themes, so its marks are chosen against a
 // light surface whatever the app theme is.
-const { roleOf, palmasWeight, compasColor, inkColor, showsEighthNotes } =
+const { roleOf, palmasWeight, compasColor, palmasColor, showsEighthNotes } =
   useCompasVisual({ onLightSurface: true })
 const sessionStore = useSessionStore()
 
@@ -90,8 +90,10 @@ const getCompasStyle = computed(() => (i: number) => {
 
 /**
  * The palmas layer: a tick outside the dial wherever the drawn instrument
- * strikes, its length the weight of the strike. No hue, for the same reason
- * the dots' ring has none — the dial sits in five different context colours.
+ * strikes, its length the weight of the strike, and blue when that strike is
+ * the accented one — the same language as the dots' ring and the counter's bar.
+ * The dial is a light surface whatever the theme, so the blue comes back as the
+ * darker of the two.
  */
 const getTickStyle = computed(() => (i: number) => {
   const weight = palmasWeight(i)
@@ -100,7 +102,7 @@ const getTickStyle = computed(() => (i: number) => {
     position: 'absolute',
     height: `${weight * 4 + 2}px`,
     width: `${weight}px`,
-    backgroundColor: inkColor.value,
+    backgroundColor: palmasColor(i),
     opacity: 0.85,
     borderRadius: '1px'
   }

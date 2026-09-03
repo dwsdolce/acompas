@@ -8,7 +8,7 @@ import { useCompasVisual } from 'src/composables/visualization'
 
 const sessionStore = useSessionStore()
 const patternStore = usePatternStore()
-const { roleOf, palmasWeight, compasColor, inkColor, showsEighthNotes } = useCompasVisual()
+const { roleOf, palmasWeight, compasColor, palmasColor, showsEighthNotes } = useCompasVisual()
 
 const {
   selectedPattern,
@@ -44,13 +44,16 @@ const getStyle = computed(() => {
 })
 
 // The palmas layer, in the same language as the dots' ring: present when the
-// instrument being drawn strikes here, thicker the harder it strikes.
+// instrument being drawn strikes here, thicker the harder it strikes, and
+// coloured when that strike is the accented one.
 const palmasStyle = computed(() => {
   const slot = currentSlot.value
   const weight = slot === null ? 0 : palmasWeight(slot)
   return {
     height: weight ? `${weight * 2}px` : '2px',
-    backgroundColor: weight ? inkColor.value : 'transparent',
+    // slot is re-tested rather than leaning on weight: a zero weight implies a
+    // null slot, but only to a reader, not to the type checker.
+    backgroundColor: slot !== null && weight ? palmasColor(slot) : 'transparent',
     opacity: weight ? 0.9 : 0
   }
 })

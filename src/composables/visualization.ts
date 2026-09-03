@@ -19,17 +19,24 @@ export type CompasRole = 'accent' | 'beat' | 'pulse' | 'sub'
  *
  * Two layers, on two channels that cannot be confused for one another:
  *
- *   compás — the pulse of the palo. Carried by colour and by size.
+ *   compás — the pulse of the palo. Carried by fill colour and by size.
  *   palmas — what the instrument you are watching actually strikes. Carried by
- *            an outline, never by a hue.
+ *            an outline, its thickness the weight of the strike.
  *
- * The palmas layer takes no colour of its own on purpose. `--q-primary` is the
- * context's colour and it moves — red for flamenco, orange for Afro-Cuban,
- * purple for Afro-Brazilian, light-blue for Fundamental Global, teal for
- * Ternary African — so any second hue collides with one of them (amber against
- * the Afro-Cuban orange, to take the obvious case). An outline in the
- * foreground colour reads against all five, and against a greyscale screen or
- * a viewer who cannot separate two hues.
+ * Across both layers, hue means one thing: this one is accented. An accented
+ * compás slot is a red disc among grey ones; an accented strike is a blue ring
+ * among ink ones. Everything unaccented stays neutral.
+ *
+ * The palmas layer used to take no hue at all, because `--q-primary` moved with
+ * the context — red, orange, purple, light-blue, teal — and any second colour
+ * collided with one of the five. So the strength of a strike was encoded as one,
+ * two or three pixels of line weight, which is not a difference anyone can see.
+ * The contexts now all share one colour, which frees the channel; if they are
+ * ever given distinct colours again, this hue has to be reconsidered with them.
+ *
+ * Red against blue is also the pair to choose here: it survives the common forms
+ * of colour blindness, where a red/green pairing would not. Thickness still
+ * carries the same information underneath, so nothing depends on hue alone.
  */
 export const useCompasVisual = (options: { onLightSurface?: boolean } = {}) => {
   const patternStore = usePatternStore()
@@ -66,9 +73,6 @@ export const useCompasVisual = (options: { onLightSurface?: boolean } = {}) => {
     return sample === 1 ? 3 : sample === 2 ? 2 : sample === 3 ? 1 : 0
   }
 
-  // Grey rather than a second hue, for the same reason the palmas layer has no
-  // hue: it has to sit beside all five context colours without competing.
-  //
   // `onLightSurface` is for a view that does not follow the theme. The clock
   // face is $blue-grey-1 whether the app is light or dark, so reading the
   // theme there paints a near-white tick on a near-white dial and a #bdbdbd
@@ -78,7 +82,18 @@ export const useCompasVisual = (options: { onLightSurface?: boolean } = {}) => {
   const neutralColor = computed(() => (onDark.value ? '#bdbdbd' : '#616161'))
   const inkColor = computed(() => (onDark.value ? '#f5f5f5' : '#212121'))
 
+  /** light-blue-4 on a dark ground, blue-8 on a light one. */
+  const accentInkColor = computed(() => (onDark.value ? '#29b6f6' : '#1565c0'))
+
   const compasColor = (i: number) => (isAccent(i) ? 'var(--q-primary)' : neutralColor.value)
+
+  /**
+   * The palmas layer's colour. Only the accented strike takes the hue — the
+   * softer two stay ink, so the accent is the one thing that stands out rather
+   * than the whole layer turning blue.
+   */
+  const palmasColor = (i: number) =>
+    (palmasWeight(i) === 3 ? accentInkColor.value : inkColor.value)
 
   const compasScale: Record<CompasRole, number> = {
     accent: 1.5,
@@ -111,6 +126,7 @@ export const useCompasVisual = (options: { onLightSurface?: boolean } = {}) => {
     compasOpacity,
     neutralColor,
     inkColor,
+    palmasColor,
     isHidden,
     showsEighthNotes: visualizedHasEighthNotes
   }

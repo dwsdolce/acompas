@@ -57,12 +57,20 @@ export const usePatternStore = defineStore('patterns', () => {
   const patterns = useStorage('patterns', ref<PatternSetting[]>([]))
   const selectedPatternName = useStorage('selected-pattern-name', ref('alegria'))
   const selectedContextName = useStorage('selected-context-name', ref('flamenco'))
+  // One colour for every context. These used to differ - red, orange, purple,
+  // light-blue, teal - and repainted the whole app on a context change. That
+  // said nothing the header button and this menu's check mark do not already
+  // say, and it cost the visualisation its only free hue: a second colour had
+  // to avoid all five, so the palmas layer could only encode the strength of a
+  // strike as one, two or three pixels of line weight. With the app one colour,
+  // hue is free to mean accent. The per-context structure is kept so that
+  // giving them distinct colours again is a matter of editing these values.
   const contexts = ref<ContextOption[]>([
     { label: 'Flamenco', value: 'flamenco', colors: { primary: 'red-6', secondary: 'red-10' }},
-    { label: 'Afro-Cuban', value: 'afro-cuban', colors: { primary: 'orange-6', secondary: 'orange-10' }},
-    { label: 'Afro-Brazilian', value: 'afro-brazilian', colors: { primary: 'purple-6', secondary: 'purple-10' }},
-    { label: 'Fundamental Global', value: 'fundamental-global', colors: { primary: 'light-blue-6', secondary: 'light-blue-10' }},
-    { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'teal-6', secondary: 'teal-10' }}
+    { label: 'Afro-Cuban', value: 'afro-cuban', colors: { primary: 'red-6', secondary: 'red-10' }},
+    { label: 'Afro-Brazilian', value: 'afro-brazilian', colors: { primary: 'red-6', secondary: 'red-10' }},
+    { label: 'Fundamental Global', value: 'fundamental-global', colors: { primary: 'red-6', secondary: 'red-10' }},
+    { label: 'Ternary African', value: 'ternary-african', colors: { primary: 'red-6', secondary: 'red-10' }}
   ])
 
   // *****************************************

@@ -18,7 +18,7 @@ const {
   compasColor,
   compasScale,
   compasOpacity,
-  inkColor,
+  palmasColor,
   isHidden,
   showsEighthNotes
 } = useCompasVisual()
@@ -103,7 +103,12 @@ const dotStyle = computed(() => (i: number) => {
     // rather than a fatter dot, its thickness the weight of the strike.
     // outline-offset leaves a real gap showing whatever is behind, so no
     // background colour has to be guessed here.
-    outline: weight ? `${weight}px solid ${inkColor.value}` : 'none',
+    //
+    // Only the accented ring is widened, from 3px to 6px. The softer two keep
+    // the weight they had: the point is to make the accent obvious, not to
+    // thicken the whole layer, and each view scales this same 3/2/1 weight to
+    // suit its own geometry (the clock uses weight*4+2, the counter weight*2).
+    outline: weight ? `${weight === 3 ? 6 : weight}px solid ${palmasColor(i)}` : 'none',
     outlineOffset: weight ? '2px' : '0'
   }
 })
