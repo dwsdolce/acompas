@@ -25,15 +25,10 @@ node_modules
 /public/favicon.ico
 /public/icons
 /src-electron/electron-assets
-/public/audio/*.mp3
-/public/audio/*.wav
-/public/audio/*.ogg
-/public/audio/*.flac
-/public/audio/*.mp4
-/public/audio/**/*.mp3
-/public/audio/**/*.ogg
-/public/audio/**/*.flac
-/public/audio/**/*.mp4
+# Every playable file is generated from the .wav masters in audio/, which are
+# the committed ones. The whole directory goes, rather than a list of formats
+# that had to grow whenever one was added or dropped.
+/public/audio/
 
 # Capacitor related directories and files
 /src-capacitor/www

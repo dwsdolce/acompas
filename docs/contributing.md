@@ -93,7 +93,7 @@ For now, it is not possible to set other note subdivisions than the fourth and e
 
 ## Adding a sound
 
-To add a sound, you must provide a clean .wav file inside the public/audio folder. Then, you must update the `src/assets/data/soundsData.ts` file. Sounds can be grouped by instrument, and each sound must have a unique identifier. Here is an example :
+To add a sound, you must provide a clean .wav file inside the audio/ folder (the masters; public/audio holds the generated formats). Then, you must update the `src/assets/data/soundsData.ts` file. Sounds can be grouped by instrument, and each sound must have a unique identifier. Here is an example :
 
 ```typescript
   {

@@ -1,11 +1,19 @@
 #!/usr/bin/env node
 //
-// Convert the .wav masters in public/audio into the formats the app plays.
+// Convert the .wav masters in audio/ into the formats the app plays, writing
+// them into public/audio/ under the same tree.
 //
-// Only the .wav files are committed; the rest are generated and gitignored.
-// `yarn audio` runs this, and `yarn install` runs that, so a fresh clone gets
-// playable audio without a manual step. The install passes --optional, so a
-// missing ffmpeg warns instead of failing the whole dependency install.
+// The masters used to live in public/audio beside their output, and everything
+// in public/ is copied verbatim into every build - so 51 MB of source files
+// nobody can play shipped in the web deploy, the desktop app and the Android
+// APK, which was 91 MB of which about three quarters was waste. Sources belong
+// where they cannot be served, the same reason resources/artwork exists.
+//
+// Only the .wav files are committed; everything under public/audio is generated
+// and gitignored. `yarn audio` runs this, and `yarn install` runs that, so a
+// fresh clone gets playable audio without a manual step. The install passes
+// --optional, so a missing ffmpeg warns instead of failing the whole
+// dependency install.
 //
 // This was a Python script until the Windows setup showed what that cost:
 // `python3` is not a command Windows supplies under that name, so `yarn
@@ -13,7 +21,7 @@
 // already a hard requirement, so rewriting it here removes an interpreter from
 // the prerequisites rather than adding a way to find one.
 
-import { accessSync, constants, existsSync, readdirSync, rmSync, statSync } from 'node:fs'
+import { accessSync, constants, existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 
@@ -23,8 +31,24 @@ import path from 'node:path'
 // from anywhere else would not.
 process.chdir(path.resolve(import.meta.dirname, '..'))
 
-const BASEDIR = 'public/audio'
-const EXTENSIONS = ['mp3', 'mp4', 'ogg', 'flac']
+const SOURCEDIR = 'audio'
+const OUTPUTDIR = 'public/audio'
+
+/**
+ * The formats the app actually reaches, newest-preferred first.
+ *
+ * mp4 and ogg were dropped: metronome.ts picks flac when the browser reports
+ * it, and every engine since roughly 2017 does - including WKWebView, verified
+ * by playing the app on an iPhone. The two of them added 6.3 MB to every
+ * download to cover a case that cannot arise. mp3 stays as the one fallback,
+ * for an engine old enough to report no flac support.
+ */
+const EXTENSIONS = ['flac', 'mp3']
+
+/** Where a master's generated output goes: audio/x/y.wav -> public/audio/x/y */
+function outputBase (wav) {
+  return path.join(OUTPUTDIR, path.relative(SOURCEDIR, wav).slice(0, -'.wav'.length))
+}
 
 /** The first executable named `name` on PATH, or null - shutil.which in Node. */
 function which (name) {
@@ -63,7 +87,7 @@ function * walk (dir) {
 }
 
 function * wavFiles (directory) {
-  const root = directory ? path.join(BASEDIR, directory) : BASEDIR
+  const root = directory ? path.join(SOURCEDIR, directory) : SOURCEDIR
   if (!existsSync(root)) {
     // A mistyped subdirectory used to convert nothing and report success.
     console.error(`ERROR: no such directory: ${root}`)
@@ -114,8 +138,9 @@ function convert (directory, optional) {
   let ffmpeg
 
   for (const wav of wavFiles(directory)) {
-    const base = wav.slice(0, -'.wav'.length)
+    const base = outputBase(wav)
     const wavModified = statSync(wav).mtimeMs
+    mkdirSync(path.dirname(base), { recursive: true })
 
     for (const extension of EXTENSIONS) {
       const out = `${base}.${extension}`
@@ -148,7 +173,7 @@ function convert (directory, optional) {
 function unconvert (directory) {
   let removed = 0
   for (const wav of wavFiles(directory)) {
-    const base = wav.slice(0, -'.wav'.length)
+    const base = outputBase(wav)
     for (const extension of EXTENSIONS) {
       const out = `${base}.${extension}`
       if (existsSync(out)) {
@@ -165,7 +190,7 @@ function showHelp () {
   console.log('Usage: node scripts/format-audio.mjs [convert|unconvert] [directory] [--optional]')
   console.log('  convert     Generate the playable formats from the .wav masters')
   console.log('  unconvert   Delete the generated formats')
-  console.log('  directory   Limit to a subdirectory of public/audio (optional)')
+  console.log('  directory   Limit to a subdirectory of audio/ (optional)')
   console.log('  --optional  Warn instead of failing when ffmpeg is not installed')
 }
 

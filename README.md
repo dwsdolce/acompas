@@ -1,6 +1,6 @@
 # Palmas
 
-![Version](https://img.shields.io/badge/version-4.2.5-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
 A flamenco metronome — *compás y palmas* — available on multiple platforms:
@@ -286,7 +286,7 @@ turn it into a plain `it`.
 
 The source code is published under the terms of the GNU [AGPL license](https://www.gnu.org/licenses/agpl-3.0.html) (see the LICENSE file at the
 root of the git repository).
-There is an exception to this : the drumkits. All the .wav files located in public/audio are licensed under the terms of the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0).
+There is an exception to this : the drumkits. All the .wav files located in audio/ are licensed under the terms of the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0).
 
 ## Contributing to the project
 

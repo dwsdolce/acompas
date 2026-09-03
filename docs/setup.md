@@ -358,7 +358,7 @@ Only the `.wav` masters are committed; the formats the app actually plays
 (`.mp3`, `.mp4`, `.ogg`, `.flac`) are generated and gitignored.
 
 ```bash
-yarn audio                                      # all of public/audio
+yarn audio                                      # every master in audio/
 yarn audio:clean                                # delete the generated formats
 node scripts/format-audio.mjs convert acompas   # or just one subdirectory
 ```
