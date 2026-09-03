@@ -597,13 +597,35 @@ the quickest confirmation that signing actually happened.
 
 ## Building the app
 
+**Run these from the repository root.** Quasar resolves everything relative to
+the current directory, so from anywhere else it looks in the wrong place —
+without saying so:
+
 ```bash
+cd ~/src/palmas          # wherever you cloned it
+
 # Build and run the Android APK in debug mode
 npx quasar dev -m capacitor -T android
 
 # Build the APK in production mode (signed release APK)
 npx quasar build -m capacitor -T android
 ```
+
+> ⚠️ This is easy to get wrong because other steps on this page — the Gradle
+> commands below, and the AAB — *do* ask you to `cd src-capacitor/android`. Run
+> `quasar build` from there and it fails at the end with nothing but
+> `Command "./gradlew.bat assembleRelease" failed with exit code: 1`.
+>
+> The clue is in the lines above that message, which name the directories
+> Quasar used:
+>
+> ```
+> Running "capacitor sync android" in /..
+> Running "./gradlew.bat assembleRelease" in /
+> ```
+>
+> Those should read `/src-capacitor` and `/src-capacitor\android`. Anything
+> else means you are not at the root.
 
 The signed release **APK** is written to:
 
@@ -629,8 +651,10 @@ For testing on an emulator, a debug build straight through Gradle is quicker and
 needs no keystore:
 
 ```bash
+cd ~/src/palmas
 npx quasar build -m capacitor -T android --skip-pkg   # web assets + cap sync
-cd src-capacitor/android
+
+cd ~/src/palmas/src-capacitor/android
 ./gradlew assembleDebug          # .\gradlew.bat from PowerShell
 ```
 
@@ -671,19 +695,41 @@ signed, so this needs [a keystore](#creating-a-keystore) first.
 > directly with Gradle instead:
 
 ```bash
-# First sync the freshly built web assets into the Android project
+# From the repository root: build the web assets and sync them into the
+# Android project. This step must run from the root, not from src-capacitor.
+cd ~/src/palmas
 npx quasar build -m capacitor -T android
 
-# Then build the signed release bundle
-cd src-capacitor/android
+# Then, from the Android project: build the signed release bundle
+cd ~/src/palmas/src-capacitor/android
 ./gradlew bundleRelease          # .\gradlew.bat from PowerShell
 ```
+
+> ⚠️ Both `cd` lines are spelled out because the two commands run from
+> *different* directories, and the second leaves you in the wrong place for the
+> first. Coming back to this block and running it from where the last one left
+> you gives `quasar build` the wrong root, and it fails at the very end with
+> only `Command "./gradlew.bat assembleRelease" failed with exit code: 1`.
+> See [Building the app](#building-the-app) for how to recognise that.
 
 The signed release **AAB** is written to:
 
 ```
 src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
 ```
+
+Note that this is under `src-capacitor/android/app/build/outputs`, not in
+`dist/` — Quasar copies the APK out but leaves the bundle where Gradle put it,
+because it never asked for a bundle in the first place.
+
+> **The AAB is bigger than the APK, and that is not a problem.** At 1.0.0 the
+> bundle is about 37 MB against the APK's 29 MB, which looks like the wrong way
+> round for the format that is supposed to make downloads smaller.
+>
+> A bundle is not a thing anyone installs. It carries every screen density,
+> language and architecture together, and Play generates a cut-down APK per
+> device from it. What a user downloads is smaller than the 29 MB APK, not
+> larger. The size to judge is the one Play reports after upload, not this file.
 
 Google Play rejects a `versionCode` that has already been published. That is
 handled for you: the `versionCode` is the git commit count, so any build made
