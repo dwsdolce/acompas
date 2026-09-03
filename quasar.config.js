@@ -81,7 +81,19 @@ export default defineConfig(function (ctx) {
       // Without this, process.env.APP_VERSION is undefined at runtime and the
       // header falls back to showing "v4".
       define: {
-        'process.env.APP_VERSION': JSON.stringify(pkg.version)
+        'process.env.APP_VERSION': JSON.stringify(pkg.version),
+
+        // vue-i18n ships two message compilers. The default one turns every
+        // translation string into a function with `Function("return ...")`,
+        // which the Content-Security-Policy in index.html forbids: without
+        // this flag the policy blocks the first message compiled and the app
+        // renders nothing at all.
+        //
+        // The JIT compiler produces the same AST and walks it instead of
+        // generating code, so it needs no eval. Results are cached per message
+        // either way. vue-i18n defaults the flag to false when the bundler
+        // leaves it undefined, so it has to be set explicitly here.
+        __INTLIFY_JIT_COMPILATION__: true
       },
       target: {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
