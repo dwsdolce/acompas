@@ -82,48 +82,29 @@ div
         q-icon(name="mdi-security")
       q-item-section {{ $t('privacy') }}
 
-    q-item(clickable, v-ripple, @click="launch('https://play.google.com/store/apps/details?id=audio.acompas.app')")
-      q-item-section(avatar)
-        q-icon(name="mdi-android")
-      q-item-section {{ $t('android') }}
-
-    q-expansion-item(icon="mdi-web", :label="$t('follow')")
-      q-list(no-border, link, inset-separator)
-
-        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/acompas.org/')")
-          q-item-section(avatar)
-            q-icon(name="mdi-facebook")
-          q-item-section Facebook
-
-        q-item(clickable, v-ripple, @click="launch('https://x.com/acompas_org')")
-          q-item-section(avatar)
-            q-icon(name="mdi-alpha-x")
-          q-item-section X
-
-        q-item(clickable, v-ripple, @click="launch('https://mastodon.social/@acompas')")
-          q-item-section(avatar)
-            q-icon(name="mdi-mastodon")
-          q-item-section Mastodon
-
-        q-item(clickable, v-ripple, @click="launch('https://bsky.app/profile/acompas.bsky.social')")
-          q-item-section(avatar)
-            q-icon(name="mdi-weather-cloudy")
-          q-item-section Bluesky
+    //- The Play Store entry and the Follow section were removed with the
+      rename. Both pointed at A Compás - its listing, its Facebook, X,
+      Mastodon and Bluesky accounts - which under a different app's name
+      would tell users they were following this one. Palmas has no store
+      listing and no accounts of its own yet; when it does, they go here.
 
     q-expansion-item(icon="mdi-share-variant", :label="$t('share')")
       q-list(no-border, link, inset-separator)
 
-        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://www.dolcesfogato.com/acompas/')")
           q-item-section(avatar)
             q-icon(name="mdi-facebook")
           q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://acompas.org')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://www.dolcesfogato.com/acompas/')")
           q-item-section(avatar)
             q-icon(name="mdi-alpha-x")
           q-item-section X
 
-    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas')")
+    //- Must point at this fork, not upstream. The app is AGPL and is served
+      over a network, so section 13 obliges us to offer the source of the
+      version people are actually using - which is this one, not A Compás.
+    q-item(clickable, v-ripple, @click="launch('https://github.com/dwsdolce/palmas')")
       q-item-section(avatar)
         q-icon(name="mdi-xml")
       q-item-section {{ $t('source') }}
@@ -133,7 +114,7 @@ div
         q-icon(name="mdi-format-list-bulleted")
       q-item-section {{ $t('doc.changelog.title') }}
 
-    q-item(clickable, v-ripple, @click="launch('https://gitlab.com/acompas/acompas/issues')")
+    q-item(clickable, v-ripple, @click="launch('https://github.com/dwsdolce/palmas/issues')")
       q-item-section(avatar)
         q-icon(name="mdi-bug")
       q-item-section {{ $t('issues') }}

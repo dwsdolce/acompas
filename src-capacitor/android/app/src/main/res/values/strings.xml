@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">A Compás</string>
-    <string name="title_activity_main">A Compás</string>
-    <string name="package_name">audio.acompas.app</string>
-    <string name="custom_url_scheme">audio.acompas.app</string>
+    <string name="app_name">Palmas</string>
+    <string name="title_activity_main">Palmas</string>
+    <string name="package_name">com.dolcesfogato.palmas</string>
+    <string name="custom_url_scheme">com.dolcesfogato.palmas</string>
 </resources>

@@ -4,7 +4,7 @@
 export default {
   failed: 'Aktion fehlgeschlagen',
   success: 'Aktion war erfolgreich',
-  welcome: 'Willkommen bei der A Compás App',
+  welcome: 'Willkommen bei der Palmas App',
   notFound: {
     header: 'Entschuldigung, diese Seite existiert nicht.',
     btn: 'Zurück zu den Rhythmen'
@@ -21,7 +21,7 @@ export default {
   issues: 'Probleme',
   doc: {
     welcome: {
-      title: 'Willkommen bei der A Compás App',
+      title: 'Willkommen bei der Palmas App',
       content: `
 Diese App ist dafür entwickelt, Ihnen beim Erlernen und Üben Ihres Musikinstruments zu helfen.
 Sie befindet sich noch in der Entwicklung, also haben Sie bitte Geduld, während wir sie weiter verbessern.
@@ -109,7 +109,7 @@ Die Noten zwischen dem Startschlag und dem Beginn des Musters werden als Klick-S
           content: `
 **Helle und dunkle Thema-Optionen**
 
-A Compás bietet sowohl helle als auch dunkle Themen für die beste visuelle Erfahrung:
+Palmas bietet sowohl helle als auch dunkle Themen für die beste visuelle Erfahrung:
 
 - **Helles Thema**: Saubere, helle Oberfläche ideal für gut beleuchtete Umgebungen. Bietet weiße Hintergründe mit dunklem Text für maximale Lesbarkeit bei Tageslicht.
 - **Dunkles Thema**: Augenfreundlich mit dunklen Hintergründen und hellem Text. Perfekt für schwache Lichtverhältnisse, reduziert Augenbelastung bei langen Übungseinheiten und spart Batterie bei OLED-Bildschirmen.
@@ -124,7 +124,7 @@ A Compás bietet sowohl helle als auch dunkle Themen für die beste visuelle Erf
           content: `
 **Multi-Sprach-Unterstützung**
 
-A Compás ist in 9 Sprachen verfügbar, um der globalen Flamenco-Gemeinschaft zu dienen:
+Palmas ist in 9 Sprachen verfügbar, um der globalen Flamenco-Gemeinschaft zu dienen:
 
 - **Englisch** (en-US) - Standardsprache
 - **Französisch** (Français) - Vollständige Übersetzung
@@ -181,7 +181,7 @@ Wählen Sie die Visualisierung, die am besten zu Ihrem Übungsstil passt:
       content: `
 Viele Flamenco-**Palos** stammen tatsächlich von anderen rhythmischen Strukturen ab.
 Zum Beispiel stammt "Farruca" von "Tientos" ab, "Columbiana" oder "Garrotín" sind Arten von "Tangos".
-Hier können Sie den Namen eines beliebigen "Palo" eingeben, von dem Sie je gehört haben, und A Compás wird nach den Rhythmen suchen, von denen er abgeleitet ist.
+Hier können Sie den Namen eines beliebigen "Palo" eingeben, von dem Sie je gehört haben, und Palmas wird nach den Rhythmen suchen, von denen er abgeleitet ist.
 - Suchen Sie nach einem Rhythmus, indem Sie seinen Namen oder einen Teil davon eingeben.
 - Die Suche unterscheidet nicht zwischen Groß- und Kleinschreibung.
 - Die Suche wird sowohl im Rhythmusnamen als auch in den verknüpften Rhythmen durchgeführt.
@@ -277,7 +277,7 @@ Aber das ist der einzige Weg, um die neuen Funktionen zu erhalten. Wenn es Ihre 
     },
     changelog: {
       title: 'Changelog',
-      description: 'Neueste Änderungen und Updates zu A Compás',
+      description: 'Neueste Änderungen und Updates zu Palmas',
     }
   },
   buttons: {

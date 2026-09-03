@@ -1,7 +1,7 @@
-# Contributing to A Compás
+# Contributing to Palmas
 
 If you are a musician and would like to contribute, you can submit new
-patterns. A Compás is getting more generalistic and will ultimately be able to
+patterns. Palmas is getting more generalistic and will ultimately be able to
 play any kind of rhythm. You can also contribute to the code by submitting a
 merge request.
 

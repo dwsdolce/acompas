@@ -294,8 +294,8 @@ VS Code before running it (see [the note above](#a-note-on-windows-shells)).
 ## Clone and install
 
 ```bash
-git clone https://github.com/dwsdolce/acompas.git
-cd acompas
+git clone https://github.com/dwsdolce/palmas.git
+cd palmas
 yarn install
 cd src-capacitor && yarn install && cd ..
 ```

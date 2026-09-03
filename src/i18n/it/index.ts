@@ -4,7 +4,7 @@
 export default {
   failed: 'Azione fallita',
   success: 'Azione completata con successo',
-  welcome: 'Benvenuto nell\'app A Compás',
+  welcome: 'Benvenuto nell\'app Palmas',
   notFound: {
     header: 'Spiacenti, questa pagina non esiste.',
     btn: 'Torna ai pattern'
@@ -21,7 +21,7 @@ export default {
   issues: 'Problemi',
   doc: {
     welcome: {
-      title: 'Benvenuto nell\'app A Compás',
+      title: 'Benvenuto nell\'app Palmas',
       content: `
 Questa app è progettata per aiutarti ad imparare e praticare con il tuo strumento musicale.
 È un lavoro in corso, quindi ti preghiamo di essere paziente mentre continuiamo a migliorarla.
@@ -109,7 +109,7 @@ Le note tra il battito di inizio e l'inizio del pattern verranno suonate come un
           content: `
 **Opzioni tema chiaro e scuro**
 
-A Compás offre temi chiari e scuri per fornire la migliore esperienza visiva:
+Palmas offre temi chiari e scuri per fornire la migliore esperienza visiva:
 
 - **Tema chiaro**: Interfaccia pulita e luminosa ideale per ambienti ben illuminati. Presenta sfondi bianchi con testo scuro per massima leggibilità alla luce del giorno.
 - **Tema scuro**: Facile per gli occhi con sfondi scuri e testo chiaro. Perfetto per condizioni di scarsa illuminazione, riduce l'affaticamento degli occhi durante sessioni di pratica prolungate e risparmia batteria su schermi OLED.
@@ -124,7 +124,7 @@ A Compás offre temi chiari e scuri per fornire la migliore esperienza visiva:
           content: `
 **Supporto multilingue**
 
-A Compás è disponibile in 9 lingue per servire la comunità flamenca globale:
+Palmas è disponibile in 9 lingue per servire la comunità flamenca globale:
 
 - **Inglese** (en-US) - Lingua predefinita
 - **Francese** (Français) - Traduzione completa
@@ -181,7 +181,7 @@ Scegli la visualizzazione che si adatta meglio al tuo stile di pratica:
       content: `
 Molti **palos** flamenchi sono effettivamente derivati da altre strutture ritmiche.
 Ad esempio, "farruca" deriva da "tientos", "columbiana" o "garrotín" sono tipi di "tangos".
-Qui puoi inserire il nome di qualsiasi "palo" di cui hai mai sentito parlare e A Compás cercherà i pattern da cui deriva.
+Qui puoi inserire il nome di qualsiasi "palo" di cui hai mai sentito parlare e Palmas cercherà i pattern da cui deriva.
 - Cerca un pattern digitando il suo nome o una parte di esso.
 - La ricerca non fa distinzione tra maiuscole e minuscole.
 - La ricerca viene eseguita sul nome del pattern e sui pattern collegati.
@@ -277,7 +277,7 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
     },
     changelog: {
       title: 'Registro delle modifiche',
-      description: 'Ultimi cambiamenti e aggiornamenti di A Compás',
+      description: 'Ultimi cambiamenti e aggiornamenti di Palmas',
     }
   },
   buttons: {

@@ -4,7 +4,7 @@
 export default {
   failed: '操作失败',
   success: '操作成功',
-  welcome: '欢迎使用 A Compás 应用',
+  welcome: '欢迎使用 Palmas 应用',
   notFound: {
     header: '抱歉，此页面不存在。',
     btn: '返回节拍型'
@@ -21,7 +21,7 @@ export default {
   issues: '问题',
   doc: {
     welcome: {
-      title: '欢迎使用 A Compás 应用',
+      title: '欢迎使用 Palmas 应用',
       content: `
 此应用旨在帮助您学习和练习乐器。
 这是一个正在进行的项目，请耐心等待我们继续改进。
@@ -109,7 +109,7 @@ export default {
           content: `
 **浅色和深色主题选项**
 
-A Compás提供浅色和深色主题以提供最佳视觉体验：
+Palmas提供浅色和深色主题以提供最佳视觉体验：
 
 - **浅色主题**：适合明亮环境的清洁明亮界面。采用白色背景和深色文字，在日光下具有最大可读性。
 - **深色主题**：采用深色背景和浅色文字，对眼睛友好。适合弱光条件，减少长时间练习时的眼部疲劳，并在OLED屏幕上节省电池。
@@ -124,7 +124,7 @@ A Compás提供浅色和深色主题以提供最佳视觉体验：
           content: `
 **多语言支持**
 
-A Compás提供9种语言服务全球弗拉门戈社区：
+Palmas提供9种语言服务全球弗拉门戈社区：
 
 - **英语** (en-US) - 默认语言
 - **法语** (Français) - 完整翻译
@@ -181,7 +181,7 @@ A Compás提供9种语言服务全球弗拉门戈社区：
       content: `
 许多弗拉门戈**palos**实际上来源于其他节奏结构。
 例如，"farruca"来源于"tientos"，"columbiana"或"garrotín"是"tangos"的类型。
-在这里您可以输入您听过的任何"palo"名称，A Compás将搜索它所来源的模式。
+在这里您可以输入您听过的任何"palo"名称，Palmas将搜索它所来源的模式。
 - 通过输入名称或其一部分搜索模式。
 - 搜索不区分大小写。
 - 搜索在模式名称和链接模式上执行。
@@ -277,7 +277,7 @@ A Compás提供9种语言服务全球弗拉门戈社区：
     },
     changelog: {
       title: 'Changelog',
-      description: 'Latest changes and updates to A Compás',
+      description: 'Latest changes and updates to Palmas',
     }
   },
   buttons: {

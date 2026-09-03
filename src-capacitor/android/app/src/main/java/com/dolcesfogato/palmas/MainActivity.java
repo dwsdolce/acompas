@@ -1,4 +1,4 @@
-package audio.acompas.app;
+package com.dolcesfogato.palmas;
 
 import android.os.Bundle;
 import androidx.core.view.WindowCompat;

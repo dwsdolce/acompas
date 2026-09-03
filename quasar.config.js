@@ -299,9 +299,11 @@ export default defineConfig(function (ctx) {
       // electron-builder options
       // https://www.electron.build/configuration/configuration
       builder: {
-        appId: 'audio.acompas.app',
-        productName: 'Acompas',
-        copyright: 'Copyright © 2024 Acompas',
+        appId: 'com.dolcesfogato.palmas',
+        productName: 'Palmas',
+        // Both lines are required by the AGPL: the original authors keep their
+        // copyright, and a modified version has to say that it is one.
+        copyright: 'Copyright © 2014-2023 Olivier Ricordeau, Jérémie Sieffert; © 2026 David Smith. Based on A Compás.',
         mac: {
           category: 'public.app-category.music',
           // Signing is opt-in and off by default. Left to itself

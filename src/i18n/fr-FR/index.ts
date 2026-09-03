@@ -4,7 +4,7 @@
 export default {
   failed: 'Action échouée',
   success: 'Action réussie',
-  welcome: 'Bienvenue dans l\'application A Compás',
+  welcome: 'Bienvenue dans l\'application Palmas',
   notFound: {
     header: 'Désolé, cette page n\'existe pas.',
     btn: 'Retourner aux motifs'
@@ -21,7 +21,7 @@ export default {
   issues: 'Problèmes',
   doc: {
     welcome: {
-      title: 'Bienvenue dans l\'application A Compás',
+      title: 'Bienvenue dans l\'application Palmas',
       content: `
 Cette application est conçue pour vous aider à apprendre et à pratiquer votre instrument de musique.
 C'est un travail en cours, alors soyez patient avec nous pendant que nous continuons à l'améliorer.
@@ -109,7 +109,7 @@ Les notes entre le battement de départ et le début du motif seront jouées com
           content: `
 **Options de thème clair et sombre**
 
-A Compás propose des thèmes clair et sombre pour offrir la meilleure expérience visuelle :
+Palmas propose des thèmes clair et sombre pour offrir la meilleure expérience visuelle :
 
 - **Thème clair** : Interface claire et lumineuse idéale pour les environnements bien éclairés. Présente des arrière-plans blancs avec du texte sombre pour une lisibilité maximale en plein jour.
 - **Thème sombre** : Facile pour les yeux avec des arrière-plans sombres et du texte clair. Parfait pour les conditions de faible éclairage, réduit la fatigue oculaire pendant les longues sessions de pratique et économise la batterie sur les écrans OLED.
@@ -127,7 +127,7 @@ L'application respecte par défaut la préférence de thème système de votre a
           content: `
 **Support multi-langues**
 
-A Compás est disponible en 9 langues pour servir la communauté flamenco mondiale :
+Palmas est disponible en 9 langues pour servir la communauté flamenco mondiale :
 
 - **Anglais** (en-US) - Langue par défaut
 - **Français** (Français) - Traduction complète
@@ -201,7 +201,7 @@ Accédez aux options de visualisation via le menu des paramètres. Les changemen
       content: `
 Beaucoup de **palos** flamencos sont en fait dérivés d'autres structures rythmiques.
 Par exemple, "farruca" est dérivé de "tientos", "columbiana" ou "garrotín" sont des types de "tangos".
-Ici vous pouvez saisir le nom de n'importe quel "palo" que vous avez entendu et A Compás recherchera les motifs dont il dérive.
+Ici vous pouvez saisir le nom de n'importe quel "palo" que vous avez entendu et Palmas recherchera les motifs dont il dérive.
 - Recherchez un motif en tapant son nom ou une partie de celui-ci.
 - La recherche ne distingue pas les majuscules des minuscules.
 - La recherche est effectuée sur le nom du motif et sur les motifs liés.
@@ -297,7 +297,7 @@ Mais c'est le seul moyen d'obtenir les nouvelles fonctionnalités. Si c'est votr
     },
     changelog: {
       title: 'Journal des modifications',
-      description: 'Derniers changements et mises à jour d\'A Compás',
+      description: 'Derniers changements et mises à jour de Palmas',
     }
   },
   buttons: {

@@ -61,8 +61,8 @@ q-layout(
         to="/"
       ).row.items-center.no-wrap.q-px-sm
         q-avatar.shadow-1
-          img(:src="`${publicFolder}ACompas-4-logo.png`" alt="A Compás icon", width="40")
-        img(:src="`${publicFolder}ACompas-4-name.png`" alt="A Compás name title", height="30").q-mt-xs.q-ml-sm
+          img(:src="`${publicFolder}ACompas-4-logo.png`" alt="Palmas icon", width="40")
+        img(:src="`${publicFolder}ACompas-4-name.png`" alt="Palmas name title", height="30").q-mt-xs.q-ml-sm
 
       q-space
       SelectContext(v-if="contexts.length > 1")

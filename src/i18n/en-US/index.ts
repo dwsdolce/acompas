@@ -4,7 +4,7 @@
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
-  welcome: 'Welcome to A Compás app',
+  welcome: 'Welcome to Palmas app',
   notFound: {
     header: 'Sorry, this page doesn\'t exist.',
     btn: 'Go back to patterns'
@@ -21,7 +21,7 @@ export default {
   issues: 'Issues',
   doc: {
     welcome: {
-      title: 'Welcome to the A Compás app',
+      title: 'Welcome to the Palmas app',
       content: `
 This app is designed to help you learn and practice your musical instrument.
 It is a work in progress, so please be patient with us as we continue to improve it.
@@ -109,7 +109,7 @@ The notes between the start beat and the begining of the pattern will be played 
           content: `
 **Light and Dark Theme Options**
 
-A Compás offers both light and dark themes to provide the best visual experience:
+Palmas offers both light and dark themes to provide the best visual experience:
 
 - **Light Theme**: Clean, bright interface ideal for well-lit environments. Features white backgrounds with dark text for maximum readability in daylight.
 - **Dark Theme**: Easy on the eyes with dark backgrounds and light text. Perfect for low-light conditions, reduces eye strain during extended practice sessions, and saves battery on OLED screens.
@@ -127,7 +127,7 @@ The app respects your device's system theme preference by default, but you can o
           content: `
 **Multi-language Support**
 
-A Compás is available in 9 languages to serve the global flamenco community:
+Palmas is available in 9 languages to serve the global flamenco community:
 
 - **English** (en-US) - Default language
 - **French** (Français) - Full translation
@@ -201,7 +201,7 @@ Access visualization options through the settings menu. Changes apply immediatel
       content: `
 Many flamenco **palos** are actually derived from other rhythmical structures.
 For example, "farruca" is derived from "tientos", "columbiana" or "garrotín" are kinds of "tangos".
-Here you can input the name of any "palo" you ever heard of and A Compás will search for the patterns which it is derived from.
+Here you can input the name of any "palo" you ever heard of and Palmas will search for the patterns which it is derived from.
 - Search for a pattern by typing its name or a part of it.
 - The search is case insensitive.
 - The search is performed on the pattern name and on the linked patterns.
@@ -297,7 +297,7 @@ But this is the only way to get the new features. If it is your first use, this 
     },
     changelog: {
       title: 'Changelog',
-      description: 'Latest changes and updates to A Compás',
+      description: 'Latest changes and updates to Palmas',
     }
   },
   buttons: {

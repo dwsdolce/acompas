@@ -470,7 +470,7 @@ Common issues:
   (e.g. the Play Store build) is already installed. Uninstall it first (this
   wipes the app's local data), then install again:
   ```bash
-  adb uninstall audio.acompas.app
+  adb uninstall com.dolcesfogato.palmas
   ```
 - **Device not listed** — enable *Developer options › USB debugging* on the
   phone, accept the "Allow USB debugging?" prompt, set the USB mode to *File

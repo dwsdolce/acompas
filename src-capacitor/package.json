@@ -1,7 +1,7 @@
 {
-  "name": "acompas",
+  "name": "palmas",
   "description": "A flamenco metronome",
-  "author": "A Compás Team",
+  "author": "David Smith",
   "private": true,
   "dependencies": {
     "@capacitor-community/keep-awake": "^8.0.1",

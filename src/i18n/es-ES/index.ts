@@ -4,7 +4,7 @@
 export default {
   failed: 'Acción fallida',
   success: 'Acción exitosa',
-  welcome: 'Bienvenido a la aplicación A Compás',
+  welcome: 'Bienvenido a la aplicación Palmas',
   notFound: {
     header: 'Lo sentimos, esta página no existe.',
     btn: 'Volver a los patrones'
@@ -21,7 +21,7 @@ export default {
   issues: 'Problemas',
   doc: {
     welcome: {
-      title: 'Bienvenido a la aplicación A Compás',
+      title: 'Bienvenido a la aplicación Palmas',
       content: `
 Esta aplicación está diseñada para ayudarte a aprender y practicar tu instrumento musical.
 Es un trabajo en progreso, así que ten paciencia con nosotros mientras continuamos mejorándola.
@@ -109,7 +109,7 @@ Las notas entre el golpe de inicio y el comienzo del patrón se reproducirán co
           content: `
 **Opciones de tema claro y oscuro**
 
-A Compás ofrece temas claro y oscuro para proporcionar la mejor experiencia visual:
+Palmas ofrece temas claro y oscuro para proporcionar la mejor experiencia visual:
 
 - **Tema claro**: Interfaz limpia y brillante ideal para entornos bien iluminados. Presenta fondos blancos con texto oscuro para máxima legibilidad en luz diurna.
 - **Tema oscuro**: Fácil para la vista con fondos oscuros y texto claro. Perfecto para condiciones de poca luz, reduce la fatiga ocular durante sesiones de práctica extendidas y ahorra batería en pantallas OLED.
@@ -127,7 +127,7 @@ La aplicación respeta la preferencia de tema del sistema de tu dispositivo por 
           content: `
 **Soporte multiidioma**
 
-A Compás está disponible en 9 idiomas para servir a la comunidad flamenca mundial:
+Palmas está disponible en 9 idiomas para servir a la comunidad flamenca mundial:
 
 - **Inglés** (en-US) - Idioma predeterminado
 - **Francés** (Français) - Traducción completa
@@ -201,7 +201,7 @@ Accede a las opciones de visualización a través del menú de configuración. L
       content: `
 Muchos **palos** flamencos en realidad se derivan de otras estructuras rítmicas.
 Por ejemplo, "farruca" se deriva de "tientos", "columbiana" o "garrotín" son tipos de "tangos".
-Aquí puedes ingresar el nombre de cualquier "palo" que hayas escuchado y A Compás buscará los patrones de los cuales se deriva.
+Aquí puedes ingresar el nombre de cualquier "palo" que hayas escuchado y Palmas buscará los patrones de los cuales se deriva.
 - Busca un patrón escribiendo su nombre o una parte de él.
 - La búsqueda no distingue entre mayúsculas y minúsculas.
 - La búsqueda se realiza en el nombre del patrón y en los patrones vinculados.
@@ -297,7 +297,7 @@ Pero esta es la única forma de obtener las nuevas características. Si es tu pr
     },
     changelog: {
       title: 'Registro de cambios',
-      description: 'Últimos cambios y actualizaciones de A Compás',
+      description: 'Últimos cambios y actualizaciones de Palmas',
     }
   },
   buttons: {

@@ -1,9 +1,9 @@
 {
-  "name": "acompas",
+  "name": "palmas",
   "version": "4.2.5",
   "description": "A flamenco metronome",
-  "productName": "A Compás",
-  "author": "A Compás Team",
+  "productName": "Palmas",
+  "author": "David Smith",
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {

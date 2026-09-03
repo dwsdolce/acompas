@@ -1,13 +1,31 @@
-# A Compás
+# Palmas
 
-![Version](https://img.shields.io/badge/version-4.2.2-blue)
+![Version](https://img.shields.io/badge/version-4.2.5-blue)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
-A flamenco metronome available on multiple platforms:
+A flamenco metronome — *compás y palmas* — available on multiple platforms:
 
-* Web application (available at [https://acompas.org](https://acompas.org))
-* Mobile application using [Capacitor](https://capacitorjs.com), [available on the Google Play marketplace](https://play.google.com/store/apps/details?id=audio.acompas.app)
+* Web application (available at [https://www.dolcesfogato.com/acompas/](https://www.dolcesfogato.com/acompas/))
+* Mobile application using [Capacitor](https://capacitorjs.com)
 * Desktop application (Electron)
+
+## Relationship to A Compás
+
+Palmas is a modified version of [A Compás](https://gitlab.com/acompas/acompas)
+by Olivier Ricordeau and Jérémie Sieffert, who wrote the great majority of this
+code and hold copyright in it from 2014 to 2023. It is distributed under the
+same AGPL-3.0 licence, which is what makes this fork possible.
+
+It is renamed because it is not their work any more: they neither review nor
+support these changes, and shipping them under their name would misrepresent
+both projects. Palmas is published separately, under its own application
+identifiers, and bugs here are not their problem — report them
+[on this repository](https://github.com/dwsdolce/palmas/issues).
+
+Changes made in this fork include a Node toolchain in place of Python,
+cross-platform setup and packaging scripts, subfolder-relative web hosting,
+lazily loaded locales, removal of the analytics, and a content security policy.
+See the commit history for the full account.
 
 ## Key Features
 
@@ -34,9 +52,13 @@ It is based on the following technologies :
 For what every dependency is actually for, and which layer of the app it belongs
 to, see [docs/stack.md](docs/stack.md).
 
-## Team
+## Contact
 
-You can [talk with the team on Slack](https://acompas-org.slack.com).
+Issues and merge requests go to
+[github.com/dwsdolce/palmas](https://github.com/dwsdolce/palmas).
+
+The A Compás Slack is the upstream project's, not this one's — please do not
+take questions about Palmas there.
 
 ## Thanks
 
@@ -54,8 +76,8 @@ this machine does not already have it.
 **1. Clone the project.**
 
 ```bash
-git clone https://github.com/dwsdolce/acompas.git
-cd acompas
+git clone https://github.com/dwsdolce/palmas.git
+cd palmas
 ```
 
 **2. Run the setup script.** Choose by **the shell you are typing into**, not by
@@ -267,7 +289,7 @@ There is an exception to this : the drumkits. All the .wav files located in publ
 ## Contributing to the project
 
 If you're a musician and would like to contribute, you can submit new rhythms.
-A Compás is getting more generalistic and will ultimately be able to play any
+Palmas is getting more generalistic and will ultimately be able to play any
 kind of rhythm. See [docs/contributing.md](docs/contributing.md) for the pattern,
 sequence and sound formats with worked examples. You can also contribute to the
 code by submitting a merge request.

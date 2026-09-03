@@ -15,8 +15,12 @@ def packageJson = new JsonSlurper().parseText(rootProject.file("../../package.js
 def appVersion = packageJson.version.toString()                      // e.g. "4.2.1"
 def (verMajor, verMinor, verPatch) = appVersion.tokenize('-')[0].tokenize('.').collect { it.toInteger() }
 
-// The 701000000 offset keeps generated codes strictly above the last
-// manually-published versionCode (701000468). Assumes minor/patch < 100.
+// The 701000000 offset is inherited from A Compás, where it kept generated
+// codes above that project's last manually-published versionCode (701000468).
+// Palmas publishes under its own applicationId, so it shares none of that
+// history and could start from 1 - the offset is kept only so that version
+// codes never move backwards for anyone who installed an earlier build from
+// this tree. Assumes minor/patch < 100.
 def computedVersionCode = 701000000 + verMajor * 10000 + verMinor * 100 + verPatch
 
 // Properties are assigned with '=' rather than the space-separated form
@@ -27,10 +31,10 @@ def computedVersionCode = 701000000 + verMajor * 10000 + verMinor * 100 + verPat
 // themselves and from the generated cordova-plugins module, neither of which
 // is editable from here.
 android {
-    namespace = "audio.acompas.app"
+    namespace = "com.dolcesfogato.palmas"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "audio.acompas.app"
+        applicationId "com.dolcesfogato.palmas"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode computedVersionCode

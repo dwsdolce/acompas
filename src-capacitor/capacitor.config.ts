@@ -5,8 +5,8 @@ import { defineCapacitorConfig } from '@quasar/app-vite/capacitor'
 // (webDir, and server.url when running `quasar dev`), so those are not
 // hardcoded here.
 export default defineCapacitorConfig({
-  appId: 'audio.acompas.app',
-  appName: 'A Compás',
+  appId: 'com.dolcesfogato.palmas',
+  appName: 'Palmas',
   npmClient: 'yarn',
   webDir: 'www',
   plugins: {
