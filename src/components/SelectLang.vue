@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { setLocale } from 'src/boot/i18n'
 import HelpTooltip from 'src/components/HelpTooltip.vue'
 
 const { locale } = useI18n()
@@ -9,10 +10,10 @@ const languages = ref([
   { code: 'en-US', label: 'English',  flag: '🇬🇧' },
   { code: 'es-ES', label: 'Español',  flag: '🇪🇸' },
   { code: 'fr-FR', label: 'Français', flag: '🇫🇷' },
-  // { code: 'ja-JP', label: '日本語', flag: '🇯🇵' },
-  // { code: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
-  // { code: 'ar', label: 'العربية', flag: '🇸🇦' },
-  // { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
+  { code: 'ja-JP', label: '日本語', flag: '🇯🇵' },
+  { code: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
+  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+  { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
   { code: 'de', label: 'Deutsch',  flag: '🇩🇪' },
   { code: 'it', label: 'Italiano', flag: '🇮🇹' }
 ])
@@ -38,16 +39,19 @@ watch(selectedLocale, (val) => {
     return
   }
 
+  // setLocale rather than assigning locale directly: the messages for this
+  // language may not have been fetched yet, and a bare assignment would fall
+  // back to English instead of waiting for them.
   if (code !== locale.value) {
-    locale.value = code
+    void setLocale(code)
   }
 })
 
 const selectRef = ref(null)
 
-function selectLanguage(lang) {
+async function selectLanguage(lang) {
   selectedLocale.value = lang
-  locale.value = lang.code
+  await setLocale(lang.code)
   selectRef.value?.hidePopup()
 }
 </script>

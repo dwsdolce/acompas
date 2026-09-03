@@ -8,6 +8,7 @@ import { useMetronome } from 'src/composables/metronome'
 import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
 import { t } from 'src/boot/i18n'
+import { getDefaultPatterns } from 'src/utils/utils'
 import type {
   numOpts,
   instruOpts,
@@ -249,27 +250,6 @@ export const usePatternStore = defineStore('patterns', () => {
   // Utility methods
   // *****************************************
 
-  const getAllData = async () => {
-    // import.meta.globEager() was removed in Vite 5; the eager option on
-    // import.meta.glob() replaces it and returns the same shape.
-    const patternsModules = import.meta.glob('/src/assets/data/patterns/*.ts', { eager: true })
-
-    const patternsData = Object.entries(patternsModules).map(([path, patternsModule]) => {
-      const context = path.match(/\/src\/assets\/data\/patterns\/(.*)\.ts$/)![1] // eslint-disable-line @typescript-eslint/no-non-null-assertion
-
-      const patterns = patternsModule.default.map((pattern: PatternState) => {
-        return {
-          ...pattern,
-          context
-        }
-      })
-
-      return patterns
-    })
-
-    return patternsData.flat()
-  }
-
   const instrument = (type: string): instruOpts | undefined => {
     return instruments.value.find((el: instruOpts) => el.value === type)
   }
@@ -398,8 +378,13 @@ export const usePatternStore = defineStore('patterns', () => {
   }
 
   const initStore = async () => {
-    // Load the data
-    data.value = await getAllData()
+    // Load the data. This used to be a second, eager copy of getDefaultPatterns
+    // living here - the same glob over the same directory, differing only in
+    // passing { eager: true }. Eager wins when both exist, so the pattern data
+    // was statically imported into the main chunk and the lazy version could
+    // never split it out; the build said so six times over, once per pattern
+    // file, as INEFFECTIVE_DYNAMIC_IMPORT.
+    data.value = await getDefaultPatterns()
 
     if (!data.value.length) {
       Notify.create({

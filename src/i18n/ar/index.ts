@@ -163,6 +163,11 @@ A Compás متاح بـ 9 لغات لخدمة مجتمع الفلامنكو ال
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'مقال ويكيبيديا:',
       videoExample: 'مثال فيديو:',

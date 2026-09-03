@@ -183,6 +183,11 @@ Accédez aux options de visualisation via le menu des paramètres. Les changemen
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Article Wikipédia :',
       videoExample: 'Exemple vidéo :',

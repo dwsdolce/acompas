@@ -163,6 +163,11 @@ Scegli la visualizzazione che si adatta meglio al tuo stile di pratica:
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Articolo Wikipedia:',
       videoExample: 'Esempio video:',

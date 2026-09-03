@@ -3,6 +3,7 @@ import { defineStore, storeToRefs } from 'pinia'
 import { Screen, Dialog, is } from 'quasar'
 import { useStorage } from '@vueuse/core'
 import { useMatomo } from 'src/composables/matomo'
+import { t } from 'src/boot/i18n'
 import type { Size, SessionState } from 'src/utils/types'
 
 export const useSessionStore = defineStore('session', () => {
@@ -22,10 +23,13 @@ export const useSessionStore = defineStore('session', () => {
   const audioVisualOffset = useStorage('audio-visual-offset', ref<number>(0))
   const leftDrawerOpen = ref<boolean>(Screen.gt.md)
   const visualizationSize = ref<Size>({ width: null, height: null })
-  const visualizationModes = ref([
-    { label: 'Dots', value: 'dots' },
-    { label: 'Counter', value: 'counter' },
-    { label: 'Clock', value: 'clock' }
+  // Computed rather than a plain ref so the labels follow the locale: a ref
+  // would be built once, at whatever language the app started in, and then
+  // stay in English for the rest of the session.
+  const visualizationModes = computed(() => [
+    { label: t('doc.visualizationModes.dots'), value: 'dots' },
+    { label: t('doc.visualizationModes.counter'), value: 'counter' },
+    { label: t('doc.visualizationModes.clock'), value: 'clock' }
   ])
   const selectedVisualizationMode = useStorage('visualization-mode', ref('dots'))
 

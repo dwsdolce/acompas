@@ -163,6 +163,11 @@ A Compás در 9 زبان برای خدمت به جامعه جهانی فلام�
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'مقاله ویکی‌پدیا:',
       videoExample: 'نمونه ویدیو:',

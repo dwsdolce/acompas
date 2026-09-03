@@ -163,6 +163,11 @@ A Compás提供9种语言服务全球弗拉门戈社区：
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: '维基百科文章：',
       videoExample: '视频示例：',

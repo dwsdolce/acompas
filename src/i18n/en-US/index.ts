@@ -183,6 +183,11 @@ Access visualization options through the settings menu. Changes apply immediatel
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Wikipedia article:',
       videoExample: 'Video example:',

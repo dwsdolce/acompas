@@ -1,5 +1,20 @@
 import { describe, it, expect } from 'vitest'
-import messages from 'src/i18n'
+
+// Read the locales off disk rather than through src/i18n, which now bundles
+// only en-US and fetches the rest on demand - importing it here would silently
+// reduce this suite to checking one language against itself. A glob also picks
+// up a newly added locale directory without anyone remembering to list it.
+const modules = import.meta.glob('/src/i18n/*/index.ts', { eager: true }) as Record<
+  string,
+  { default: Record<string, unknown> }
+>
+
+const messages = Object.fromEntries(
+  Object.entries(modules).map(([path, module]) => [
+    path.match(/\/src\/i18n\/(.*)\/index\.ts$/)![1], // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    module.default
+  ])
+)
 
 type Tree = { [key: string]: string | Tree }
 
@@ -26,6 +41,13 @@ const referenceKeys = uiKeys(messages[REFERENCE] as Tree)
 
 describe('i18n', () => {
   it('ships more than one locale, with a non-trivial reference', () => {
+    // Not "more than one": the app bundles only en-US now and fetches the rest
+    // on demand, so a mistake in how this suite finds them would leave it
+    // checking English against English and passing. Every locale directory on
+    // disk has to turn up here.
+    expect(locales.length).toBe(
+      Object.keys(import.meta.glob('/src/i18n/*/index.ts')).length
+    )
     expect(locales.length).toBeGreaterThan(1)
     expect(referenceKeys.length).toBeGreaterThan(50)
   })

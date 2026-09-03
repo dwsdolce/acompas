@@ -163,6 +163,11 @@ A Compásは世界のフラメンココミュニティにサービスを提供�
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Wikipedia記事：',
       videoExample: 'ビデオ例：',

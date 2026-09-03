@@ -183,6 +183,11 @@ Accede a las opciones de visualización a través del menú de configuración. L
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Artículo de Wikipedia:',
       videoExample: 'Ejemplo de video:',

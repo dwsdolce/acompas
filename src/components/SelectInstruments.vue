@@ -40,7 +40,7 @@ div
     :color="isDarkMode ? 'white' : 'black'",
     icon="mdi-tune-variant",
     :padding="$q.screen.lt.md ? 'sm' : 'md'",
-    label="Mixer",
+    :label="$t('doc.mixer.title')",
     @click="mixerDialog = true"
   )
   q-dialog(

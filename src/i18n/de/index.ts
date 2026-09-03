@@ -163,6 +163,11 @@ Wählen Sie die Visualisierung, die am besten zu Ihrem Übungsstil passt:
         }
       }
     },
+    visualizationModes: {
+      dots: 'Dots',
+      counter: 'Counter',
+      clock: 'Clock'
+    },
     utils: {
       wikipediaUrl: 'Wikipedia-Artikel:',
       videoExample: 'Video-Beispiel:',
