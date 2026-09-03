@@ -483,7 +483,25 @@ running emulator, or open `src-capacitor/android` as a Gradle project and run it
 
 ## Version numbering
 
-`versionCode` and `versionName` come from the root `package.json` — see the
-`JsonSlurper` block at the top of `src-capacitor/android/app/build.gradle` — so
-4.2.5 becomes versionName `4.2.5` and versionCode `701040205`. iOS reads the same
-file, so bump the version there once and both platforms follow.
+The two numbers come from different places, and only one of them is edited by
+hand — see the top of `src-capacitor/android/app/build.gradle`:
+
+| | value | source |
+|---|---|---|
+| `versionName` | `1.0.0` | the `version` field in the root `package.json` |
+| `versionCode` | `868` | `git rev-list --count HEAD`, the commit count |
+
+The commit count is the build number everywhere in this project — the header
+shows `v1.0.0 (868)`, and iOS uses the same pair for
+`CFBundleShortVersionString` and `CFBundleVersion`. It rises with every commit,
+which is what Play requires, and it names the commit a build came from, so a
+report quoting a build number identifies the exact source.
+
+To release a new version, edit `version` in the root `package.json`. The build
+number looks after itself.
+
+> ⚠️ **The build fails rather than guessing** if git cannot supply a count. A
+> shallow clone — `git clone --depth`, or `actions/checkout` without
+> `fetch-depth: 0` — reports `1`, and a `versionCode` of 1 is the kind of
+> mistake Play accepts happily and then holds you to: every later upload is
+> refused for not being higher. Build from a full checkout.
