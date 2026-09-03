@@ -31,16 +31,6 @@ export const metronomeMock = () => {
   return { useMetronome: () => instance }
 }
 
-export const matomoMock = () => ({
-  useMatomo: () => ({
-    initMatomo: vi.fn(),
-    matomoExists: () => false,
-    deleteMatomo: vi.fn(),
-    trackPlay: vi.fn(),
-    trackStop: vi.fn()
-  })
-})
-
 export const keepAwakeMock = () => {
   // isSupported is an async function in the real composable, not a ref: the
   // store calls `await isSupported()`.

@@ -272,22 +272,7 @@ Ici vous pouvez saisir le nom de n'importe quel "palo" que vous avez entendu et 
     privacy: {
       title: 'Politique de confidentialité',
       content: `
-Cette application utilise un outil appelé **Matomo** pour collecter des données d'analyse de visites anonymisées.
-
-Si vous activez l'option ci-dessous, Matomo définira un cookie dans le navigateur web (pour le site web acompas.org),
-ou dans l'appareil mobile (pour l'application Android),
-et observera certaines de vos actions dans l'application
-(essentiellement les actions 'Jouer' et 'Arrêter' du métronome pour inférer le temps de jeu),
-en anonymisant votre adresse IP.
-
-Cette information fait seulement partie de nos statistiques d'utilisation (pour avoir une idée du nombre d'utilisateurs que nous avons). Nous ne vendons ni ne donnons accès à ces données à qui que ce soit d'autre.
-Vous pouvez activer ou désactiver cette fonctionnalité quand vous le souhaitez.`,
-      allow: `
-Nous ne collectons aucune donnée personnelle nominative.
-
-**Autoriser cette application à nous envoyer des données d'utilisation anonymisées ?**`,
-      enable: 'Activer et fermer',
-      close: 'Fermer',
+Nous ne collectons aucune donnée personnelle.`
     },
     tempo: {
       title: 'Tempo',

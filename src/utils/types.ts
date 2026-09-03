@@ -129,9 +129,6 @@ export interface PatternSetting {
 }
 
 export interface SessionState {
-  trackingEnabled:          boolean
-  trackingInitialized:      boolean
-  trackingChosen:           boolean
   leftDrawerOpen:           boolean
   visualizationSize:        Size
 }

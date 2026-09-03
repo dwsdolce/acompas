@@ -272,22 +272,7 @@ Here you can input the name of any "palo" you ever heard of and A Compás will s
     privacy: {
       title: 'Privacy policy',
       content: `
-This app uses a tool called **Matomo** to collect anonymised visits analytics data.
-
-If you activate the option below, Matomo will set a cookie in the web browser (for the acompas.org website),
-or in the mobile device (for the Android app),
-and observe some of your actions in the app
-(essentially metronome 'Play' and 'Stop' actions to infer time playing),
-anonymising your IP address.
-
-This information is only part of our usage statistics (to have an idea about how many users we have). We don't sell nor give access to this data to anyone else.
-You can enable or disable this feature when you want to.`,
-      allow: `
-We don't collect any nominative personal data.
-
-**Allow this app to send us some anonymised usage data ?**`,
-      enable: 'Enable & close',
-      close: 'Close',
+We don't collect any personal data.`
     },
     tempo: {
       title: 'Tempo',

@@ -252,22 +252,7 @@ Hier können Sie den Namen eines beliebigen "Palo" eingeben, von dem Sie je geh�
     privacy: {
       title: 'Datenschutzerklärung',
       content: `
-Diese App verwendet ein Tool namens **Matomo**, um anonymisierte Besuchsanalysedaten zu sammeln.
-
-Wenn Sie die Option unten aktivieren, setzt Matomo ein Cookie im Webbrowser (für die Website acompas.org)
-oder im mobilen Gerät (für die Android-App)
-und beobachtet einige Ihrer Aktionen in der App
-(hauptsächlich Metronom-'Abspielen'- und 'Stoppen'-Aktionen, um die Spielzeit abzuleiten),
-wobei Ihre IP-Adresse anonymisiert wird.
-
-Diese Information ist nur Teil unserer Nutzungsstatistik (um eine Vorstellung davon zu haben, wie viele Benutzer wir haben). Wir verkaufen diese Daten nicht und geben niemandem anderen Zugang dazu.
-Sie können diese Funktion jederzeit aktivieren oder deaktivieren.`,
-      allow: `
-Wir sammeln keine nominativen persönlichen Daten.
-
-**Dieser App erlauben, uns einige anonymisierte Nutzungsdaten zu senden?**`,
-      enable: 'Aktivieren & schließen',
-      close: 'Schließen',
+Wir sammeln keine persönlichen Daten.`
     },
     tempo: {
       title: 'Tempo',

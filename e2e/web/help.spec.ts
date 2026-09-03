@@ -25,10 +25,9 @@ test.describe('the help buttons', () => {
       // useStorage keeps plain strings for string refs — no JSON quoting.
       localStorage.setItem('selected-context-name', 'flamenco')
       localStorage.setItem('selected-pattern-name', 'abandolaos')
-      // Both of these otherwise put a dialog in front of everything, and
-      // dismissing one of them reloads the page.
+      // Otherwise the update dialog sits in front of everything, and
+      // dismissing it reloads the page.
       localStorage.setItem('is-up-to-date-v4', 'true')
-      localStorage.setItem('tracking-chosen', 'true')
     })
     await page.goto('/#/flamenco/abandolaos')
     await page.getByRole('button', { name: 'Rhythm options' }).first().click()

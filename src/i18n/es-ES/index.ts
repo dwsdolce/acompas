@@ -272,22 +272,7 @@ Aquí puedes ingresar el nombre de cualquier "palo" que hayas escuchado y A Comp
     privacy: {
       title: 'Política de privacidad',
       content: `
-Esta aplicación utiliza una herramienta llamada **Matomo** para recopilar datos anónimos de análisis de visitas.
-
-Si activas la opción a continuación, Matomo establecerá una cookie en el navegador web (para el sitio web acompas.org),
-o en el dispositivo móvil (para la aplicación Android),
-y observará algunas de tus acciones en la aplicación
-(esencialmente acciones de 'Reproducir' y 'Parar' del metrónomo para inferir el tiempo de reproducción),
-anonimizando tu dirección IP.
-
-Esta información es solo parte de nuestras estadísticas de uso (para tener una idea de cuántos usuarios tenemos). No vendemos ni damos acceso a estos datos a nadie más.
-Puedes habilitar o deshabilitar esta función cuando quieras.`,
-      allow: `
-No recopilamos ningún dato personal nominativo.
-
-**¿Permitir que esta aplicación nos envíe algunos datos de uso anónimos?**`,
-      enable: 'Habilitar y cerrar',
-      close: 'Cerrar',
+No recopilamos ningún dato personal.`
     },
     tempo: {
       title: 'Tempo',

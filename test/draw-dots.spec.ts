@@ -5,7 +5,6 @@ import { setActivePinia, createPinia } from 'pinia'
 vi.mock('animejs', () => ({ default: Object.assign(() => ({}), { remove: () => {} }) }))
 vi.mock('src/composables/metronome', async () => (await import('./helpers/app-mocks')).metronomeMock())
 vi.mock('src/composables/keep-awake', async () => (await import('./helpers/app-mocks')).keepAwakeMock())
-vi.mock('src/composables/matomo', async () => (await import('./helpers/app-mocks')).matomoMock())
 vi.mock('vue-router', async () => (await import('./helpers/app-mocks')).routerMock())
 vi.mock('src/boot/i18n', async () => (await import('./helpers/app-mocks')).i18nMock())
 vi.mock('quasar', async (importOriginal) => (await import('./helpers/app-mocks')).quasarMock(importOriginal as never))

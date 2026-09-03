@@ -5,7 +5,6 @@ import { useStorage, useDebounceFn } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import soundsData from 'src/assets/data/soundsData'
 import { useMetronome } from 'src/composables/metronome'
-import { useMatomo } from 'src/composables/matomo'
 import { useKeepAwake } from 'src/composables/keep-awake'
 import { t } from 'src/boot/i18n'
 import { getDefaultPatterns } from 'src/utils/utils'
@@ -48,12 +47,6 @@ export const usePatternStore = defineStore('patterns', () => {
     keepAwake,
     allowSleep
   } = useKeepAwake()
-
-  const {
-    matomoExists,
-    trackPlay,
-    trackStop
-  } = useMatomo()
 
   // *****************************************
   // State
@@ -317,14 +310,12 @@ export const usePatternStore = defineStore('patterns', () => {
       return
     }
 
-    if (matomoExists()) trackPlay()
     if (await isSupported()) keepAwake()
   }
 
   const stop = async () => {
     isPlaying.value = false
     stopAllSequences()
-    if (matomoExists()) trackStop()
     if (await isSupported()) allowSleep()
     reinitialize()
   }

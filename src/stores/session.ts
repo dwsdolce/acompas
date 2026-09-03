@@ -1,21 +1,12 @@
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { Screen, Dialog, is } from 'quasar'
 import { useStorage } from '@vueuse/core'
-import { useMatomo } from 'src/composables/matomo'
 import { t } from 'src/boot/i18n'
 import type { Size, SessionState } from 'src/utils/types'
 
 export const useSessionStore = defineStore('session', () => {
-  const {
-    initMatomo,
-    deleteMatomo,
-  } = useMatomo()
-
   const isUpToDatev4 = useStorage('is-up-to-date-v4', ref<boolean>(false))
-  const trackingEnabled = useStorage('tracking-enabled', ref<boolean>(false))
-  const trackingInitialized = useStorage('tracking-initialized', ref<boolean>(false))
-  const trackingChosen = useStorage('tracking-chosen', ref<boolean>(false))
   const isDarkMode = useStorage('is-dark-mode', ref<boolean>(true))
   // Manual audio/visual calibration (ms) added on top of the auto-detected
   // output latency. Lets users compensate Bluetooth delay that the browser
@@ -40,29 +31,6 @@ export const useSessionStore = defineStore('session', () => {
     }
   })
 
-  const toggleTrackVisits = (v: boolean) => {
-    v ? enableTrackVisits() : disableTrackVisits()
-  }
-
-  const enableTrackVisits = () => {
-    if (!trackingEnabled.value) trackingEnabled.value = true
-    initMatomo()
-  }
-
-  const disableTrackVisits = () => {
-     if (trackingEnabled.value) trackingEnabled.value = false
-    deleteMatomo()
-  }
-
-  const initializeTracking = () => {
-    if (!trackingInitialized.value) trackingInitialized.value = true
-    initMatomo()
-  }
-
-  const enableTrackingChosen = () => {
-    trackingChosen.value = true
-  }
-
   const toggleDarkMode = () => {
     isDarkMode.value = !isDarkMode.value
   }
@@ -75,26 +43,8 @@ export const useSessionStore = defineStore('session', () => {
     visualizationSize.value = payload
   }
 
-  // No onMounted here. The watcher below is immediate, so it already runs
-  // initializeTracking() when the store is created and tracking is on - an
-  // onMounted doing the same thing fired a second time once the component
-  // mounted, initialising Matomo twice. It also tied initialisation to the
-  // store first being used inside a component: created anywhere else, from a
-  // test or a boot file, the hook never ran and Vue warned that there was no
-  // instance to attach it to.
-  watch(trackingEnabled, (value) => {
-    if (value) {
-      initializeTracking()
-    } else {
-      deleteMatomo()
-    }
-  }, { immediate: true })
-
   return {
     isUpToDatev4,
-    trackingEnabled,
-    trackingInitialized,
-    trackingChosen,
     isDarkMode,
     audioVisualOffset,
     leftDrawerOpen,
@@ -102,11 +52,6 @@ export const useSessionStore = defineStore('session', () => {
     visualizationModes,
     selectedVisualizationMode,
     visualizationMode,
-    toggleTrackVisits,
-    enableTrackVisits,
-    disableTrackVisits,
-    initializeTracking,
-    enableTrackingChosen,
     toggleDarkMode,
     toggleLeftDrawer,
     setVisualizationSize
