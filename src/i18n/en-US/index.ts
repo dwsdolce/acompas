@@ -9,13 +9,10 @@ export default {
     header: 'Sorry, this page doesn\'t exist.',
     btn: 'Go back to patterns'
   },
-  donate: 'Donate',
   help: 'Help',
   tuning: 'Tuning fork',
   shortcuts: 'Shortcuts',
   privacy: 'Privacy policy',
-  android: 'Get the Android app',
-  follow: 'Follow us',
   share: 'Share',
   source: 'Source code',
   issues: 'Issues',

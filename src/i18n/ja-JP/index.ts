@@ -9,13 +9,10 @@ export default {
     header: '申し訳ありませんが、このページは存在しません。',
     btn: 'パターンに戻る'
   },
-  donate: '寄付',
   help: 'ヘルプ',
   tuning: '音叉',
   shortcuts: 'ショートカット',
   privacy: 'プライバシーポリシー',
-  android: 'Androidアプリを取得',
-  follow: 'フォロー',
   share: '共有',
   source: 'ソースコード',
   issues: '問題',

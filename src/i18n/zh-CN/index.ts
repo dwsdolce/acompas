@@ -9,13 +9,10 @@ export default {
     header: '抱歉，此页面不存在。',
     btn: '返回节拍型'
   },
-  donate: '捐赠',
   help: '帮助',
   tuning: '调音器',
   shortcuts: '快捷键',
   privacy: '隐私政策',
-  android: '获取Android应用',
-  follow: '关注我们',
   share: '分享',
   source: '源代码',
   issues: '问题',

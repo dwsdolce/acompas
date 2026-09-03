@@ -9,13 +9,10 @@ export default {
     header: 'Spiacenti, questa pagina non esiste.',
     btn: 'Torna ai pattern'
   },
-  donate: 'Dona',
   help: 'Aiuto',
   tuning: 'Diapason',
   shortcuts: 'Scorciatoie',
   privacy: 'Politica sulla privacy',
-  android: 'Scarica l\'app Android',
-  follow: 'Seguici',
   share: 'Condividi',
   source: 'Codice sorgente',
   issues: 'Problemi',

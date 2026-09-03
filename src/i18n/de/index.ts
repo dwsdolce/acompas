@@ -9,13 +9,10 @@ export default {
     header: 'Entschuldigung, diese Seite existiert nicht.',
     btn: 'Zurück zu den Rhythmen'
   },
-  donate: 'Spenden',
   help: 'Hilfe',
   tuning: 'Stimmgabel',
   shortcuts: 'Tastenkürzel',
   privacy: 'Datenschutzerklärung',
-  android: 'Android-App herunterladen',
-  follow: 'Folgen Sie uns',
   share: 'Teilen',
   source: 'Quellcode',
   issues: 'Probleme',

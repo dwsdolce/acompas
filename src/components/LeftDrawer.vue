@@ -41,14 +41,10 @@
 div
   q-list(no-border, link, separator)
 
-    q-item(
-      clickable,
-      v-ripple,
-      @click="launch('https://www.paypal.com/donate/?hosted_button_id=NCN4GX9DL3L5W')"
-    )
-     q-item-section(avatar)
-      q-icon(name="mdi-currency-usd")
-     q-item-section {{ $t('donate') }}
+    //- The Donate item is gone with the rename. It opened A Compás's PayPal
+      button, so under this app's name it solicited money for one project
+      while appearing to ask on behalf of another. Nothing replaces it:
+      there is no Palmas donation to point at.
 
     q-item(
       id="helpQItem",

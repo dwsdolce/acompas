@@ -12,8 +12,8 @@ node_modules
 /src-cordova/plugins
 /src-cordova/www
 
-# A Compas specific ignores
-# Generated icons. `yarn icons` produces these from app-icon.png, and the
+# Palmas specific ignores
+# Generated icons. `yarn icons` produces these from resources/icon.png, and the
 # postinstall hook runs it, so a fresh clone is build-ready with no manual
 # step. Do not commit them.
 #

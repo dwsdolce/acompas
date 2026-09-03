@@ -9,13 +9,10 @@ export default {
     header: 'Désolé, cette page n\'existe pas.',
     btn: 'Retourner aux motifs'
   },
-  donate: 'Faire un don',
   help: 'Aide',
   tuning: 'Diapason',
   shortcuts: 'Raccourcis',
   privacy: 'Politique de confidentialité',
-  android: 'Obtenir l\'application Android',
-  follow: 'Suivez-nous',
   share: 'Partager',
   source: 'Code source',
   issues: 'Problèmes',
