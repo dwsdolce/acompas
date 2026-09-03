@@ -321,11 +321,11 @@ error if given one:
 
 ```bash
 $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
-  -n acompas-api36 \
+  -n palmas-api36 \
   -k "system-images;android-36;google_apis;x86_64" \
   -d pixel_7
 
-emulator -avd acompas-api36 &
+emulator -avd palmas-api36 &
 adb devices          # emulator-5554  device
 ```
 
@@ -334,9 +334,9 @@ backgrounding — start it in its own terminal:
 
 ```powershell
 & "$env:ANDROID_HOME\cmdline-tools\latest\bin\avdmanager.bat" create avd `
-  -n acompas-api36 -k "system-images;android-36;google_apis;x86_64" -d pixel_7
+  -n palmas-api36 -k "system-images;android-36;google_apis;x86_64" -d pixel_7
 
-Start-Process emulator -ArgumentList '-avd','acompas-api36'
+Start-Process emulator -ArgumentList '-avd','palmas-api36'
 adb devices
 ```
 

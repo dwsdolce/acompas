@@ -67,8 +67,6 @@ yarn-error.log*
 
 out/
 
-acompasenv
-
 # Secrets & signing material (never commit) — global safety net
 *.jks
 *.keystore

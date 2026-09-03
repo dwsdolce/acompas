@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palmas — Compás y palmas, a flamenco metronome</title>
+<meta name="description" content="A flamenco metronome: play the compás of alegrías, bulerías, soleá, tangos and more, with palmas, cajón and jaleo. Free in your browser, open source, in nine languages.">
+<link rel="canonical" href="https://www.dolcesfogato.com/palmas/">
+
+<!-- Open Graph (Facebook, LinkedIn, Discord, iMessage, etc.)
+     og:image is deliberately absent. The only artwork this project has is still
+     A Compás's, and putting their monogram on a Palmas link preview is the one
+     thing the rename exists to avoid. Add it here once Palmas has its own. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Palmas">
+<meta property="og:title" content="Palmas — Compás y palmas, a flamenco metronome">
+<meta property="og:description" content="Play the compás of alegrías, bulerías, soleá, tangos and more, with palmas, cajón and jaleo. Free in your browser, open source.">
+<meta property="og:url" content="https://www.dolcesfogato.com/palmas/">
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Palmas — Compás y palmas, a flamenco metronome">
+<meta name="twitter:description" content="Play the compás of alegrías, bulerías, soleá, tangos and more, with palmas, cajón and jaleo. Free in your browser, open source.">
+
+<!-- Structured data for rich search results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Palmas",
+  "applicationCategory": "MusicApplication",
+  "operatingSystem": "Web browser, macOS, Windows, Linux, Android, iOS",
+  "description": "A flamenco metronome. Play the compás of alegrías, bulerías, soleá, tangos, seguiriyas and more, with palmas, cajón, jaleo and other instruments, at any tempo, with dot, counter and clock visualisations.",
+  "url": "https://www.dolcesfogato.com/palmas/",
+  "author": { "@type": "Organization", "name": "Dolce Sfogato", "url": "https://www.dolcesfogato.com/" },
+  "isAccessibleForFree": true,
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "sameAs": [ "https://github.com/dwsdolce/palmas" ],
+  "offers": [
+    { "@type": "Offer", "name": "Palmas in your browser (web app)", "price": "0", "priceCurrency": "USD", "url": "https://www.dolcesfogato.com/palmas/palmas_web/" }
+  ]
+}
+</script>
+
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; margin: 0; padding: 2.5rem 1.25rem 4rem;
+    color: #1d1d1f; background: #ffffff;
+  }
+  .p-page { max-width: 60rem; margin: 0 auto; }
+  h1 { font-size: 2.1rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.3rem; margin-top: 2.5rem; }
+  h3 { margin-top: 0; }
+  .tagline { font-size: 1.3rem; color: #555; margin-top: 0; }
+  .lead { font-size: 1.05rem; }
+  a { color: #b3261e; }
+  .p-cards { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 1.5rem 0; }
+  .p-card {
+    flex: 1 1 18rem; border: 1px solid rgba(128,128,128,0.3);
+    border-radius: 14px; padding: 1.25rem 1.4rem;
+  }
+  .price { font-weight: 600; }
+  .btn {
+    display: inline-block; margin: 0.4rem 0.4rem 0 0; padding: 0.55rem 1rem;
+    border-radius: 9px; background: #b3261e; color: #fff !important;
+    text-decoration: none; font-weight: 600;
+  }
+  .btn.secondary { background: #444; }
+  .btn.coming { background: #999; cursor: default; }
+  .p-links { list-style: none; padding-left: 0; }
+  .p-links li { margin: 0.4rem 0; }
+  .feature-grid { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .feature { flex: 1 1 16rem; }
+  .feature h3 { margin-bottom: 0.25rem; }
+  .p-note {
+    border: 1px solid rgba(128,128,128,0.3); border-radius: 14px;
+    padding: 1.25rem 1.4rem; margin: 1.5rem 0; background: rgba(179,38,30,0.04);
+  }
+  .p-note h2 { margin-top: 0; }
+  .palos { columns: 3 12rem; column-gap: 1.5rem; padding-left: 1.2rem; }
+  footer { max-width: 60rem; margin: 3rem auto 0; font-size: 0.9rem; color: #6e6e73; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e8e8ea; background: #1c1c1e; }
+    a { color: #ff8a80; }
+    .tagline { color: #c7c7cc; }
+    .btn { background: #c5372c; }
+    .p-note { background: rgba(255,138,128,0.08); }
+  }
+</style>
+</head>
+<body>
+<div class="p-page">
+
+<h1>Palmas</h1>
+<p class="tagline">Compás y palmas — a flamenco metronome</p>
+
+<p class="lead">Flamenco is not counted in bars of four. Each <em>palo</em> has
+its own compás — a twelve-beat cycle with accents in particular places for
+soleá and alegrías, a different cycle for tangos, another for seguiriyas.
+Palmas plays those cycles, with the instruments that actually keep them:
+palmas, cajón, jaleo, pitos and more. Set the tempo, choose which instruments
+sound, and practise against a rhythm that is the real thing rather than a click.</p>
+
+<h2>Ways to use Palmas</h2>
+<div class="p-cards">
+
+  <div class="p-card">
+    <h3>Palmas in your browser</h3>
+    <p>The full app, free and open source, in any modern browser — nothing to
+    buy, nothing to install. Choose a palo, set the tempo, mix the instruments,
+    and watch the compás as dots, a counter, or a clock. Your settings stay on
+    your own device.</p>
+    <p class="price">Free &amp; open source — runs in your browser</p>
+    <a class="btn" href="https://www.dolcesfogato.com/palmas/palmas_web/">Open the web app</a>
+    <a class="btn secondary" href="https://github.com/dwsdolce/palmas">Source on GitHub</a>
+  </div>
+
+  <div class="p-card">
+    <h3>Desktop &amp; mobile</h3>
+    <p>The same app also builds as a desktop application for macOS, Windows and
+    Linux, and as an Android and iOS app. These are not published yet — for now,
+    the repository builds all of them, and the setup script installs what each
+    one needs.</p>
+    <p class="price">Build it yourself</p>
+    <a class="btn secondary" href="https://github.com/dwsdolce/palmas">Source on GitHub</a>
+  </div>
+
+  <div class="p-card">
+    <h3>Apple App Store</h3>
+    <p>An App Store release is in preparation. Until it is there, the browser
+    app works on iPhone and iPad — open it in Safari and use
+    <strong>Share → Add to Home Screen</strong> for an icon and a standalone
+    window.</p>
+    <p class="price">In preparation</p>
+    <span class="btn coming">Coming to the App Store</span>
+  </div>
+
+</div>
+
+<h2>What it plays</h2>
+<p>Palmas covers the flamenco repertoire and several related traditions —
+among them:</p>
+<ul class="palos">
+  <li>Alegrías</li>
+  <li>Bulerías</li>
+  <li>Soleá</li>
+  <li>Soleá por bulería</li>
+  <li>Tangos</li>
+  <li>Tientos</li>
+  <li>Seguiriyas</li>
+  <li>Fandangos</li>
+  <li>Farruca</li>
+  <li>Rumba</li>
+  <li>Sevillanas</li>
+  <li>Tanguillos</li>
+  <li>Verdiales</li>
+  <li>Zapateado</li>
+  <li>Abandolaos</li>
+  <li>Jaleos</li>
+</ul>
+<p>Alongside the flamenco palos there are Afro-Cuban and Afro-Brazilian
+rhythms, and a tuning fork for good measure.</p>
+
+<h2>What it does</h2>
+<div class="feature-grid">
+  <div class="feature">
+    <h3>The real compás</h3>
+    <p>Accents where they belong for each palo, not an even click — with a
+    prestart count-in, adjustable swing, and a humanise option so it breathes.</p>
+  </div>
+  <div class="feature">
+    <h3>See the cycle</h3>
+    <p>Three ways to watch the beat: dots around the compás, a plain counter, or
+    a clock face. Whichever makes the cycle legible to you.</p>
+  </div>
+  <div class="feature">
+    <h3>Mix the instruments</h3>
+    <p>Palmas, cajón, jaleo, pitos and more — turn each on or off, set its
+    volume, and choose whether it plays eighths. Adjust the reverb decay to suit
+    the room you are practising in.</p>
+  </div>
+  <div class="feature">
+    <h3>In your language</h3>
+    <p>Nine languages: English, Spanish, French, Italian, German, Arabic,
+    Persian, Japanese and Chinese.</p>
+  </div>
+  <div class="feature">
+    <h3>Yours alone</h3>
+    <p>No accounts, no analytics, no tracking of any kind. Nothing about your
+    practice leaves your device.</p>
+  </div>
+  <div class="feature">
+    <h3>Free and open</h3>
+    <p>Licensed under the AGPL. Read the source, build it yourself, or send a
+    patch.</p>
+  </div>
+</div>
+
+<h2>Documentation &amp; help</h2>
+<ul class="p-links">
+  <li>💬 <a href="https://github.com/dwsdolce/palmas/issues">Report a problem or suggest a rhythm</a></li>
+  <li>🔒 <a href="privacy.html">Privacy Policy</a></li>
+  <li>💻 <a href="https://github.com/dwsdolce/palmas">Source on GitHub</a></li>
+</ul>
+
+<div class="p-note">
+  <h2>Built on A Compás</h2>
+  <p>Palmas is a modified version of
+  <a href="https://gitlab.com/acompas/acompas">A Compás</a> by Olivier Ricordeau
+  and Jérémie Sieffert, who wrote the great majority of it and hold copyright
+  from 2014 to 2023. It is distributed under the same
+  <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a> licence,
+  which is what makes this version possible — and it carries a different name
+  because the changes here are not theirs to answer for. Please report anything
+  about Palmas
+  <a href="https://github.com/dwsdolce/palmas/issues">on its own repository</a>,
+  not to them.</p>
+  <p>The jaleo recordings are by Aziz Andry.</p>
+</div>
+
+</div>
+<footer>© 2026 Dolce Sfogato. Palmas. Based on A Compás, © 2014–2023 Olivier Ricordeau and Jérémie Sieffert, under the AGPL-3.0.</footer>
+</body>
+</html>

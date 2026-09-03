@@ -1,0 +1,19 @@
+# robots.txt for dolcesfogato.com
+#
+# UPLOAD THIS TO THE DOMAIN ROOT -> https://www.dolcesfogato.com/robots.txt
+# NOT to /palmas/. Crawlers read robots.txt only at the domain root; a copy
+# inside /palmas/ is ignored, which is why this file lives in deploy/ rather
+# than in website/ (everything in website/ is copied verbatim to /palmas/).
+#
+# THIS FILE IS SHARED WITH OTHER SITES ON THE DOMAIN. It is not owned by Palmas.
+# guitar_tap_website holds its own copy of the same file, listing only its own
+# sitemap. Whichever copy you upload last wins, so uploading that one would
+# silently drop the Palmas sitemap line below - and uploading this one drops
+# nothing only because it lists both. Before uploading either, check that it
+# names every sitemap on the domain.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.dolcesfogato.com/guitar_tap/sitemap.xml
+Sitemap: https://www.dolcesfogato.com/palmas/sitemap.xml

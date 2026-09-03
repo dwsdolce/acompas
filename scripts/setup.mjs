@@ -323,7 +323,7 @@ function writeHook () {
   // a POSIX shell profile makes every line of it fail with "$'\r': command not
   // found" - breaking the shell to install a convenience. PowerShell reads LF
   // perfectly well, so LF is right for both targets.
-  appendFileSync(target.file, `\n# Added by acompas scripts/setup.mjs\n${target.line}\n`)
+  appendFileSync(target.file, `\n# Added by palmas scripts/setup.mjs\n${target.line}\n`)
   console.log(`\n  Added to ${target.file}:  ${target.line}`)
   return true
 }
@@ -477,7 +477,7 @@ function corepackEntry () {
 
 /** Really try to write, because Windows ACLs make accessSync untrustworthy. */
 function canWriteTo (dir) {
-  const probe = path.join(dir, '.acompas-write-probe')
+  const probe = path.join(dir, '.palmas-write-probe')
   try {
     writeFileSync(probe, '')
     unlinkSync(probe)

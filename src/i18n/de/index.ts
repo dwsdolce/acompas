@@ -252,7 +252,9 @@ Hier können Sie den Namen eines beliebigen "Palo" eingeben, von dem Sie je geh�
     privacy: {
       title: 'Datenschutzerklärung',
       content: `
-Wir sammeln keine persönlichen Daten.`
+Wir sammeln keine persönlichen Daten.
+
+Wenn Sie die Hilfe zu einem Palo öffnen, fragt die App bei Wikipedia die Zusammenfassung dieses Artikels ab, um sie in Ihrer Sprache anzuzeigen. Wikipedia sieht dabei Ihre IP-Adresse und welcher Artikel angefragt wurde. Sonst verlässt nichts Ihr Gerät.`
     },
     tempo: {
       title: 'Tempo',

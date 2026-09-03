@@ -272,7 +272,9 @@ Ici vous pouvez saisir le nom de n'importe quel "palo" que vous avez entendu et 
     privacy: {
       title: 'Politique de confidentialité',
       content: `
-Nous ne collectons aucune donnée personnelle.`
+Nous ne collectons aucune donnée personnelle.
+
+Lorsque vous ouvrez l'aide d'un palo, l'application demande à Wikipédia le résumé de cet article afin de l'afficher dans votre langue. Wikipédia voit votre adresse IP et l'article demandé. Rien d'autre ne quitte votre appareil.`
     },
     tempo: {
       title: 'Tempo',

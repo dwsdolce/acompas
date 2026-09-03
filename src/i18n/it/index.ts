@@ -252,7 +252,9 @@ Qui puoi inserire il nome di qualsiasi "palo" di cui hai mai sentito parlare e P
     privacy: {
       title: 'Politica sulla privacy',
       content: `
-Non raccogliamo alcun dato personale.`
+Non raccogliamo alcun dato personale.
+
+Quando apri la guida di un palo, l'app chiede a Wikipedia il riassunto di quell'articolo per mostrartelo nella tua lingua. Wikipedia vede il tuo indirizzo IP e quale articolo è stato richiesto. Nient'altro lascia il tuo dispositivo.`
     },
     tempo: {
       title: 'Tempo',

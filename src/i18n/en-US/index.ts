@@ -272,7 +272,9 @@ Here you can input the name of any "palo" you ever heard of and Palmas will sear
     privacy: {
       title: 'Privacy policy',
       content: `
-We don't collect any personal data.`
+We don't collect any personal data.
+
+When you open the help for a rhythm, the app asks Wikipedia for that article's summary, so it can show it in your language. Wikipedia sees your IP address and which article was requested. Nothing else leaves your device.`
     },
     tempo: {
       title: 'Tempo',

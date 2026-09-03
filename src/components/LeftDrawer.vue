@@ -91,12 +91,12 @@ div
     q-expansion-item(icon="mdi-share-variant", :label="$t('share')")
       q-list(no-border, link, inset-separator)
 
-        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://www.dolcesfogato.com/acompas/')")
+        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://www.dolcesfogato.com/palmas/')")
           q-item-section(avatar)
             q-icon(name="mdi-facebook")
           q-item-section Facebook
 
-        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://www.dolcesfogato.com/acompas/')")
+        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://www.dolcesfogato.com/palmas/')")
           q-item-section(avatar)
             q-icon(name="mdi-alpha-x")
           q-item-section X

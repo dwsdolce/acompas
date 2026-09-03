@@ -272,7 +272,9 @@ Aquí puedes ingresar el nombre de cualquier "palo" que hayas escuchado y Palmas
     privacy: {
       title: 'Política de privacidad',
       content: `
-No recopilamos ningún dato personal.`
+No recopilamos ningún dato personal.
+
+Cuando abres la ayuda de un palo, la aplicación pide a Wikipedia el resumen de ese artículo para mostrarlo en tu idioma. Wikipedia ve tu dirección IP y qué artículo se ha solicitado. Nada más sale de tu dispositivo.`
     },
     tempo: {
       title: 'Tempo',

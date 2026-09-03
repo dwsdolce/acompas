@@ -62,7 +62,7 @@ declare module 'vue-i18n' {
 }
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
-const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('acompas-locale') : null
+const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('palmas-locale') : null
 const browser = (typeof navigator !== 'undefined' && navigator.language) ? navigator.language : 'en-US'
 const initial = stored && availableLocales.includes(stored as never)
   ? stored
@@ -109,7 +109,7 @@ export const t = (key: string): string =>
 export default boot(async ({ app }) => {
   // Persistance réactive de la locale
   watch(() => i18n.global.locale.value, (val: string) => {
-    try { localStorage.setItem('acompas-locale', val) } catch {}
+    try { localStorage.setItem('palmas-locale', val) } catch {}
   })
 
   // Awaited so the first paint is already in the right language.

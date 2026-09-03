@@ -145,8 +145,8 @@ export default defineConfig(function (ctx) {
       // relative URLs there break Vite's module graph.
       //
       // Note that relative URLs resolve against the *document* URL, so the app
-      // must be served with a trailing slash - .../acompas_web/ rather than
-      // .../acompas_web. Servers normally redirect to add it.
+      // must be served with a trailing slash - .../palmas_web/ rather than
+      // .../palmas_web. Servers normally redirect to add it.
       extendViteConf (viteConf) {
         if (ctx.mode.spa && ctx.prod) {
           viteConf.base = './'

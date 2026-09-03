@@ -5,7 +5,7 @@
 
 A flamenco metronome — *compás y palmas* — available on multiple platforms:
 
-* Web application (available at [https://www.dolcesfogato.com/acompas/](https://www.dolcesfogato.com/acompas/))
+* Web application (available at [https://www.dolcesfogato.com/palmas/](https://www.dolcesfogato.com/palmas/))
 * Mobile application using [Capacitor](https://capacitorjs.com)
 * Desktop application (Electron)
 
@@ -35,7 +35,7 @@ See the commit history for the full account.
   - Counter display
   - Clock display
 - 🌓 Light/Dark theme support
-- 🌐 Multilingual support - Available in 10 languages:
+- 🌐 Multilingual support - Available in 9 languages:
   - English, Spanish, French, Italian, German
   - Arabic, Persian (Farsi), Japanese, Chinese (Simplified)
 - 📱 Mobile-optimized with keep-awake functionality
@@ -187,11 +187,9 @@ yarn preview    # serve that production build at localhost:4173
 
 `yarn preview` is how you run the *built* app. You cannot simply open
 `dist/spa/index.html`: the browser blocks module scripts over `file://`, and the
-app would not load. A plain file server is not enough either — the web build
-uses **history** routing, so `/flamenco/solea` is a route rather than a file and
-has to be answered with `index.html`. `yarn preview` does that fallback, while
-still returning a real 404 for a missing asset, so a broken build still looks
-broken. It is the same server the end-to-end tests and the CI smoke test use:
+app would not load. `yarn preview` serves it properly, returning a real 404 for
+a missing asset so that a broken build still looks broken. It is the same server
+the end-to-end tests and the CI smoke test use:
 [scripts/serve-static.mjs](scripts/serve-static.mjs).
 
 The Quasar CLI is a project dependency rather than a global install, so run it
@@ -220,6 +218,10 @@ is why every command in these docs uses `yarn` or `npx`.
 | Desktop (Electron) | macOS, Windows, Linux | `yarn build:desktop` | [docs/desktop.md](docs/desktop.md) |
 | Android | macOS, Windows, Linux | `npx quasar build -m capacitor -T android` | [docs/android.md](docs/android.md) |
 | iOS | macOS only | `npx quasar build -m capacitor -T ios` | [docs/ios.md](docs/ios.md) |
+
+The names, subtitles and identifiers the app is published under are in
+[docs/store-listing.md](docs/store-listing.md), along with what each store
+requires before it will accept a first release.
 
 Each build runs on the platform it targets — electron-builder does not
 cross-compile, and the mobile toolchains are the vendors' own.

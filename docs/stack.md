@@ -1,7 +1,7 @@
 # The technology stack
 
 Palmas is a web application wearing a native shell. Every pixel you see is a
-web page: it runs in a browser tab on [www.dolcesfogato.com/acompas/](https://www.dolcesfogato.com/acompas/), inside
+web page: it runs in a browser tab on [www.dolcesfogato.com/palmas/](https://www.dolcesfogato.com/palmas/), inside
 a `WKWebView` on iOS, and inside Chromium on the desktop — the same code in all
 three. What changes is the container.
 

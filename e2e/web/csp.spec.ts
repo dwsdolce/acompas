@@ -61,7 +61,7 @@ test.describe('the content security policy', () => {
       localStorage.setItem('selected-context-name', 'flamenco')
       localStorage.setItem('selected-pattern-name', 'abandolaos')
       localStorage.setItem('is-up-to-date-v4', 'true')
-      if (chosen) localStorage.setItem('acompas-locale', chosen)
+      if (chosen) localStorage.setItem('palmas-locale', chosen)
     }, locale)
 
     await page.goto('/#/flamenco/abandolaos')
