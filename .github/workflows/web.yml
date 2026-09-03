@@ -11,7 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Full history, not the default shallow clone. The build number is the
+      # git commit count, and `git rev-list --count HEAD` returns 1 at
+      # fetch-depth 1 - so every CI build would call itself build 1, including
+      # the SPA uploaded as an artifact.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v7
         with:

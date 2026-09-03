@@ -9,19 +9,43 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-// Single source of truth for the app version: the root package.json.
-// versionName mirrors the semver string; versionCode is derived from it.
+// versionName is the marketing version, from the root package.json.
 def packageJson = new JsonSlurper().parseText(rootProject.file("../../package.json").text)
-def appVersion = packageJson.version.toString()                      // e.g. "4.2.1"
-def (verMajor, verMinor, verPatch) = appVersion.tokenize('-')[0].tokenize('.').collect { it.toInteger() }
+def appVersion = packageJson.version.toString()                      // e.g. "1.0.0"
 
-// The 701000000 offset is inherited from A Compás, where it kept generated
-// codes above that project's last manually-published versionCode (701000468).
-// Palmas publishes under its own applicationId, so it shares none of that
-// history and could start from 1 - the offset is kept only so that version
-// codes never move backwards for anyone who installed an earlier build from
-// this tree. Assumes minor/patch < 100.
-def computedVersionCode = 701000000 + verMajor * 10000 + verMinor * 100 + verPatch
+// versionCode is the git commit count, as every project here derives its build
+// number - guitar_tap, GuitarTap, GuitarTapWeb, pdfarranger and marklens-ports
+// all use `git rev-list --count HEAD`. It increases with every commit, which is
+// exactly what Play requires, and it names the commit a build came from.
+//
+// It replaces a formula carried over from A Compás, which offset the semver by
+// 701000000 to stay above that project's last published code. Palmas publishes
+// under its own applicationId and shares none of that history, so the offset
+// only tied this app to someone else's release numbering. The formula also gave
+// every build of one version the same code, so two builds of 4.2.5 were
+// indistinguishable; a commit count is different for each.
+//
+// No fallback on purpose. The web build falls back to 0 because the number is
+// only displayed there, but a wrong versionCode is a store problem: a shallow
+// clone yields 1, Play accepts it, and every later upload is then refused as
+// not higher. Failing here is far cheaper than finding out at upload.
+def gitCount = new ByteArrayOutputStream()
+def gitResult = exec {
+    commandLine 'git', 'rev-list', '--count', 'HEAD'
+    workingDir rootProject.file("../..")
+    standardOutput = gitCount
+    ignoreExitValue = true
+}
+def computedVersionCode = gitCount.toString().trim().isInteger()
+        ? gitCount.toString().trim().toInteger()
+        : -1
+if (gitResult.exitValue != 0 || computedVersionCode < 2) {
+    throw new GradleException(
+        "Cannot determine the build number: 'git rev-list --count HEAD' gave " +
+        "'${gitCount.toString().trim()}'. The Android versionCode is the commit " +
+        "count, so this needs a full git checkout - a shallow clone (git clone " +
+        "--depth, or actions/checkout without fetch-depth: 0) reports 1.")
+}
 
 // Properties are assigned with '=' rather than the space-separated form
 // Capacitor scaffolds. Gradle 8 deprecates that form and Gradle 9 removes it;

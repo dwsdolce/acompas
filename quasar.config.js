@@ -12,6 +12,7 @@
 
 
 import { defineConfig } from '@quasar/app-vite'
+import { execSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
@@ -20,6 +21,30 @@ import { readFileSync } from 'node:fs'
 // require() are not available.
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pkg = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
+
+/**
+ * The build number: the git commit count, as every other project here derives
+ * it — guitar_tap, GuitarTap, GuitarTapWeb, pdfarranger and marklens-ports all
+ * use `git rev-list --count HEAD`. It is monotonic without needing tags, and it
+ * names a commit, so a bug report carrying one identifies the exact source.
+ * Shown as "1.0.0 (867)", which is Swift's CFBundleShortVersionString
+ * (CFBundleVersion) convention.
+ *
+ * Falls back to '0' outside a checkout, matching GuitarTapWeb. That is
+ * cosmetic here — the number is only displayed. Android is stricter, because a
+ * wrong versionCode is a store problem rather than a display one, so
+ * build.gradle fails instead of falling back.
+ *
+ * Beware shallow clones: `actions/checkout` defaults to fetch-depth 1, where
+ * this returns 1. The workflow asks for the full history for that reason.
+ */
+const buildNumber = (() => {
+  try {
+    return execSync('git rev-list --count HEAD', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || '0'
+  } catch {
+    return '0'
+  }
+})()
 
 
 export default defineConfig(function (ctx) {
@@ -82,6 +107,7 @@ export default defineConfig(function (ctx) {
       // header falls back to showing "v4".
       define: {
         'process.env.APP_VERSION': JSON.stringify(pkg.version),
+        'process.env.APP_BUILD': JSON.stringify(buildNumber),
 
         // vue-i18n ships two message compilers. The default one turns every
         // translation string into a function with `Function("return ...")`,

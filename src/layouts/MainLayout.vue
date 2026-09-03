@@ -21,7 +21,13 @@ const leftDrawerOpen: Ref<boolean> = ref(Screen.gt.md)
 
 Screen.setSizes({ sm: 500, md: 650, lg: 1000, xl: 2000 })
 
-const appVersion = process.env.APP_VERSION?.valueOf() || '4'
+// "1.0.0 (867)" — the marketing version and the git commit count, the same
+// pairing every other project here shows, after Swift's
+// CFBundleShortVersionString (CFBundleVersion). The build number is what makes
+// two builds of one version tellable apart in a bug report.
+const appVersion = process.env.APP_VERSION?.valueOf() || '1.0.0'
+const appBuild = process.env.APP_BUILD?.valueOf() || ''
+const versionString = appBuild ? `${appVersion} (${appBuild})` : appVersion
 
 const onResize = (size: Size) => {
   setVisualizationSize(size)
@@ -74,7 +80,7 @@ q-layout(
       q-space
 
       SelectSettings
-      .text-weight-regular v{{ appVersion }}
+      .text-weight-regular v{{ versionString }}
 
   q-drawer(
     bordered,
