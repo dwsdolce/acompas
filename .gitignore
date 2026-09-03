@@ -76,3 +76,9 @@ google-services.json
 # Playwright output
 /test-results
 /playwright-report
+
+# Scratch space. Kept ignored rather than removed with the directory it was
+# added for: a /tmp is the obvious place to drop a working file, and it should
+# stay impossible to commit one by accident. Artwork sources that are worth
+# keeping live in resources/artwork, which is versioned.
+/tmp/

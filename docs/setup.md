@@ -336,9 +336,14 @@ yarn icons:all  # everything, including the committed Capacitor Android/iOS
                 # assets — rewrites ~30 tracked files, so review the diff
 ```
 
-The header logo is *not* part of this. `public/ACompas-4-logo.png` and
-`public/ACompas-4-name.png` are hand-made images referenced directly from
-`src/layouts/MainLayout.vue`, and regenerating icons does not touch them.
+The header is *not* part of this. `public/palmas-wordmark.svg` is drawn by hand
+and referenced directly from `src/layouts/MainLayout.vue`; regenerating icons
+does not touch it. It is the only image the header loads — the mark itself
+appears on the launcher, the favicon and the store tile, not in the toolbar.
+
+The editable sources for both — the Inkscape files and the typeface they were
+set in — are in [resources/artwork](../resources/artwork/README.md), which is
+outside `public/` and so never deployed.
 
 `yarn icons:all` also runs `packaging/prepare-ios-assets.mjs`, which flattens the
 alpha channel out of the iOS app icon (App Store Connect rejects an icon that has

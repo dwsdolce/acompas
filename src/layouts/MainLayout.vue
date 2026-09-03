@@ -56,13 +56,18 @@ q-layout(
       )
         q-icon(name="mdi-menu")
 
+      //- The wordmark alone, no avatar beside it. The mark and the name said
+        the same thing twice, and together they overflowed the toolbar at 360px
+        - a common phone width - wrapping onto two lines and clipping the
+        version number. The mark earns its place on the launcher, the favicon
+        and the store tile; here the name is the thing that identifies the app.
+        The button stays, so clicking the wordmark still returns home.
       q-btn(
         flat,
-        to="/"
+        to="/",
+        aria-label="Palmas - back to the metronome"
       ).row.items-center.no-wrap.q-px-sm
-        q-avatar.shadow-1
-          img(:src="`${publicFolder}ACompas-4-logo.png`" alt="Palmas icon", width="40")
-        img(:src="`${publicFolder}ACompas-4-name.png`" alt="Palmas name title", height="30").q-mt-xs.q-ml-sm
+        img(:src="`${publicFolder}palmas-wordmark.svg`" alt="Palmas", height="30")
 
       q-space
       SelectContext(v-if="contexts.length > 1")
