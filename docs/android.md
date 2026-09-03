@@ -11,6 +11,7 @@ assumes `yarn install` has already run.
 
 - [Prerequisites](#prerequisites)
 - [An emulator](#an-emulator)
+- [Creating a keystore](#creating-a-keystore)
 - [Building the app](#building-the-app)
 - [Generating the AAB for the Play Store](#generating-the-aab-for-the-play-store)
 - [Installing on a device or emulator](#installing-on-a-device-or-emulator)
@@ -157,7 +158,8 @@ export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/c
 ```
 
 **Windows** — open *System Properties → Advanced → Environment Variables* and do
-both under **User variables**:
+both under **User variables**. Not *System variables*: the difference looks
+cosmetic and is not — see the warning below.
 
 1. **New…** — name `ANDROID_HOME`, value `%LOCALAPPDATA%\Android\Sdk`
 2. Select **Path**, **Edit…**, then **New** for each of these:
@@ -180,9 +182,64 @@ both under **User variables**:
 > `/cygdrive/c/...` value for `ANDROID_HOME`. Setting them in Windows means
 > PowerShell and your POSIX shell both inherit values that work.
 
+> ⚠️ **Under *User* variables, not *System* ones** — because of
+> `%LOCALAPPDATA%`. That is not a stored variable at all: Windows synthesises
+> it when it builds a *user's* environment. A System variable is expanded
+> against the *system* environment, which has no `LOCALAPPDATA`, so the
+> placeholder is passed through untouched and `ANDROID_HOME` arrives at your
+> shell as the literal text `%LOCALAPPDATA%\Android\Sdk`, naming a directory
+> that does not exist.
+>
+> Nothing about this looks wrong. The Environment Variables dialog shows what
+> you typed, and PowerShell reports the correct path — because
+> `[Environment]::GetEnvironmentVariable('ANDROID_HOME','Machine')` expands in
+> your logged-in context. Only a program actually using the value fails, and it
+> fails somewhere else entirely. To check what your shell really received:
+>
+> ```bash
+> echo "$ANDROID_HOME"     # a literal %LOCALAPPDATA% here means it is in the wrong scope
+> ```
+>
+> If you would rather keep it under System variables, write the path out in
+> full — `C:\Users\<you>\AppData\Local\Android\Sdk` — and accept that a
+> machine-wide variable then points inside one user's profile.
+
 Then open a **new terminal** — and on Windows inside VS Code, restart VS Code,
 because a new tab inherits the old environment. See
 [the Windows shell notes](setup.md#a-note-on-windows-shells).
+
+### Check that step 3 took
+
+Both variables fail a long way from their cause, so confirm them before going
+further. Each command should print a real path and find a real file:
+
+```bash
+echo "$ANDROID_HOME"
+ls "$ANDROID_HOME/platform-tools/adb.exe"     # adb, without .exe, on macOS and Linux
+echo "$JAVA_HOME"
+```
+
+```powershell
+$env:ANDROID_HOME
+Test-Path "$env:ANDROID_HOME\platform-tools\adb.exe"
+$env:JAVA_HOME
+```
+
+If `ANDROID_HOME` prints an unexpanded `%LOCALAPPDATA%`, or nothing at all, the
+build fails much later with a message that names neither the variable nor the
+step:
+
+```
+SDK location not found. Define a valid SDK location with an ANDROID_HOME
+environment variable or by setting the sdk.dir path in your project's local
+properties file at '...\src-capacitor\android\local.properties'
+```
+
+That message is worth recognising. It appears after Vite has finished and
+Capacitor has synced, so the build looks like it is nearly done, and it points
+at `local.properties` — a file Android Studio generates and which is not in this
+repository. The cause is almost always this step: the variable is unset, in the
+wrong scope, or set after the shell was started.
 
 ### 4. Install the API 36 packages
 
@@ -346,6 +403,198 @@ Either way, `adb devices` is how you confirm the emulator is up — it should sh
 `emulator-5554  device`. An emulator Studio started and one started with
 `emulator -avd` are the same thing to `adb` and to Gradle.
 
+## Creating a keystore
+
+Only needed to produce a *signed* build. Debug builds and unsigned release
+builds need none of this, so skip the section until you are shipping something.
+
+### What the key is, and what losing it costs
+
+Two different keys are involved, and which one you are making decides how
+frightening this is.
+
+* **With Play App Signing** — the default for new apps — the key you create here
+  is only an **upload key**. Google holds the key that actually signs what
+  users install. Lose your upload key and Google can register a new one for you.
+* **Distributing the APK yourself**, from a website or by hand, makes this key
+  the **signing key**. Android will not install an update signed by a different
+  key, so losing it means nobody who has your app can ever update it. There is
+  no recovery, no appeal, and no workaround but persuading every user to
+  uninstall and start again.
+
+Either way, [back it up](#back-it-up) before you publish anything signed with
+it.
+
+### Generate it
+
+```bash
+mkdir -p ~/keys
+cd ~/keys
+keytool -genkeypair -v \
+  -keystore palmas-upload.jks \
+  -alias palmas \
+  -keyalg RSA -keysize 4096 -validity 10000 \
+  -storetype PKCS12
+```
+
+`keytool` ships with the JDK, so it is already on PATH from
+[step 1](#1-install-a-jdk).
+
+> ⚠️ **Change directory first, and give `-keystore` a bare filename** — as
+> above. `keytool` is a native Windows program and cannot read a Cygwin path.
+> Writing `-keystore ~/keys/palmas-upload.jks` from Cygwin passes it
+> `/cygdrive/c/Users/you/keys/palmas-upload.jks`, which the JVM reads as a
+> Windows path and cannot find:
+>
+> ```
+> keytool error: java.io.FileNotFoundException:
+>   \cygdrive\c\Users\you\keys\palmas-upload.jks (The system cannot find the path specified)
+> ```
+>
+> It is a slow way to fail: the message arrives *after* you have entered the
+> passwords and all six certificate fields, and after the key pair has been
+> generated. Nothing is saved, so it all has to be typed again.
+>
+> A bare filename resolves against the real Windows working directory, which
+> Cygwin and Git Bash both set correctly, so it works from every shell on every
+> platform. If you would rather stay where you are, convert the path instead:
+> `-keystore "$(cygpath -w ~/keys/palmas-upload.jks)"`.
+
+Three of those flags are choices rather than ceremony:
+
+* **`-alias`** names the key inside the keystore. You will repeat it in
+  `keystore.properties`, and it cannot be changed later.
+* **`-validity 10000`** is about 27 years. Google Play requires a certificate
+  valid past 2033, and a key that expires is a key you can no longer ship
+  updates with, so err long.
+* **`-storetype PKCS12`** is the modern format. Without it, older JDKs write the
+  proprietary JKS format and warn about migrating on every use.
+
+### The questions it asks
+
+First it asks you to invent a **keystore password**, twice. This is not issued
+by anyone and cannot be recovered — forgetting it is the same as losing the
+file.
+
+> **The rules are not what you might guess.** `keytool` enforces exactly one:
+> **at least 6 characters**. No maximum, no required mix of character types.
+>
+> But a second rule comes from somewhere else. The password is later read from
+> `keystore.properties` by Java's `Properties.load()`, where `\` is an escape
+> character — so **a backslash in the password is silently swallowed**:
+>
+> ```
+> typed  back\slash    →  Gradle reads  backslash
+> typed  two\\back     →  Gradle reads  two\back
+> ```
+>
+> Spaces, `$`, `#`, `:`, `=` and trailing spaces all survive intact. Only the
+> backslash bites, and it bites late: the build fails with *"Keystore was
+> tampered with, or password was incorrect"*, which blames the keystore rather
+> than the password that was altered on the way in. Avoid `\`, and avoid
+> non-ASCII too — the file has no declared encoding.
+
+Then it asks six certificate fields. **None is validated, and none is shown to
+users** — the Play listing displays your developer account name, not this
+certificate. They are visible to anyone who inspects the APK, and they are
+permanent, so answer them honestly and move on.
+
+| Prompt | Field | Example |
+|---|---|---|
+| First and last name | `CN` | `Dolce Sfogato` |
+| Organizational unit | `OU` | blank, or `Development` |
+| Organization | `O` | `Dolce Sfogato` |
+| City or Locality | `L` | your city |
+| State or Province | `ST` | your state |
+| Two-letter country code | `C` | `US` |
+
+Last it asks for a **key password**, offering to reuse the keystore password if
+you press Return. Reusing it is the usual choice and what PKCS12 effectively
+assumes.
+
+### Back it up
+
+Do this now, while the passwords are still in your head. This is the step that
+is easiest to postpone and most expensive to have postponed.
+
+**Four things, because the keystore alone is useless:**
+
+1. `palmas-upload.jks`
+2. Both passwords — or the one, if you reused it for the key
+3. The alias — `palmas`
+4. The certificate fingerprint
+
+The fingerprint is the one people skip. It is how you confirm that a restored
+copy is the *right* key rather than merely a valid one, and Play displays the
+fingerprint it expects for your app — so if you are ever holding two candidate
+files and a vague memory, this settles it:
+
+```bash
+cd ~/keys
+keytool -list -v -keystore palmas-upload.jks -alias palmas | grep -A1 "SHA256:"
+```
+
+**Keep two copies, in different places, at least one off this machine.** A
+password manager entry with the file attached is the tidiest arrangement: key,
+passwords, alias and fingerprint together, encrypted, and already part of
+something you back up. An encrypted archive in cloud storage does the job too —
+though not with the passwords in plain text beside it.
+
+Never in the repository. `*.jks`, `*.keystore` and `keystore.properties` are all
+gitignored so that this cannot happen by accident.
+
+**Write down what it is for.** In three years, a file called
+`palmas-upload.jks` with nothing beside it is one you will be afraid to delete
+and unable to use. A single line — *Palmas Android signing key, created
+2026-09-03, alias `palmas`* — is enough.
+
+### Point the build at it
+
+Create `src-capacitor/android/keystore.properties`:
+
+```properties
+storeFile=C:/Users/you/keys/palmas-upload.jks
+storePassword=your keystore password
+keyAlias=palmas
+keyPassword=your key password
+```
+
+> ⚠️ **Write the path with forward slashes, even on Windows.** This is a Java
+> properties file, so `\` is an escape character and the path you would
+> naturally type is quietly destroyed:
+>
+> ```
+> storeFile=C:\Users\dws\keys\palmas-upload.jks
+>   →  Gradle reads  C:Usersdwskeyspalmas-upload.jks
+> ```
+>
+> Forward slashes work perfectly well in Java on Windows and need no escaping.
+> Doubling the backslashes — `C:\\Users\\dws\\…` — also works, if you prefer.
+> This is the same escaping rule that eats a backslash in the passwords above.
+
+> ⚠️ **A relative `storeFile` resolves against `src-capacitor/android`**, not
+> the repository root, because `build.gradle` reads it through
+> `rootProject.file(...)` and the Gradle root project *is* that directory. A
+> path that looks right from the repo root will not be found. An absolute path
+> avoids the question entirely.
+
+The file is gitignored, along with `*.jks` and `*.keystore`, so neither the
+keystore nor the passwords can be committed by accident. Check that for
+yourself rather than taking it on trust:
+
+```bash
+git check-ignore -v src-capacitor/android/keystore.properties
+```
+
+Note that the passwords sit in **plain text** in that file. That is the standard
+Android arrangement, and it means the password protects you from someone who
+obtains the keystore *without* the properties file — not from anyone with access
+to your working tree.
+
+With the file in place, `npx quasar build -m capacitor -T android` produces
+`app-release.apk` rather than `app-release-unsigned.apk`. That change of name is
+the quickest confirmation that signing actually happened.
+
 ## Building the app
 
 ```bash
@@ -364,7 +613,17 @@ dist/capacitor/android/apk/release/app-release.apk
 
 Signing uses `src-capacitor/android/keystore.properties` (keystore path, alias
 and passwords). If that file is missing, the build produces an *unsigned* APK
-instead.
+instead — and **the file is named differently**, which is easy to miss when
+looking for the name above:
+
+```
+dist/capacitor/android/apk/release/app-release-unsigned.apk
+```
+
+Gradle appends the suffix itself, so the name tells you which you have without
+inspecting the signature. An unsigned APK is fine for reading the build output
+or checking its size; it cannot be installed on a device, and the Play Store
+will not take it.
 
 For testing on an emulator, a debug build straight through Gradle is quicker and
 needs no keystore:
@@ -403,7 +662,8 @@ Two harmless warnings appear on the way past:
 
 ## Generating the AAB for the Play Store
 
-Google Play requires an **AAB** (Android App Bundle), not an APK.
+Google Play requires an **AAB** (Android App Bundle), not an APK. It must be
+signed, so this needs [a keystore](#creating-a-keystore) first.
 
 > ⚠️ The `--aab` flag of `quasar build` is **not honored** — still true as of
 > `@quasar/app-vite` 3.8.1, whose Capacitor mode has no handling for it at all;
@@ -425,8 +685,11 @@ The signed release **AAB** is written to:
 src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-Google Play rejects a `versionCode` that has already been published, so always
-increase the version before building a release you intend to upload.
+Google Play rejects a `versionCode` that has already been published. That is
+handled for you: the `versionCode` is the git commit count, so any build made
+from a later commit already carries a higher one, and re-uploading the same
+build is the only way to trip over it. See
+[Version numbering](#version-numbering).
 
 ## Installing on a device or emulator
 
@@ -438,9 +701,11 @@ trip over:
 |---|---|
 | `./gradlew assembleDebug` | `src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk` |
 | `npx quasar build -m capacitor -T android` | `dist/capacitor/android/apk/release/app-release.apk` |
+| the same, with no `keystore.properties` | `dist/capacitor/android/apk/release/app-release-unsigned.apk` |
 
 The debug one is what you want while developing: no keystore, and it installs
-alongside nothing else.
+alongside nothing else. The unsigned release will not install at all — `adb
+install` refuses it with `INSTALL_PARSE_FAILED_NO_CERTIFICATES`.
 
 ```bash
 # List connected devices/emulators (each with its serial)
