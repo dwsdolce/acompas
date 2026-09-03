@@ -29,20 +29,21 @@ def appVersion = packageJson.version.toString()                      // e.g. "1.
 // only displayed there, but a wrong versionCode is a store problem: a shallow
 // clone yields 1, Play accepts it, and every later upload is then refused as
 // not higher. Failing here is far cheaper than finding out at upload.
-def gitCount = new ByteArrayOutputStream()
-def gitResult = exec {
+// providers.exec rather than the project-level exec(Closure): that form is
+// deprecated in Gradle 8 and gone in 9, and this file is already carrying
+// warnings it cannot fix from its dependencies without adding one it can.
+def gitProcess = providers.exec {
     commandLine 'git', 'rev-list', '--count', 'HEAD'
-    workingDir rootProject.file("../..")
-    standardOutput = gitCount
+    workingDir = rootProject.file("../..")
     ignoreExitValue = true
 }
-def computedVersionCode = gitCount.toString().trim().isInteger()
-        ? gitCount.toString().trim().toInteger()
-        : -1
-if (gitResult.exitValue != 0 || computedVersionCode < 2) {
+def gitExit = gitProcess.result.get().exitValue
+def gitCount = gitProcess.standardOutput.asText.get().trim()
+def computedVersionCode = gitCount.isInteger() ? gitCount.toInteger() : -1
+if (gitExit != 0 || computedVersionCode < 2) {
     throw new GradleException(
         "Cannot determine the build number: 'git rev-list --count HEAD' gave " +
-        "'${gitCount.toString().trim()}'. The Android versionCode is the commit " +
+        "'${gitCount}'. The Android versionCode is the commit " +
         "count, so this needs a full git checkout - a shallow clone (git clone " +
         "--depth, or actions/checkout without fetch-depth: 0) reports 1.")
 }
@@ -84,7 +85,17 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.release
+            // Only sign when there is something to sign with. Assigning the
+            // config unconditionally meant a release build without
+            // keystore.properties failed at :app:packageRelease with
+            // "SigningConfig 'release' is missing required property
+            // 'storeFile'" - and the documentation said it would produce an
+            // unsigned APK instead. Omitting the config is what actually does
+            // that, so anyone can build a release APK to test with, and only
+            // the person holding the keystore can sign one.
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
