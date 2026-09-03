@@ -13,7 +13,6 @@ export default {
   tuning: 'Diapason',
   shortcuts: 'Raccourcis',
   privacy: 'Politique de confidentialité',
-  share: 'Partager',
   source: 'Code source',
   issues: 'Problèmes',
   doc: {
@@ -127,10 +126,14 @@ L'application respecte par défaut la préférence de thème système de votre a
 Palmas est disponible en 9 langues pour servir la communauté flamenco mondiale :
 
 - **Anglais** (en-US) - Langue par défaut
-- **Français** (Français) - Traduction complète
 - **Espagnol** (Español) - Terminologie flamenco native
+- **Français** (Français) - Traduction complète
 - **Allemand** (Deutsch) - Localisation complète
 - **Italien** (Italiano) - Traduction complète de l'interface
+- **Japonais** (日本語)
+- **Chinois** (简体中文) - Simplifié
+- **Arabe** (العربية) - De droite à gauche
+- **Persan** (فارسی) - De droite à gauche
 
 **Fonctionnalités :**
 - Tous les menus, boutons et textes d'aide sont traduits
@@ -177,6 +180,99 @@ Accédez aux options de visualisation via le menu des paramètres. Les changemen
 - Le mode horloge est particulièrement efficace pour les motifs à 12 temps comme la Soleá
 - Le mode compteur aide lors de l'apprentissage des rythmes complexes
 - Le mode points minimise les distractions pour les praticiens avancés`
+        },
+        // Machine-translated and not yet reviewed by a speaker. The flamenco
+        // vocabulary is deliberately left in Spanish.
+        reading: {
+          title: 'Lire l\'affichage',
+          content: `
+**Deux choses à la fois**
+
+Chaque visualisation montre deux choses superposées, et ce ne sont pas les
+mêmes :
+
+- Le **compás** — la pulsation du palo lui-même. C'est le motif abstrait : où
+  tombent les accents dans le cycle, quel que soit celui qui joue.
+- Les **palmas** — ce que frappe réellement l'instrument que vous regardez. Un
+  interprète ne se contente pas de marquer les accents ; chaque instrument joue
+  sa propre figure face à eux.
+
+Les abandolaos en sont l'exemple le plus clair. Leur pulsation tombe sur 6, 2 et
+4, tandis que les palmas claras frappent sur 1 et 3. Un affichage ne montrant
+que le compás contredirait ce que vous entendez.
+
+**La couleur signifie accentué**
+
+- Un point **rouge** est un temps accentué du compás. Les points gris sont les
+  temps non accentués, et ils rétrécissent à mesure qu'ils comptent moins : un
+  temps compté, puis une pulsation non comptée, puis une subdivision à
+  contretemps.
+- Un anneau **bleu** est une frappe accentuée de l'instrument dessiné. Les
+  anneaux plus fins, dans la couleur de premier plan, sont ses frappes plus
+  douces. L'absence d'anneau signifie que cet instrument se tait sur ce temps.
+
+L'anneau est légèrement détaché du point afin de se lire comme un anneau plutôt
+que comme un point plus gros. L'épaisseur porte la même information que la
+couleur, de sorte que rien ne dépend de la distinction entre rouge et bleu.
+
+Le compteur et l'horloge disent la même chose à leur manière : une barre sous le
+chiffre et un repère à l'extérieur du cadran, plus épais ou plus long pour une
+frappe plus forte, et coloré lorsqu'il s'agit de la frappe accentuée.
+
+**Croches**
+
+Un instrument peut aussi jouer sur les contretemps, pas seulement sur les temps.
+La colonne **8e** de la table de mixage l'active instrument par instrument.
+
+Lorsqu'elle est active, les positions à contretemps apparaissent entre les temps
+comptés, dessinées plus petites. Lorsqu'elle ne l'est pas, elles sont toujours
+là mais invisibles, si bien que l'espacement des temps ne bouge jamais.
+
+**Choisir l'instrument dessiné**
+
+Un seul instrument peut être dessiné à la fois : deux figures superposées
+seraient illisibles. La colonne **Affiché** de la table de mixage choisit lequel.
+
+Ce n'est jamais un instrument que vous ne pouvez pas entendre : votre choix tient
+tant que cet instrument reste actif, sinon c'est le premier instrument actif qui
+est dessiné. Comme la table de mixage refuse de tous les désactiver, il y en a
+toujours exactement un.`
+        },
+        sync: {
+          title: 'Décalage audio/visuel',
+          content: `
+**Quand le son et l'animation ne coïncident pas**
+
+Le temps que vous voyez et celui que vous entendez devraient arriver ensemble. Si
+le clic survient *après* l'allumage du point, ce réglage corrige cela : il retient
+l'animation jusqu'à ce que le son la rattrape.
+
+Il se mesure en millisecondes, et le curseur affiche aussi le décalage en
+fraction de temps au tempo courant : 120 ms fixes comptent bien davantage à
+200 bpm qu'à 60.
+
+**Pourquoi cela arrive**
+
+Toute chaîne audio ajoute du retard : la mise en mémoire tampon du navigateur, le
+système d'exploitation, puis ce par quoi le son transite. L'application demande
+déjà au navigateur quelle latence il ajoute et la compense automatiquement. Ce
+qu'elle ne peut pas voir, c'est le reste.
+
+**Le Bluetooth est le coupable habituel.** Les casques et enceintes sans fil
+ajoutent entre 100 et 300 millisecondes environ que rien ne signale, si bien que
+l'application n'a aucun moyen de le savoir. Une sortie filaire ne demande presque
+jamais d'ajustement.
+
+**Comment le régler**
+
+Lancez le métronome, repérez un temps facile à identifier — un temps accentué —
+et montez le curseur jusqu'à ce que le son et l'animation coïncident. Fiez-vous à
+votre oreille plutôt qu'au chiffre : la bonne valeur est celle où ils coïncident,
+et elle différera entre votre casque et vos enceintes.
+
+Le réglage est enregistré sur cet appareil et se conserve d'une session à
+l'autre. Si vous passez du filaire au sans-fil, attendez-vous à devoir le
+changer.`
         }
       }
     },

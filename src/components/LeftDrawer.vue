@@ -84,19 +84,6 @@ div
       would tell users they were following this one. Palmas has no store
       listing and no accounts of its own yet; when it does, they go here.
 
-    q-expansion-item(icon="mdi-share-variant", :label="$t('share')")
-      q-list(no-border, link, inset-separator)
-
-        q-item(clickable, v-ripple, @click="launch('https://www.facebook.com/sharer/sharer.php?u=https://www.dolcesfogato.com/palmas/')")
-          q-item-section(avatar)
-            q-icon(name="mdi-facebook")
-          q-item-section Facebook
-
-        q-item(clickable, v-ripple, @click="launch('https://x.com/share?url=https://www.dolcesfogato.com/palmas/')")
-          q-item-section(avatar)
-            q-icon(name="mdi-alpha-x")
-          q-item-section X
-
     //- Must point at this fork, not upstream. The app is AGPL and is served
       over a network, so section 13 obliges us to offer the source of the
       version people are actually using - which is this one, not A Compás.

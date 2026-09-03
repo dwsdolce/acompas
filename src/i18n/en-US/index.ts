@@ -13,7 +13,6 @@ export default {
   tuning: 'Tuning fork',
   shortcuts: 'Shortcuts',
   privacy: 'Privacy policy',
-  share: 'Share',
   source: 'Source code',
   issues: 'Issues',
   doc: {
@@ -59,7 +58,8 @@ The tempo is the speed of the metronome, measured in beats per minute.`,
           title: 'Instruments mixer',
           content: `
 Select playing instruments (make sure to have at least one active instrument),
-set its own relative volume, and wether playing quarter notes or eighth notes.`,
+set the relative volume of each, choose whether it plays eighth notes as well as
+beats, and pick which one is drawn in the visualization.`,
         },
         improvise: {
           title: 'Improvise',
@@ -127,10 +127,14 @@ The app respects your device's system theme preference by default, but you can o
 Palmas is available in 9 languages to serve the global flamenco community:
 
 - **English** (en-US) - Default language
-- **French** (Français) - Full translation
 - **Spanish** (Español) - Native flamenco terminology
+- **French** (Français) - Full translation
 - **German** (Deutsch) - Complete localization
 - **Italian** (Italiano) - Full interface translation
+- **Japanese** (日本語)
+- **Chinese** (简体中文) - Simplified
+- **Arabic** (العربية) - Right to left
+- **Persian** (فارسی) - Right to left
 
 **Features:**
 - All menus, buttons, and help text are translated
@@ -177,6 +181,94 @@ Access visualization options through the settings menu. Changes apply immediatel
 - Clock mode is particularly effective for 12-beat patterns like Soleá
 - Counter mode helps when learning to count complex rhythms
 - Dots mode minimizes distractions for advanced practitioners`
+        },
+        reading: {
+          title: 'Reading the display',
+          content: `
+**Two things at once**
+
+Every visualization shows two different things layered together, and they are
+not the same thing:
+
+- The **compás** — the pulse of the palo itself. This is the abstract pattern: where the
+  accents fall in the cycle, regardless of who is playing.
+- The **palmas** — what the instrument you are watching actually strikes. A
+  player does not simply hit the accents; each instrument plays its own figure
+  against them.
+
+Abandolaos is the clearest example. Its pulse falls on 6, 2 and 4, while the
+palmas claras strike on 1 and 3. A display showing only the compás would
+contradict what you are hearing.
+
+**Colour means accented**
+
+- A **red** dot is an accented beat of the compás. Grey dots are the
+  unaccented ones, and they shrink as they matter less — a counted beat, then
+  an uncounted pulse, then an off-beat subdivision.
+- A **blue** ring is an accented strike by the instrument being drawn. Thinner
+  rings in the foreground colour are its softer strikes. No ring at all means
+  that instrument is silent on that beat.
+
+The ring is set slightly off the dot so it reads as a ring rather than a
+larger dot. Thickness carries the same information as the colour, so nothing
+depends on telling red from blue.
+
+The counter and the clock say the same thing in their own shapes: a bar under
+the number, and a tick outside the dial, thicker or longer for a harder strike
+and coloured when it is the accented one.
+
+**Eighth notes**
+
+An instrument can play on the half-beats as well as the beats. The **8th**
+column in the instruments mixer turns that on for each instrument separately.
+
+When it is on, the off-beat positions appear between the counted beats, drawn
+smaller. When it is off they are still there but invisible, so the spacing of
+the beats never shifts as you toggle it.
+
+**Choosing which instrument is drawn**
+
+Only one instrument can be drawn at a time — two figures overlaid would be
+unreadable. The **Shown** column in the mixer chooses which one.
+
+It is never an instrument you cannot hear: your choice holds for as long as
+that instrument stays active, and otherwise the first active instrument is
+drawn. Since the mixer will not let you switch everything off, there is always
+exactly one.`
+        },
+        sync: {
+          title: 'Audio/visual delay',
+          content: `
+**When the sound and the animation disagree**
+
+The beat you see and the beat you hear should land together. If the click
+arrives *after* the dot lights up, this setting is the fix: it holds the
+animation back until the sound catches up.
+
+It is measured in milliseconds, and the slider also shows the delay as a
+fraction of a beat at your current tempo — a fixed 120 ms matters far more at
+200 bpm than at 60.
+
+**Why it happens**
+
+Every audio path adds delay: the browser's own buffering, the operating
+system, and then whatever the sound travels through. The app already asks the
+browser how much latency it is adding and compensates for that automatically.
+What it cannot see is the rest.
+
+**Bluetooth is the usual culprit.** Wireless headphones and speakers add
+between roughly 100 and 300 milliseconds that nothing reports, so the app has
+no way to know about it. Wired output rarely needs any adjustment at all.
+
+**How to set it**
+
+Start the metronome, watch a beat you can pick out easily — an accented one —
+and raise the slider until the sound and the animation land together. Trust
+your ear rather than the number: the right value is the one where they agree,
+and it will differ between your headphones and your speakers.
+
+The setting is saved on this device, so it persists between sessions. If you
+switch between wired and wireless, expect to change it back.`
         }
       }
     },

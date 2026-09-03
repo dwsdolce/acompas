@@ -13,7 +13,6 @@ export default {
   tuning: 'Diapasón',
   shortcuts: 'Atajos',
   privacy: 'Política de privacidad',
-  share: 'Compartir',
   source: 'Código fuente',
   issues: 'Problemas',
   doc: {
@@ -127,10 +126,14 @@ La aplicación respeta la preferencia de tema del sistema de tu dispositivo por 
 Palmas está disponible en 9 idiomas para servir a la comunidad flamenca mundial:
 
 - **Inglés** (en-US) - Idioma predeterminado
-- **Francés** (Français) - Traducción completa
 - **Español** (Español) - Terminología flamenca nativa
+- **Francés** (Français) - Traducción completa
 - **Alemán** (Deutsch) - Localización completa
 - **Italiano** (Italiano) - Traducción completa de la interfaz
+- **Japonés** (日本語)
+- **Chino** (简体中文) - Simplificado
+- **Árabe** (العربية) - De derecha a izquierda
+- **Persa** (فارسی) - De derecha a izquierda
 
 **Características:**
 - Todos los menús, botones y textos de ayuda están traducidos
@@ -177,6 +180,95 @@ Accede a las opciones de visualización a través del menú de configuración. L
 - El modo reloj es particularmente efectivo para patrones de 12 golpes como la Soleá
 - El modo contador ayuda al aprender ritmos complejos
 - El modo puntos minimiza distracciones para practicantes avanzados`
+        },
+        // Machine-translated and not yet reviewed by a speaker. The flamenco
+        // vocabulary is deliberately left in Spanish.
+        reading: {
+          title: 'Leer la pantalla',
+          content: `
+**Dos cosas a la vez**
+
+Cada visualización muestra dos cosas superpuestas, y no son lo mismo:
+
+- El **compás** — el pulso del palo en sí. Es el patrón abstracto: dónde caen
+  los acentos en el ciclo, independientemente de quién toque.
+- Las **palmas** — lo que realmente golpea el instrumento que estás mirando. Un
+  intérprete no se limita a marcar los acentos; cada instrumento toca su propia
+  figura frente a ellos.
+
+Los abandolaos son el ejemplo más claro. Su pulso cae en 6, 2 y 4, mientras que
+las palmas claras golpean en 1 y 3. Una pantalla que mostrara solo el compás
+contradiría lo que estás oyendo.
+
+**El color significa acentuado**
+
+- Un punto **rojo** es un golpe acentuado del compás. Los puntos grises son los
+  no acentuados, y se van encogiendo según importan menos: un golpe contado,
+  luego un pulso no contado, luego una subdivisión a contratiempo.
+- Un anillo **azul** es un golpe acentuado del instrumento dibujado. Los anillos
+  más finos en el color de primer plano son sus golpes más suaves. La ausencia
+  de anillo significa que ese instrumento calla en ese golpe.
+
+El anillo va ligeramente separado del punto para que se lea como un anillo y no
+como un punto más grande. El grosor lleva la misma información que el color, así
+que nada depende de distinguir el rojo del azul.
+
+El contador y el reloj dicen lo mismo con sus propias formas: una barra bajo el
+número y una marca fuera de la esfera, más gruesa o más larga cuanto más fuerte
+es el golpe, y coloreada cuando es el acentuado.
+
+**Corcheas**
+
+Un instrumento puede tocar también en los contratiempos, no solo en los golpes.
+La columna **8ª** de la mesa de mezclas lo activa para cada instrumento por
+separado.
+
+Cuando está activada, las posiciones a contratiempo aparecen entre los golpes
+contados, dibujadas más pequeñas. Cuando está desactivada siguen ahí pero
+invisibles, de modo que la separación entre golpes nunca cambia al activarla.
+
+**Elegir qué instrumento se dibuja**
+
+Solo se puede dibujar un instrumento a la vez: dos figuras superpuestas serían
+ilegibles. La columna **Mostrado** de la mesa de mezclas elige cuál.
+
+Nunca es un instrumento que no puedas oír: tu elección se mantiene mientras ese
+instrumento siga activo, y si no, se dibuja el primero que lo esté. Como la mesa
+de mezclas no permite apagarlos todos, siempre hay exactamente uno.`
+        },
+        sync: {
+          title: 'Retardo audio/visual',
+          content: `
+**Cuando el sonido y la animación no coinciden**
+
+El golpe que ves y el que oyes deberían llegar juntos. Si el clic suena
+*después* de que se encienda el punto, este ajuste lo corrige: retiene la
+animación hasta que el sonido la alcanza.
+
+Se mide en milisegundos, y el deslizador muestra además el retardo como fracción
+de un golpe al tempo actual: unos 120 ms fijos importan mucho más a 200 bpm que
+a 60.
+
+**Por qué ocurre**
+
+Toda cadena de audio añade retardo: el propio búfer del navegador, el sistema
+operativo y después aquello por lo que viaja el sonido. La aplicación ya pregunta
+al navegador cuánta latencia está añadiendo y la compensa automáticamente. Lo que
+no puede ver es el resto.
+
+**El Bluetooth suele ser el culpable.** Los auriculares y altavoces inalámbricos
+añaden entre unos 100 y 300 milisegundos que nada declara, así que la aplicación
+no tiene forma de saberlo. La salida por cable rara vez necesita ajuste alguno.
+
+**Cómo ajustarlo**
+
+Pon en marcha el metrónomo, fíjate en un golpe fácil de identificar —uno
+acentuado— y sube el deslizador hasta que el sonido y la animación coincidan.
+Fíate de tu oído más que del número: el valor correcto es aquel en el que
+coinciden, y será distinto con tus auriculares que con tus altavoces.
+
+El ajuste se guarda en este dispositivo, así que se conserva entre sesiones. Si
+alternas entre cable e inalámbrico, cuenta con tener que cambiarlo.`
         }
       }
     },

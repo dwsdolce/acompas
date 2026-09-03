@@ -13,7 +13,6 @@ export default {
   tuning: 'Stimmgabel',
   shortcuts: 'Tastenkürzel',
   privacy: 'Datenschutzerklärung',
-  share: 'Teilen',
   source: 'Quellcode',
   issues: 'Probleme',
   doc: {
@@ -157,6 +156,99 @@ Wählen Sie die Visualisierung, die am besten zu Ihrem Übungsstil passt:
 - Kreisförmige Uhren-Visualisierung
 - Beats um eine Uhr mit animiertem Zeiger angeordnet
 - Bietet intuitive Wahrnehmung des zyklischen Rhythmus`
+        },
+        // Machine-translated and not yet reviewed by a speaker. The flamenco
+        // vocabulary is deliberately left in Spanish.
+        reading: {
+          title: 'Die Anzeige lesen',
+          content: `
+**Zwei Dinge zugleich**
+
+Jede Visualisierung zeigt zwei übereinandergelegte Dinge, und sie sind nicht
+dasselbe:
+
+- Der **compás** — der Puls des palo selbst. Das ist das abstrakte Muster: wo
+  die Akzente im Zyklus liegen, unabhängig davon, wer spielt.
+- Die **palmas** — was das Instrument, das Sie gerade betrachten, tatsächlich
+  schlägt. Ein Spieler trifft nicht einfach die Akzente; jedes Instrument spielt
+  seine eigene Figur dagegen.
+
+Abandolaos ist das deutlichste Beispiel. Sein Puls liegt auf 6, 2 und 4, während
+die palmas claras auf 1 und 3 schlagen. Eine Anzeige, die nur den compás zeigt,
+widerspräche dem, was Sie hören.
+
+**Farbe bedeutet akzentuiert**
+
+- Ein **roter** Punkt ist ein akzentuierter Schlag des compás. Graue Punkte sind
+  die unbetonten, und sie werden kleiner, je weniger sie zählen: ein gezählter
+  Schlag, dann ein ungezählter Puls, dann eine Unterteilung auf dem Off-Beat.
+- Ein **blauer** Ring ist ein akzentuierter Schlag des gezeichneten Instruments.
+  Dünnere Ringe in der Vordergrundfarbe sind seine leiseren Schläge. Gar kein
+  Ring bedeutet, dass dieses Instrument auf diesem Schlag schweigt.
+
+Der Ring sitzt leicht abgesetzt vom Punkt, damit er als Ring gelesen wird und
+nicht als größerer Punkt. Die Stärke trägt dieselbe Information wie die Farbe, so
+dass nichts davon abhängt, Rot von Blau zu unterscheiden.
+
+Zähler und Uhr sagen dasselbe in ihrer eigenen Form: ein Balken unter der Zahl
+und ein Strich außerhalb des Zifferblatts, dicker oder länger bei einem härteren
+Schlag und eingefärbt, wenn es der akzentuierte ist.
+
+**Achtelnoten**
+
+Ein Instrument kann auch auf den Zwischenschlägen spielen, nicht nur auf den
+Schlägen. Die Spalte **8tel** im Instrumenten-Mixer schaltet das für jedes
+Instrument einzeln ein.
+
+Ist sie aktiv, erscheinen die Off-Beat-Positionen zwischen den gezählten
+Schlägen, kleiner gezeichnet. Ist sie es nicht, sind sie weiterhin vorhanden,
+aber unsichtbar, so dass sich der Abstand der Schläge nie verschiebt.
+
+**Auswählen, welches Instrument gezeichnet wird**
+
+Es kann immer nur ein Instrument gezeichnet werden: zwei übereinanderliegende
+Figuren wären unlesbar. Die Spalte **Angezeigt** im Mixer wählt aus, welches.
+
+Es ist nie ein Instrument, das Sie nicht hören können: Ihre Wahl gilt, solange
+dieses Instrument aktiv bleibt, andernfalls wird das erste aktive gezeichnet. Da
+der Mixer nicht zulässt, alle abzuschalten, gibt es immer genau eines.`
+        },
+        sync: {
+          title: 'Audio-/Bildverzögerung',
+          content: `
+**Wenn Klang und Animation nicht zusammenpassen**
+
+Der Schlag, den Sie sehen, und der, den Sie hören, sollten zusammen eintreffen.
+Kommt das Klicken *nach* dem Aufleuchten des Punktes, ist diese Einstellung die
+Abhilfe: Sie hält die Animation zurück, bis der Klang aufgeholt hat.
+
+Sie wird in Millisekunden gemessen, und der Regler zeigt die Verzögerung
+zusätzlich als Bruchteil eines Schlags beim aktuellen Tempo — feste 120 ms fallen
+bei 200 bpm weit stärker ins Gewicht als bei 60.
+
+**Warum das passiert**
+
+Jeder Audioweg fügt Verzögerung hinzu: die Pufferung des Browsers, das
+Betriebssystem und dann alles, wodurch der Klang läuft. Die App fragt den Browser
+bereits, wie viel Latenz er hinzufügt, und gleicht das automatisch aus. Was sie
+nicht sehen kann, ist der Rest.
+
+**Bluetooth ist meist der Übeltäter.** Drahtlose Kopfhörer und Lautsprecher
+fügen etwa 100 bis 300 Millisekunden hinzu, die nirgends gemeldet werden, so dass
+die App nichts davon wissen kann. Kabelgebundene Ausgabe braucht selten eine
+Anpassung.
+
+**So stellen Sie es ein**
+
+Starten Sie das Metronom, achten Sie auf einen gut erkennbaren Schlag — einen
+akzentuierten — und schieben Sie den Regler hoch, bis Klang und Animation
+zusammenfallen. Vertrauen Sie Ihrem Ohr mehr als der Zahl: der richtige Wert ist
+der, bei dem beide übereinstimmen, und er wird bei Kopfhörern anders sein als bei
+Lautsprechern.
+
+Die Einstellung wird auf diesem Gerät gespeichert und bleibt zwischen Sitzungen
+erhalten. Wenn Sie zwischen Kabel und Funk wechseln, rechnen Sie damit, sie
+wieder ändern zu müssen.`
         }
       }
     },

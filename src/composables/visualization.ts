@@ -4,7 +4,8 @@ import { usePatternStore } from 'src/stores/patterns'
 import { useSessionStore } from 'src/stores/session'
 
 /**
- * What a slot is in the compás — the theory, identical for every instrument.
+ * What a slot is in the compás — the abstract pattern, identical for every
+ * instrument.
  *
  *   accent — a stressed beat, listed in the pattern's `accents`
  *   beat   — a counted beat, i.e. one carrying a label

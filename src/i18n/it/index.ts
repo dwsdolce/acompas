@@ -13,7 +13,6 @@ export default {
   tuning: 'Diapason',
   shortcuts: 'Scorciatoie',
   privacy: 'Politica sulla privacy',
-  share: 'Condividi',
   source: 'Codice sorgente',
   issues: 'Problemi',
   doc: {
@@ -157,6 +156,97 @@ Scegli la visualizzazione che si adatta meglio al tuo stile di pratica:
 - Visualizzazione circolare tipo quadrante orologio
 - Battiti disposti attorno a un orologio con lancetta animata
 - Fornisce sensazione intuitiva del ritmo ciclico`
+        },
+        // Machine-translated and not yet reviewed by a speaker. The flamenco
+        // vocabulary is deliberately left in Spanish.
+        reading: {
+          title: 'Leggere il display',
+          content: `
+**Due cose insieme**
+
+Ogni visualizzazione mostra due cose sovrapposte, e non sono la stessa cosa:
+
+- Il **compás** — la pulsazione del palo stesso. È lo schema astratto: dove
+  cadono gli accenti nel ciclo, indipendentemente da chi suona.
+- Le **palmas** — ciò che lo strumento che stai guardando colpisce davvero. Chi
+  suona non si limita a marcare gli accenti; ogni strumento suona la propria
+  figura contro di essi.
+
+Gli abandolaos sono l'esempio più chiaro. La loro pulsazione cade su 6, 2 e 4,
+mentre le palmas claras colpiscono su 1 e 3. Una visualizzazione che mostrasse
+solo il compás contraddirebbe ciò che stai ascoltando.
+
+**Il colore indica l'accento**
+
+- Un punto **rosso** è un battito accentato del compás. I punti grigi sono
+  quelli non accentati, e si rimpiccioliscono man mano che contano meno: un
+  battito contato, poi una pulsazione non contata, poi una suddivisione in
+  levare.
+- Un anello **blu** è un colpo accentato dello strumento disegnato. Gli anelli
+  più sottili, nel colore di primo piano, sono i suoi colpi più deboli.
+  L'assenza di anello significa che quello strumento tace su quel battito.
+
+L'anello è leggermente staccato dal punto, così da leggersi come un anello e non
+come un punto più grande. Lo spessore porta la stessa informazione del colore,
+quindi nulla dipende dal distinguere il rosso dal blu.
+
+Il contatore e l'orologio dicono la stessa cosa con le loro forme: una barra
+sotto il numero e una tacca fuori dal quadrante, più spessa o più lunga per un
+colpo più forte, e colorata quando è quello accentato.
+
+**Crome**
+
+Uno strumento può suonare anche sui levare, non solo sui battiti. La colonna
+**8ª** nel mixer degli strumenti la attiva per ciascuno strumento separatamente.
+
+Quando è attiva, le posizioni in levare compaiono fra i battiti contati,
+disegnate più piccole. Quando non lo è restano al loro posto ma invisibili, così
+la spaziatura dei battiti non si sposta mai.
+
+**Scegliere quale strumento viene disegnato**
+
+Si può disegnare un solo strumento alla volta: due figure sovrapposte sarebbero
+illeggibili. La colonna **Mostrato** nel mixer sceglie quale.
+
+Non è mai uno strumento che non puoi sentire: la tua scelta vale finché quello
+strumento resta attivo, altrimenti viene disegnato il primo strumento attivo.
+Poiché il mixer non permette di spegnerli tutti, ce n'è sempre esattamente uno.`
+        },
+        sync: {
+          title: 'Ritardo audio/video',
+          content: `
+**Quando suono e animazione non coincidono**
+
+Il battito che vedi e quello che senti dovrebbero arrivare insieme. Se il clic
+arriva *dopo* che il punto si accende, è questa impostazione a correggerlo:
+trattiene l'animazione finché il suono non la raggiunge.
+
+Si misura in millisecondi, e il cursore mostra anche il ritardo come frazione di
+un battito al tempo corrente: 120 ms fissi pesano molto di più a 200 bpm che a
+60.
+
+**Perché succede**
+
+Ogni catena audio aggiunge ritardo: il buffering del browser, il sistema
+operativo e poi tutto ciò che il suono attraversa. L'app chiede già al browser
+quanta latenza sta aggiungendo e la compensa automaticamente. Ciò che non può
+vedere è il resto.
+
+**Il Bluetooth è di solito il colpevole.** Cuffie e altoparlanti senza fili
+aggiungono all'incirca fra 100 e 300 millisecondi che nessuno dichiara, quindi
+l'app non ha modo di saperlo. L'uscita via cavo raramente richiede una
+regolazione.
+
+**Come impostarlo**
+
+Avvia il metronomo, osserva un battito facile da riconoscere — uno accentato — e
+alza il cursore finché suono e animazione non coincidono. Fidati dell'orecchio
+più che del numero: il valore giusto è quello in cui coincidono, e sarà diverso
+con le cuffie rispetto agli altoparlanti.
+
+L'impostazione viene salvata su questo dispositivo, quindi si conserva fra una
+sessione e l'altra. Se passi da cavo a senza fili, aspettati di doverla
+cambiare.`
         }
       }
     },
