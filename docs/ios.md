@@ -92,8 +92,8 @@ produces a number Apple will accept as higher than the last. See
 [Version numbering](#version-numbering). The name, subtitle and bundle
 identifier the listing uses are in [store-listing.md](store-listing.md).
 
-Run `yarn icons:all` before archiving if the artwork has changed since the last
-one; see [Icons](#icons) for why that matters and how it fails if you skip it.
+The app icon looks after itself: every iOS build flattens it first. See
+[Icons](#icons) for what that is guarding against.
 
 > This section is written from Apple's documented flow and has **not yet been
 > walked end to end for this app**. Treat it as the shape of the process rather
@@ -120,8 +120,12 @@ setting back to `NO`; the rest of the migration is fine to keep.
 
 ### `Invalid Image - the app icon can't contain an alpha channel`
 
-App Store Connect rejected the upload. Run `yarn icons:all` and archive again —
-see [Icons](#icons). A device build installs happily with the alpha channel
+App Store Connect rejected the upload. This should no longer be reachable: every
+iOS build flattens the icon first, and fails loudly if it cannot - see
+[Icons](#icons). Seeing it anyway means the archive was made from an icon the
+build never touched, so check that the `beforeBuild` hook in `quasar.config.js`
+is still there and that the archive came from a build rather than from a stale
+`Assets.xcassets`. A device build installs happily with the alpha channel
 present, which is why this only ever appears at upload.
 
 ### The app shows a blank screen
@@ -174,17 +178,31 @@ account, change it there, or pick the team in Xcode under the App target →
 
 ## Icons
 
-`yarn icons:all` regenerates the committed iOS assets and then runs
-`packaging/prepare-ios-assets.mjs`, which flattens the app icon's alpha channel.
-App Store Connect rejects an icon with transparency ("Invalid Image - the app
-icon can't contain an alpha channel"), and a device build installs happily
-either way, so the failure would otherwise surface only at upload.
+App Store Connect rejects an app icon that carries transparency - *"Invalid
+Image - the app icon can't contain an alpha channel"* - and it rejects it at
+upload. A device build installs happily either way, so without a guard the
+failure arrives long after the icon was made. `resources/icon.png` does have an
+alpha channel, so this is a live hazard rather than a precaution.
 
-Unlike the rest of this page, that step is not macOS-only: it is a Node script
-and runs anywhere ffmpeg does, so the icons can be regenerated on whatever
-machine is to hand. Only the Xcode build needs a Mac. It does have to be run
-**on the Mac before archiving**, though, because what it fixes is checked at
-upload and nowhere earlier.
+**Nothing needs doing about it.** Every iOS build runs
+`packaging/prepare-ios-assets.mjs` first, through the `beforeBuild` hook in
+`quasar.config.js`. It reads the committed icon, leaves it alone if it is
+already flat, and flattens it with ffmpeg if not - then re-reads the result
+rather than trusting ffmpeg's exit status, because this is precisely the step
+whose failure would otherwise only appear at upload. It also writes the 1x and
+2x names the splash asset catalogue insists on.
+
+The hook is scoped to `-T ios` alone. `yarn icons:all` regenerates 56 tracked
+files across both native platforms, so hanging that off an iOS build would
+rewrite every Android launcher icon as a side effect; this one step touches two
+files and is idempotent, so on a clean tree it costs milliseconds and leaves the
+tree clean.
+
+Run `yarn icons:all` by hand only when the **artwork itself** changes - it is
+what regenerates the icons from `resources/icon.png` in the first place. That is
+not macOS-only: it is a Node script and runs anywhere ffmpeg does, so the icons
+can be regenerated on whatever machine is to hand. Only the Xcode build needs a
+Mac.
 
 ## Version numbering
 

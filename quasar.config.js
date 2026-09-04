@@ -12,7 +12,7 @@
 
 
 import { defineConfig } from '@quasar/app-vite'
-import { execSync } from 'node:child_process'
+import { execSync, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
@@ -176,6 +176,33 @@ export default defineConfig(function (ctx) {
       extendViteConf (viteConf) {
         if (ctx.mode.spa && ctx.prod) {
           viteConf.base = './'
+        }
+      },
+
+      // The iOS app icon has to be flat. App Store Connect refuses one with an
+      // alpha channel, and it refuses it at upload - a device build installs
+      // happily either way - so the failure lands hours or days after whoever
+      // generated the icon has stopped thinking about it. resources/icon.png
+      // genuinely has an alpha channel, so this is a live hazard and not a
+      // precaution.
+      //
+      // Only the iOS target, because that is the only place it matters, and
+      // only this one step: `yarn icons:all` regenerates 56 tracked files
+      // across both native platforms, so building for iOS would rewrite every
+      // Android launcher icon as a side effect. prepare-ios-assets.mjs touches
+      // two files and is idempotent - it reads the committed icon, says so and
+      // stops if it is already flat - so on a clean tree this costs a few
+      // milliseconds and leaves the tree clean, while a build can no longer
+      // carry an icon that upload will reject.
+      beforeBuild () {
+        if (!ctx.mode.capacitor || ctx.targetName !== 'ios') return
+
+        const script = path.join(__dirname, 'packaging', 'prepare-ios-assets.mjs')
+        const result = spawnSync(process.execPath, [script], { stdio: 'inherit' })
+
+        if (result.error !== undefined) throw result.error
+        if (result.status !== 0) {
+          throw new Error('packaging/prepare-ios-assets.mjs failed, so the iOS assets are not ready to ship')
         }
       },
       // viteVuePluginOptions: {},
