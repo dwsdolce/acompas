@@ -9,6 +9,8 @@ reverse. Run the build on the platform you want a package for.
 **Every build**
 
 * [Building](#building) — one command on every platform
+* [The Electron runtime](#the-electron-runtime) — the one prerequisite
+  `yarn install` does not provide
 * [What comes out](#what-comes-out)
 * [When a build fails](#when-a-build-fails) — indexed by what you saw
 
@@ -46,6 +48,33 @@ image — see [Signing on macOS](#signing-on-macos).
 
 `--unpacked` writes `dist/electron/UnPackaged`; the full build writes
 `dist/electron/Packaged`.
+
+### The Electron runtime
+
+**A machine set up by `setup.ps1` / `setup.sh` needs nothing here** — the script
+fetches this, and [says so](../README.md#what-it-covers-and-what-it-does-not) as
+part of guaranteeing the desktop build works.
+
+It gets its own section because it is the one desktop prerequisite that
+`yarn install` does not provide. The `electron` package on npm is a wrapper
+around a ~150MB runtime downloaded separately, and Electron 44 removed the
+postinstall hook that used to fetch it, so an install leaves a package that
+looks complete around a binary that is not there.
+
+That means it can go missing on a machine that has built before — after an
+Electron version bump, or on a `node_modules` installed without the setup
+script. The build then stops with
+[The Electron runtime is missing](#the-electron-runtime-is-missing-so-there-is-nothing-to-package).
+Re-run the setup script, or fetch it directly:
+
+```bash
+npx install-electron
+```
+
+Either way it is paid for once per machine rather than once per clone: the
+download is cached outside the project — `~/.cache/electron` on Linux,
+`~/Library/Caches/electron` on macOS, `%LOCALAPPDATA%\electron\Cache` on
+Windows.
 
 ### What comes out
 
@@ -133,9 +162,17 @@ Close it and try again.
 
 ### `The Electron runtime is missing, so there is nothing to package`
 
-Electron delivers its runtime through its own postinstall rather than as files
-in the package, and that step can be skipped without failing `yarn install`.
-Fix it with `node node_modules/electron/install.js`.
+The `electron` package is a wrapper; its runtime is downloaded separately and
+`yarn install` does not do it — see [The Electron runtime](#the-electron-runtime).
+Re-run `setup.ps1` / `setup.sh`, which fetches it, or do it directly:
+
+```bash
+npx install-electron
+```
+
+`node node_modules/electron/install.js` is the same script under another name,
+and is what the error message quotes because it needs no `node_modules/.bin` on
+PATH.
 
 ### `No application bundle was produced under dist/electron/Packaged` (macOS)
 

@@ -154,7 +154,9 @@ Everything below is done once. Come back here only when
 [Building](#building) sends you.
 
 Do the [Getting started](../README.md#getting-started) steps first — the
-prerequisites there are assumed by everything here.
+prerequisites there are assumed by everything here. The setup script stops at
+the web and desktop builds and does not touch any of what follows; see
+[what it covers](../README.md#what-it-covers-and-what-it-does-not).
 
 ## Prerequisites
 

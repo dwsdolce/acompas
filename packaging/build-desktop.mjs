@@ -128,10 +128,11 @@ if (!existsSync(path.join(ROOT, 'node_modules'))) {
   fail('Dependencies are not installed. Run: node scripts/setup.mjs')
 }
 
-// Electron delivers its runtime through its own postinstall rather than as
-// files in the package, and that step can be skipped without failing `yarn
-// install`. Without it electron-builder has nothing to package, and the error
-// it gives says very little.
+// The `electron` package is a wrapper around a runtime downloaded separately,
+// and as of Electron 44 no install fetches it: the postinstall hook that used
+// to is gone, replaced by an `install-electron` command. So a clean `yarn
+// install` reaches here with nothing for electron-builder to package, and the
+// error it gives on its own says very little.
 if (!existsSync(path.join(ROOT, 'node_modules', 'electron', 'path.txt'))) {
   fail('The Electron runtime is missing, so there is nothing to package.\n' +
     '       Fix it with: node node_modules/electron/install.js')

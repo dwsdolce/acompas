@@ -15,6 +15,7 @@ installs things, or if you want to know what it is checking and why.
 - [Yarn](#yarn)
 - [ffmpeg](#ffmpeg)
 - [Clone and install](#clone-and-install)
+- [The Electron runtime](#the-electron-runtime) — a separate step, for desktop builds
 - [Regenerating icons and audio](#regenerating-icons-and-audio)
 
 ## Prerequisites
@@ -316,6 +317,27 @@ immediately ready to build:
    `tsconfig.json` extends. Without it, lint and tests cannot resolve types.
 2. `yarn icons` — generates the web and Electron icons.
 3. `yarn audio` — converts the `.wav` masters into the formats the app plays.
+
+### The Electron runtime
+
+Only for the desktop build and the Electron end-to-end tests — everything web
+works without it:
+
+```bash
+npx install-electron
+```
+
+`yarn install` does not fetch it. The `electron` package on npm is a wrapper
+around a ~150MB runtime downloaded separately, and Electron 44 removed the
+postinstall hook that used to do the downloading, so the package installs
+looking complete around a binary that is absent. `yarn build:desktop` then
+stops with *"The Electron runtime is missing, so there is nothing to package"*.
+
+This is the step the setup script would have done for you — it is here because
+this page is the by-hand equivalent, and without it the desktop build is the one
+thing doing it by hand would leave you short of. The download is cached outside
+the project, so it is paid for once per machine rather than once per clone. See
+[docs/desktop.md](desktop.md#the-electron-runtime).
 
 ## Regenerating icons and audio
 

@@ -144,11 +144,17 @@ async function choose (question, options) {
  * Echoes back whichever entry point they actually used - the bootstrap scripts
  * set ACOMPAS_ENTRY - because being told to resume with a command you did not
  * type reads as a different instruction, not the same one again.
+ *
+ * `lead` names what has to happen before resuming, and defaults to the usual
+ * reason a step cannot finish here: this shell's environment is settled and a
+ * new one is needed. Callers that have just printed an instruction of their own
+ * pass "Once that is done," instead. Either way the sentence says what to do -
+ * a bare "Then run this again" reads as though a step were missing.
  */
-function resumeHere (why) {
+function resumeHere (why, lead = 'Open a new terminal, then') {
   const entry = process.env.ACOMPAS_ENTRY ?? 'node scripts/setup.mjs'
   console.log(`\n  ${why}`)
-  console.log('  Then run this again to pick up where you left off:')
+  console.log(`  ${lead} run this again to pick up where you left off:`)
   console.log(`\n      ${entry}\n`)
 }
 
@@ -487,14 +493,33 @@ function canWriteTo (dir) {
   }
 }
 
+/** Report the yarn now on PATH. */
+function reportYarn (yarn) {
+  say('ok', 'yarn', `${capture(yarn, ['--version']) ?? 'present'}  (${yarn})`)
+  return 'ok'
+}
+
+/**
+ * What to report once Corepack has been enabled.
+ *
+ * Corepack writes its shims beside Node, and that directory is usually already
+ * on PATH - a version manager put it there, or the installer did - so the shell
+ * that started this can see yarn immediately and there is nothing to resume.
+ * Only when the shim landed somewhere this terminal never picked up does a new
+ * one become necessary, so look before saying so.
+ */
+function afterCorepack (why) {
+  const yarn = which('yarn')
+  if (yarn !== null) return reportYarn(yarn)
+  resumeHere(why)
+  return 'stop'
+}
+
 async function checkYarn () {
   heading('Yarn')
 
   const yarn = which('yarn')
-  if (yarn !== null) {
-    say('ok', 'yarn', `${capture(yarn, ['--version']) ?? 'present'}  (${yarn})`)
-    return 'ok'
-  }
+  if (yarn !== null) return reportYarn(yarn)
 
   say('fail', 'yarn', 'not found - Corepack provides the pinned yarn 1.22.22')
 
@@ -517,45 +542,44 @@ async function checkYarn () {
   // the user profile and needs none.
   const nodeDir = path.dirname(process.execPath)
   if (canWriteTo(nodeDir)) {
-    if (run(process.execPath, [entry, 'enable'])) {
-      resumeHere('Corepack is enabled, but the new yarn shim is not on this shell\'s PATH.')
-      return 'stop'
-    }
-    return 'fail'
+    if (!run(process.execPath, [entry, 'enable'])) return 'fail'
+    return afterCorepack('Corepack is enabled, but the new yarn shim is not on this shell\'s PATH.')
   }
 
   console.log(`\n  ${nodeDir} is not writable by you, so this needs elevation.`)
 
   if (!WIN) {
     console.log('  Run:  sudo corepack enable')
-    resumeHere('Corepack has to be enabled first.')
+    resumeHere('Corepack has to be enabled first.', 'Once that is done,')
     return 'stop'
   }
 
   if (await confirm('Launch an elevated PowerShell to run it? (a UAC prompt will appear)')) {
     const command = `Start-Process -Verb RunAs -Wait -FilePath '${process.execPath}' -ArgumentList '"${entry}"','enable'`
     run('powershell', ['-NoProfile', '-Command', command])
-    resumeHere('If you approved the prompt, Corepack is now enabled.')
-    return 'stop'
+    return afterCorepack('If you approved the prompt Corepack is enabled, but the new yarn shim is not on this shell\'s PATH.')
   }
 
   console.log('\n  Open PowerShell with "Run as administrator" and run:')
   console.log('\n      corepack enable\n')
-  resumeHere('Corepack has to be enabled first.')
+  resumeHere('Corepack has to be enabled first.', 'Once that is done,')
   return 'stop'
 }
 
 // ----------------------------------------------------------------- ffmpeg
 
+/** Report the ffmpeg now on PATH. */
+function reportFfmpeg (ffmpeg) {
+  const first = (capture(ffmpeg, ['-version']) ?? '').split('\n')[0]
+  say('ok', 'ffmpeg', `${first || 'present'}`)
+  return 'ok'
+}
+
 async function checkFfmpeg () {
   heading('ffmpeg')
 
   const ffmpeg = which('ffmpeg')
-  if (ffmpeg !== null) {
-    const first = (capture(ffmpeg, ['-version']) ?? '').split('\n')[0]
-    say('ok', 'ffmpeg', `${first || 'present'}`)
-    return 'ok'
-  }
+  if (ffmpeg !== null) return reportFfmpeg(ffmpeg)
 
   say('fail', 'ffmpeg', 'not found - the app has no playable audio without it')
 
@@ -574,7 +598,7 @@ async function checkFfmpeg () {
 
   if (installer === null) {
     console.log('\n  Install ffmpeg with your package manager, or from https://ffmpeg.org/download.html')
-    resumeHere('ffmpeg has to be on PATH before dependencies are installed.')
+    resumeHere('ffmpeg has to be on PATH before dependencies are installed.', 'Once that is done,')
     return 'stop'
   }
 
@@ -584,11 +608,75 @@ async function checkFfmpeg () {
     return 'stop'
   }
 
+  // A package manager that installs into a directory already on PATH - apt and
+  // brew both do - leaves ffmpeg runnable here and now, so there is no reason
+  // to send anyone to a new terminal. winget's shim directory is the case that
+  // usually is not inherited.
+  const installed = which('ffmpeg')
+  if (installed !== null) return reportFfmpeg(installed)
+
   resumeHere('ffmpeg is installed, but PATH changes do not reach a running terminal.')
   return 'stop'
 }
 
 // ------------------------------------------------------------- dependencies
+
+/**
+ * The Electron runtime, which is not part of the `electron` npm package.
+ *
+ * That package is a wrapper around a ~150MB binary downloaded separately, and
+ * as of Electron 44 nothing downloads it during an install: the postinstall
+ * hook that used to is gone, replaced by an `install-electron` command you are
+ * expected to run. So a completely successful `yarn install` still leaves the
+ * desktop build and the Electron end-to-end specs with nothing to launch, and
+ * the only sign is a package directory that looks perfectly normal.
+ *
+ * It is only a warning: everything web works without it.
+ */
+async function checkElectron () {
+  const electronDir = path.join(ROOT, 'node_modules', 'electron')
+  if (!existsSync(electronDir)) return
+
+  const runtime = path.join(electronDir, 'path.txt')
+  if (existsSync(runtime)) {
+    say('ok', 'electron', 'runtime present')
+    return
+  }
+
+  // "Installed" would be misleading: the npm package is here, and only the
+  // runtime it wraps is absent. Naming both halves is the difference between a
+  // puzzling message and an obvious one.
+  say('warn', 'electron', 'npm package present, but the Electron runtime is missing')
+  console.log('         the desktop build and its tests have nothing to launch')
+
+  if (CHECK_ONLY) {
+    console.log('         fix: npx install-electron')
+    console.log('              ~150MB to download, ~370MB once unpacked')
+    return
+  }
+
+  if (!await confirm('Fetch the Electron runtime now? Desktop builds and their tests need it.')) return
+
+  // install.js says nothing at all when it succeeds, so check the artefact
+  // rather than trusting the exit status, and say so either way - an echoed
+  // command followed by silence tells you nothing about what happened. The
+  // script is invoked by path rather than as `npx install-electron` because
+  // node_modules/.bin need not be on PATH here.
+  const ok = run(process.execPath, [path.join(electronDir, 'install.js')]) &&
+    existsSync(runtime)
+
+  if (ok) {
+    say('ok', 'electron', 'runtime fetched')
+    // It was counted as a warning moments ago and has just been resolved;
+    // leaving it counted would make the closing summary contradict the screen
+    // directly above it.
+    warnings--
+    return
+  }
+
+  console.log('\n  That did not work. Run it by hand and read the error:')
+  console.log('\n      npx install-electron\n')
+}
 
 async function checkDependencies () {
   heading('Project')
@@ -614,45 +702,9 @@ async function checkDependencies () {
     say('warn', '.quasar', 'missing - run: npx quasar prepare')
   }
 
-  // Electron delivers its ~250MB binary through its own postinstall rather than
-  // as files inside the package, and that step can be skipped without failing
-  // `yarn install`. The package then looks perfectly installed while the
-  // desktop build and the Electron end-to-end specs have nothing to launch. It
-  // is only a warning: everything web works without it.
-  const electronDir = path.join(ROOT, 'node_modules', 'electron')
-  const electronReady = existsSync(path.join(electronDir, 'path.txt'))
-  if (rootInstalled && existsSync(electronDir) && !electronReady) {
-    // "Installed" would be misleading: the npm package is here, and only the
-    // runtime it fetches separately is absent. Naming both halves is the
-    // difference between a puzzling message and an obvious one.
-    say('warn', 'electron', 'npm package present, but the Electron runtime is missing')
-    console.log('         the desktop build and its tests have nothing to launch')
-    const installer = path.join(electronDir, 'install.js')
-
-    if (CHECK_ONLY) {
-      console.log('         fix: node node_modules/electron/install.js')
-      console.log('              ~150MB to download, ~370MB once unpacked')
-    } else if (await confirm('Fetch the Electron runtime now? Desktop builds and their tests need it.')) {
-      // install.js says nothing at all when it succeeds, so check the artefact
-      // rather than trusting the exit status, and say so either way - an echoed
-      // command followed by silence tells you nothing about what happened.
-      const ok = run(process.execPath, [installer]) &&
-        existsSync(path.join(electronDir, 'path.txt'))
-
-      if (ok) {
-        say('ok', 'electron', 'runtime fetched')
-        // It was counted as a warning moments ago and has just been resolved;
-        // leaving it counted would make the closing summary contradict the
-        // screen directly above it.
-        warnings--
-      } else {
-        console.log('\n  That did not work. Run it by hand and read the error:')
-        console.log('\n      node node_modules/electron/install.js\n')
-      }
-    }
-  } else if (rootInstalled && electronReady) {
-    say('ok', 'electron', 'runtime present')
-  }
+  // Only worth reporting if there is a node_modules to look in; a first run
+  // gets this after the install below instead.
+  if (rootInstalled) await checkElectron()
 
   if (rootInstalled && capacitorInstalled && prepared) return 'ok'
 
@@ -672,6 +724,7 @@ async function checkDependencies () {
   const yarn = which('yarn')
   if (yarn === null) return 'fail'
 
+  const installedRoot = !rootInstalled
   if (!rootInstalled && !run(yarn, ['install'])) return 'fail'
 
   if (!capacitorInstalled) {
@@ -680,6 +733,16 @@ async function checkDependencies () {
     const ok = run(yarn, ['install'])
     process.chdir(ROOT)
     if (!ok) return 'fail'
+  }
+
+  // The install just put node_modules/electron there, so the check above ran
+  // against a directory that did not exist yet. Without this, the first run -
+  // the one that installs everything, and so the only one where nobody has
+  // been told about the runtime yet - is the single run that stays silent
+  // about it.
+  if (installedRoot) {
+    heading('Desktop')
+    await checkElectron()
   }
 
   return 'ok'
@@ -721,11 +784,21 @@ async function main () {
     console.log('Some prerequisites are still missing. Fix the items above and run this again.\n')
   } else if (warnings > 0) {
     const plural = warnings === 1 ? '' : 's'
+    // Deliberately not "ready to build the web and desktop apps" here: the
+    // Electron warning means precisely that the desktop app cannot be built,
+    // so naming the targets would contradict the screen above.
     console.log(`Ready to build, with ${warnings} warning${plural} above worth reading.`)
     console.log('Next:  yarn dev\n')
   } else {
-    console.log('Everything is in place. Next:  yarn dev\n')
+    console.log('The web and desktop apps can be built on this machine. Next:  yarn dev\n')
   }
+
+  // Naming the scope rather than declaring victory outright. This checks what
+  // the web and desktop builds need and nothing else, so on the one machine
+  // that also builds Android or iOS, "everything is in place" would be a claim
+  // about toolchains it never looked at - and would be wrong there exactly
+  // once, memorably.
+  if (!failed) console.log('Android and iOS have their own one-time setup: docs/android.md, docs/ios.md\n')
 
   rl?.close()
   process.exit(failed ? 1 : 0)

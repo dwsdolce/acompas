@@ -135,8 +135,9 @@ anyway — plenty of applications install Node without ever mentioning it.
    is none. That is *all* they do. They exist only because the main script is
    written in Node, and so cannot be the thing that discovers Node is missing.
 2. **`scripts/setup.mjs`** takes over: the Node version this project needs,
-   Yarn, ffmpeg, and the project's dependencies — both of them, since
-   `src-capacitor` is a second install that even the web build requires.
+   Yarn, ffmpeg, the project's dependencies — both of them, since
+   `src-capacitor` is a second install that even the web build requires — and
+   the Electron runtime, which no install fetches on its own.
 
 It changes **nothing** without asking, asks only where there is a real decision
 to make, and is safe to run repeatedly — re-running it is how you resume after a
@@ -151,6 +152,28 @@ powershell -ExecutionPolicy Bypass -File .\setup.ps1 --check
 ```bash
 ./setup.sh --check
 ```
+
+#### What it covers, and what it does not
+
+When it finishes cleanly, **`yarn build` and `yarn build:desktop` both work on
+this machine**. That is the whole promise, and it is deliberately the same
+promise on macOS, Windows and Linux: the web build is cheap enough that there is
+no reason not to have it everywhere, and the desktop build has to happen on each
+platform anyway, because electron-builder does not cross-compile.
+
+**Android and iOS are not part of it.** Their toolchains are large, they are set
+up once on whichever machine you choose to build them from, and they ask
+questions no script should answer for you — which JDK, an IDE or the
+command-line SDK, which Apple team. Xcode cannot be installed non-interactively
+at all. Each has its own one-time setup, written out in full:
+
+* [docs/android.md](docs/android.md#setting-the-machine-up) — JDK 21, the
+  Android SDK, `JAVA_HOME` and `ANDROID_HOME`, API 36, an emulator, a keystore.
+* [docs/ios.md](docs/ios.md#setting-the-machine-up) — Xcode, CocoaPods, the
+  signing team. macOS only.
+
+Do the setup script first either way: both build on the same Node, Yarn and
+dependencies it installs.
 
 ### Doing it by hand
 
@@ -229,6 +252,15 @@ cross-compile, and the mobile toolchains are the vendors' own.
 you have any, and describes what it produced; on macOS it also signs, notarises
 and staples the disk image.
 
+> ⚠️ The desktop build needs Electron's runtime, a separate ~150MB download that
+> `yarn install` does not fetch — Electron 44 removed the postinstall hook that
+> used to. **The setup script fetches it**, so this matters only if you set the
+> machine up by hand, or if it goes missing later after an Electron version
+> bump: `yarn build:desktop` then stops with *"The Electron runtime is
+> missing"*, and the Electron end-to-end tests have nothing to launch. Re-run
+> the setup script, or `npx install-electron`. See
+> [docs/desktop.md](docs/desktop.md#the-electron-runtime).
+
 ## Tests
 
 ```bash
@@ -260,7 +292,10 @@ delete `.quasar`.
 
 `yarn test:e2e` needs a build first — `yarn build` for the web specs and
 `npx quasar build -m electron` for the Electron ones. Each group skips itself
-with a message if its build is missing.
+with a message if its build is missing. The Electron specs also need the
+Electron runtime, which the setup script installs — see
+[docs/desktop.md](docs/desktop.md#the-electron-runtime) if they report it
+missing.
 
 The Electron specs launch the app and check that a window opens with a populated
 `#q-app`, that every image loads, that a sample decodes, and that nothing logs an

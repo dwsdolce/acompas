@@ -316,6 +316,14 @@ Everything below happens **once**. A machine that has built the app before needs
 none of it, and neither does a new release — go back to
 [Building](#building) for that.
 
+Do the [Getting started](../README.md#getting-started) steps first: everything
+here builds on the Node, Yarn and dependencies the setup script installs. It
+does not install any of what follows, and that is deliberate — the setup script
+covers the web and desktop builds, which every machine is expected to produce,
+while the Android toolchain is set up once on whichever machine you choose to
+build from and asks questions no script should answer for you. See
+[what the setup script covers](../README.md#what-it-covers-and-what-it-does-not).
+
 Work through it in order the first time. The last section,
 [Creating a keystore](#creating-a-keystore), is needed only when you want to
 sign a release; debug builds do not use it.
