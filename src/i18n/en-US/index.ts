@@ -389,6 +389,77 @@ But this is the only way to get the new features. If it is your first use, this 
     changelog: {
       title: 'Changelog',
       description: 'Latest changes and updates to Palmas',
+        releases: {
+          v1_0_0: [
+            '**Palmas is a new app**, derived from [A Compás](https://gitlab.com/acompas/acompas) 4.2.4 by Olivier Ricordeau and Jérémie Sieffert, under the same AGPL-3.0 licence. It carries its own name, its own application identifiers and its own version numbering, because the changes here are not theirs to answer for. Report anything about Palmas [on its own repository](https://github.com/dwsdolce/palmas/issues).',
+            'New identity: a script **P** inside a ring of twelve dots — the compás the app draws — and a wordmark set in Playball, the face A Compás itself used through its 2.x releases.',
+            '**The visualization now says which strikes are accented.** Colour means accent in both layers: a red disc for an accented beat of the compás, a blue ring for an accented strike by the instrument being drawn. The strength of a strike used to be one, two or three pixels of line weight, which nobody could see.',
+            'The five rhythm contexts now share one colour. Repainting the whole app per context spent the only free colour channel on a mode the interface already names twice.',
+            'New help covering what the display is showing, the eighth-note column, choosing which instrument is drawn, and the audio/visual delay setting — translated into all nine languages.',
+            '**The palo descriptions are translated.** They were a Wikipedia extract in four languages and English in the other five — and English for anyone offline, whenever the lookup failed. They are now the app\'s own text in all nine, with Wikipedia as a link rather than the body.',
+            '**Content Security Policy** on every production build, which turned up two real defects: vue-i18n compiled translations with `Function()`, and Tone.js loads its audio worklet from a blob URL.',
+            '**All analytics removed.** No accounts, no tracking, no cookies. The one request the app makes to anyone else is a Wikipedia lookup when you open the help for a palo, and the privacy policy now says so.',
+            'The web build runs from any subfolder, so it can be hosted anywhere rather than only at a domain root.',
+            'Nine languages are reachable again: Arabic, Persian, Japanese and Chinese were present but never offered. Locales load on demand, which took the main bundle from 230 KB to 190 KB gzipped.',
+            '**Python is no longer needed to build.** The audio pipeline, the setup and the desktop packaging are Node scripts that run on macOS, Windows and Linux alike; the iOS asset step no longer needs a Mac either.',
+            'Setup is two small scripts — `setup.ps1` and `setup.sh` — that check for Node, install it if missing, and hand over to a shared Node script that does the rest, asking before it changes anything.',
+            'Documentation rewritten around build targets rather than host operating systems, and verified step by step on a machine with no toolchain installed.'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p><p>It can be seen as "the first half of the compás is ternary", and "the second half is binary".</p><p>This rhythm is the same for both alegría and soleá por bulería (which is an acceleration of traditional soleá).</p><p>The difference between the two styles is that the one is played in major tones (alegría means "joy" in Spanish) and the other is played in minor (flamenco tune Am G F E).</p><p>It can also fit for many other styles from the same "families" like cantiñas, caracoles, mirabras (alegría-like) or caña, polo, bambera (more soleá por bulería styled), and even for guajira</p>',
+      places: 'Cádiz'
+    },
+    abandolaos: {
+      doc: '<p>A kind of 3/4 pattern. It is used for a wide range of different palos, like Verdiales, Fandangos abandolaos, Jaleos extremeños and even some Bulería patterns.</p>',
+      places: 'Málaga, Huelva, Extremadura'
+    },
+    'buleria-6': {
+      doc: '<p>One compás is made of 2 groups of 3 ternary quarter notes, so this palo is purely ternary.</p><p>It can be seen as the first half of a 12 beats bulería.</p>',
+      places: 'Jerez de la Frontera'
+    },
+    'buleria-12': {
+      doc: '<p>One compás is made of 12 beats, and an emphasis is put on beats 12, 3, 6, 8 and 10.</p><p>It can be seen as "the first half of the compás is ternary (3 beats + 3 beats = 6 beats)", and "the second half is binary (2 beats + 2 beats + 2 beats = 6 beats)".</p>',
+      places: 'Jerez de la Frontera and others'
+    },
+    'buleria-12-variation': {
+      doc: '<p>In this popular variation of the 12 beats bulería compás, an accent is put on beat 7 instead of beat 6.</p>',
+      places: 'Jerez de la Frontera and others'
+    },
+    fandangos: {
+      doc: '<p>This 12 beats-based palo has accents on beats 12, 3, 6, 9 and 10.</p>',
+      places: 'Huelva, Málaga, and others'
+    },
+    rumba: {
+      doc: '<p>Rumba is a 4/4 palo, it can be counted as 1, 2, 3, 4.</p><p>There is an accent on the first beat. Remark : our example pattern is made of 2 bars.</p>',
+      places: 'Barcelona and others'
+    },
+    sevillana: {
+      doc: '<p>Sevillanas is a purely ternary palo, with an accent on beat 1. It is just like a waltz.</p><p>Remark : our example pattern is made of 2 bars.</p>',
+      places: 'Sevilla'
+    },
+    siguiriya: {
+      doc: '<p>Siguiriya is a 12 beats-based palo, with accents on beats 12, 2, 4, 7 and 10.</p>',
+      places: 'Sevilla, Cádiz and others'
+    },
+    solea: {
+      doc: '<p>Soleá is a sad 12 beats-based palo, with accents on beats 3, 6, 8, 10 and 12.</p>',
+      places: 'Sevilla, Cádiz and others'
+    },
+    tanguillos: {
+      doc: '<p>Tanguillos are a kind of hybrid rhythm between 3/4, 6/8 and 4/4, it can be counted as 1, 2, 3.</p><p>There is an accent on the first beat and sometimes… on the 2 and a half.</p><p>Remark : our example pattern is made of 2 bars.</p>',
+      places: 'Cádiz and others'
+    },
+    tangos: {
+      doc: '<p>Tangos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p><p>Remark : our example pattern is made of 2 bars.</p>',
+      places: 'Granada, Málaga, Extremadura'
+    },
+    tientos: {
+      doc: '<p>Tientos is a 4/4 palo, it can be counted as 1, 2, 3, 4. There is an accent on the first beat.</p><p>It often ends "por tangos".</p><p>Remark : our example pattern is made of 2 bars.</p>',
+      places: 'Cádiz and other places in Andalusia'
     }
   },
   buttons: {

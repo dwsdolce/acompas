@@ -57,8 +57,9 @@ Il tempo è la velocità del metronomo, misurata in battiti per minuto.`,
         mixer: {
           title: 'Mixer strumenti',
           content: `
-Seleziona gli strumenti in riproduzione (assicurati di avere almeno uno strumento attivo),
-imposta il suo volume relativo, e se suona note da un quarto o da un ottavo.`,
+Seleziona gli strumenti in riproduzione (assicurati di averne almeno uno attivo),
+imposta il volume relativo di ciascuno, scegli se suona anche le crome oltre ai tempi,
+e indica quale viene disegnato nella visualizzazione.`,
         },
         improvise: {
           title: 'Improvvisa',
@@ -251,9 +252,9 @@ cambiare.`
       }
     },
     visualizationModes: {
-      dots: 'Dots',
-      counter: 'Counter',
-      clock: 'Clock'
+      dots: 'Punti',
+      counter: 'Contatore',
+      clock: 'Orologio'
     },
     utils: {
       wikipediaUrl: 'Articolo Wikipedia:',
@@ -367,6 +368,77 @@ Ma questo è l'unico modo per ottenere le nuove funzionalità. Se è il tuo prim
     changelog: {
       title: 'Registro delle modifiche',
       description: 'Ultimi cambiamenti e aggiornamenti di Palmas',
+        releases: {
+          v1_0_0: [
+            '**Palmas è una nuova applicazione**, derivata da [A Compás](https://gitlab.com/acompas/acompas) 4.2.4 di Olivier Ricordeau e Jérémie Sieffert, con la stessa licenza AGPL-3.0. Porta un nome proprio, identificatori applicativi propri e una propria numerazione di versione, perché le modifiche fatte qui non sono cosa loro. Segnala qualunque cosa riguardi Palmas [sul suo repository](https://github.com/dwsdolce/palmas/issues).',
+            'Nuova identità: una **P** corsiva dentro un anello di dodici punti — il compás che l\'applicazione disegna — e un logotipo composto in Playball, il carattere che la stessa A Compás usava nelle sue versioni 2.x.',
+            '**La visualizzazione ora dice quali colpi sono accentati.** Il colore significa accento in entrambi gli strati: un disco rosso per un tempo accentato del compás, un anello blu per un colpo accentato dello strumento disegnato. Prima la forza di un colpo era uno, due o tre pixel di spessore della linea, che nessuno riusciva a vedere.',
+            'I cinque contesti ritmici ora condividono un solo colore. Ridipingere tutta l\'applicazione a seconda del contesto spendeva l\'unico canale di colore libero per una modalità che l\'interfaccia nomina già due volte.',
+            'Nuova guida su ciò che mostra il display, sulla colonna delle crome, sulla scelta dello strumento disegnato e sull\'impostazione del ritardo audio/video — tradotta in tutte e nove le lingue.',
+            '**Le descrizioni dei palos sono tradotte.** Erano un estratto di Wikipedia in quattro lingue e in inglese nelle altre cinque — e in inglese per chiunque fosse offline, ogni volta che la richiesta falliva. Ora sono il testo dell\'applicazione stessa in tutte e nove le lingue, con Wikipedia come collegamento e non come corpo del testo.',
+            '**Content Security Policy** in ogni build di produzione, che ha portato alla luce due difetti reali: vue-i18n compilava le traduzioni con `Function()` e Tone.js carica il suo audio worklet da una URL blob.',
+            '**Rimossa ogni analitica.** Nessun account, nessun tracciamento, nessun cookie. L\'unica richiesta che l\'applicazione rivolge a terzi è una ricerca su Wikipedia quando apri la guida di un palo, e ora l\'informativa sulla privacy lo dice.',
+            'La build web funziona da qualsiasi sottocartella, quindi può essere ospitata ovunque e non solo alla radice di un dominio.',
+            'Le nove lingue sono di nuovo raggiungibili: arabo, persiano, giapponese e cinese erano presenti ma non venivano mai offerti. Le lingue si caricano su richiesta, il che ha portato il bundle principale da 230 KB a 190 KB compressi.',
+            '**Python non serve più per compilare.** La catena audio, l\'installazione e il pacchetto desktop sono script Node che funzionano allo stesso modo su macOS, Windows e Linux; anche il passaggio delle risorse iOS non richiede più un Mac.',
+            'L\'installazione sono due piccoli script — `setup.ps1` e `setup.sh` — che verificano la presenza di Node, lo installano se manca e passano la mano a uno script Node condiviso che fa il resto, chiedendo prima di cambiare qualsiasi cosa.',
+            'Documentazione riscritta attorno agli obiettivi di compilazione anziché ai sistemi operativi ospiti, e verificata passo per passo su una macchina senza alcun toolchain installato.'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>Un compás è formato da 12 tempi, con accenti sui tempi 12, 3, 6, 8 e 10.</p><p>Si può sentire come «la prima metà del compás è ternaria» e «la seconda metà è binaria».</p><p>Questo ritmo è lo stesso per l\'alegría e per la soleá por bulería (che è un\'accelerazione della soleá tradizionale).</p><p>La differenza fra i due stili è che uno si suona in tonalità maggiori (alegría significa «gioia» in spagnolo) e l\'altro in minori (tonalità flamenca Am G F E).</p><p>Si adatta anche a molti altri stili delle stesse «famiglie», come cantiñas, caracoles o mirabrás (vicini all\'alegría), oppure caña, polo e bambera (più vicini alla soleá por bulería), e perfino alla guajira.</p>',
+      places: 'Cádiz'
+    },
+    abandolaos: {
+      doc: '<p>Una specie di pattern in 3/4. È usato per un\'ampia gamma di palos, come verdiales, fandangos abandolaos, jaleos extremeños e perfino alcuni pattern di bulería.</p>',
+      places: 'Málaga, Huelva, Extremadura'
+    },
+    'buleria-6': {
+      doc: '<p>Un compás è formato da 2 gruppi di 3 semiminime ternarie, quindi questo palo è puramente ternario.</p><p>Si può vedere come la prima metà di una bulería da 12 tempi.</p>',
+      places: 'Jerez de la Frontera'
+    },
+    'buleria-12': {
+      doc: '<p>Un compás è formato da 12 tempi, con accenti sui tempi 12, 3, 6, 8 e 10.</p><p>Si può sentire come «la prima metà del compás è ternaria (3 tempi + 3 tempi = 6 tempi)» e «la seconda metà è binaria (2 tempi + 2 tempi + 2 tempi = 6 tempi)».</p>',
+      places: 'Jerez de la Frontera e altri'
+    },
+    'buleria-12-variation': {
+      doc: '<p>In questa diffusa variante del compás di bulería da 12 tempi, l\'accento cade sul tempo 7 anziché sul 6.</p>',
+      places: 'Jerez de la Frontera e altri'
+    },
+    fandangos: {
+      doc: '<p>Questo palo da 12 tempi ha accenti sui tempi 12, 3, 6, 9 e 10.</p>',
+      places: 'Huelva, Málaga e altri'
+    },
+    rumba: {
+      doc: '<p>La rumba è un palo in 4/4; si conta 1, 2, 3, 4.</p><p>C\'è un accento sul primo tempo. Nota: il nostro pattern di esempio è composto da 2 battute.</p>',
+      places: 'Barcelona e altri'
+    },
+    sevillana: {
+      doc: '<p>La sevillana è un palo puramente ternario, con un accento sul tempo 1. È proprio come un valzer.</p><p>Nota: il nostro pattern di esempio è composto da 2 battute.</p>',
+      places: 'Sevilla'
+    },
+    siguiriya: {
+      doc: '<p>La siguiriya è un palo da 12 tempi, con accenti sui tempi 12, 2, 4, 7 e 10.</p>',
+      places: 'Sevilla, Cádiz e altri'
+    },
+    solea: {
+      doc: '<p>La soleá è un palo triste da 12 tempi, con accenti sui tempi 3, 6, 8, 10 e 12.</p>',
+      places: 'Sevilla, Cádiz e altri'
+    },
+    tanguillos: {
+      doc: '<p>I tanguillos sono una sorta di ritmo ibrido fra 3/4, 6/8 e 4/4; si contano 1, 2, 3.</p><p>C\'è un accento sul primo tempo e talvolta… sul due e mezzo.</p><p>Nota: il nostro pattern di esempio è composto da 2 battute.</p>',
+      places: 'Cádiz e altri'
+    },
+    tangos: {
+      doc: '<p>I tangos sono un palo in 4/4; si contano 1, 2, 3, 4. C\'è un accento sul primo tempo.</p><p>Nota: il nostro pattern di esempio è composto da 2 battute.</p>',
+      places: 'Granada, Málaga, Extremadura'
+    },
+    tientos: {
+      doc: '<p>I tientos sono un palo in 4/4; si contano 1, 2, 3, 4. C\'è un accento sul primo tempo.</p><p>Spesso finiscono «por tangos».</p><p>Nota: il nostro pattern di esempio è composto da 2 battute.</p>',
+      places: 'Cádiz e altri luoghi dell\'Andalusia'
     }
   },
   buttons: {

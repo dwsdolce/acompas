@@ -57,8 +57,9 @@ El tempo es la velocidad del metrónomo, medida en golpes por minuto.`,
         mixer: {
           title: 'Mesa de mezclas de instrumentos',
           content: `
-Selecciona instrumentos en reproducción (asegúrate de tener al menos un instrumento activo),
-establece su propio volumen relativo, y si reproduce notas negras o corcheas.`,
+Selecciona los instrumentos que suenan (asegúrate de tener al menos uno activo),
+ajusta el volumen relativo de cada uno, elige si toca corcheas además de los tiempos,
+y decide cuál se dibuja en la visualización.`,
         },
         improvise: {
           title: 'Improvisar',
@@ -273,9 +274,9 @@ alternas entre cable e inalámbrico, cuenta con tener que cambiarlo.`
       }
     },
     visualizationModes: {
-      dots: 'Dots',
-      counter: 'Counter',
-      clock: 'Clock'
+      dots: 'Puntos',
+      counter: 'Contador',
+      clock: 'Reloj'
     },
     utils: {
       wikipediaUrl: 'Artículo de Wikipedia:',
@@ -389,6 +390,77 @@ Pero esta es la única forma de obtener las nuevas características. Si es tu pr
     changelog: {
       title: 'Registro de cambios',
       description: 'Últimos cambios y actualizaciones de Palmas',
+        releases: {
+          v1_0_0: [
+            '**Palmas es una aplicación nueva**, derivada de [A Compás](https://gitlab.com/acompas/acompas) 4.2.4 de Olivier Ricordeau y Jérémie Sieffert, bajo la misma licencia AGPL-3.0. Lleva su propio nombre, sus propios identificadores de aplicación y su propia numeración de versiones, porque los cambios hechos aquí no son responsabilidad suya. Informa de cualquier cosa sobre Palmas [en su propio repositorio](https://github.com/dwsdolce/palmas/issues).',
+            'Nueva identidad: una **P** caligráfica dentro de un anillo de doce puntos —el compás que dibuja la aplicación— y un logotipo tipográfico compuesto en Playball, la tipografía que la propia A Compás usó durante sus versiones 2.x.',
+            '**La visualización ahora indica qué golpes van acentuados.** El color significa acento en ambas capas: un disco rojo para un tiempo acentuado del compás y un anillo azul para un golpe acentuado del instrumento dibujado. Antes la fuerza de un golpe eran uno, dos o tres píxeles de grosor de línea, que nadie podía ver.',
+            'Los cinco contextos rítmicos comparten ahora un mismo color. Repintar toda la aplicación según el contexto gastaba el único canal de color libre en un modo que la interfaz ya nombra dos veces.',
+            'Nueva ayuda sobre lo que muestra la pantalla, la columna de corcheas, la elección del instrumento que se dibuja y el ajuste de retardo audio/visual, traducida a los nueve idiomas.',
+            '**Las descripciones de los palos están traducidas.** Eran un extracto de Wikipedia en cuatro idiomas y estaban en inglés en los otros cinco, y en inglés para cualquiera sin conexión siempre que la consulta fallaba. Ahora son el texto propio de la aplicación en los nueve idiomas, con Wikipedia como enlace y no como cuerpo del texto.',
+            '**Política de seguridad de contenidos (CSP)** en todas las compilaciones de producción, que sacó a la luz dos defectos reales: vue-i18n compilaba las traducciones con `Function()` y Tone.js carga su audio worklet desde una URL blob.',
+            '**Analítica eliminada por completo.** Sin cuentas, sin seguimiento, sin cookies. La única petición que la aplicación hace a terceros es una consulta a Wikipedia al abrir la ayuda de un palo, y la política de privacidad ya lo dice.',
+            'La versión web funciona desde cualquier subcarpeta, así que puede alojarse en cualquier sitio y no solo en la raíz de un dominio.',
+            'Los nueve idiomas vuelven a estar accesibles: el árabe, el persa, el japonés y el chino estaban presentes pero nunca se ofrecían. Los idiomas se cargan bajo demanda, lo que redujo el paquete principal de 230 KB a 190 KB comprimidos.',
+            '**Ya no hace falta Python para compilar.** La cadena de audio, la instalación y el empaquetado de escritorio son scripts de Node que funcionan igual en macOS, Windows y Linux; el paso de recursos de iOS tampoco necesita ya un Mac.',
+            'La instalación son dos scripts pequeños —`setup.ps1` y `setup.sh`— que comprueban si hay Node, lo instalan si falta y ceden el paso a un script de Node compartido que hace el resto, preguntando antes de cambiar nada.',
+            'Documentación reescrita en torno a los destinos de compilación en lugar de los sistemas operativos anfitriones, y verificada paso a paso en una máquina sin ninguna herramienta instalada.'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>Un compás se compone de 12 tiempos, con acentos en los tiempos 12, 3, 6, 8 y 10.</p><p>Puede entenderse como «la primera mitad del compás es ternaria» y «la segunda mitad es binaria».</p><p>Este ritmo es el mismo para la alegría y para la soleá por bulería (que es una aceleración de la soleá tradicional).</p><p>La diferencia entre los dos estilos es que uno se toca en tonos mayores —de ahí el nombre— y el otro en menores (tonalidad flamenca Am G F E).</p><p>También sirve para muchos otros estilos de las mismas «familias», como cantiñas, caracoles o mirabrás (cercanos a la alegría), o caña, polo y bambera (más próximos a la soleá por bulería), e incluso para la guajira.</p>',
+      places: 'Cádiz'
+    },
+    abandolaos: {
+      doc: '<p>Una especie de patrón de 3/4. Se usa en una amplia variedad de palos, como los verdiales, los fandangos abandolaos, los jaleos extremeños e incluso algunos patrones de bulería.</p>',
+      places: 'Málaga, Huelva, Extremadura'
+    },
+    'buleria-6': {
+      doc: '<p>Un compás se compone de 2 grupos de 3 negras ternarias, de modo que este palo es puramente ternario.</p><p>Puede verse como la primera mitad de una bulería de 12 tiempos.</p>',
+      places: 'Jerez de la Frontera'
+    },
+    'buleria-12': {
+      doc: '<p>Un compás se compone de 12 tiempos, con acentos en los tiempos 12, 3, 6, 8 y 10.</p><p>Puede entenderse como «la primera mitad del compás es ternaria (3 tiempos + 3 tiempos = 6 tiempos)» y «la segunda mitad es binaria (2 tiempos + 2 tiempos + 2 tiempos = 6 tiempos)».</p>',
+      places: 'Jerez de la Frontera y otros'
+    },
+    'buleria-12-variation': {
+      doc: '<p>En esta variación popular del compás de bulería de 12 tiempos, el acento cae en el tiempo 7 en lugar del 6.</p>',
+      places: 'Jerez de la Frontera y otros'
+    },
+    fandangos: {
+      doc: '<p>Este palo de 12 tiempos lleva acentos en los tiempos 12, 3, 6, 9 y 10.</p>',
+      places: 'Huelva, Málaga y otros'
+    },
+    rumba: {
+      doc: '<p>La rumba es un palo en 4/4; se puede contar 1, 2, 3, 4.</p><p>Hay un acento en el primer tiempo. Nota: nuestro patrón de ejemplo consta de 2 compases.</p>',
+      places: 'Barcelona y otros'
+    },
+    sevillana: {
+      doc: '<p>La sevillana es un palo puramente ternario, con un acento en el tiempo 1. Es igual que un vals.</p><p>Nota: nuestro patrón de ejemplo consta de 2 compases.</p>',
+      places: 'Sevilla'
+    },
+    siguiriya: {
+      doc: '<p>La siguiriya es un palo de 12 tiempos, con acentos en los tiempos 12, 2, 4, 7 y 10.</p>',
+      places: 'Sevilla, Cádiz y otros'
+    },
+    solea: {
+      doc: '<p>La soleá es un palo triste de 12 tiempos, con acentos en los tiempos 3, 6, 8, 10 y 12.</p>',
+      places: 'Sevilla, Cádiz y otros'
+    },
+    tanguillos: {
+      doc: '<p>Los tanguillos son una especie de ritmo híbrido entre 3/4, 6/8 y 4/4; se pueden contar 1, 2, 3.</p><p>Hay un acento en el primer tiempo y a veces… en el dos y medio.</p><p>Nota: nuestro patrón de ejemplo consta de 2 compases.</p>',
+      places: 'Cádiz y otros'
+    },
+    tangos: {
+      doc: '<p>Los tangos son un palo en 4/4; se pueden contar 1, 2, 3, 4. Hay un acento en el primer tiempo.</p><p>Nota: nuestro patrón de ejemplo consta de 2 compases.</p>',
+      places: 'Granada, Málaga, Extremadura'
+    },
+    tientos: {
+      doc: '<p>Los tientos son un palo en 4/4; se pueden contar 1, 2, 3, 4. Hay un acento en el primer tiempo.</p><p>A menudo terminan «por tangos».</p><p>Nota: nuestro patrón de ejemplo consta de 2 compases.</p>',
+      places: 'Cádiz y otros lugares de Andalucía'
     }
   },
   buttons: {

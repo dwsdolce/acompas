@@ -45,7 +45,7 @@ See `vueRouterMode` in `quasar.config.js`.
 
 ### `vue-i18n` — 9.14.5
 Translation. Text lives in per-language files under `src/i18n/` rather than in
-components. Ten languages, including Arabic and Persian, which read right to
+components. Nine languages, including Arabic and Persian, which read right to
 left.
 
 There is deliberately **no** i18n build plugin. `@intlify/vite-plugin-vue-i18n`

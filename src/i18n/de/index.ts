@@ -57,8 +57,10 @@ Das Tempo ist die Geschwindigkeit des Metronoms, gemessen in Schlägen pro Minut
         mixer: {
           title: 'Instrumenten-Mischpult',
           content: `
-Wählen Sie spielende Instrumente aus (stellen Sie sicher, dass mindestens ein Instrument aktiv ist),
-stellen Sie dessen relative Lautstärke ein und ob es Viertelnoten oder Achtelnoten spielt.`,
+Wählen Sie die spielenden Instrumente aus (mindestens eines muss aktiv sein),
+stellen Sie die relative Lautstärke jedes Instruments ein, legen Sie fest, ob es zusätzlich
+zu den Schlägen auch Achtelnoten spielt, und bestimmen Sie, welches in der Visualisierung
+dargestellt wird.`,
         },
         improvise: {
           title: 'Improvisieren',
@@ -253,9 +255,9 @@ wieder ändern zu müssen.`
       }
     },
     visualizationModes: {
-      dots: 'Dots',
-      counter: 'Counter',
-      clock: 'Clock'
+      dots: 'Punkte',
+      counter: 'Zähler',
+      clock: 'Uhr'
     },
     utils: {
       wikipediaUrl: 'Wikipedia-Artikel:',
@@ -367,8 +369,79 @@ Aber das ist der einzige Weg, um die neuen Funktionen zu erhalten. Wenn es Ihre 
       stop: 'Stoppen'
     },
     changelog: {
-      title: 'Changelog',
+      title: 'Änderungsprotokoll',
       description: 'Neueste Änderungen und Updates zu Palmas',
+        releases: {
+          v1_0_0: [
+            '**Palmas ist eine neue App**, abgeleitet von [A Compás](https://gitlab.com/acompas/acompas) 4.2.4 von Olivier Ricordeau und Jérémie Sieffert, unter derselben AGPL-3.0-Lizenz. Sie trägt einen eigenen Namen, eigene Anwendungs-Identifier und eine eigene Versionsnummerierung, denn die Änderungen hier haben die beiden nicht zu verantworten. Melden Sie alles zu Palmas [in ihrem eigenen Repository](https://github.com/dwsdolce/palmas/issues).',
+            'Neue Identität: ein geschriebenes **P** in einem Ring aus zwölf Punkten – dem Compás, den die App zeichnet – und ein Schriftzug in Playball, der Schrift, die A Compás selbst in ihren 2.x-Versionen verwendete.',
+            '**Die Visualisierung zeigt jetzt, welche Schläge betont sind.** Farbe bedeutet Betonung in beiden Ebenen: eine rote Scheibe für einen betonten Schlag des Compás, ein blauer Ring für einen betonten Schlag des dargestellten Instruments. Die Stärke eines Schlags waren früher ein, zwei oder drei Pixel Linienbreite, was niemand sehen konnte.',
+            'Die fünf Rhythmus-Kontexte teilen sich jetzt eine Farbe. Die ganze App je Kontext umzufärben verbrauchte den einzigen freien Farbkanal für einen Modus, den die Oberfläche ohnehin zweimal benennt.',
+            'Neue Hilfe dazu, was die Anzeige zeigt, zur Achtelnoten-Spalte, zur Wahl des dargestellten Instruments und zur Audio/Bild-Verzögerung – in alle neun Sprachen übersetzt.',
+            '**Die Palo-Beschreibungen sind übersetzt.** Sie waren in vier Sprachen ein Wikipedia-Auszug und in den übrigen fünf Englisch – und Englisch für alle ohne Netz, sobald die Abfrage fehlschlug. Jetzt sind sie in allen neun Sprachen der eigene Text der App, und Wikipedia ist nur noch ein Link statt des Textkörpers.',
+            '**Content Security Policy** in jedem Produktionsbuild, was zwei echte Fehler zutage förderte: vue-i18n kompilierte Übersetzungen mit `Function()`, und Tone.js lädt sein Audio-Worklet von einer Blob-URL.',
+            '**Sämtliche Analytik entfernt.** Keine Konten, kein Tracking, keine Cookies. Die einzige Anfrage, die die App an Dritte stellt, ist eine Wikipedia-Abfrage beim Öffnen der Hilfe zu einem Palo – und die Datenschutzerklärung sagt das jetzt auch.',
+            'Der Web-Build läuft aus jedem Unterordner und kann daher überall gehostet werden, nicht nur im Wurzelverzeichnis einer Domain.',
+            'Neun Sprachen sind wieder erreichbar: Arabisch, Persisch, Japanisch und Chinesisch waren vorhanden, wurden aber nie angeboten. Sprachen werden bei Bedarf geladen, was das Haupt-Bundle von 230 KB auf 190 KB gzip-komprimiert verkleinert hat.',
+            '**Python wird zum Bauen nicht mehr gebraucht.** Die Audio-Pipeline, das Setup und das Desktop-Packaging sind Node-Skripte, die unter macOS, Windows und Linux gleichermaßen laufen; auch der iOS-Asset-Schritt braucht keinen Mac mehr.',
+            'Das Setup besteht aus zwei kleinen Skripten – `setup.ps1` und `setup.sh` –, die auf Node prüfen, es bei Bedarf installieren und dann an ein gemeinsames Node-Skript übergeben, das den Rest erledigt und vor jeder Änderung nachfragt.',
+            'Dokumentation neu aufgebaut nach Build-Zielen statt nach Host-Betriebssystemen, und Schritt für Schritt auf einer Maschine ohne installierte Toolchain überprüft.'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>Ein Compás besteht aus 12 Schlägen, mit Betonungen auf den Schlägen 12, 3, 6, 8 und 10.</p><p>Man kann es so hören: „die erste Hälfte des Compás ist ternär“ und „die zweite Hälfte ist binär“.</p><p>Dieser Rhythmus ist derselbe für Alegría und für Soleá por bulería (eine beschleunigte Form der traditionellen Soleá).</p><p>Der Unterschied zwischen beiden Stilen liegt darin, dass der eine in Dur gespielt wird (alegría heißt auf Spanisch „Freude“) und der andere in Moll (Flamenco-Tonfolge Am G F E).</p><p>Er passt auch zu vielen weiteren Stilen derselben „Familien“, etwa Cantiñas, Caracoles oder Mirabrás (der Alegría nahe) sowie Caña, Polo und Bambera (eher der Soleá por bulería nahe), und sogar zur Guajira.</p>',
+      places: 'Cádiz'
+    },
+    abandolaos: {
+      doc: '<p>Eine Art 3/4-Muster. Es wird für eine große Bandbreite von Palos verwendet, etwa Verdiales, Fandangos abandolaos, Jaleos extremeños und sogar einige Bulería-Muster.</p>',
+      places: 'Málaga, Huelva, Extremadura'
+    },
+    'buleria-6': {
+      doc: '<p>Ein Compás besteht aus 2 Gruppen zu je 3 ternären Vierteln, dieser Palo ist also rein ternär.</p><p>Man kann ihn als die erste Hälfte einer Bulería mit 12 Schlägen auffassen.</p>',
+      places: 'Jerez de la Frontera'
+    },
+    'buleria-12': {
+      doc: '<p>Ein Compás besteht aus 12 Schlägen, mit Betonungen auf den Schlägen 12, 3, 6, 8 und 10.</p><p>Man kann es so hören: „die erste Hälfte des Compás ist ternär (3 Schläge + 3 Schläge = 6 Schläge)“ und „die zweite Hälfte ist binär (2 Schläge + 2 Schläge + 2 Schläge = 6 Schläge)“.</p>',
+      places: 'Jerez de la Frontera und andere'
+    },
+    'buleria-12-variation': {
+      doc: '<p>In dieser verbreiteten Variante des Bulería-Compás mit 12 Schlägen liegt der Akzent auf Schlag 7 statt auf Schlag 6.</p>',
+      places: 'Jerez de la Frontera und andere'
+    },
+    fandangos: {
+      doc: '<p>Dieser Palo mit 12 Schlägen hat Akzente auf den Schlägen 12, 3, 6, 9 und 10.</p>',
+      places: 'Huelva, Málaga und andere'
+    },
+    rumba: {
+      doc: '<p>Die Rumba ist ein Palo im 4/4-Takt; sie wird 1, 2, 3, 4 gezählt.</p><p>Auf dem ersten Schlag liegt ein Akzent. Hinweis: unser Beispielmuster umfasst 2 Takte.</p>',
+      places: 'Barcelona und andere'
+    },
+    sevillana: {
+      doc: '<p>Die Sevillana ist ein rein ternärer Palo mit einem Akzent auf Schlag 1. Sie ist wie ein Walzer.</p><p>Hinweis: unser Beispielmuster umfasst 2 Takte.</p>',
+      places: 'Sevilla'
+    },
+    siguiriya: {
+      doc: '<p>Die Siguiriya ist ein Palo mit 12 Schlägen, mit Akzenten auf den Schlägen 12, 2, 4, 7 und 10.</p>',
+      places: 'Sevilla, Cádiz und andere'
+    },
+    solea: {
+      doc: '<p>Die Soleá ist ein trauriger Palo mit 12 Schlägen, mit Akzenten auf den Schlägen 3, 6, 8, 10 und 12.</p>',
+      places: 'Sevilla, Cádiz und andere'
+    },
+    tanguillos: {
+      doc: '<p>Tanguillos sind eine Art Mischrhythmus zwischen 3/4, 6/8 und 4/4; sie werden 1, 2, 3 gezählt.</p><p>Auf dem ersten Schlag liegt ein Akzent und manchmal … auf der Zwei und einhalb.</p><p>Hinweis: unser Beispielmuster umfasst 2 Takte.</p>',
+      places: 'Cádiz und andere'
+    },
+    tangos: {
+      doc: '<p>Tangos sind ein Palo im 4/4-Takt; sie werden 1, 2, 3, 4 gezählt. Auf dem ersten Schlag liegt ein Akzent.</p><p>Hinweis: unser Beispielmuster umfasst 2 Takte.</p>',
+      places: 'Granada, Málaga, Extremadura'
+    },
+    tientos: {
+      doc: '<p>Tientos sind ein Palo im 4/4-Takt; sie werden 1, 2, 3, 4 gezählt. Auf dem ersten Schlag liegt ein Akzent.</p><p>Sie enden oft „por tangos“.</p><p>Hinweis: unser Beispielmuster umfasst 2 Takte.</p>',
+      places: 'Cádiz und andere Orte in Andalusien'
     }
   },
   buttons: {

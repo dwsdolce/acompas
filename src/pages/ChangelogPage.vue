@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import CustomCard from 'src/components/CustomCard.vue'
 import MarkdownRenderer from 'src/components/MarkdownRenderer.vue'
-// The release history is deliberately not translated; see the data file for
-// why. Only the title and description on this page come from i18n.
+// Metadata only - version, date and build. The notes for each release are
+// translated, and live in the catalogues under doc.changelog.releases.<id>.
 import changelogEntries from 'src/assets/data/changelog'
+
+const { tm } = useI18n()
+
+// tm() rather than t(): the notes are an array, and it returns the whole list.
+// It resolves against the current locale with no per-key fallback, which is safe
+// here only because test/i18n.spec.ts requires every locale to carry every key.
+const notesFor = (id: string) => tm(`doc.changelog.releases.${id}`) as unknown as string[]
 
 // Split rather than `new Date(dateStr)`. A bare "2026-09-03" is parsed as UTC
 // midnight and then rendered in local time, so everywhere west of Greenwich the
@@ -38,8 +46,8 @@ q-page.text-grey-1.q-pa-sm.flex.justify-center.items-center
 
               q-list.bg-transparent.q-ml-none
                 q-item(
-                  v-for="change in entry.changes",
-                  :key="change",
+                  v-for="(change, i) in notesFor(entry.id)",
+                  :key="i",
                   dense
                 )
                   q-item-section(side, center)

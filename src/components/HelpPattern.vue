@@ -12,13 +12,33 @@ import type { QBtn } from 'quasar'
 
 const patternStore = usePatternStore()
 const sessionStore = useSessionStore()
-const { t, locale } = useI18n()
+const { t, te, locale } = useI18n()
 
 const { selectedData } = storeToRefs(patternStore)
 
+// The description and the places it comes from are translated like every other
+// string, keyed by the pattern's `name`. Only the thirteen flamenco palos carry
+// one; everything else renders no description, as it did before, so `te` decides
+// rather than a missing key reaching the page as its own name.
+const patternText = (field: 'doc' | 'places') => {
+  const name = selectedData.value?.name
+  if (name === undefined) return ''
+  const key = `patterns.${name}.${field}`
+  return te(key) ? t(key) : ''
+}
+
+const patternDoc = computed(() => patternText('doc'))
+const patternPlaces = computed(() => patternText('places'))
+
 const patternHelpDialog = ref(false)
 
-const { extract: wikiExtract, articleUrl: wikiUrl, loading: wikiLoading, load: loadWiki } = useWikipediaExtract()
+// Only the resolved article URL is wanted now. The intro extract used to be the
+// body of this dialog, which meant the description a reader saw depended on
+// their language having a Wikipedia article and on there being a network: four
+// locales were never mapped at all, and an offline or native launch fell back to
+// English everywhere. The description is translated text now, and Wikipedia is
+// a link out of it.
+const { articleUrl: wikiUrl, load: loadWiki } = useWikipediaExtract()
 
 // Prefer the localized Wikipedia article when we resolved one, else the
 // English URL from the pattern data.
@@ -78,23 +98,19 @@ span.q-ml-sm
     custom-card
       template(v-slot:title) {{ selectedData?.longLabel }}
       template(v-slot:content)
-        .row.justify-center.q-py-md(v-if="wikiLoading")
-          q-spinner-dots(size="2em", color="primary")
-        template(v-else-if="wikiExtract")
-          div(v-html="wikiExtract")
-          p.text-caption.text-grey
-            | {{ $t('doc.utils.source') }}
-            span(v-if="wikipediaLink")
-              q-btn(
-                flat,
-                round,
-                size="sm",
-                icon="mdi-open-in-new",
-                @click="launch(wikipediaLink)"
-              ).q-ml-sm
-        div(v-else, v-html="selectedData?.doc")
+        div(v-if="patternDoc", v-html="patternDoc")
         h6.text-h6 {{ $t('doc.utils.beats', { count: beatCount }) }}
-        p {{ selectedData?.places }}
+        p(v-if="patternPlaces") {{ patternPlaces }}
+        p.text-caption.text-grey(v-if="wikipediaLink")
+          | {{ $t('doc.utils.wikipediaUrl') }}
+          q-btn(
+            flat,
+            round,
+            size="sm",
+            icon="mdi-open-in-new",
+            :aria-label="$t('doc.utils.openLink')",
+            @click="launch(wikipediaLink)"
+          ).q-ml-sm
         //- p(v-if="wikipediaLink") {{ $t('doc.utils.wikipediaUrl') }}
         //-   q-btn(
         //-     outline,

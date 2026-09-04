@@ -57,8 +57,9 @@ Le tempo est la vitesse du métronome, mesurée en battements par minute.`,
         mixer: {
           title: 'Table de mixage des instruments',
           content: `
-Sélectionnez les instruments en cours de lecture (assurez-vous d'avoir au moins un instrument actif),
-définissez son propre volume relatif, et s'il joue des noires ou des croches.`,
+Sélectionnez les instruments qui jouent (assurez-vous d'en avoir au moins un actif),
+réglez le volume relatif de chacun, choisissez s'il joue aussi les croches en plus des temps,
+et désignez celui qui est dessiné dans la visualisation.`,
         },
         improvise: {
           title: 'Improviser',
@@ -277,9 +278,9 @@ changer.`
       }
     },
     visualizationModes: {
-      dots: 'Dots',
-      counter: 'Counter',
-      clock: 'Clock'
+      dots: 'Points',
+      counter: 'Compteur',
+      clock: 'Horloge'
     },
     utils: {
       wikipediaUrl: 'Article Wikipédia :',
@@ -393,6 +394,77 @@ Mais c'est le seul moyen d'obtenir les nouvelles fonctionnalités. Si c'est votr
     changelog: {
       title: 'Journal des modifications',
       description: 'Derniers changements et mises à jour de Palmas',
+        releases: {
+          v1_0_0: [
+            '**Palmas est une nouvelle application**, dérivée de [A Compás](https://gitlab.com/acompas/acompas) 4.2.4 d\'Olivier Ricordeau et Jérémie Sieffert, sous la même licence AGPL-3.0. Elle porte son propre nom, ses propres identifiants d\'application et sa propre numérotation de versions, car les changements faits ici ne sont pas de leur ressort. Signalez tout ce qui concerne Palmas [sur son propre dépôt](https://github.com/dwsdolce/palmas/issues).',
+            'Nouvelle identité : un **P** calligraphique dans un anneau de douze points — le compás que l\'application dessine — et un logotype composé en Playball, la police qu\'A Compás elle-même utilisait pour ses versions 2.x.',
+            '**La visualisation indique désormais quelles frappes sont accentuées.** La couleur signifie accent dans les deux couches : un disque rouge pour un temps accentué du compás, un anneau bleu pour une frappe accentuée de l\'instrument dessiné. La force d\'une frappe se traduisait auparavant par une épaisseur de trait de un, deux ou trois pixels, que personne ne pouvait voir.',
+            'Les cinq contextes rythmiques partagent maintenant une seule couleur. Repeindre toute l\'application selon le contexte dépensait le seul canal de couleur libre pour un mode que l\'interface nomme déjà deux fois.',
+            'Nouvelle aide sur ce que montre l\'affichage, la colonne des croches, le choix de l\'instrument dessiné et le réglage du décalage audio/visuel — traduite dans les neuf langues.',
+            '**Les descriptions des palos sont traduites.** C\'était un extrait de Wikipédia dans quatre langues et de l\'anglais dans les cinq autres — et de l\'anglais pour quiconque hors ligne, dès que la requête échouait. C\'est désormais le texte propre à l\'application dans les neuf langues, Wikipédia n\'étant plus le corps du texte mais un lien.',
+            '**Politique de sécurité du contenu (CSP)** sur toutes les compilations de production, ce qui a révélé deux vrais défauts : vue-i18n compilait les traductions avec `Function()`, et Tone.js charge son audio worklet depuis une URL blob.',
+            '**Toute l\'analytique a été retirée.** Pas de comptes, pas de suivi, pas de cookies. La seule requête que l\'application adresse à un tiers est une recherche Wikipédia à l\'ouverture de l\'aide d\'un palo, et la politique de confidentialité le dit désormais.',
+            'La version web fonctionne depuis n\'importe quel sous-dossier : elle peut donc être hébergée n\'importe où, et pas seulement à la racine d\'un domaine.',
+            'Les neuf langues sont à nouveau accessibles : l\'arabe, le persan, le japonais et le chinois étaient présents mais n\'étaient jamais proposés. Les langues se chargent à la demande, ce qui a fait passer le bundle principal de 230 Ko à 190 Ko compressés.',
+            '**Python n\'est plus nécessaire pour compiler.** La chaîne audio, l\'installation et l\'empaquetage de bureau sont des scripts Node qui fonctionnent aussi bien sur macOS, Windows et Linux ; l\'étape des ressources iOS n\'exige plus de Mac non plus.',
+            'L\'installation tient en deux petits scripts — `setup.ps1` et `setup.sh` — qui vérifient la présence de Node, l\'installent s\'il manque, et passent la main à un script Node commun qui fait le reste, en demandant avant de modifier quoi que ce soit.',
+            'Documentation réécrite autour des cibles de compilation plutôt que des systèmes d\'exploitation hôtes, et vérifiée pas à pas sur une machine sans aucun outil installé.'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>Un compás compte 12 temps, avec des accents sur les temps 12, 3, 6, 8 et 10.</p><p>On peut l\'entendre comme « la première moitié du compás est ternaire » et « la seconde moitié est binaire ».</p><p>Ce rythme est le même pour l\'alegría et pour la soleá por bulería (qui est une accélération de la soleá traditionnelle).</p><p>La différence entre les deux styles est que l\'un se joue en tons majeurs (alegría signifie « joie » en espagnol) et l\'autre en mineurs (tonalité flamenca Am G F E).</p><p>Il convient aussi à bien d\'autres styles des mêmes « familles », comme les cantiñas, caracoles ou mirabrás (proches de l\'alegría), ou la caña, le polo et la bambera (plus proches de la soleá por bulería), et même à la guajira.</p>',
+      places: 'Cádiz'
+    },
+    abandolaos: {
+      doc: '<p>Une sorte de motif à 3/4. Il est utilisé pour un large éventail de palos : verdiales, fandangos abandolaos, jaleos extremeños et même certains motifs de bulería.</p>',
+      places: 'Málaga, Huelva, Extremadura'
+    },
+    'buleria-6': {
+      doc: '<p>Un compás est fait de 2 groupes de 3 noires ternaires : ce palo est donc purement ternaire.</p><p>On peut le voir comme la première moitié d\'une bulería à 12 temps.</p>',
+      places: 'Jerez de la Frontera'
+    },
+    'buleria-12': {
+      doc: '<p>Un compás compte 12 temps, avec des accents sur les temps 12, 3, 6, 8 et 10.</p><p>On peut l\'entendre comme « la première moitié du compás est ternaire (3 temps + 3 temps = 6 temps) » et « la seconde moitié est binaire (2 temps + 2 temps + 2 temps = 6 temps) ».</p>',
+      places: 'Jerez de la Frontera et autres'
+    },
+    'buleria-12-variation': {
+      doc: '<p>Dans cette variante répandue du compás de bulería à 12 temps, l\'accent tombe sur le temps 7 au lieu du temps 6.</p>',
+      places: 'Jerez de la Frontera et autres'
+    },
+    fandangos: {
+      doc: '<p>Ce palo à 12 temps porte des accents sur les temps 12, 3, 6, 9 et 10.</p>',
+      places: 'Huelva, Málaga et autres'
+    },
+    rumba: {
+      doc: '<p>La rumba est un palo à 4/4 ; elle se compte 1, 2, 3, 4.</p><p>Il y a un accent sur le premier temps. Remarque : notre motif d\'exemple compte 2 mesures.</p>',
+      places: 'Barcelona et autres'
+    },
+    sevillana: {
+      doc: '<p>La sevillana est un palo purement ternaire, avec un accent sur le temps 1. C\'est exactement comme une valse.</p><p>Remarque : notre motif d\'exemple compte 2 mesures.</p>',
+      places: 'Sevilla'
+    },
+    siguiriya: {
+      doc: '<p>La siguiriya est un palo à 12 temps, avec des accents sur les temps 12, 2, 4, 7 et 10.</p>',
+      places: 'Sevilla, Cádiz et autres'
+    },
+    solea: {
+      doc: '<p>La soleá est un palo triste à 12 temps, avec des accents sur les temps 3, 6, 8, 10 et 12.</p>',
+      places: 'Sevilla, Cádiz et autres'
+    },
+    tanguillos: {
+      doc: '<p>Les tanguillos sont une sorte de rythme hybride entre 3/4, 6/8 et 4/4 ; ils se comptent 1, 2, 3.</p><p>Il y a un accent sur le premier temps et parfois… sur le deux et demi.</p><p>Remarque : notre motif d\'exemple compte 2 mesures.</p>',
+      places: 'Cádiz et autres'
+    },
+    tangos: {
+      doc: '<p>Les tangos sont un palo à 4/4 ; ils se comptent 1, 2, 3, 4. Il y a un accent sur le premier temps.</p><p>Remarque : notre motif d\'exemple compte 2 mesures.</p>',
+      places: 'Granada, Málaga, Extremadura'
+    },
+    tientos: {
+      doc: '<p>Les tientos sont un palo à 4/4 ; ils se comptent 1, 2, 3, 4. Il y a un accent sur le premier temps.</p><p>Ils se terminent souvent « por tangos ».</p><p>Remarque : notre motif d\'exemple compte 2 mesures.</p>',
+      places: 'Cádiz et d\'autres lieux d\'Andalousie'
     }
   },
   buttons: {

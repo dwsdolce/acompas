@@ -57,8 +57,9 @@ export default {
         mixer: {
           title: '乐器混音器',
           content: `
-选择播放乐器（确保至少有一个活跃乐器），
-设置其相对音量，以及是否播放四分音符或八分音符。`,
+选择演奏的乐器（请确保至少启用一个），
+设置各自的相对音量，选择它是否在拍子之外还演奏八分音符，
+并指定在可视化中绘制哪一个。`,
         },
         improvise: {
           title: '即兴演奏',
@@ -235,9 +236,9 @@ abandolaos 是最清楚的例子。它的脉动落在 6、2 和 4 上，而 palm
       }
     },
     visualizationModes: {
-      dots: 'Dots',
-      counter: 'Counter',
-      clock: 'Clock'
+      dots: '圆点',
+      counter: '计数器',
+      clock: '时钟'
     },
     utils: {
       wikipediaUrl: '维基百科文章：',
@@ -349,8 +350,79 @@ abandolaos 是最清楚的例子。它的脉动落在 6、2 和 4 上，而 palm
       stop: '停止'
     },
     changelog: {
-      title: 'Changelog',
-      description: 'Latest changes and updates to Palmas',
+      title: '更新日志',
+      description: 'Palmas 的最新更改和更新',
+        releases: {
+          v1_0_0: [
+            '**Palmas 是一个新应用**，派生自 Olivier Ricordeau 和 Jérémie Sieffert 的 [A Compás](https://gitlab.com/acompas/acompas) 4.2.4，采用同样的 AGPL-3.0 许可证。它有自己的名称、自己的应用标识符和自己的版本编号，因为这里所做的改动不该由他们负责。有关 Palmas 的任何问题请 [在它自己的仓库](https://github.com/dwsdolce/palmas/issues) 反馈。',
+            '全新标识：十二个圆点组成的环中一个手写体 **P**——正是应用所绘制的 compás——以及用 Playball 排成的文字标志，这正是 A Compás 自己在 2.x 版本中使用的字体。',
+            '**可视化现在会显示哪些击点带重音。** 两个图层中颜色都表示重音：红色圆盘表示 compás 的重音拍，蓝色圆环表示所绘乐器的重音击点。以前击打的力度是用一、二或三像素的线宽表示的，谁也看不出来。',
+            '五种节奏语境现在共用一种颜色。按语境重绘整个应用，把唯一空闲的颜色通道花在了一个界面本已两处标明的模式上。',
+            '新增帮助，说明画面显示的内容、八分音符列、选择绘制哪件乐器，以及音画延迟设置——并已翻译成全部九种语言。',
+            '**各个 palo 的说明也已翻译。** 以前在四种语言中是维基百科的摘录，在其余五种语言中是英文；只要查询失败，离线时对所有人都是英文。现在九种语言都使用应用自己的文本，维基百科只作为链接，而不再是正文。',
+            '所有生产构建都启用了 **内容安全策略（CSP）**，由此发现了两个真实缺陷：vue-i18n 用 `Function()` 编译翻译，以及 Tone.js 从 blob URL 加载它的 audio worklet。',
+            '**移除了全部分析统计。** 没有账号，没有追踪，没有 Cookie。应用向外部发出的唯一请求，是你打开某个 palo 的帮助时对维基百科的查询，隐私政策现在也这样写明了。',
+            '网页版可以从任意子目录运行，因此可以托管在任何位置，而不只是域名根目录。',
+            '九种语言重新可用：阿拉伯语、波斯语、日语和中文本已存在，却从未提供选择。语言按需加载，这使主包从 230 KB 降到 190 KB（gzip 压缩后）。',
+            '**构建不再需要 Python。** 音频流程、安装和桌面打包都是 Node 脚本，在 macOS、Windows 和 Linux 上同样可用；iOS 资源生成步骤也不再需要 Mac。',
+            '安装就是两个小脚本——`setup.ps1` 和 `setup.sh`——它们检查是否有 Node，缺少就安装，然后交给一个共用的 Node 脚本完成其余工作，并在改动任何东西之前先询问。',
+            '文档改为围绕构建目标而非宿主操作系统重写，并在一台未安装任何工具链的机器上逐步验证。'
+          ]
+        }
+    }
+  },
+  patterns: {
+    alegria: {
+      doc: '<p>一个 compás 由 12 拍组成，重音落在第 12、3、6、8 和 10 拍上。</p><p>可以这样理解：「compás 的前半段是三分的」，「后半段是二分的」。</p><p>这个节奏对 alegría 和 soleá por bulería（传统 soleá 的加速版）来说是相同的。</p><p>两种风格的区别在于：一种用大调演奏（alegría 在西班牙语中意为「欢乐」），另一种用小调演奏（弗拉门戈和声进行 Am G F E）。</p><p>它也适用于同一「家族」的许多其他风格，例如接近 alegría 的 cantiñas、caracoles、mirabrás，或更接近 soleá por bulería 的 caña、polo、bambera，甚至适用于 guajira。</p>',
+      places: '加的斯'
+    },
+    abandolaos: {
+      doc: '<p>一种 3/4 拍的型态。它用于范围广泛的 palo，例如 verdiales、fandangos abandolaos、jaleos extremeños，甚至某些 bulería 的型态。</p>',
+      places: '马拉加、韦尔瓦、埃斯特雷马杜拉'
+    },
+    'buleria-6': {
+      doc: '<p>一个 compás 由 2 组各 3 个三分四分音符组成，因此这个 palo 是纯三分的。</p><p>可以把它看作 12 拍 bulería 的前半段。</p>',
+      places: '赫雷斯-德拉弗龙特拉'
+    },
+    'buleria-12': {
+      doc: '<p>一个 compás 由 12 拍组成，重音落在第 12、3、6、8 和 10 拍上。</p><p>可以这样理解：「compás 的前半段是三分的（3 拍 + 3 拍 = 6 拍）」，「后半段是二分的（2 拍 + 2 拍 + 2 拍 = 6 拍）」。</p>',
+      places: '赫雷斯-德拉弗龙特拉等地'
+    },
+    'buleria-12-variation': {
+      doc: '<p>在这个流行的 12 拍 bulería compás 变体中，重音落在第 7 拍而不是第 6 拍。</p>',
+      places: '赫雷斯-德拉弗龙特拉等地'
+    },
+    fandangos: {
+      doc: '<p>这个 12 拍的 palo 在第 12、3、6、9 和 10 拍上有重音。</p>',
+      places: '韦尔瓦、马拉加等地'
+    },
+    rumba: {
+      doc: '<p>rumba 是 4/4 拍的 palo，可以数作 1、2、3、4。</p><p>第一拍有重音。注：我们的示例型态由 2 个小节组成。</p>',
+      places: '巴塞罗那等地'
+    },
+    sevillana: {
+      doc: '<p>sevillana 是纯三分的 palo，重音在第 1 拍。就像华尔兹一样。</p><p>注：我们的示例型态由 2 个小节组成。</p>',
+      places: '塞维利亚'
+    },
+    siguiriya: {
+      doc: '<p>siguiriya 是 12 拍的 palo，重音在第 12、2、4、7 和 10 拍上。</p>',
+      places: '塞维利亚、加的斯等地'
+    },
+    solea: {
+      doc: '<p>soleá 是一种哀伤的 12 拍 palo，重音在第 3、6、8、10 和 12 拍上。</p>',
+      places: '塞维利亚、加的斯等地'
+    },
+    tanguillos: {
+      doc: '<p>tanguillos 是介于 3/4、6/8 和 4/4 之间的混合节奏，可以数作 1、2、3。</p><p>第一拍有重音，有时……还落在第二拍半上。</p><p>注：我们的示例型态由 2 个小节组成。</p>',
+      places: '加的斯等地'
+    },
+    tangos: {
+      doc: '<p>tangos 是 4/4 拍的 palo，可以数作 1、2、3、4。第一拍有重音。</p><p>注：我们的示例型态由 2 个小节组成。</p>',
+      places: '格拉纳达、马拉加、埃斯特雷马杜拉'
+    },
+    tientos: {
+      doc: '<p>tientos 是 4/4 拍的 palo，可以数作 1、2、3、4。第一拍有重音。</p><p>它常以「por tangos」结束。</p><p>注：我们的示例型态由 2 个小节组成。</p>',
+      places: '加的斯以及安达卢西亚的其他地区'
     }
   },
   buttons: {
