@@ -168,7 +168,7 @@ if (!existsSync(path.join(ROOT, 'node_modules'))) {
 // error it gives on its own says very little.
 if (!existsSync(path.join(ROOT, 'node_modules', 'electron', 'path.txt'))) {
   fail('The Electron runtime is missing, so there is nothing to package.\n' +
-    '       Fix it with: node node_modules/electron/install.js')
+    '       Fix it with: npx install-electron')
 }
 
 const quasar = path.join(ROOT, 'node_modules', '@quasar', 'app-vite', 'bin', 'quasar.js')

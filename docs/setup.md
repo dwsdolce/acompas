@@ -337,7 +337,13 @@ stops with *"The Electron runtime is missing, so there is nothing to package"*.
 This is the step the setup script would have done for you — it is here because
 this page is the by-hand equivalent, and without it the desktop build is the one
 thing doing it by hand would leave you short of. The download is cached outside
-the project, so it is paid for once per machine rather than once per clone. See
+the project, so it is paid for once per machine rather than once per clone.
+
+It is not, however, paid once per checkout. Any `yarn install` that reinstalls
+the `electron` package re-extracts that wrapper and takes the runtime with it —
+adding a single dependency is enough — so the desktop build starts failing again
+on a machine where it has always worked. Run the command above again; it comes
+back from the cache in seconds. See
 [docs/desktop.md](desktop.md#the-electron-runtime).
 
 ## Regenerating icons and audio
