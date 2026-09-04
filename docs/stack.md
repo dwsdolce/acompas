@@ -151,7 +151,7 @@ status bar.
 Stops the screen sleeping. For a metronome propped on a music stand, this is not
 a nicety.
 
-### `electron` — 31.7.7
+### `electron` — 44.0.0
 The desktop equivalent: bundles Chromium and Node.js into a Mac or Linux
 application. Heavier than Capacitor — the browser engine ships with the app
 rather than being borrowed from the operating system. `@electron/remote` lets
@@ -188,7 +188,7 @@ switches off the ESLint rules that would argue with Prettier, and
 Adds vendor prefixes to CSS for the browsers listed in the build target, so you
 write the standard property once.
 
-### `electron-builder` — 24.13.3
+### `electron-builder` — 26.15.3
 Packages the Electron app into a `.dmg` or Linux package, handling signing and
 metadata. Selected in `quasar.config.js` via `bundler: 'builder'`.
 

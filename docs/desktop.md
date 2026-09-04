@@ -35,7 +35,7 @@ which signs, notarises and staples — see
 
 | Host | Artefacts |
 |---|---|
-| **Windows** | `Acompas Setup <version>.exe` — installer: wizard, choice of directory, Start Menu and desktop shortcuts, an entry in Settings → Apps<br>`Acompas <version>.exe` — portable: runs without installing, leaves nothing behind<br>`.blockmap` — differential-update index, only needed if you ship auto-updates |
+| **Windows** | `Palmas Setup <version>.exe` — installer: wizard, choice of directory, Start Menu and desktop shortcuts, an entry in Settings → Apps<br>`Palmas <version>.exe` — portable: runs without installing, leaves nothing behind<br>`.blockmap` — differential-update index, only needed if you ship auto-updates |
 | **macOS** | `.dmg` |
 | **Linux** | electron-builder's defaults — no `linux` block is configured |
 
@@ -45,6 +45,16 @@ script describes each one as it reports them rather than just listing filenames.
 Upgrades need no special handling: electron-builder's NSIS install script calls
 `uninstallOldVersion` before installing, so an existing copy is removed first.
 Settings in `%APPDATA%` survive an uninstall.
+
+> Both of those stop at the rename. The fork changed `appId` from
+> `audio.acompas.app` to `com.dolcesfogato.palmas` and `productName` from
+> `Acompas` to `Palmas`, and each guarantee above is keyed to one of them.
+> NSIS finds the previous install by `appId`, so it will not see an old Acompas
+> and the two sit side by side in Settings → Apps; Electron derives its user
+> data directory from `productName`, so settings under `%APPDATA%\Acompas`
+> (`~/Library/Application Support/Acompas` on macOS) are not inherited and
+> Palmas starts fresh. Uninstall the old one by hand. This applies once, to
+> machines that ran a build from before the rename.
 
 > ⚠️ **Windows builds are unsigned**, and Windows will say so. Downloading and
 > running the installer raises *"Windows protected your PC"*, and the user has
@@ -132,7 +142,7 @@ what lets Gatekeeper clear it without a round trip to Apple.
 
 ### The installed app does nothing when launched
 
-Symptom: the installer finishes, you leave *"Run Acompas"* ticked, and nothing
+Symptom: the installer finishes, you leave *"Run Palmas"* ticked, and nothing
 appears — no window, no error, no crash dialog. Starting the same app from its
 Start Menu entry or desktop icon works.
 
@@ -140,16 +150,16 @@ Check the icon first. An app that starts from a shortcut is installed correctly,
 whatever the installer's checkbox did, and the two known causes are different
 problems:
 
-**The first launch can simply be slow.** `Acompas.exe` is around 244MB and its
-`app.asar` another 92MB, and the build is unsigned, so Windows Defender scans
-the lot the first time it runs. That can take tens of seconds during which
-nothing at all appears on screen. Later launches are quick because the scan has
-already happened.
+**The first launch can simply be slow.** `Palmas.exe` is around 233MB and its
+`app.asar` another 30MB — about 400MB installed — and the build is unsigned, so
+Windows Defender scans the lot the first time it runs. That can take tens of
+seconds during which nothing at all appears on screen. Later launches are quick
+because the scan has already happened.
 
 **Or `ELECTRON_RUN_AS_NODE` was inherited.** This only applies if the installer
 was started **from a terminal**: VS Code sets that variable in every shell it
 spawns, the installer inherits it, and the app it launches inherits it in turn.
-In that mode `Acompas.exe` behaves as a plain Node binary with no script to run
+In that mode `Palmas.exe` behaves as a plain Node binary with no script to run
 and exits 0 at once - no window, nothing on stderr, nothing in the event log.
 Started from Explorer or from a shortcut, the variable is not there and the
 problem cannot arise.

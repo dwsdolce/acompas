@@ -62,11 +62,19 @@ requiring that modified versions be marked as different.
 
 ## Before either store
 
-- **Artwork is unresolved.** The header monogram, the `Compás` wordmark, the
-  app icon and the favicons are all still A Compás's. Every string says Palmas
-  while every image says A Compás. Nothing should ship until that is replaced.
+- **Artwork is done.** The mark is a script P inside a ring of twelve dots, in
+  `#f44336` — the app's own primary colour. It replaced A Compás's circled A and
+  `Compás` wordmark, which had been shipping under the Palmas name while every
+  string already said Palmas. Sources are in
+  [resources/artwork](../resources/artwork/README.md); the icon set regenerates
+  from `resources/icon.png` with `yarn icons:all`.
 - **Apple is the reachable route.** There is a developer account, and iOS
-  builds need the Mac that already exists.
+  builds need the Mac that already exists. Run `yarn icons:all` there before
+  submitting: it flattens the alpha channel out of the app icon, which App
+  Store Connect rejects and which only fails at upload.
+- **The privacy policy is live** at
+  <https://www.dolcesfogato.com/palmas/privacy.html>, which is the URL App Store
+  Connect asks for.
 - **Play is not, yet.** A personal developer account created after 13 Nov 2023
   must run a closed test with **12 testers opted in continuously for 14 days**
   before it can even apply for production access, and Google now checks that
