@@ -357,8 +357,65 @@ export default defineConfig(function (ctx) {
         // Both lines are required by the AGPL: the original authors keep their
         // copyright, and a modified version has to say that it is one.
         copyright: 'Copyright © 2014-2023 Olivier Ricordeau, Jérémie Sieffert; © 2026 David Smith. Based on A Compás.',
+
+        // The four-component version - major.minor.patch.build - that every
+        // other project here ships: guitar_tap, GuitarTapWeb, pdfarranger-qt
+        // and marklens-ports all name their artefacts
+        // <name>-<major.minor.patch.build>-<arch>.<ext> and put the same string
+        // in the package metadata. The build component is the commit count
+        // computed at the top of this file.
+        //
+        // extraMetadata rewrites the version electron-builder reads, which is
+        // the only lever that reaches the package metadata as well as the
+        // filename. It does not reach the running app: the version shown there
+        // comes from the APP_VERSION and APP_BUILD defines below, which read
+        // package.json directly and still render as "1.0.0 (867)".
+        //
+        // Deliberately not electron-builder's `buildNumber`, which looks like
+        // the obvious fit but is not. It leaves the version at three
+        // components and passes the fourth to fpm as --iteration, which is the
+        // Debian revision and the RPM release - so the packages would read
+        // 1.0.0-867 and Release: 867, where every other project here reads
+        // 1.0.0.867 and Release: 1.
+        extraMetadata: {
+          version: `${pkg.version}.${buildNumber}`
+        },
+
+        // Windows keeps the build number in the exe's own resource, where
+        // pdfarranger-qt and marklens-ports both put it: packaging's
+        // VSVersionInfo carries filevers and prodvers as the full four-number
+        // tuple, and FileVersion and ProductVersion as the same string.
+        //
+        // Two options rather than one, and neither alone will do.
+        // electron-builder composes VIProductVersion from major, minor, patch
+        // and `buildNumber`, so without that the fourth slot is 0 and the exe
+        // reports 1.0.0.0. But `buildNumber` also makes `buildVersion` default
+        // to version + '.' + buildNumber, which on the already-four-component
+        // version above compounds to 1.0.0.880.880 and lands in FileVersion -
+        // hence pinning buildVersion too.
+        //
+        // Windows-only because on Linux `buildNumber` is exactly what must not
+        // be set: fpm takes it as --iteration, the Debian revision and the RPM
+        // release, and the packages become 1.0.0.880-880. Gating on the host is
+        // sound here for the reason this whole script exists - electron-builder
+        // does not cross-compile, so the host platform is the target platform.
+        ...(process.platform === 'win32'
+          ? { buildNumber, buildVersion: `${pkg.version}.${buildNumber}` }
+          : {}),
+
         mac: {
           category: 'public.app-category.music',
+
+          // Apple splits what Linux packs into one string across two keys, and
+          // the four-component version set above belongs in neither on its
+          // own: CFBundleShortVersionString is the marketing version and takes
+          // at most three integers, CFBundleVersion is the build. Spelled out
+          // here so a .dmg matches src-capacitor/ios/App/set-version.sh, which
+          // stamps exactly these two values for the iOS build - "1.0.0 (880)"
+          // means the same thing on both, and neither shape is one App Store
+          // Connect would refuse.
+          bundleShortVersion: pkg.version,
+          bundleVersion: buildNumber,
           // Signing is opt-in and off by default. Left to itself
           // electron-builder finds the Developer ID in the keychain and signs
           // with the hardened runtime; macOS then kills the app on launch
@@ -403,9 +460,54 @@ export default defineConfig(function (ctx) {
           // stays false, so this installs per-user with no elevation prompt
           // unless the directory chosen above needs one.
         },
-        // linux: {
-        //   target: ['AppImage', 'deb']
-        // }
+        linux: {
+          // Three artefacts, because "install it" means three different things
+          // depending on the distribution:
+          //   AppImage -> chmod +x and run. No root, no package manager, works
+          //               anywhere, and is the only one of the three that a
+          //               Debian *and* a Fedora user can both be handed.
+          //   deb      -> Debian, Ubuntu, Mint
+          //   rpm      -> Fedora, RHEL, openSUSE
+          //
+          // deb and rpm go through electron-builder's fpm target, which refuses
+          // to start without a project homepage and a maintainer carrying an
+          // email address. Both come from package.json - `homepage`, and
+          // `author` in its object form rather than a bare string - and both
+          // are mandatory fields in the packages themselves rather than
+          // electron-builder being fussy. AppImage needs neither, which is why
+          // the default Linux build produced one without any of this.
+          //
+          // The rpm additionally shells out to `rpmbuild`, which is not
+          // installed by default on Debian-family machines;
+          // packaging/build-desktop.mjs checks for it before starting.
+          target: ['AppImage', 'deb', 'rpm'],
+
+          // Written into the .desktop file verbatim as `Categories=`. This is
+          // also exactly what electron-builder would derive from the
+          // `public.app-category.music` set for macOS above, spelled out here
+          // so that the two cannot quietly drift apart.
+          category: 'Audio;AudioVideo',
+
+          // The one-line summary a package manager shows in a search result.
+          // Without it, deb falls back to the full description.
+          synopsis: 'A flamenco metronome',
+
+          // <name>-<version>-<arch>.<ext>, matching the other projects here.
+          // electron-builder's own defaults differ per format - underscores
+          // and a dropped arch for deb, a dot before the arch for rpm - so all
+          // three are named here rather than left to it. Naming the pattern
+          // also forces the arch to be included: electron-builder omits it for
+          // x64 unless the pattern is user-supplied.
+          artifactName: '${name}-${version}-${arch}.${ext}'
+
+          // No icon setting needed, for the same reason as Windows above:
+          // src-electron/electron-assets/icons/icon.png is 512x512, and
+          // electron-builder generates the size set Linux wants from it.
+          //
+          // No `depends` either. electron-builder's defaults for deb and rpm
+          // are the usual Electron runtime libraries - GTK 3, NSS, libsecret
+          // and friends - which is what this needs and nothing more.
+        }
       },
 
       // Specify additional parameters when yarn/npm installing

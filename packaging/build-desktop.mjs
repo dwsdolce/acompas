@@ -120,6 +120,16 @@ function findAppBundle () {
   return undefined
 }
 
+/** The first executable named `name` on PATH, or null. */
+function onPath (name) {
+  for (const dir of (process.env.PATH ?? '').split(path.delimiter)) {
+    if (dir === '') continue
+    const candidate = path.join(dir, name)
+    if (existsSync(candidate)) return candidate
+  }
+  return null
+}
+
 // ------------------------------------------------------------------ preflight
 
 heading('Checking the project')
@@ -140,6 +150,18 @@ if (!existsSync(path.join(ROOT, 'node_modules', 'electron', 'path.txt'))) {
 
 const quasar = path.join(ROOT, 'node_modules', '@quasar', 'app-vite', 'bin', 'quasar.js')
 if (!existsSync(quasar)) fail('The Quasar CLI was not found. Run: node scripts/setup.mjs')
+
+// The Linux build produces an AppImage, a .deb and an .rpm. Only the .rpm
+// needs anything from outside the project: electron-builder's fpm target
+// shells out to rpmbuild, which Debian-family machines - the ones most likely
+// to be building this - do not have by default. fpm fails deep inside its own
+// output when it is missing, so catch it here where the fix fits on one line.
+if (!WIN && !MAC && !unpackedOnly && onPath('rpmbuild') === null) {
+  fail('rpmbuild is missing, so the .rpm cannot be built.\n' +
+    '       Install it:  sudo apt install rpm       (Debian, Ubuntu, Mint)\n' +
+    '                    sudo dnf install rpm-build (Fedora, RHEL)\n' +
+    '       Or drop \'rpm\' from electron.builder.linux.target in quasar.config.js.')
+}
 
 console.log(`  platform    ${process.platform} ${process.arch}`)
 console.log(`  electron    ${JSON.parse(readFileSync(path.join(ROOT, 'node_modules/electron/package.json'), 'utf8')).version}`)

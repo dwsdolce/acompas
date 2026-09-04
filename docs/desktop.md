@@ -11,6 +11,7 @@ reverse. Run the build on the platform you want a package for.
 * [Building](#building) — one command on every platform
 * [The Electron runtime](#the-electron-runtime) — the one prerequisite
   `yarn install` does not provide
+* [rpmbuild, for the .rpm](#rpmbuild-for-the-rpm) — Linux only
 * [What comes out](#what-comes-out)
 * [When a build fails](#when-a-build-fails) — indexed by what you saw
 
@@ -76,16 +77,83 @@ download is cached outside the project — `~/.cache/electron` on Linux,
 `~/Library/Caches/electron` on macOS, `%LOCALAPPDATA%\electron\Cache` on
 Windows.
 
+### rpmbuild, for the .rpm
+
+Linux only, and only for one of the three artefacts. `.deb` and `.rpm` are built
+by electron-builder's fpm target, and fpm shells out to `rpmbuild` for the rpm —
+which Debian-family machines, the ones most likely to be building this, do not
+have installed by default:
+
+```bash
+sudo apt install rpm         # Debian, Ubuntu, Mint
+sudo dnf install rpm-build   # Fedora, RHEL
+```
+
+[packaging/build-desktop.mjs](../packaging/build-desktop.mjs) checks for it
+before starting, because fpm's own failure arrives several minutes into a build
+and buried in its output. If you would rather not install it, drop `'rpm'` from
+`electron.builder.linux.target` in [quasar.config.js](../quasar.config.js) and
+the other two still build.
+
+fpm itself needs nothing: electron-builder downloads it on the first Linux
+package build and caches it under `~/.cache/electron-builder`.
+
 ### What comes out
 
 | Host | Artefacts |
 |---|---|
 | **Windows** | `Palmas Setup <version>.exe` — installer: wizard, choice of directory, Start Menu and desktop shortcuts, an entry in Settings → Apps<br>`Palmas <version>.exe` — portable: runs without installing, leaves nothing behind<br>`.blockmap` — differential-update index, only needed if you ship auto-updates |
 | **macOS** | `.dmg` — signed, notarised and stapled when credentials are configured |
-| **Linux** | electron-builder's defaults — no `linux` block is configured |
+| **Linux** | `palmas-<version>-x86_64.AppImage` — portable: `chmod +x` and run, no root and no package manager, and the only one of the three a Debian *and* a Fedora user can both be handed<br>`palmas-<version>-amd64.deb` — Debian, Ubuntu, Mint<br>`palmas-<version>-x86_64.rpm` — Fedora, RHEL, openSUSE |
 
 The two Windows executables differ by the single word "Setup", which is why the
 script describes each one as it reports them rather than just listing filenames.
+
+### The version on an artefact
+
+`<version>` above is four components — `1.0.0.880` — where the fourth is the git
+commit count, the same build number the app shows as "1.0.0 (880)" and the same
+scheme every other project here uses. It appears in the filename *and* in the
+package metadata, so `dpkg -I` and `rpm -qip` agree with the name on disk:
+
+```
+Version: 1.0.0.880          # deb
+Version: 1.0.0.880          # rpm, with Release: 1
+```
+
+That is set by `extraMetadata.version` in [quasar.config.js](../quasar.config.js),
+not by electron-builder's `buildNumber` option. `buildNumber` looks like the
+right lever and is not: it leaves the version at three components and hands the
+fourth to fpm as `--iteration`, which is the Debian revision and the RPM
+release — giving `1.0.0-880` and `Release: 880` instead.
+
+**macOS spells the same thing differently**, and gets it spelled out in the
+`mac` block rather than inheriting the four-component string. Apple splits a
+version across two keys — `CFBundleShortVersionString`, the marketing version,
+capped at three integers, and `CFBundleVersion`, the build — so the `.dmg`
+carries `1.0.0` and `880` separately. That is what
+[src-capacitor/ios/App/set-version.sh](../src-capacitor/ios/App/set-version.sh)
+stamps for iOS, so both Apple builds agree, and neither is a shape App Store
+Connect would refuse.
+
+**Windows carries it in the exe's own resource** — `VIProductVersion`,
+`FileVersion` and `ProductVersion` all read `1.0.0.880`, matching the
+`VSVersionInfo` block that `pdfarranger-qt` and `marklens-ports` stamp with
+PyInstaller. That takes both `buildNumber` and `buildVersion`, set together and
+only when building on Windows: electron-builder composes `VIProductVersion`
+from major, minor, patch and `buildNumber`, so without it the fourth slot is
+zero; but `buildNumber` alone also makes `buildVersion` default to
+*version*`.`*buildNumber*, which on an already-four-component version compounds
+to `1.0.0.880.880` and lands in `FileVersion`.
+
+Gating on the host platform is sound for the same reason this script exists at
+all — electron-builder does not cross-compile, so the host *is* the target. On
+Linux `buildNumber` is precisely what must not be set, for the fpm reason
+above.
+
+A shallow clone has no commit history to count, so the build number collapses
+to `1`. `actions/checkout` defaults to `fetch-depth: 1`, which is why the
+workflow asks for the full history.
 
 ## When a build fails
 

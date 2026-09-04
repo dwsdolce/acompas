@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "A flamenco metronome",
   "productName": "Palmas",
-  "author": "David Smith",
+  "author": {
+    "name": "David Smith",
+    "email": "dws@dolcesfogato.com"
+  },
+  "homepage": "https://dolcesfogato.com/palmas",
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
