@@ -10,15 +10,21 @@ Sources belong where they cannot be served.
 
 | source | becomes | how |
 |---|---|---|
-| `logo.svg` | `resources/icon.png` | export 1024×1024 PNG |
+| `logo.svg` | `resources/icon.png` | rendered at 1024×1024 by the build |
 | `wordmark.svg` | `public/palmas-wordmark.svg` | save as Optimised SVG |
 | `logo-and-name.svg` | — | the combined lockup; unused so far |
 
-`resources/icon.png` is in turn the single input to every generated icon —
-`yarn icons` for the web and Electron set, `yarn icons:all` for those plus the
-committed Android and iOS assets. Both read it from `icongenie-profile.json`.
-Nothing else feeds the icon pipeline; the header wordmark is referenced directly
-from `src/layouts/MainLayout.vue` and is not generated.
+`logo.svg` is the root of the whole icon chain, and nothing below it is
+committed. `scripts/icons.mjs` renders the 1024×1024 master from it, then reads
+`icongenie-profile.json` and produces whatever the target being built needs -
+all of it driven by the build, none of it by hand. Nothing else feeds the icon
+pipeline; the header wordmark is referenced directly from
+`src/layouts/MainLayout.vue` and is not generated.
+
+Edit the drawing and build: the master and every icon under it follow. There is
+no export step to remember, which is the point - the master used to be exported
+by hand and committed, and that made it the one place the chain could quietly
+fall behind the artwork.
 
 ## The typeface
 
@@ -58,10 +64,10 @@ that names Playball renders in whatever fallback the viewer happens to have.
 the app agree. An earlier export used pure `#ff0000`, which reads noticeably
 hotter than anything in the interface.
 
-For `resources/icon.png` specifically: 1024×1024, the disc full-bleed to the
-edges, transparent outside it, and **no rounded corners** — iOS applies its own
-mask, and a pre-rounded icon gets rounded twice. The transparency is correct
-here: `packaging/prepare-ios-assets.mjs` flattens it onto white for the App
+For `logo.svg` specifically: square, the disc full-bleed to the edges,
+transparent outside it, and **no rounded corners** — iOS applies its own mask,
+and a pre-rounded icon gets rounded twice. The transparency is correct here:
+`packaging/prepare-ios-assets.mjs` flattens the iOS icon onto white for the App
 Store, which rejects any icon carrying an alpha channel.
 
 The header wordmark is white on transparent, which is what lets it sit on the

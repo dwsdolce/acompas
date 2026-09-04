@@ -1,5 +1,9 @@
 // Finish the iOS assets Icon Genie leaves half-done.
 //
+// Run by scripts/icons.mjs straight after it generates the iOS set, so these
+// two steps are part of producing the assets rather than a repair someone has
+// to remember afterwards.
+//
 // Was a zsh script, so it ran on macOS and nowhere else - and it failed
 // quietly on Windows, leaving the alpha channel in place. That is the worst
 // possible place for a silent failure: a device build installs happily with an
@@ -96,7 +100,7 @@ function readPng (file) {
 
 const fail = (message) => { console.error(`ERROR: ${message}`); process.exit(1) }
 
-if (!existsSync(ICON)) fail(`no iOS app icon at ${ICON} - run: yarn icons:all`)
+if (!existsSync(ICON)) fail(`no iOS app icon at ${ICON} - run: yarn icons ios`)
 
 const before = readPng(ICON)
 if (before === null) fail(`${ICON} is not a PNG this script can read`)
@@ -110,7 +114,7 @@ if (!before.transparent) {
   if (ffmpeg === null) {
     console.error('ERROR: ffmpeg not found, so the iOS icon keeps its alpha channel.')
     console.error('It will install on a device but App Store Connect will refuse it.')
-    console.error('Install it, then run `yarn icons:all` again:')
+    console.error('Install it, then run `yarn icons ios` again:')
     console.error('  macOS    brew install ffmpeg')
     console.error('  Windows  winget install Gyan.FFmpeg')
     console.error('  Linux    sudo apt install ffmpeg')
@@ -156,7 +160,7 @@ if (!before.transparent) {
 // The splash is one image referenced three times, at 1x, 2x and 3x. Icon Genie
 // writes a single file, so the other two names are copies of it - the asset
 // catalogue names them, and Xcode will not build with any of them missing.
-if (!existsSync(SPLASH)) fail(`no iOS splash at ${SPLASH} - run: yarn icons:all`)
+if (!existsSync(SPLASH)) fail(`no iOS splash at ${SPLASH} - run: yarn icons ios`)
 
 for (const scale of [1, 2]) {
   const target = `${SPLASH_DIR}/splash-2732x2732-${scale}.png`

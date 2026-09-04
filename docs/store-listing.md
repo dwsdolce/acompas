@@ -66,12 +66,12 @@ requiring that modified versions be marked as different.
   `#f44336` — the app's own primary colour. It replaced A Compás's circled A and
   `Compás` wordmark, which had been shipping under the Palmas name while every
   string already said Palmas. Sources are in
-  [resources/artwork](../resources/artwork/README.md); the icon set regenerates
-  from `resources/icon.png` with `yarn icons:all`.
+  [resources/artwork](../resources/artwork/README.md); the icon set is generated
+  from `logo.svg` by the build itself.
 - **Apple is the reachable route.** There is a developer account, and iOS
-  builds need the Mac that already exists. Run `yarn icons:all` there before
-  submitting: it flattens the alpha channel out of the app icon, which App
-  Store Connect rejects and which only fails at upload.
+  builds need the Mac that already exists. The build flattens the alpha channel
+  out of the app icon on its own, which App Store Connect rejects and which only
+  fails at upload.
 - **The privacy policy is live** at
   <https://www.dolcesfogato.com/palmas/privacy.html>, which is the URL App Store
   Connect asks for.

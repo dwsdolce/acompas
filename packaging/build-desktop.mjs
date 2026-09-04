@@ -94,9 +94,32 @@ function readSettings (file) {
     // surrounding quotes. A password may legitimately contain a '#'.
     const raw = rest.trim()
     const quoted = /^(['"])(.*)\1\s*$/.exec(raw)
-    values[name] = quoted === null ? raw.replace(/\s+#.*$/, '').trim() : quoted[2]
+    const value = quoted === null ? raw.replace(/\s+#.*$/, '').trim() : quoted[2]
+    // These files are written to be `source`d, and ours rely on it: the Tauri
+    // aliases are defined as "$CODESIGN_IDENTITY", and one path as "$HOME/...".
+    // Left as written they reach electron-builder verbatim, which reports no
+    // such identity in the keychain, skips signing, and ships an unsigned app
+    // that only Apple's notary service rejects. Single quotes suppress
+    // expansion, as in a shell, so a password containing a '$' survives.
+    values[name] = quoted?.[1] === "'" ? value : expand(value, values)
   }
   return values
+}
+
+/**
+ * Substitute $NAME and ${NAME}, preferring a name defined earlier in the same
+ * file over the surrounding environment. An undefined name becomes empty and a
+ * backslash escapes the '$', both as a shell would have it.
+ */
+function expand (value, values) {
+  const reference = /\\?\$(?:\{([A-Za-z_][A-Za-z0-9_]*)\}|([A-Za-z_][A-Za-z0-9_]*))?/g
+  return value.replace(reference, (whole, braced, bare) => {
+    if (whole.startsWith('\\')) return whole.slice(1)
+    const name = braced ?? bare
+    // A '$' that no name follows is literal, as it is in a shell.
+    if (name === undefined) return whole
+    return values[name] ?? process.env[name] ?? ''
+  })
 }
 
 const megabytes = bytes => `${(bytes / 1024 / 1024).toFixed(1)} MB`

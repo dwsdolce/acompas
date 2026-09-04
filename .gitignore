@@ -13,18 +13,36 @@ node_modules
 /src-cordova/www
 
 # Palmas specific ignores
-# Generated icons. `yarn icons` produces these from resources/icon.png, and the
-# postinstall hook runs it, so a fresh clone is build-ready with no manual
-# step. Do not commit them.
+# Generated icons, all of them derived from resources/artwork/logo.svg.
+# scripts/icons.mjs renders the 1024px master and then produces whatever the
+# target being built needs, and the build asks it first, so there is nothing to
+# run by hand and no way to ship an icon older than the artwork.
 #
-# `yarn icons:all` is a different, occasional job: it runs the full profile,
-# which also rewrites the Capacitor Android and iOS assets that ARE committed,
-# and flattens the iOS icon, which Icon Genie writes with an alpha channel that
-# App Store Connect refuses. Run it only when the source icon changes, and
-# review the diff.
+# The master is generated too. It used to be exported from the drawing by hand
+# and committed, which made it the one place the chain could silently fall
+# behind its source.
+/resources/icon.png
 /public/favicon.ico
 /public/icons
 /src-electron/electron-assets
+# What the icons were generated from, so a build can tell whether they are still
+# current without regenerating them to find out.
+/.icons/
+
+# The Capacitor native projects are committed - they are real Xcode and Gradle
+# projects - but the images inside them are not: they are generated from
+# resources/icon.png like every other icon, and were only ever in git because
+# they arrived with the project scaffold in 2022.
+#
+# Named file by file rather than by directory, because these sit beside things
+# that genuinely are sources: ic_launcher_background.png, which nothing derives
+# from the artwork, and the asset catalogue's Contents.json.
+/src-capacitor/android/app/src/main/res/mipmap-*/ic_launcher.png
+/src-capacitor/android/app/src/main/res/mipmap-*/ic_launcher_round.png
+/src-capacitor/android/app/src/main/res/mipmap-*/ic_launcher_foreground.png
+/src-capacitor/android/app/src/main/res/drawable*/launch_splash.png
+/src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset/*.png
+/src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset/*.png
 # Every playable file is generated from the .wav masters in audio/, which are
 # the committed ones. The whole directory goes, rather than a list of formats
 # that had to grow whenever one was added or dropped.

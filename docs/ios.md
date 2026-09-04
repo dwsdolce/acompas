@@ -183,28 +183,25 @@ account, change it there, or pick the team in Xcode under the App target →
 App Store Connect rejects an app icon that carries transparency - *"Invalid
 Image - the app icon can't contain an alpha channel"* - and it rejects it at
 upload. A device build installs happily either way, so without a guard the
-failure arrives long after the icon was made. `resources/icon.png` does have an
+failure arrives long after the icon was made. The generated master does have an
 alpha channel, so this is a live hazard rather than a precaution.
 
 **Nothing needs doing about it.** Every iOS build runs
 `packaging/prepare-ios-assets.mjs` first, through the `beforeBuild` hook in
-`quasar.config.js`. It reads the committed icon, leaves it alone if it is
+`quasar.config.js`. It reads the generated icon, leaves it alone if it is
 already flat, and flattens it with ffmpeg if not - then re-reads the result
 rather than trusting ffmpeg's exit status, because this is precisely the step
 whose failure would otherwise only appear at upload. It also writes the 1x and
 2x names the splash asset catalogue insists on.
 
-The hook is scoped to `-T ios` alone. `yarn icons:all` regenerates 56 tracked
-files across both native platforms, so hanging that off an iOS build would
-rewrite every Android launcher icon as a side effect; this one step touches two
-files and is idempotent, so on a clean tree it costs milliseconds and leaves the
-tree clean.
+Nothing here has to be run by hand, and an iOS build touches only the iOS
+assets: `scripts/icons.mjs` generates per target, so building for iOS no longer
+rewrites every Android launcher icon as a side effect. On an unchanged tree it
+hashes the sources, finds them current and prints nothing.
 
-Run `yarn icons:all` by hand only when the **artwork itself** changes - it is
-what regenerates the icons from `resources/icon.png` in the first place. That is
-not macOS-only: it is a Node script and runs anywhere ffmpeg does, so the icons
-can be regenerated on whatever machine is to hand. Only the Xcode build needs a
-Mac.
+None of it is macOS-only. It is a Node script and runs anywhere ffmpeg does, so
+the icons can be regenerated on whatever machine is to hand. Only the Xcode build
+needs a Mac.
 
 ## Version numbering
 

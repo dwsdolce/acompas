@@ -47,6 +47,40 @@ const buildNumber = (() => {
 })()
 
 
+/**
+ * Generate the icons this build needs, before it needs them.
+ *
+ * The icon set is derived from resources/artwork/logo.svg and not committed, so
+ * it used to be install-time state: `postinstall` generated it once and nothing
+ * looked again. Pulling a commit that changed the artwork therefore left every
+ * later build shipping the old mark, with nothing to say so - which is exactly
+ * what happened between the Palmas icon landing and it reaching a .dmg.
+ *
+ * scripts/icons.mjs decides whether there is anything to do by hashing the
+ * sources, so on an unchanged tree this costs a few stats and prints nothing.
+ * It is given the target rather than left to guess: a macOS build has no use
+ * for icon.ico or the Linux set.
+ */
+function generateIcons (ctx) {
+  const target = ctx.mode.capacitor && ctx.targetName === 'ios' ? 'ios'
+    : ctx.mode.capacitor && ctx.targetName === 'android' ? 'android'
+    : ctx.mode.electron ? 'electron'
+    : 'web'
+
+  // A native build serves the web assets too, so public/ has to be current
+  // either way.
+  const targets = target === 'ios' || target === 'android' ? ['web', target] : [target]
+
+  const script = path.join(__dirname, 'scripts', 'icons.mjs')
+  const result = spawnSync(process.execPath, [script, ...targets], { stdio: 'inherit' })
+
+  if (result.error !== undefined) throw result.error
+  if (result.status !== 0) {
+    throw new Error('scripts/icons.mjs failed, so the icons are older than the artwork')
+  }
+}
+
+
 export default defineConfig(function (ctx) {
   return {
     // eslint: {
@@ -179,31 +213,22 @@ export default defineConfig(function (ctx) {
         }
       },
 
-      // The iOS app icon has to be flat. App Store Connect refuses one with an
-      // alpha channel, and it refuses it at upload - a device build installs
-      // happily either way - so the failure lands hours or days after whoever
-      // generated the icon has stopped thinking about it. resources/icon.png
-      // genuinely has an alpha channel, so this is a live hazard and not a
-      // precaution.
-      //
-      // Only the iOS target, because that is the only place it matters, and
-      // only this one step: `yarn icons:all` regenerates 56 tracked files
-      // across both native platforms, so building for iOS would rewrite every
-      // Android launcher icon as a side effect. prepare-ios-assets.mjs touches
-      // two files and is idempotent - it reads the committed icon, says so and
-      // stops if it is already flat - so on a clean tree this costs a few
-      // milliseconds and leaves the tree clean, while a build can no longer
-      // carry an icon that upload will reject.
+      // Everything icon-related happens in one place now. That includes
+      // flattening the iOS app icon, which used to be invoked separately here:
+      // App Store Connect refuses an alpha channel and refuses it at upload - a
+      // device build installs happily either way - so the failure lands hours
+      // or days after whoever generated the icon stopped thinking about it.
+      // The generated master genuinely has an alpha channel, so it is a live
+      // hazard rather than a precaution, and it belongs where the iOS assets
+      // are produced rather than in a step that has to be remembered.
       beforeBuild () {
-        if (!ctx.mode.capacitor || ctx.targetName !== 'ios') return
+        generateIcons(ctx)
+      },
 
-        const script = path.join(__dirname, 'packaging', 'prepare-ios-assets.mjs')
-        const result = spawnSync(process.execPath, [script], { stdio: 'inherit' })
-
-        if (result.error !== undefined) throw result.error
-        if (result.status !== 0) {
-          throw new Error('packaging/prepare-ios-assets.mjs failed, so the iOS assets are not ready to ship')
-        }
+      // The dev server serves public/, so a stale favicon shows up here too -
+      // and this is where the artwork is usually being looked at.
+      beforeDev () {
+        generateIcons(ctx)
       },
       // viteVuePluginOptions: {},
 
@@ -416,6 +441,15 @@ export default defineConfig(function (ctx) {
           // Connect would refuse.
           bundleShortVersion: pkg.version,
           bundleVersion: buildNumber,
+
+          // Named for the same reason as Linux below, and here it is not
+          // optional: the DMG target's default pattern substitutes
+          // bundleShortVersion for ${version} whenever that is set, so the
+          // four-component version above reaches the .zip beside it but never
+          // the .dmg - which came out as Palmas-1.0.0-arm64.dmg next to
+          // Palmas-1.0.0.883-arm64-mac.zip. A user-supplied pattern is not
+          // subject to that substitution.
+          artifactName: '${name}-${version}-${arch}.${ext}',
           // Signing is opt-in and off by default. Left to itself
           // electron-builder finds the Developer ID in the keychain and signs
           // with the hardened runtime; macOS then kills the app on launch
@@ -441,10 +475,14 @@ export default defineConfig(function (ctx) {
           // src-electron/electron-assets/icons/icon, which resolves to
           // icon.ico here and is generated by `yarn icons`.
           //
-          // Two artefacts, named by electron-builder's own templates and
-          // distinguishable only by the word "Setup":
-          //   nsis     -> "Palmas Setup <version>.exe", the installer
-          //   portable -> "Palmas <version>.exe", self-extracting, no install
+          // Two artefacts:
+          //   nsis     -> the installer
+          //   portable -> self-extracting, no install
+          //
+          // Both are the same electron-builder target class, and its default
+          // names differ only by the word "Setup". Naming them therefore has
+          // to be done per target, in the nsis and portable blocks below: an
+          // artifactName here would apply to both and give them one filename.
           target: ['nsis', 'portable']
         },
         nsis: {
@@ -453,12 +491,22 @@ export default defineConfig(function (ctx) {
           // then it launches the app. Perfectly functional and quite startling.
           // A conventional wizard is worth the extra two clicks.
           oneClick: false,
-          allowToChangeInstallationDirectory: true
+          allowToChangeInstallationDirectory: true,
+
+          // <name>-<version>-<arch>-setup.exe, matching Linux and macOS. The
+          // suffix is what keeps this distinct from the portable exe below,
+          // the job the word "Setup" does in the default name.
+          artifactName: '${name}-${version}-${arch}-setup.${ext}'
           // Upgrades need nothing here: installSection.nsh calls
           // uninstallOldVersion unconditionally, outside the ONE_CLICK branch,
           // so an existing install is removed first either way. perMachine
           // stays false, so this installs per-user with no elevation prompt
           // unless the directory chosen above needs one.
+        },
+        portable: {
+          // The counterpart to nsis above: same version and arch, told apart
+          // by the suffix rather than by the absence of one.
+          artifactName: '${name}-${version}-${arch}-portable.${ext}'
         },
         linux: {
           // Three artefacts, because "install it" means three different things
@@ -511,7 +559,9 @@ export default defineConfig(function (ctx) {
           //
           // Given a directory, electron-builder collects every <size>x<size>.png
           // in it and installs each into its matching hicolor directory.
-          // `yarn icons` generates them; see icongenie-generated.json.
+          // scripts/icons.mjs generates them, and only when the target is
+          // Linux - electron-builder does not cross-compile, so there is no
+          // reason for this directory to exist on a Mac.
           //
           // Absolute, because electron-builder runs against
           // dist/electron/UnPackaged rather than the repository root, so a

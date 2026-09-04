@@ -25,9 +25,8 @@
     "build:electron": "quasar build -m electron",
     "build:electron:dev": "quasar build -m electron --dev",
     "build:electron:prod": "quasar build -m electron --prod",
-    "icons": "icongenie generate -p icongenie-generated.json",
-    "postinstall": "quasar prepare && yarn icons && node scripts/format-audio.mjs convert --optional",
-    "icons:all": "icongenie generate -p icongenie-profile.json && node packaging/prepare-ios-assets.mjs",
+    "icons": "node scripts/icons.mjs",
+    "postinstall": "quasar prepare && node scripts/icons.mjs && node scripts/format-audio.mjs convert --optional",
     "audio": "node scripts/format-audio.mjs convert",
     "audio:clean": "node scripts/format-audio.mjs unconvert"
   },
@@ -73,6 +72,7 @@
     "happy-dom": "^20.12.0",
     "prettier": "^3.3.2",
     "pug": "^3.0.3",
+    "sharp": "^0.35.3",
     "typescript": "^5.5.3",
     "vitest": "^4.1.11"
   },

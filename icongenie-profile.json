@@ -393,17 +393,6 @@
     {
       "generator": "splashscreen",
       "name": "launch_splash.png",
-      "folder": "src-capacitor/android/app/src/main/res/drawable-port-ldpi",
-      "sizes": [
-        [
-          240,
-          320
-        ]
-      ]
-    },
-    {
-      "generator": "splashscreen",
-      "name": "launch_splash.png",
       "folder": "src-capacitor/android/app/src/main/res/drawable-port-mdpi",
       "sizes": [
         [
@@ -453,17 +442,6 @@
         [
           1280,
           1920
-        ]
-      ]
-    },
-    {
-      "generator": "splashscreen",
-      "name": "launch_splash.png",
-      "folder": "src-capacitor/android/app/src/main/res/drawable-land-ldpi",
-      "sizes": [
-        [
-          320,
-          240
         ]
       ]
     },

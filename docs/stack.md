@@ -205,7 +205,7 @@ Six packages that had accumulated here were removed on 2026-08-30:
 `electron-packager` (the config selects `builder`; also deprecated upstream),
 `@types/dompurify` (DOMPurify 3 ships its own types), `@vue/devtools` (app-vite
 v3 uses `vite-plugin-vue-devtools` and installs it on demand),
-`@capacitor/assets` (this project generates icons with `yarn icons`) and
+`@capacitor/assets` (this project generates icons from the build itself) and
 `@vue/language-plugin-pug` (editor tooling, and never wired into
 `vueCompilerOptions` so it was not doing even that).
 
@@ -225,7 +225,7 @@ What remains looks unused to a naive grep but is not:
 | `@types/dompurify` | Type definitions for DOMPurify. Version 3 ships its own types, so this stub is redundant and can conflict. |
 | `@types/animejs` | Types for anime.js, which ships none of its own — so this one **is** doing real work even though nothing imports it by name. Keep it. |
 | `@vue/devtools` | The standalone Vue debugging app, launched when `vueDevtools` is enabled in `quasar.config.js`. Its bundled Electron fails to install, so enabling it currently breaks `quasar dev`. |
-| `@capacitor/assets` | A CLI that generates app icons and splash screens from a source image. Run by hand, if at all — this project uses Quasar's Icon Genie instead, via `yarn icons`. |
+| `@capacitor/assets` | A CLI that generates app icons and splash screens from a source image. Run by hand, if at all — this project uses Quasar's Icon Genie instead, driven by `scripts/icons.mjs`. |
 | `@vue/language-plugin-pug` | Teaches the Vue editor tooling to understand Pug templates. It improves your editor, not the build. |
 
 ---
