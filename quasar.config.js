@@ -498,12 +498,29 @@ export default defineConfig(function (ctx) {
           // three are named here rather than left to it. Naming the pattern
           // also forces the arch to be included: electron-builder omits it for
           // x64 unless the pattern is user-supplied.
-          artifactName: '${name}-${version}-${arch}.${ext}'
+          artifactName: '${name}-${version}-${arch}.${ext}',
 
-          // No icon setting needed, for the same reason as Windows above:
-          // src-electron/electron-assets/icons/icon.png is 512x512, and
-          // electron-builder generates the size set Linux wants from it.
+          // A directory of sized PNGs rather than the single icon.png the
+          // other platforms use, because electron-builder does not resize for
+          // Linux: given one file it passes it through untouched, and the
+          // package ends up with hicolor/512x512/apps/palmas.png as the only
+          // icon there is. The window icon is set in electron-main.ts and so
+          // is unaffected - which is why the taskbar and a desktop shortcut
+          // look right while the applications menu, the one place that goes
+          // through the icon theme, falls back to a generic icon.
           //
+          // Given a directory, electron-builder collects every <size>x<size>.png
+          // in it and installs each into its matching hicolor directory.
+          // `yarn icons` generates them; see icongenie-generated.json.
+          //
+          // Absolute, because electron-builder runs against
+          // dist/electron/UnPackaged rather than the repository root, so a
+          // project-relative path resolves to nothing - and resolving to
+          // nothing is silent: the source list falls through to the icon.png
+          // Quasar sets, and the build succeeds with one icon again. Quasar
+          // passes absolute paths for its own icon defaults for this reason.
+          icon: path.resolve(__dirname, 'src-electron/electron-assets/icons/linux')
+
           // No `depends` either. electron-builder's defaults for deb and rpm
           // are the usual Electron runtime libraries - GTK 3, NSS, libsecret
           // and friends - which is what this needs and nothing more.

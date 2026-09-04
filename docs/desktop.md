@@ -11,6 +11,7 @@ reverse. Run the build on the platform you want a package for.
 * [Building](#building) — one command on every platform
 * [The Electron runtime](#the-electron-runtime) — the one prerequisite
   `yarn install` does not provide
+* [Icons on Linux](#icons-on-linux) — why a set, not one file
 * [rpmbuild, for the .rpm](#rpmbuild-for-the-rpm) — Linux only
 * [What comes out](#what-comes-out)
 * [When a build fails](#when-a-build-fails) — indexed by what you saw
@@ -76,6 +77,35 @@ Either way it is paid for once per machine rather than once per clone: the
 download is cached outside the project — `~/.cache/electron` on Linux,
 `~/Library/Caches/electron` on macOS, `%LOCALAPPDATA%\electron\Cache` on
 Windows.
+
+### Icons on Linux
+
+The `.deb` and `.rpm` install a set of eight — 16 through 512 — into the
+matching `/usr/share/icons/hicolor/<size>x<size>/apps/` directories, generated
+by `yarn icons` into `src-electron/electron-assets/icons/linux/` and pointed at
+by `linux.icon` in [quasar.config.js](../quasar.config.js).
+
+A set rather than the single `icon.png` the other platforms use, because
+electron-builder does not resize for Linux: given one file it passes it through
+untouched, and the package ends up with a lone `512x512` entry. Only the
+applications menu notices. The taskbar and a desktop shortcut take their icon
+from the running window, which [electron-main.ts](../src-electron/electron-main.ts)
+sets directly — so those look right while the menu, the one place that goes
+through the icon theme, falls back to a generic icon. The AppImage never
+notices either: it embeds the icon as `.DirIcon` at the root of its AppDir and
+does not consult the theme at all.
+
+`linux.icon` is an absolute path, and has to be. electron-builder runs against
+`dist/electron/UnPackaged` rather than the repository root, so a
+project-relative path resolves to nothing — and resolving to nothing is silent:
+the source list falls through to the `icon.png` Quasar sets, and the build
+succeeds with one icon again. Quasar passes absolute paths for its own icon
+defaults for the same reason. If the menu icon ever goes generic again, count
+the icons in the package before anything else:
+
+```bash
+dpkg-deb -c dist/electron/Packaged/*.deb | grep hicolor
+```
 
 ### rpmbuild, for the .rpm
 
