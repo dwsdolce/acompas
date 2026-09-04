@@ -26,7 +26,7 @@ import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 
 // Every path below is relative to the repository root, so anchor there rather
-// than trusting the caller's directory - the same thing packaging/build_mac
+// than trusting the caller's directory - the same thing packaging/build-desktop.mjs
 // does. `yarn audio` would be fine either way; `node scripts/format-audio.mjs`
 // from anywhere else would not.
 process.chdir(path.resolve(import.meta.dirname, '..'))

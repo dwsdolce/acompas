@@ -338,8 +338,8 @@ export default defineConfig(function (ctx) {
           // because it is not notarized, with no dialog and no output. An
           // explicit null keeps local builds unsigned and launchable.
           //
-          // packaging/build_mac exports CSC_NAME from the settings file
-          // outside the repository, which turns both of these on. Notarizing
+          // packaging/build-desktop.mjs exports CSC_NAME from the settings
+          // file outside the repository, which turns both of these on. Notarizing
           // needs credentials as well, and electron-builder throws if it is
           // asked to notarize without them, so that is checked here too - it
           // reads whichever of the three sets is present.
@@ -359,8 +359,8 @@ export default defineConfig(function (ctx) {
           //
           // Two artefacts, named by electron-builder's own templates and
           // distinguishable only by the word "Setup":
-          //   nsis     -> "Acompas Setup <version>.exe", the installer
-          //   portable -> "Acompas <version>.exe", self-extracting, no install
+          //   nsis     -> "Palmas Setup <version>.exe", the installer
+          //   portable -> "Palmas <version>.exe", self-extracting, no install
           target: ['nsis', 'portable']
         },
         nsis: {

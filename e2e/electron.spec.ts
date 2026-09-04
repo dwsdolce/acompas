@@ -18,7 +18,7 @@ const launchArgs = ['--no-sandbox', '--disable-gpu']
 test.describe('Electron desktop app', () => {
   test.skip(
     !existsSync(appDir),
-    'Build it first: quasar build -m electron (or packaging/build_mac app)'
+    'Build it first: yarn build:desktop --unpacked'
   )
 
   test('opens a window that renders the app with its assets', async () => {

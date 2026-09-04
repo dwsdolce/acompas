@@ -226,8 +226,8 @@ requires before it will accept a first release.
 Each build runs on the platform it targets — electron-builder does not
 cross-compile, and the mobile toolchains are the vendors' own.
 `yarn build:desktop` checks its prerequisites, picks up signing credentials if
-you have any, and describes what it produced; on macOS it hands over to
-`packaging/build_mac`, which also notarises.
+you have any, and describes what it produced; on macOS it also signs, notarises
+and staples the disk image.
 
 ## Tests
 
