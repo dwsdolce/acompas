@@ -147,3 +147,51 @@ $axis : 2vh
 .help-btn.q-btn
   min-width: 44px
   min-height: 44px
+
+
+// Right-to-left layout, for Arabic and Persian
+//
+// Quasar compiles one direction of its stylesheet, and @quasar/app-vite v3 has
+// no option to build the mirrored one, so `html, body, #q-app { direction: ltr }`
+// ships whatever the language is - and it outranks the `dir` attribute the Lang
+// plugin sets on <html>, because an author rule beats a presentational hint.
+// Arabic then laid out with an LTR base direction: the full stop at the end of
+// a sentence appeared at its far left, and a run like "AGPL-3.0." landed on the
+// wrong side of the text around it.
+//
+// Quasar's layout JS does honour rtl, and pads the page container on the side
+// the drawer is meant to occupy - the right. With the CSS unmirrored the drawer
+// stayed anchored at `left: 0`, so the gap opened on one side of the page and
+// the drawer covered the content on the other.
+//
+// The rules below are Quasar's own, taken from the `[dir="rtl"]` half of
+// quasar.rtl.css, which is the mirrored sheet the framework ships but the Vite
+// build never reaches for. Only the left drawer is mirrored because that is the
+// only one this app has.
+html[dir="rtl"], [dir="rtl"] body, [dir="rtl"] #q-app
+  direction: rtl
+
+[dir="rtl"]
+  .q-drawer--left
+    left: auto
+    right: 0
+    transform: translateX(100%)
+
+    &.q-drawer--bordered
+      border-right: 0
+      border-left: 1px solid rgba(0, 0, 0, 0.12)
+
+    .q-layout__shadow
+      left: -10px
+      right: 10px
+      &:after
+        left: 10px
+        right: auto
+
+  // The compás still reads 1 -> 12 from left to right. Text mirrors; a rhythm
+  // does not. The clock face cannot mirror at all - its numerals run clockwise
+  // from a fixed 12 and the hand sweeps one way - so letting the dots reverse
+  // while the clock stayed put left the two views disagreeing about which
+  // direction time runs. Notation is not mirrored in RTL settings either.
+  .main-panel .top-panel
+    direction: ltr
