@@ -155,11 +155,20 @@ powershell -ExecutionPolicy Bypass -File .\setup.ps1 --check
 
 #### What it covers, and what it does not
 
-When it finishes cleanly, **`yarn build` and `yarn build:desktop` both work on
-this machine**. That is the whole promise, and it is deliberately the same
-promise on macOS, Windows and Linux: the web build is cheap enough that there is
-no reason not to have it everywhere, and the desktop build has to happen on each
-platform anyway, because electron-builder does not cross-compile.
+When it finishes cleanly, **`yarn build`, `yarn build:desktop`, `yarn test` and
+`yarn test:e2e` all work on this machine**. That is the whole promise, and it is
+deliberately the same promise on macOS, Windows and Linux: the web build is
+cheap enough that there is no reason not to have it everywhere, and the desktop
+build has to happen on each platform anyway, because electron-builder does not
+cross-compile.
+
+The tests are in the promise because building is not the bar —
+[CLAUDE.md](CLAUDE.md) asks for lint, tests and a run of what you touched before
+calling anything done, and a suite that cannot start is a suite that gets
+skipped. Both things this covers that `yarn install` does not fetch — the
+Electron runtime and Playwright's chromium — fail far from their cause: fifty
+red specs and an "Executable doesn't exist" reads as a broken suite rather than
+a missing download.
 
 **Android and iOS are not part of it.** Their toolchains are large, they are set
 up once on whichever machine you choose to build them from, and they ask

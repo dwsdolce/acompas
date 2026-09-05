@@ -16,6 +16,7 @@ installs things, or if you want to know what it is checking and why.
 - [ffmpeg](#ffmpeg)
 - [Clone and install](#clone-and-install)
 - [The Electron runtime](#the-electron-runtime) — a separate step, for desktop builds
+- [The Playwright browsers](#the-playwright-browsers) — a separate step, for `yarn test:e2e`
 - [Regenerating icons and audio](#regenerating-icons-and-audio)
 
 ## Prerequisites
@@ -345,6 +346,26 @@ adding a single dependency is enough — so the desktop build starts failing aga
 on a machine where it has always worked. Run the command above again; it comes
 back from the cache in seconds. See
 [docs/desktop.md](desktop.md#the-electron-runtime).
+
+### The Playwright browsers
+
+Only for `yarn test:e2e`, and only the web half of it — the Electron specs
+drive the app's own binary:
+
+```bash
+npx playwright install chromium
+```
+
+`yarn install` does not fetch them. Installing Playwright installs the library,
+not the browsers it drives, so the suite starts and then fails once per spec
+with `Executable doesn't exist at .../ms-playwright/...`, which looks like a
+broken test suite rather than a missing download.
+
+Only chromium: both web projects in
+[playwright.config.ts](../playwright.config.ts) use `devices['Desktop Chrome']`.
+`scripts/setup.mjs` checks for it and offers to fetch it, so `yarn setup`
+covers this too. Like the Electron runtime, the download is cached outside the
+project and paid for once per machine.
 
 ## Regenerating icons and audio
 

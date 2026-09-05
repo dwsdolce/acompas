@@ -678,6 +678,82 @@ async function checkElectron () {
   console.log('\n      npx install-electron\n')
 }
 
+/**
+ * The browsers Playwright drives, which are not part of installing Playwright.
+ *
+ * The same shape of problem as the Electron runtime above: a large download
+ * that no install fetches, absent without a word until something far away
+ * fails. Here that is `yarn test:e2e` reporting fifty failures and an
+ * "Executable doesn't exist" for each, which reads as a broken suite rather
+ * than a missing browser - so the suite gets abandoned instead of fixed.
+ *
+ * Only chromium: both web projects in playwright.config.ts use
+ * devices['Desktop Chrome'], and the Electron specs drive the app's own binary
+ * rather than a downloaded browser.
+ */
+async function checkPlaywright () {
+  // Playwright's own entry point rather than node_modules/.bin/playwright, for
+  // the same reason corepack and install-electron are run this way above.
+  // The shims there are per-platform - an extensionless shell script, plus
+  // playwright.cmd and playwright.ps1 on Windows - and which of them exist
+  // depends on the shell that ran `yarn install`, not the shell running this.
+  // On Windows both are common: a node_modules populated from Git Bash or
+  // Cygwin and then used from PowerShell, or the reverse. Asking for the wrong
+  // shim would not report a problem, it would skip the check in silence, which
+  // is the failure this whole function exists to stop happening. Going through
+  // Node sidesteps the shims and behaves identically everywhere.
+  const cli = [
+    path.join(ROOT, 'node_modules', 'playwright', 'cli.js'),
+    path.join(ROOT, 'node_modules', '@playwright', 'test', 'cli.js')
+  ].find(existsSync)
+  if (cli === undefined) return
+
+  // Ask Playwright where the browsers for *this* version belong rather than
+  // guessing at the cache layout: the directories are version-stamped
+  // (chromium-1234), the parent differs per platform, and PLAYWRIGHT_BROWSERS_PATH
+  // can move all of it. --dry-run prints the paths and downloads nothing.
+  const plan = capture(process.execPath, [cli, 'install', '--dry-run', 'chromium'])
+  if (plan === null) return
+
+  // The trailing \s* is load-bearing under Cygwin and Git Bash: a Windows Node
+  // prints CRLF, and without it every path would carry a \r and never exist.
+  const wanted = [...plan.matchAll(/^\s*Install location:\s*(.+?)\s*$/gm)].map(m => m[1])
+  if (wanted.length === 0) return
+
+  const missing = wanted.filter(dir => !existsSync(dir))
+  if (missing.length === 0) {
+    say('ok', 'playwright', `chromium present  (${path.dirname(wanted[0])})`)
+    return
+  }
+
+  // `install chromium` fetches more than the browser - Playwright's own ffmpeg
+  // rides along - so count the downloads rather than claiming chromium alone.
+  say('warn', 'playwright', `${missing.length} of ${wanted.length} chromium downloads are missing`)
+  console.log('         yarn test:e2e cannot drive a browser without them')
+
+  if (CHECK_ONLY) {
+    console.log('         fix: npx playwright install chromium')
+    return
+  }
+
+  if (!await confirm('Download the Playwright browsers now? yarn test:e2e needs them.')) return
+
+  // Verify by the artefacts rather than the exit status, as with Electron:
+  // this prints plenty while it works, and none of it says whether the files
+  // that were missing are now there.
+  const ok = run(process.execPath, [cli, 'install', 'chromium']) &&
+    wanted.every(dir => existsSync(dir))
+
+  if (ok) {
+    say('ok', 'playwright', 'chromium downloaded')
+    warnings--
+    return
+  }
+
+  console.log('\n  That did not work. Run it by hand and read the error:')
+  console.log('\n      npx playwright install chromium\n')
+}
+
 async function checkDependencies () {
   heading('Project')
 
@@ -704,7 +780,10 @@ async function checkDependencies () {
 
   // Only worth reporting if there is a node_modules to look in; a first run
   // gets this after the install below instead.
-  if (rootInstalled) await checkElectron()
+  if (rootInstalled) {
+    await checkElectron()
+    await checkPlaywright()
+  }
 
   if (rootInstalled && capacitorInstalled && prepared) return 'ok'
 
@@ -741,8 +820,9 @@ async function checkDependencies () {
   // been told about the runtime yet - is the single run that stays silent
   // about it.
   if (installedRoot) {
-    heading('Desktop')
+    heading('Desktop and tests')
     await checkElectron()
+    await checkPlaywright()
   }
 
   return 'ok'
@@ -790,11 +870,11 @@ async function main () {
     console.log(`Ready to build, with ${warnings} warning${plural} above worth reading.`)
     console.log('Next:  yarn dev\n')
   } else {
-    console.log('The web and desktop apps can be built on this machine. Next:  yarn dev\n')
+    console.log('The web and desktop apps can be built and tested on this machine. Next:  yarn dev\n')
   }
 
   // Naming the scope rather than declaring victory outright. This checks what
-  // the web and desktop builds need and nothing else, so on the one machine
+  // the web and desktop builds and their tests need and nothing else, so on the one machine
   // that also builds Android or iOS, "everything is in place" would be a claim
   // about toolchains it never looked at - and would be wrong there exactly
   // once, memorably.
