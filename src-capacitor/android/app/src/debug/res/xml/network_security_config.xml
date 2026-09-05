@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug builds only. This overrides src/main/res/xml/network_security_config.xml
+  through resource merging, so nothing here can reach a release: a release build
+  never sees this source set.
+
+  `quasar dev -m capacitor -T android` starts a dev server on the build machine
+  and points the app's webview at http://<host>:9500. That is cleartext, and
+  without this the app opens on net::ERR_CLEARTEXT_NOT_PERMITTED and nothing
+  else - see "Live reload" in docs/android.md.
+
+  Permissive for any address rather than a list of them. The address is whichever
+  network interface Quasar happened to pick, on whichever machine is building,
+  and a committed list can never keep up with that - which is precisely how the
+  file this replaced ended up carrying three strangers' home addresses.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

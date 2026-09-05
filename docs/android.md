@@ -17,7 +17,7 @@ to running app:
 - [A debug APK — build, install, run](#a-debug-apk--build-install-run)
 - [A signed release APK — build, install, run](#a-signed-release-apk--build-install-run)
 - [An AAB for the Play Store](#an-aab-for-the-play-store)
-- [Live reload](#live-reload-and-why-it-is-not-a-recipe-here) — needs Android Studio; usually not worth it
+- [Live reload is not supported](#live-reload-is-not-supported) — and why
 - [Switching between debug and release](#switching-between-debug-and-release)
 - [More on installing](#more-on-installing) — serials, Cygwin paths, `adb` errors
 - [What a Gradle build does on the way past](#what-a-gradle-build-does-on-the-way-past)
@@ -41,7 +41,7 @@ missing, or this is a new machine:
 | Test a change on the emulator or a phone | no | no | [Debug APK](#a-debug-apk--build-install-run) |
 | Check the thing you are about to ship | yes | no | [Signed release APK](#a-signed-release-apk--build-install-run) |
 | Upload to Google Play | yes | no | [AAB](#an-aab-for-the-play-store) |
-| Edit the UI and see it change on the device | no | **yes** | [Live reload](#live-reload-and-why-it-is-not-a-recipe-here) — read it first |
+| Edit the UI and see it change on the device | — | — | [Not supported](#live-reload-is-not-supported) — the audio engine cannot run |
 
 The first three are the same shape: build a file, push it with `adb`, start it.
 They need no IDE, and they are the three worth knowing. The fourth needs Android
@@ -185,6 +185,39 @@ If `adb install` fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, a debug build
 is already on the emulator — see
 [Switching between debug and release](#switching-between-debug-and-release).
 
+### Building a release straight from Gradle
+
+`./gradlew assembleRelease` on its own is a legitimate way to build one, and it
+skips a step that matters: `npx quasar build` runs `capacitor sync` first, and
+Gradle does not.
+
+The sync is what writes `src-capacitor/android/app/src/main/assets/capacitor.config.json`.
+When you last ran `quasar dev`, that file was left holding the dev server:
+
+```json
+"server": { "url": "http://192.168.56.1:9500", "cleartext": true }
+```
+
+Nothing clears it until the next sync. A release built from Gradle in that state
+packages the dev server URL, and the app opens on `net::ERR_CLEARTEXT_NOT_PERMITTED`
+against an address that no longer serves anything — because release builds refuse
+cleartext, which is the point. It looks like the app is broken. It is pointed at
+your laptop.
+
+So after any `quasar dev`, run the full command once before trusting a release:
+
+```bash
+npx quasar build -m capacitor -T android
+```
+
+Or check what it is carrying, which takes a second:
+
+```bash
+unzip -p src-capacitor/android/app/build/outputs/apk/release/app-release.apk   assets/capacitor.config.json
+```
+
+A release APK fit to ship has no `server` block at all.
+
 ## An AAB for the Play Store
 
 Google Play requires an **AAB** (Android App Bundle), not an APK. It must be
@@ -241,91 +274,25 @@ from a later commit already carries a higher one, and re-uploading the same
 build is the only way to trip over it. See
 [Version numbering](#version-numbering).
 
-## Live reload, and why it is not a recipe here
+## Live reload is not supported
 
 ```bash
-npx quasar dev -m capacitor -T android
+npx quasar dev -m capacitor -T android    # don't
 ```
 
-It exists, it works, and it is the only thing in this document that needs
-Android Studio. Everything above is a command, a file and `adb`. This starts a
-dev server on your machine, points the app's webview at it over the network, and
-hands the native project to Studio — which then has to compile, install and
-launch it, because Quasar's Capacitor dev server calls `openIDE`
-unconditionally. There is no flag to skip it, nothing lands in `dist/`, and
-there is no APK for you to install.
+It runs, and the app it installs cannot play a sound.
 
-**Three things have to be right that nothing else here needs**, and each fails
-with a message that does not name its cause:
+Live reload serves the app over plain HTTP to a LAN address, and that is not a
+*secure context*. `AudioWorklet` is secure-context-only, so it does not exist
+there; Tone.js finds no audio support and the app opens on **"Update your
+browser!"**. A debug or release build never shows that, on the same emulator and
+the same webview, because Capacitor serves those from `https://localhost`, which
+*is* secure. Only the origin differs, and nothing configures around it.
 
-**1. Studio's Gradle JDK is not `JAVA_HOME`.** Studio defaults the project's
-Gradle JDK to its own bundled runtime — JBR 25 in current releases — while this
-project builds with Gradle 8.13, whose supported range stops short of it. Studio
-checks before syncing and refuses, saying a different JVM is required. The
-command-line builds above never see this: they use `JAVA_HOME`, which
-[step 3](#3-point-java_home-and-android_home-at-them) already points at a
-JDK 17–21.
+It is also the only thing here that needs Android Studio.
 
-Fix it in **File → Settings → Build, Execution, Deployment → Build Tools →
-Gradle** (`Ctrl+Alt+S`), setting **Gradle JDK** to the JDK `JAVA_HOME` names,
-then **File → Sync Project with Gradle Files**. The equivalent one-line edit is
-`java.home` in `src-capacitor/android/.gradle/config.properties` — a Java
-properties file, so backslashes double, the same escaping trap as
-[keystore.properties](#point-the-build-at-it):
-
-```properties
-java.home=C\:\\Program Files\\Eclipse Adoptium\\jdk-21
-```
-
-That file is gitignored, so it stays on your machine, and it changes only what
-Gradle runs on — Studio keeps its own runtime for the IDE itself.
-
-**2. Studio offers two upgrades. Decline both.** Each rewrites files under
-version control, and the build works as it stands.
-
-*Android Gradle Plugin upgrade* bumps AGP and usually the Gradle wrapper with
-it, and a different Gradle moves the range of Java versions Gradle will run on —
-the axis that produced the refusal above. Worth doing deliberately, with time to
-rebuild all three artefacts; not worth doing from a banner.
-
-*Migrate to Gradle Daemon JVM criteria* is worth doing eventually, for a better
-reason than Studio gives: the JDK Gradle uses currently lives in that gitignored
-`config.properties`, so every clone has to be told again and Studio guesses
-until someone does. The migration writes `gradle/gradle-daemon-jvm.properties`,
-which is tracked, and the requirement travels with the repository.
-`updateDaemonJvm` is the task, with `--jvm-version` and `--jvm-vendor`. The
-catch is that Gradle must then find a matching JDK on every machine, or fail
-with a new error of its own — so it wants testing, not a click.
-
-**3. The dev server's address has to be allowed cleartext**, or the app opens on
-`net::ERR_CLEARTEXT_NOT_PERMITTED` and nothing else. Android blocks plain HTTP
-by default, and although the manifest sets `usesCleartextTraffic="true"`, that
-is ignored whenever `networkSecurityConfig` is also set — and it is.
-`app/src/main/res/xml/network_security_config.xml` permits cleartext for a
-hard-coded list of addresses, inherited from upstream: `localhost`, `10.0.2.2`,
-and several specific machines that belonged to other developers.
-
-Two traps in that file. Entries like `192.168.0.0` and `10.0.0.0` look like
-private-range wildcards and are not — Android's `<domain>` matches a hostname or
-a literal IP, and `includeSubdomains` applies to DNS suffixes rather than IP
-ranges, so each matches only that exact address. And the address you need is
-whichever one Quasar picked, which is the first non-internal IPv4 interface the
-OS reports — on a machine with VirtualBox, VMware or WSL adapters that is
-routinely a virtual one rather than your real LAN address. The URL is printed
-when the dev server starts, and shown in the error page.
-
-Adding your address to that list works. Permitting cleartext for debug builds
-only — a `<base-config cleartextTrafficPermitted="true"/>` in
-`app/src/debug/res/xml/network_security_config.xml`, leaving release locked
-down — removes the per-machine list instead of extending it.
-
-### So: use the debug APK
-
-[A debug APK](#a-debug-apk--build-install-run) rebuilds and reinstalls in about
-thirty seconds, needs no IDE, no JDK setting, no banners and no allowlist. For
-UI work the reload loop is genuinely faster once it is running; for everything
-else the difference does not repay what it costs to get there. That is why the
-recipes above stop at three.
+Use [a debug APK](#a-debug-apk--build-install-run) instead: about thirty seconds
+to rebuild and reinstall, no IDE, and it exercises the whole app.
 
 ## Switching between debug and release
 
@@ -492,10 +459,17 @@ rule: `storeFile=C:\Users\you\keys\palmas-upload.jks` is read as
 
 ### `net::ERR_CLEARTEXT_NOT_PERMITTED`
 
-Only reachable from live reload: the app opened, pointed at the dev server over
-plain HTTP, and Android refused. The address has to be in the cleartext
-allowlist, and the one Quasar chose may not be the interface you expected. See
-[Live reload](#live-reload-and-why-it-is-not-a-recipe-here).
+The app was pointed at something over plain HTTP and Android refused. Debug
+builds permit cleartext, so this means a **release** build is loading a dev
+server URL — which happens when `quasar dev` leaves one behind and the release
+is then built straight from Gradle. See
+[Building a release straight from Gradle](#building-a-release-straight-from-gradle).
+
+If it happens to a debug build, the network security config is not being applied
+at all — debug builds permit cleartext from any address. Check that
+`AndroidManifest.xml` still names `@xml/network_security_config`, and that
+`app/src/debug/res/xml/network_security_config.xml` is still there; both files
+explain themselves in their own comments.
 
 ### `INSTALL_PARSE_FAILED_NO_CERTIFICATES`
 
