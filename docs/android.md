@@ -9,72 +9,380 @@ assumes `yarn install` has already run.
 
 ## Contents
 
-**Every build** — what you do each time:
+**Building and running** — pick the one you want; each is complete from command
+to running app:
 
-- [Building](#building)
-- [Generating the AAB for the Play Store](#generating-the-aab-for-the-play-store)
-- [Installing on a device or emulator](#installing-on-a-device-or-emulator)
-- [When a build fails](#when-a-build-fails)
+- [Which one do you want?](#which-one-do-you-want)
+- [Start the emulator](#start-the-emulator) — every session, not part of setup
+- [A debug APK — build, install, run](#a-debug-apk--build-install-run)
+- [A signed release APK — build, install, run](#a-signed-release-apk--build-install-run)
+- [An AAB for the Play Store](#an-aab-for-the-play-store)
+- [Live reload](#live-reload-and-why-it-is-not-a-recipe-here) — needs Android Studio; usually not worth it
+- [Switching between debug and release](#switching-between-debug-and-release)
+- [More on installing](#more-on-installing) — serials, Cygwin paths, `adb` errors
+- [What a Gradle build does on the way past](#what-a-gradle-build-does-on-the-way-past)
+- [When a build fails](#when-a-build-fails) — indexed by the message you got
 
 **Once, ever** — machine setup. Skip it unless a build says something is
 missing, or this is a new machine:
 
 - [Prerequisites](#prerequisites) — JDK, SDK, `JAVA_HOME`, `ANDROID_HOME`
-- [An emulator](#an-emulator)
+- [Creating an emulator](#creating-an-emulator)
 - [Creating a keystore](#creating-a-keystore) — needed only to sign a release
 
 **Reference**
 
 - [Version numbering](#version-numbering)
 
-## Building
+## Which one do you want?
 
-Everything here runs **from the repository root**, and nothing here needs
-setting up more than once. If a command fails complaining about a JDK, an SDK,
-`ANDROID_HOME` or a keystore, that is [Prerequisites](#prerequisites) or
-[Creating a keystore](#creating-a-keystore) — done once and then never again.
+| | Needs a keystore | Needs Android Studio | Go to |
+|---|---|---|---|
+| Test a change on the emulator or a phone | no | no | [Debug APK](#a-debug-apk--build-install-run) |
+| Check the thing you are about to ship | yes | no | [Signed release APK](#a-signed-release-apk--build-install-run) |
+| Upload to Google Play | yes | no | [AAB](#an-aab-for-the-play-store) |
+| Edit the UI and see it change on the device | no | **yes** | [Live reload](#live-reload-and-why-it-is-not-a-recipe-here) — read it first |
+
+The first three are the same shape: build a file, push it with `adb`, start it.
+They need no IDE, and they are the three worth knowing. The fourth needs Android
+Studio and three pieces of configuration none of the others do, which is why it
+is written up as a warning rather than a recipe.
+
+Two conventions hold throughout.
+
+**Directory.** Every command runs **from the repository root** — the directory
+holding `package.json`, wherever you cloned it. Where a recipe has to step into
+the Android project it says so, and steps back out again with `cd ../..`, so
+each one begins and ends in the same place.
+
+**Shell.** Commands are written for **bash** — Git Bash, Cygwin or WSL on
+Windows, and the native shell on macOS and Linux. Where PowerShell or cmd needs
+something different, the sentence introducing the block says so, or the
+difference is noted in a comment on the line itself. Anything not called out
+that way works the same in both.
+
+## Start the emulator
+
+**Every session, before anything else.** Nothing installs onto an emulator that
+is not running, and starting one is not part of the machine setup — creating it
+is done once, starting it is done every time you sit down.
+
+Skip this entirely if you are using a physical device: plug it in and go
+straight to `adb devices`.
+
+From bash:
 
 ```bash
-cd ~/src/palmas          # wherever you cloned it
+emulator -list-avds          # the names you have; pick one
+emulator -avd <name> &       # start it in the background
+adb devices                  # emulator-5554  device
 ```
 
-| What you want | Command | Where it lands |
-|---|---|---|
-| Run it on an emulator, with reload | `npx quasar dev -m capacitor -T android` | — |
-| A **debug APK** to install and test | see [Debug APK](#debug-apk) below | `src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk` |
-| A **signed release APK** | `npx quasar build -m capacitor -T android` | `dist/capacitor/android/apk/release/app-release.apk` |
-| An **AAB** for the Play Store | see [the AAB](#generating-the-aab-for-the-play-store) | `src-capacitor/android/app/build/outputs/bundle/release/app-release.aab` |
+The first and last are the same in every shell. Only the middle one differs:
+PowerShell and cmd have no `&` for backgrounding, so either give the emulator a
+terminal of its own and leave it running there, or:
 
-### Signed release APK
-
-```bash
-cd ~/src/palmas
-npx quasar build -m capacitor -T android
+```powershell
+Start-Process emulator -ArgumentList '-avd','<name>'
 ```
 
-Signing uses `src-capacitor/android/keystore.properties`. **Without that file
-the build still succeeds**, but produces an unsigned APK under a different
-name — `app-release-unsigned.apk` — which cannot be installed and which the
-Play Store will not accept. The suffix is the quickest way to tell which you
-have; Gradle adds it itself.
+> ⚠️ **The emulator logs into whatever terminal started it**, and with `&` that
+> is the terminal you are about to keep working in — its output interleaves with
+> your own commands and looks alarming. Restoring a snapshot prints a run of
+> `Failed to find EmulatedEglImage` and `Failed to find ColorBuffer` **errors**
+> that are entirely normal and say nothing about your build. Give it a terminal
+> of its own, or send its output somewhere you can ignore:
+>
+> ```bash
+> emulator -avd <name> > ~/emulator.log 2>&1 &
+> ```
 
-### Debug APK
+**Wait for `adb devices` to say `device`, not `offline`.** It reports the
+emulator well before Android has finished booting, and installing into an
+`offline` one fails with `device offline` or simply hangs. First boot of a new
+AVD takes a minute or two; later ones are quicker.
 
-Quicker than a release build and needs no keystore, so it is what you want while
-developing:
+If `emulator -list-avds` prints nothing, you have not made one yet — see
+[Creating an emulator](#creating-an-emulator).
+
+> ⚠️ **Do not calibrate the audio/visual offset on an emulator** — see the note
+> under [Creating an emulator](#creating-an-emulator) for why.
+
+## A debug APK — build, install, run
+
+The everyday one. No keystore, and the quickest of the three.
 
 ```bash
-cd ~/src/palmas
-npx quasar build -m capacitor -T android --skip-pkg   # web assets + cap sync
+# 1. From the repository root: build the web assets and sync them in.
+npx quasar build -m capacitor -T android --skip-pkg
 
-cd ~/src/palmas/src-capacitor/android
+# 2. Compile the APK, from inside the Android project.
+cd src-capacitor/android
 ./gradlew assembleDebug          # .\gradlew.bat from PowerShell
+
+# 3. Back to the root, then install it and start it.
+cd ../..
+adb install -r src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
+adb shell am start -n com.dolcesfogato.palmas/.MainActivity
+```
+
+`--skip-pkg` (`-s`) stops after the web build and the Capacitor sync, leaving
+the native compile to you. Step 2 is what actually makes the APK.
+
+A good run ends with exactly this, and the app opens on the emulator:
+
+```
+Performing Streamed Install
+Success
+Starting: Intent { cmp=com.dolcesfogato.palmas/.MainActivity }
+```
+
+Anything after that is the emulator talking, not your build. The app is also in
+the launcher, so later runs can be started by tapping it.
+
+The APK is about 30 MB and lands at:
+
+```
+src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 On Windows `./gradlew` works from Git Bash and Cygwin; `.\gradlew.bat` is the
 equivalent from PowerShell or cmd.
 
-### What to expect
+## A signed release APK — build, install, run
+
+What you install when you want to check the thing you are about to publish:
+minified the same way, signed with the real key, behaving as a user's copy will.
+Needs [a keystore](#creating-a-keystore).
+
+```bash
+npx quasar build -m capacitor -T android
+
+adb install -r dist/capacitor/android/apk/release/app-release.apk
+adb shell am start -n com.dolcesfogato.palmas/.MainActivity
+```
+
+**This APK exists in two places, and knowing which is which saves a puzzled
+five minutes.** Quasar runs `gradlew assembleRelease` for you and then copies
+Gradle's whole output directory into `dist/`:
+
+| How you built it | Where the APK is |
+|---|---|
+| `npx quasar build -m capacitor -T android` | `dist/capacitor/android/apk/release/app-release.apk` — **and** the Gradle path below |
+| `./gradlew assembleRelease` on its own | `src-capacitor/android/app/build/outputs/apk/release/app-release.apk` only |
+
+Both are the same file. If you built with Gradle directly — the debug recipe
+above with `assembleRelease` substituted, which works fine — nothing is copied
+to `dist/` and looking there will find an empty or missing directory.
+
+> ⚠️ **Without `src-capacitor/android/keystore.properties` the build still
+> succeeds**, and produces `app-release-unsigned.apk` instead. That one cannot
+> be installed — `adb` refuses it with `INSTALL_PARSE_FAILED_NO_CERTIFICATES` —
+> and Google Play will not accept it. The `-unsigned` suffix is the quickest way
+> to tell which you have; Gradle adds it itself.
+
+If `adb install` fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, a debug build
+is already on the emulator — see
+[Switching between debug and release](#switching-between-debug-and-release).
+
+## An AAB for the Play Store
+
+Google Play requires an **AAB** (Android App Bundle), not an APK. It must be
+signed, so this needs [a keystore](#creating-a-keystore) first.
+
+**An AAB cannot be installed on a device or emulator.** It is an upload format
+only; use the release APK above to test what you are about to publish.
+
+> ⚠️ The `--aab` flag of `quasar build` is **not honored** — still true as of
+> `@quasar/app-vite` 3.8.1, whose Capacitor mode has no handling for it at all;
+> it silently runs `assembleRelease` and produces an APK. Generate the bundle
+> directly with Gradle instead:
+
+```bash
+# 1. From the repository root: build the web assets and sync them in.
+npx quasar build -m capacitor -T android
+
+# 2. From the Android project: build the signed bundle.
+cd src-capacitor/android
+./gradlew bundleRelease          # .\gradlew.bat from PowerShell
+
+# 3. Back to the root, so the next thing you run starts where it expects to.
+cd ../..
+```
+
+> ⚠️ Step 3 is not decoration. The two commands run from *different*
+> directories, and without it you are left inside `src-capacitor/android` —
+> where running step 1 again resolves everything two levels too high and gives
+> `Command "./gradlew.bat assembleRelease" failed with exit code: 1`. See
+> [When a build fails](#when-a-build-fails).
+
+The signed AAB is written to:
+
+```
+src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
+```
+
+Under `src-capacitor`, not `dist/` — Quasar copies the APK out but leaves the
+bundle where Gradle put it, because it never asked for a bundle in the first
+place.
+
+> **Neither this file's size nor the APK's is what a user downloads.** At 1.0.0
+> the bundle is 28.7 MB and the release APK 29.0 MB — near enough the same, and
+> both beside the point.
+>
+> A bundle is not a thing anyone installs. It carries every screen density,
+> language and architecture together, and Play generates a cut-down APK per
+> device from it, so what reaches a phone is smaller than either figure. The
+> size to judge is the one Play reports after upload.
+
+Google Play rejects a `versionCode` that has already been published. That is
+handled for you: the `versionCode` is the git commit count, so any build made
+from a later commit already carries a higher one, and re-uploading the same
+build is the only way to trip over it. See
+[Version numbering](#version-numbering).
+
+## Live reload, and why it is not a recipe here
+
+```bash
+npx quasar dev -m capacitor -T android
+```
+
+It exists, it works, and it is the only thing in this document that needs
+Android Studio. Everything above is a command, a file and `adb`. This starts a
+dev server on your machine, points the app's webview at it over the network, and
+hands the native project to Studio — which then has to compile, install and
+launch it, because Quasar's Capacitor dev server calls `openIDE`
+unconditionally. There is no flag to skip it, nothing lands in `dist/`, and
+there is no APK for you to install.
+
+**Three things have to be right that nothing else here needs**, and each fails
+with a message that does not name its cause:
+
+**1. Studio's Gradle JDK is not `JAVA_HOME`.** Studio defaults the project's
+Gradle JDK to its own bundled runtime — JBR 25 in current releases — while this
+project builds with Gradle 8.13, whose supported range stops short of it. Studio
+checks before syncing and refuses, saying a different JVM is required. The
+command-line builds above never see this: they use `JAVA_HOME`, which
+[step 3](#3-point-java_home-and-android_home-at-them) already points at a
+JDK 17–21.
+
+Fix it in **File → Settings → Build, Execution, Deployment → Build Tools →
+Gradle** (`Ctrl+Alt+S`), setting **Gradle JDK** to the JDK `JAVA_HOME` names,
+then **File → Sync Project with Gradle Files**. The equivalent one-line edit is
+`java.home` in `src-capacitor/android/.gradle/config.properties` — a Java
+properties file, so backslashes double, the same escaping trap as
+[keystore.properties](#point-the-build-at-it):
+
+```properties
+java.home=C\:\\Program Files\\Eclipse Adoptium\\jdk-21
+```
+
+That file is gitignored, so it stays on your machine, and it changes only what
+Gradle runs on — Studio keeps its own runtime for the IDE itself.
+
+**2. Studio offers two upgrades. Decline both.** Each rewrites files under
+version control, and the build works as it stands.
+
+*Android Gradle Plugin upgrade* bumps AGP and usually the Gradle wrapper with
+it, and a different Gradle moves the range of Java versions Gradle will run on —
+the axis that produced the refusal above. Worth doing deliberately, with time to
+rebuild all three artefacts; not worth doing from a banner.
+
+*Migrate to Gradle Daemon JVM criteria* is worth doing eventually, for a better
+reason than Studio gives: the JDK Gradle uses currently lives in that gitignored
+`config.properties`, so every clone has to be told again and Studio guesses
+until someone does. The migration writes `gradle/gradle-daemon-jvm.properties`,
+which is tracked, and the requirement travels with the repository.
+`updateDaemonJvm` is the task, with `--jvm-version` and `--jvm-vendor`. The
+catch is that Gradle must then find a matching JDK on every machine, or fail
+with a new error of its own — so it wants testing, not a click.
+
+**3. The dev server's address has to be allowed cleartext**, or the app opens on
+`net::ERR_CLEARTEXT_NOT_PERMITTED` and nothing else. Android blocks plain HTTP
+by default, and although the manifest sets `usesCleartextTraffic="true"`, that
+is ignored whenever `networkSecurityConfig` is also set — and it is.
+`app/src/main/res/xml/network_security_config.xml` permits cleartext for a
+hard-coded list of addresses, inherited from upstream: `localhost`, `10.0.2.2`,
+and several specific machines that belonged to other developers.
+
+Two traps in that file. Entries like `192.168.0.0` and `10.0.0.0` look like
+private-range wildcards and are not — Android's `<domain>` matches a hostname or
+a literal IP, and `includeSubdomains` applies to DNS suffixes rather than IP
+ranges, so each matches only that exact address. And the address you need is
+whichever one Quasar picked, which is the first non-internal IPv4 interface the
+OS reports — on a machine with VirtualBox, VMware or WSL adapters that is
+routinely a virtual one rather than your real LAN address. The URL is printed
+when the dev server starts, and shown in the error page.
+
+Adding your address to that list works. Permitting cleartext for debug builds
+only — a `<base-config cleartextTrafficPermitted="true"/>` in
+`app/src/debug/res/xml/network_security_config.xml`, leaving release locked
+down — removes the per-machine list instead of extending it.
+
+### So: use the debug APK
+
+[A debug APK](#a-debug-apk--build-install-run) rebuilds and reinstalls in about
+thirty seconds, needs no IDE, no JDK setting, no banners and no allowlist. For
+UI work the reload loop is genuinely faster once it is running; for everything
+else the difference does not repay what it costs to get there. That is why the
+recipes above stop at three.
+
+## Switching between debug and release
+
+Debug and release carry the **same** `applicationId` — `com.dolcesfogato.palmas`,
+with no suffix — and are signed with different keys. Android will not replace
+one with the other, so installing the second over the first fails:
+
+```
+INSTALL_FAILED_UPDATE_INCOMPATIBLE
+```
+
+Uninstall first. This wipes the app's stored settings — tempo, pattern, language
+— which is worth knowing before you do it on a device you actually practise
+with:
+
+```bash
+adb uninstall com.dolcesfogato.palmas
+adb install -r <the apk you want>
+```
+
+Anyone testing both a debug build and a release build will meet this, since
+there is no way to have them installed side by side.
+
+## More on installing
+
+Each recipe above ends with a working `adb install`. This is what to do when it
+does not.
+
+```bash
+adb devices                      # what is attached, each with its serial
+adb -s emulator-5554 install -r <apk>   # pick one when several are connected
+```
+
+A 29 MB APK carrying 642 audio files takes a few seconds to push; `adb` prints
+`Success` when it is done.
+
+From Cygwin or Git Bash, `adb` is a native Windows binary and will not accept a
+`/cygdrive/...` argument. A relative path from the repository root works, as
+every recipe above uses, or convert it:
+
+```bash
+adb install -r "$(cygpath -w src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk)"
+```
+
+- **`INSTALL_FAILED_UPDATE_INCOMPATIBLE`** — see
+  [Switching between debug and release](#switching-between-debug-and-release).
+- **`INSTALL_PARSE_FAILED_NO_CERTIFICATES`** — an unsigned release APK. See the
+  warning under [signed release APK](#a-signed-release-apk--build-install-run).
+- **Device not listed** — enable *Developer options › USB debugging* on the
+  phone, accept the "Allow USB debugging?" prompt, set the USB mode to *File
+  transfer (MTP)*, and use a data-capable cable. A quick `adb kill-server &&
+  adb start-server` also helps. On Windows you may additionally need the OEM USB
+  driver for your handset.
+
+You can also drag an `.apk` onto a running emulator window, which installs it.
+
+## What a Gradle build does on the way past
 
 The first Gradle run fetches the Gradle distribution and the whole dependency
 tree and takes a couple of minutes; after that an incremental build is seconds.
@@ -86,7 +394,7 @@ accepts it mid-build without being asked. That is why
 [step 4](#4-install-the-api-36-packages) does not bother installing build-tools:
 Gradle fetches the right one regardless of what you guessed.
 
-Two warnings appear on the way past and can be ignored:
+Two warnings appear and can be ignored:
 
 * `This version only understands SDK XML versions up to 3 but an SDK XML file of
   version 4 was encountered` — the plugin's SDK reader is older than the
@@ -94,113 +402,6 @@ Two warnings appear on the way past and can be ignored:
 * `uses-permission#android.permission.ACTIVITY_RECOGNITION was tagged ... but no
   other declaration present`, and the same for `BODY_SENSORS`. The manifest
   removes permissions a dependency no longer contributes.
-
-## Generating the AAB for the Play Store
-
-Google Play requires an **AAB** (Android App Bundle), not an APK. It must be
-signed, so this needs [a keystore](#creating-a-keystore) first.
-
-> ⚠️ The `--aab` flag of `quasar build` is **not honored** — still true as of
-> `@quasar/app-vite` 3.8.1, whose Capacitor mode has no handling for it at all;
-> it silently runs `assembleRelease` and produces an APK. Generate the bundle
-> directly with Gradle instead:
-
-```bash
-# From the repository root: build the web assets and sync them into the
-# Android project. This step must run from the root, not from src-capacitor.
-cd ~/src/palmas
-npx quasar build -m capacitor -T android
-
-# Then, from the Android project: build the signed release bundle
-cd ~/src/palmas/src-capacitor/android
-./gradlew bundleRelease          # .\gradlew.bat from PowerShell
-```
-
-> ⚠️ Both `cd` lines are spelled out because the two commands run from
-> *different* directories, and the second leaves you in the wrong place for the
-> first. Running this block a second time from where it left you is the usual
-> way to get `Command "./gradlew.bat assembleRelease" failed with exit code: 1`
-> — see [When a build fails](#when-a-build-fails).
-
-The signed release **AAB** is written to:
-
-```
-src-capacitor/android/app/build/outputs/bundle/release/app-release.aab
-```
-
-Note that this is under `src-capacitor/android/app/build/outputs`, not in
-`dist/` — Quasar copies the APK out but leaves the bundle where Gradle put it,
-because it never asked for a bundle in the first place.
-
-> **The AAB is bigger than the APK, and that is not a problem.** At 1.0.0 the
-> bundle is about 37 MB against the APK's 29 MB, which looks like the wrong way
-> round for the format that is supposed to make downloads smaller.
->
-> A bundle is not a thing anyone installs. It carries every screen density,
-> language and architecture together, and Play generates a cut-down APK per
-> device from it. What a user downloads is smaller than the 29 MB APK, not
-> larger. The size to judge is the one Play reports after upload, not this file.
-
-Google Play rejects a `versionCode` that has already been published. That is
-handled for you: the `versionCode` is the git commit count, so any build made
-from a later commit already carries a higher one, and re-uploading the same
-build is the only way to trip over it. See
-[Version numbering](#version-numbering).
-
-## Installing on a device or emulator
-
-An **AAB cannot be installed directly** on a device — use an **APK** for
-on-device testing. The two builds land in different places, which is easy to
-trip over:
-
-| Build | APK |
-|---|---|
-| `./gradlew assembleDebug` | `src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk` |
-| `npx quasar build -m capacitor -T android` | `dist/capacitor/android/apk/release/app-release.apk` |
-| the same, with no `keystore.properties` | `dist/capacitor/android/apk/release/app-release-unsigned.apk` |
-
-The debug one is what you want while developing: no keystore, and it installs
-alongside nothing else. The unsigned release will not install at all — `adb
-install` refuses it with `INSTALL_PARSE_FAILED_NO_CERTIFICATES`.
-
-```bash
-# List connected devices/emulators (each with its serial)
-adb devices
-
-# Install, or reinstall keeping data. Run from the repository root.
-adb install -r src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
-
-# If several devices are connected, target one explicitly with -s <serial>
-adb -s emulator-5554 install -r src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-A 29 MB APK carrying 642 audio files takes a few seconds to push and install;
-`adb` prints `Success` when it is done.
-
-From Cygwin or Git Bash, `adb` is a native Windows binary and will not accept a
-`/cygdrive/...` argument. A relative path from the repository root works, as
-above, or convert it:
-
-```bash
-adb install -r "$(cygpath -w src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk)"
-```
-
-Common issues:
-
-- **`INSTALL_FAILED_UPDATE_INCOMPATIBLE`** — a copy signed with a different key
-  (e.g. the Play Store build) is already installed. Uninstall it first (this
-  wipes the app's local data), then install again:
-  ```bash
-  adb uninstall com.dolcesfogato.palmas
-  ```
-- **Device not listed** — enable *Developer options › USB debugging* on the
-  phone, accept the "Allow USB debugging?" prompt, set the USB mode to *File
-  transfer (MTP)*, and use a data-capable cable. A quick `adb kill-server &&
-  adb start-server` also helps. On Windows you may additionally need the OEM USB
-  driver for your handset.
-
-Alternatively, from Android Studio you can drag-and-drop the `.apk` onto a
-running emulator, or open `src-capacitor/android` as a Gradle project and run it.
 
 ## When a build fails
 
@@ -221,7 +422,7 @@ Running "./gradlew.bat assembleRelease" in /src-capacitor\android
 **If those read `in /..` and `in /`, you are not at the repository root.**
 Quasar resolves everything relative to the current directory, so from
 `src-capacitor/android` it looks two levels too high and runs Gradle in the
-filesystem root. `cd ~/src/palmas` and run it again.
+filesystem root. Return to the repository root and run it again.
 
 This is easy to fall into because the AAB and debug-APK steps *do* ask you to
 `cd src-capacitor/android`, and leave you there.
@@ -230,7 +431,7 @@ If the directories are right, run Gradle directly to see the real error, which
 Quasar is hiding:
 
 ```bash
-cd ~/src/palmas/src-capacitor/android
+cd src-capacitor/android          # from the repository root
 ./gradlew assembleRelease
 ```
 
@@ -289,6 +490,13 @@ The path in the message has lost its separators. That is the same backslash
 rule: `storeFile=C:\Users\you\keys\palmas-upload.jks` is read as
 `C:Usersyoukeyspalmas-upload.jks`. Write the path with forward slashes.
 
+### `net::ERR_CLEARTEXT_NOT_PERMITTED`
+
+Only reachable from live reload: the app opened, pointed at the dev server over
+plain HTTP, and Android refused. The address has to be in the cleartext
+allowlist, and the one Quasar chose may not be the interface you expected. See
+[Live reload](#live-reload-and-why-it-is-not-a-recipe-here).
+
 ### `INSTALL_PARSE_FAILED_NO_CERTIFICATES`
 
 You are installing `app-release-unsigned.apk`. An unsigned APK cannot be
@@ -314,7 +522,7 @@ only at the point of writing, after prompting for everything. See
 
 Everything below happens **once**. A machine that has built the app before needs
 none of it, and neither does a new release — go back to
-[Building](#building) for that.
+[Which one do you want?](#which-one-do-you-want) for that.
 
 Do the [Getting started](../README.md#getting-started) steps first: everything
 here builds on the Node, Yarn and dependencies the setup script installs. It
@@ -522,13 +730,17 @@ because a new tab inherits the old environment. See
 ### Check that step 3 took
 
 Both variables fail a long way from their cause, so confirm them before going
-further. Each command should print a real path and find a real file:
+further. Each command should print a real path and find a real file.
+
+From bash:
 
 ```bash
 echo "$ANDROID_HOME"
 ls "$ANDROID_HOME/platform-tools/adb.exe"     # adb, without .exe, on macOS and Linux
 echo "$JAVA_HOME"
 ```
+
+The same three from PowerShell, where the variables are spelled differently:
 
 ```powershell
 $env:ANDROID_HOME
@@ -569,7 +781,8 @@ The **system image differs by CPU**: `arm64-v8a` on Apple Silicon, `x86_64` on
 Intel and AMD — which is every Windows machine and most Linux ones. It is a
 large download, around 4 GB unpacked, and along with `emulator` is only needed
 if you intend to run an emulator rather than a physical device — see
-[An emulator](#an-emulator). `platform-tools` provides `adb` and is always
+[Creating an emulator](#creating-an-emulator). `platform-tools` provides `adb`
+and is always
 needed.
 
 Check it took:
@@ -597,7 +810,10 @@ android sdk list
 > SDKs shipped an unrelated `android` tool in `tools/bin`; that one is long dead
 > and is not this.
 
-## An emulator
+## Creating an emulator
+
+Done once. Starting it is every session, and is
+[up in the build half](#start-the-emulator).
 
 Only needed if you have no physical Android device. A real device is faster,
 needs no virtualisation, and is the only way to judge how the metronome actually
@@ -616,7 +832,7 @@ An emulator without CPU virtualisation is slow enough to be useless, so confirm
 it is available before creating one.
 
 **Windows** needs the *Windows Hypervisor Platform* feature, which coexists with
-Hyper-V and WSL2. Check without elevation:
+Hyper-V and WSL2. Check it from PowerShell, without elevation:
 
 ```powershell
 Get-CimInstance Win32_OptionalFeature -Filter "Name='HypervisorPlatform'" |
@@ -662,10 +878,9 @@ virtual device…**; the **+** button in its toolbar does the same. Then:
      a separate package, not a replacement, and another few GB.
 3. Name it and finish.
 
-Creating a device does not start it. Press the **▶** beside it in the Device
-Manager, or run `emulator -avd <name>` — `emulator -list-avds` shows the names.
-First boot takes a minute or two, and `adb devices` reports it as `offline`
-before it becomes `device`; wait for the second.
+Creating a device does not start it — press the **▶** beside it in the Device
+Manager, or see [Start the emulator](#start-the-emulator), which you will be
+doing every session from here on.
 
 The hardware profile you pick is worth a moment's thought. A tablet profile
 gives you a large landscape layout, which is a genuine thing to test since the
@@ -682,27 +897,20 @@ $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
   -n palmas-api36 \
   -k "system-images;android-36;google_apis;x86_64" \
   -d pixel_7
-
-emulator -avd palmas-api36 &
-adb devices          # emulator-5554  device
 ```
 
-On Windows the executable is `avdmanager.bat`, and there is no `&` for
-backgrounding — start it in its own terminal:
+On Windows the executable is `avdmanager.bat`:
 
 ```powershell
 & "$env:ANDROID_HOME\cmdline-tools\latest\bin\avdmanager.bat" create avd `
   -n palmas-api36 -k "system-images;android-36;google_apis;x86_64" -d pixel_7
-
-Start-Process emulator -ArgumentList '-avd','palmas-api36'
-adb devices
 ```
 
 `-d pixel_7` picks a device profile; `avdmanager list device` shows the rest.
 
-Either way, `adb devices` is how you confirm the emulator is up — it should show
-`emulator-5554  device`. An emulator Studio started and one started with
-`emulator -avd` are the same thing to `adb` and to Gradle.
+That creates it. To run it, see [Start the emulator](#start-the-emulator) — an
+emulator Studio started and one started with `emulator -avd` are the same thing
+to `adb` and to Gradle.
 
 ## Creating a keystore
 
