@@ -12,6 +12,7 @@ reverse. Run the build on the platform you want a package for.
 * [The Electron runtime](#the-electron-runtime) — the one prerequisite
   `yarn install` does not provide
 * [Icons on Linux](#icons-on-linux) — why a set, not one file
+* [Window association on Linux](#window-association-on-linux) — StartupWMClass
 * [rpmbuild, for the .rpm](#rpmbuild-for-the-rpm) — Linux only
 * [What comes out](#what-comes-out)
 * [When a build fails](#when-a-build-fails) — indexed by what you saw
@@ -109,6 +110,37 @@ the icons in the package before anything else:
 
 ```bash
 dpkg-deb -c dist/electron/Packaged/*.deb | grep hicolor
+```
+
+### Window association on Linux
+
+`package.json` sets `desktopName`, and `linux.syncDesktopName` in
+[quasar.config.js](../quasar.config.js) makes the `.desktop` entry's
+`StartupWMClass` follow it. Both are needed, and the reason is that the two
+names involved are not the same string:
+
+```
+xprop WM_CLASS   ->  "palmas", "palmas"     what the window reports
+StartupWMClass   ->  palmas                 what the entry claims
+```
+
+Without `syncDesktopName`, `StartupWMClass` falls back to `productName` —
+`Palmas`, with a capital — and no longer matches, so the desktop environment
+cannot tell that a running window belongs to the installed entry. Pinning the
+window creates a second launcher instead of pinning the entry, and the window
+does not group under the menu item it was started from.
+
+The trap is that none of that looks broken. The window opens, and it shows the
+right icon, because the icon comes from `BrowserWindow` in
+[electron-main.ts](../src-electron/electron-main.ts) painting it onto the
+window directly — nothing to do with the `.desktop` entry. Only the
+association is missing, and nothing reports it.
+
+Check it against a running window rather than assuming:
+
+```bash
+xprop WM_CLASS      # then click the window
+grep StartupWMClass /usr/share/applications/palmas.desktop
 ```
 
 ### rpmbuild, for the .rpm

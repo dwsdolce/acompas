@@ -530,6 +530,24 @@ export default defineConfig(function (ctx) {
           // packaging/build-desktop.mjs checks for it before starting.
           target: ['AppImage', 'deb', 'rpm'],
 
+          // Make StartupWMClass follow package.json's `desktopName` rather
+          // than productName, because those are not the same string and the
+          // window is matched to this entry on the first one.
+          //
+          //   xprop WM_CLASS  ->  "palmas", "palmas"
+          //   StartupWMClass  ->  Palmas          (productName, the default)
+          //
+          // A mismatch is quiet: the window still opens and still shows the
+          // right icon, because that comes from BrowserWindow in
+          // electron-main.ts and not from this file at all. What it costs is
+          // the association - pinning a running window, and grouping it under
+          // the menu entry it was launched from.
+          //
+          // Electron reads `desktopName` too, defaulting it to
+          // `${name}.desktop`, so naming it makes electron-builder and Electron
+          // agree explicitly instead of both guessing and happening to differ.
+          syncDesktopName: true,
+
           // Written into the .desktop file verbatim as `Categories=`. This is
           // also exactly what electron-builder would derive from the
           // `public.app-category.music` set for macOS above, spelled out here

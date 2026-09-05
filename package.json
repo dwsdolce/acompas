@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A flamenco metronome",
   "productName": "Palmas",
+  "desktopName": "palmas.desktop",
   "author": {
     "name": "David Smith",
     "email": "dws@dolcesfogato.com"
