@@ -24,16 +24,6 @@ where the work does.
   are unreviewed; the place names in ar/fa/ja/zh were transliterated rather than
   left in Latin script, which is the choice most worth a second opinion.
 
-## Clean-up
-
-- **Put the required JDK under version control.** It currently lives in the
-  gitignored `src-capacitor/android/.gradle/config.properties`, so every clone
-  has to be told again and Android Studio guesses its own bundled runtime until
-  someone does. `gradlew updateDaemonJvm --jvm-version 21 --jvm-vendor ADOPTIUM`
-  writes `gradle/gradle-daemon-jvm.properties`, which is tracked and records
-  criteria rather than a path. Wants testing on more than one machine, since
-  Gradle must then find a matching JDK or fail.
-
 ## Features
 
 - User-defined patterns

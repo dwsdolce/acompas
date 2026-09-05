@@ -556,9 +556,21 @@ On macOS Homebrew keeps `openjdk@21` keg-only, so it has to be named explicitly
 in `JAVA_HOME` below. On Windows the winget package sets `JAVA_HOME` and puts
 itself first on PATH for you.
 
-Android Studio ships a JetBrains Runtime it can build with, so Route A can
-technically skip this — but Gradle from a terminal still wants `JAVA_HOME`, so
-install one anyway.
+**It has to be 21.** `gradle/gradle-daemon-jvm.properties` states that, and
+Gradle refuses to run the daemon on anything else — whatever `JAVA_HOME` says,
+and whatever launched it. Any vendor's 21 will do; no vendor is pinned, because
+the machines that build this do not agree on one.
+
+It is also what removed Android Studio's need for a Gradle JDK setting. Studio
+launches Gradle with its own bundled JetBrains Runtime — JBR 25 in current
+releases, which Gradle 8.13 does not support — and before this file existed that
+produced a refusal to sync, with a message about needing a different JVM and
+nothing pointing at the cause. With the file in place Studio pins no Gradle JDK
+at all: `.idea/gradle.xml` carries no `gradleJvm`, the stale JBR path in
+`.gradle/config.properties` no longer matters, and sync succeeds. Gradle picks a
+21 for the daemon whatever launched it — verified by running the build with
+`JAVA_HOME` pointed at the JBR, which reports
+`Daemon JVM: Compatible with Java 21, any vendor`.
 
 ### 2. Get the SDK
 
