@@ -43,10 +43,12 @@ missing, or this is a new machine:
 | Upload to Google Play | yes | no | [AAB](#an-aab-for-the-play-store) |
 | Edit the UI and see it change on the device | — | — | [Not supported](#live-reload-is-not-supported) — the audio engine cannot run |
 
-The first three are the same shape: build a file, push it with `adb`, start it.
-They need no IDE, and they are the three worth knowing. The fourth needs Android
-Studio and three pieces of configuration none of the others do, which is why it
-is written up as a warning rather than a recipe.
+The three are the same shape: build a file, push it with `adb`, start it. None
+of them needs an IDE.
+
+The fourth row is not a fourth option. Quasar does have a live-reload mode, and
+it cannot work for this app — the audio engine will not run under it — so that
+section explains why and sends you back to the debug APK.
 
 Two conventions hold throughout.
 
